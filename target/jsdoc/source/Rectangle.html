@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='graphiti-Rectangle'>/**
+</span> * @class graphiti.Rectangle
+ * A Rectangle Figure.
+ * 
+ * @author Andreas Herz
+ * @extends graphiti.VectorFigure
+ */
+graphiti.Rectangle = graphiti.VectorFigure.extend({
+
+<span id='graphiti-Rectangle-method-constructor'>    /**
+</span>     * @constructor
+     * Creates a new figure element which are not assigned to any canvas.
+     * 
+     */
+    init: function( width, height) {
+      this._super();
+
+      this.setBackgroundColor( new graphiti.util.Color(0,0,0));
+      this.setColor(new  graphiti.util.Color(0,0,0));
+
+      if(width &amp;&amp; height)
+        this.setDimension(width, height);
+      else
+        this.setDimension(10, 10);
+    },
+    
+<span id='graphiti-Rectangle-method-repaint'>    /**
+</span>     * @method
+     * propagate all attributes like color, stroke,... to the shape element
+     **/
+    repaint: function()
+    {
+      if(this.shape===null)
+         return;
+
+      this._super({width: this.width, height:this.height});
+    },
+
+<span id='graphiti-Rectangle-method-createShapeElement'>    /**
+</span>     * @private
+     **/
+    createShapeElement : function()
+    {
+       if(this.canvas===null)
+         return null;
+         
+       this.shape = this.canvas.paper.rect(this.getX(),this.getY(),this.getWidth(), this.getHeight());
+       
+       this.setBackgroundColor(this.bgColor);
+       this.setLineWidth(this.stroke);
+       return this.shape;
+    }
+
+
+});</pre>
+</body>
+</html>

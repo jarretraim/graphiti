@@ -1,0 +1,163 @@
+/**
+ * @class
+ * Util class to handle colors in the graphiti enviroment
+ * 
+ */
+graphiti.util.Color = Class.extend({
+
+    /**
+     * @constructor
+     * Create a new Color object
+     * 
+     * @param {Number} red 
+     * @param {Number} green 
+     * @param {Number} blue 
+     */
+    init: function( red, green, blue) {
+
+      if(typeof green == "undefined")
+      {
+        var rgb = this.hex2rgb(red);
+        this.red= rgb[0];
+        this.green = rgb[1];
+        this.blue = rgb[2];
+      }
+      else
+      {
+        this.red= red;
+        this.green = green;
+        this.blue = blue;
+      }
+    },
+    
+
+    /**
+     * @method
+     * Convert the color object into a HTML CSS representation
+     * @return {String} the color in rgb(##,##,##) representation
+     **/
+    getHTMLStyle:function()
+    {
+      return "rgb("+this.red+","+this.green+","+this.blue+")";
+    },
+    
+    /**
+     * @method
+     * The red part of the color.
+     * 
+     * @return {Number} the [red] part of the color.
+     **/
+    getRed:function()
+    {
+      return this.red;
+    },
+    
+    
+    /**
+     * @method
+     * The green part of the color.
+     * 
+     * @return {Number} the [green] part of the color.
+     **/
+    getGreen:function()
+    {
+      return this.green;
+    },
+    
+    
+    /**
+     * @method
+     * The blue part of the color
+     * 
+     * @return {Number} the [blue] part of the color.
+     **/
+    getBlue:function()
+    {
+      return this.blue;
+    },
+    
+    /**
+     * @method
+     * Returns the ideal Text Color. Useful for font color selection by a given background color.
+     *
+     * @return {graphiti.util.Color} The <i>ideal</i> inverse color.
+     **/
+    getIdealTextColor:function()
+    {
+       var nThreshold = 105;
+       var bgDelta = (this.red * 0.299) + (this.green * 0.587) + (this.blue * 0.114);
+       return (255 - bgDelta < nThreshold) ? new  /*:NAMESPACE*/Color(0,0,0) : new  /*:NAMESPACE*/Color(255,255,255);
+    },
+    
+    
+    /**
+     * @private
+     */
+    hex2rgb:function(/*:String */hexcolor)
+    {
+      hexcolor = hexcolor.replace("#","");
+      return(
+             {0:parseInt(hexcolor.substr(0,2),16),
+              1:parseInt(hexcolor.substr(2,2),16),
+              2:parseInt(hexcolor.substr(4,2),16)}
+             );
+    },
+    
+    /**
+     * @private
+     **/
+    hex:function()
+    { 
+      return(this.int2hex(this.red)+this.int2hex(this.green)+this.int2hex(this.blue)); 
+    },
+    
+    /**
+     * @private
+     */
+    int2hex:function(v) 
+    {
+      v=Math.round(Math.min(Math.max(0,v),255));
+      return("0123456789ABCDEF".charAt((v-v%16)/16)+"0123456789ABCDEF".charAt(v%16));
+    },
+    
+    /**
+     * @method
+     * Returns a darker color of the given one. The original color is unchanged.
+     * 
+     * @param {Number} fraction  Darkness fraction between [0..1].
+     * @return{graphiti.util.Color}        Darker color.
+     */
+    darker:function(fraction)
+    {
+       var red   = parseInt(Math.round (this.getRed()   * (1.0 - fraction)));
+       var green = parseInt(Math.round (this.getGreen() * (1.0 - fraction)));
+       var blue  = parseInt(Math.round (this.getBlue()  * (1.0 - fraction)));
+    
+       if (red   < 0) red   = 0; else if (red   > 255) red   = 255;
+       if (green < 0) green = 0; else if (green > 255) green = 255;
+       if (blue  < 0) blue  = 0; else if (blue  > 255) blue  = 255;
+    
+       return new graphiti.util.Color(red, green, blue);
+    },
+    
+    
+    /**
+     * @method
+     * Make a color lighter. The original color is unchanged.
+     * 
+     * @param {Number} fraction  Darkness fraction between [0..1].
+     * @return {graphiti.util.Color} Lighter color.
+     */
+    lighter:function( fraction)
+    {
+        var red   = parseInt(Math.round (this.getRed()   * (1.0 + fraction)));
+        var green = parseInt(Math.round (this.getGreen() * (1.0 + fraction)));
+        var blue  = parseInt(Math.round (this.getBlue()  * (1.0 + fraction)));
+    
+        if (red   < 0) red   = 0; else if (red   > 255) red   = 255;
+        if (green < 0) green = 0; else if (green > 255) green = 255;
+        if (blue  < 0) blue  = 0; else if (blue  > 255) blue  = 255;
+    
+        return new /*:NAMESPACE*/Color(red, green, blue);
+    },
+});

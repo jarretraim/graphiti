@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='graphiti-Oval'>/**
+</span> * @class graphiti.Oval
+ * The base class for all visible elements inside a canvas.
+ * 
+ * @inheritable
+ * @author Andreas Herz
+ * @extends graphiti.VectorFigure
+ * @since 2.1
+ */
+graphiti.Oval = graphiti.VectorFigure.extend({
+<span id='graphiti-Oval-method-constructor'>    /**
+</span>     * @constructor
+     * Creates a new figure element which are not assigned to any canvas.
+     * 
+     */
+    init: function( ) {
+        this._super( );
+        this.setBackgroundColor(new graphiti.util.Color(200,255,120));
+        this.setDimension(50,50);
+   },
+      
+
+<span id='graphiti-Oval-method-createShapeElement'>   /** 
+</span>    * @private
+    **/
+   createShapeElement : function()
+   {
+     var halfW = this.getWidth()/2;
+     var halfH = this.getHeight()/2;
+     this.shape= this.canvas.paper.ellipse(this.getX()+halfW, this.getY()+halfH, halfW, halfH);
+
+     this.repaint();
+     
+     return this.shape;
+   },
+
+<span id='graphiti-Oval-method-repaint'>   /**
+</span>    * @method
+    * propagate all attributes like color, stroke,... to the shape element
+    **/
+   repaint: function()
+   {
+     if(this.shape===null)
+        return;
+        
+     var halfW = this.width/2;
+     var halfH = this.height/2;
+     this._super({rx: halfW, ry:halfH, cx: this.x+halfW, cy:this.y+halfH});
+   },
+    
+});
+
+</pre>
+</body>
+</html>

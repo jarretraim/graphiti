@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='graphiti-command-CommandMove'>/**
+</span> * @class graphiti.command.CommandMove
+ * 
+ * Generic support class for the undo/redo concept within graphiti.
+ * All add,drag&amp;drop,delete operations should be execute via Commands and the related CommandStack.
+ */
+graphiti.command.CommandMove = graphiti.command.Command.extend({
+    
+<span id='graphiti-command-CommandMove-method-constructor'>    /**
+</span>     * @constructor
+     * Create a new Command objects which can be execute via the CommandStack.
+     * 
+     * @param {String} label
+     */
+    init : function(figure, x, y)
+    {
+        this._super(&quot;move figure&quot;);
+        this.figure = figure;
+        if (x == undefined)
+        {
+            this.oldX = figure.getX();
+            this.oldY = figure.getY();
+        }
+        else
+        {
+            this.oldX = x;
+            this.oldY = y;
+        }
+        this.oldCompartment = figure.getParent();
+    },
+    
+  
+<span id='graphiti-command-CommandMove-method-setStartPosition'>    /**
+</span>     * Set the initial position of the element
+     *
+     **/
+    setStartPosition:function( x,  y)
+    {
+       this.oldX = x;
+       this.oldY = y;
+    },
+    
+<span id='graphiti-command-CommandMove-method-setPosition'>    /**
+</span>     * Set the target/final position of the figure move command.
+     * 
+     **/
+    setPosition:function( x,  y)
+    {
+       this.newX = x;
+       this.newY = y;
+       this.newCompartment = this.figure.getCanvas().getBestCompartmentFigure(x,y,this.figure);
+    },
+    
+<span id='graphiti-command-CommandMove-property-canExecute'>    /**
+</span>     * Returns [true] if the command can be execute and the execution of the
+     * command modify the model. A CommandMove with [startX,startX] == [endX,endY] should
+     * return false. &lt;br&gt;
+     * the execution of the Command doesn't modify the model.
+     *
+     * @type boolean
+     **/
+    canExecute:function()
+    {
+      // return false if we doesn't modify the model =&gt; NOP Command
+      return this.newX!=this.oldX || this.newY!=this.oldY;
+    },
+    
+<span id='graphiti-command-CommandMove-method-execute'>    /**
+</span>     * Execute the command the first time
+     * 
+     **/
+    execute:function()
+    {
+       this.redo();
+    },
+    
+<span id='graphiti-command-CommandMove-method-undo'>    /**
+</span>     * Undo the command
+     *
+     **/
+    undo:function()
+    {
+       this.figure.setPosition(this.oldX, this.oldY);
+       if(this.newCompartment!==null)
+          this.newCompartment.removeChild(this.figure);
+    
+       if(this.oldCompartment!==null)
+          this.oldCompartment.addChild(this.figure);
+    
+       this.figure.getCanvas().moveResizeHandles(this.figure);
+    },
+    
+<span id='graphiti-command-CommandMove-method-redo'>    /** Redo the command after the user has undo this command
+</span>     *
+     **/
+    redo:function()
+    {
+       this.figure.setPosition(this.newX, this.newY);
+       if(this.oldCompartment!==null)
+          this.oldCompartment.removeChild(this.figure);
+    
+       if(this.newCompartment!==null)
+          this.newCompartment.addChild(this.figure);
+    
+       this.figure.getCanvas().moveResizeHandles(this.figure);
+    },
+});</pre>
+</body>
+</html>

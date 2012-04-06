@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='graphiti-Line'>/**
+</span> * @class graphiti.Line
+ * The base class for all visible elements inside a canvas.
+ * 
+ * @inheritable
+ * @author Andreas Herz
+ * @extends graphiti.Figure
+ * @since 2.1
+ */
+graphiti.Line = graphiti.Figure.extend({
+
+<span id='graphiti-Line-method-constructor'>    /**
+</span>     * @constructor
+     * Creates a new figure element which are not assigned to any canvas.
+     */
+    init: function( ) {
+        this._super( );
+        
+        this.width = this.getMinWidth();
+        this.height = this.getMinHeight();
+   },
+      
+
+<span id='graphiti-Line-method-createShapeElement'>   /** 
+</span>    * @private
+    **/
+   createShapeElement : function()
+   {
+     var halfW = this.getWidth()/2;
+     var halfH = this.getHeight()/2;
+     this.shape= this.canvas.paper.ellipse(this.getX()+halfW, this.getY()+halfH, halfW, halfH);
+
+     this.repaint();
+     
+     return this.shape;
+   },
+
+<span id='graphiti-Line-method-setDimension'>    /**
+</span>     * @method
+     * Set the new width and height of the figure.
+     * 
+     * @see #getMinWidth
+     * @see #getMinHeight
+     * @param {Number} w The new width of the figure
+     * @param {Number} h The new height of the figure
+     */
+    setDimension:function(w,  h)
+    {
+      this.width = Math.max(this.getMinWidth(),w);
+      this.height= Math.max(this.getMinHeight(),h);
+      
+      if(this.shape!==null)
+      {
+        var halfW = this.width/2;
+        var halfH = this.height/2;
+        this.shape.attr({rx: halfW, ry:halfH});
+      }
+      
+      this.fireMoveEvent();
+    
+      // Update the resize handles if the user change the dimension via an API call
+      //
+      if(this.canvas!=null &amp;&amp; this.canvas.getCurrentSelection()==this)
+      {
+         this.workflow.moveResizeHandles(this);
+      }
+    }
+
+});
+
+</pre>
+</body>
+</html>

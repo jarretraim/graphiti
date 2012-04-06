@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='graphiti-Canvas'>/**
+</span> * @class graphiti.Canvas
+ * Interactive paint area of the graphiti library.
+ * 
+ * @inheritable
+ * @author Andreas Herz
+ * @version 2.1
+ */
+graphiti.Canvas = Class.extend(
+{
+<span id='graphiti-Canvas-method-constructor'>    /**
+</span>     * @constructor
+     * Create a new canvas with the given HTML dom references.
+     * 
+     * @param {String} pValue
+     */
+    init : function(canvasId)
+    {
+        this.canvasId = canvasId;
+        this.html = document.getElementById(canvasId);
+        this.paper = Raphael(canvasId, this.getWidth(), this.getHeight());
+        this.zoomFactor = 1.0;
+        this.enableSmoothFigureHandling=false;
+        this.currentSelection = null;
+        
+        this.resizeHandle1 = new graphiti.ResizeHandle(this,1); // 1 = LEFT TOP
+        this.resizeHandle2 = new graphiti.ResizeHandle(this,2); // 2 = CENTER_TOP
+        this.resizeHandle3 = new graphiti.ResizeHandle(this,3); // 3 = RIGHT_TOP
+        this.resizeHandle4 = new graphiti.ResizeHandle(this,4); // 4 = RIGHT_MIDDLE
+        this.resizeHandle5 = new graphiti.ResizeHandle(this,5); // 5 = RIGHT_BOTTOM
+        this.resizeHandle6 = new graphiti.ResizeHandle(this,6); // 6 = CENTER_BOTTOM
+        this.resizeHandle7 = new graphiti.ResizeHandle(this,7); // 7 = LEFT_BOTTOM
+        this.resizeHandle8 = new graphiti.ResizeHandle(this,8); // 8 = LEFT_MIDDLE
+
+        this.resizeHandleHalfWidth = parseInt(this.resizeHandle2.getWidth()/2);
+        
+        this.figures = new graphiti.util.ArrayList();
+        this.lines = new graphiti.util.ArrayList();
+        
+        this.selectionListeners = new graphiti.util.ArrayList();
+
+        this.commandStack = new graphiti.command.CommandStack();
+    },
+    
+<span id='graphiti-Canvas-method-getCommandStack'>    /**
+</span>     * @method
+     * Returns the command stack for the Canvas. Required for undo/redo  support.
+     *
+     * @return {graphiti.command.CommandStack}
+     **/
+    getCommandStack : function()
+    {
+      return this.commandStack;
+    },
+
+<span id='graphiti-Canvas-method-getWidth'>    /**
+</span>     * @method
+     * Return the width of the canvas
+     * 
+     * @return {Number}
+     **/
+    getWidth : function()
+    {
+        return parseInt(this.html.style.width);
+    },
+
+
+<span id='graphiti-Canvas-method-getHeight'>    /**
+</span>     * @method
+     * Return the height of the canvas.
+     * 
+     * @return {Number}
+     **/
+    getHeight:function() {
+      return parseInt(this.html.style.height);
+    },
+ 
+
+<span id='graphiti-Canvas-method-addFigure'>    /**
+</span>     * Add a figure at the hands over x/y position.
+     *
+     * @param {graphiti.Figure} figure The figure to add.
+     * @param {Number} x The x position.
+     * @param {Number} y The y position.
+     **/
+    addFigure:function( figure , xPos,  yPos)
+    {
+      figure.setCanvas(this);
+
+      var shape = figure.getShapeElement();
+      if(figure instanceof graphiti.Line)
+      {
+        this.lines.add(figure);
+      }
+      else
+      {
+        this.figures.add(figure);
+        figure.createDraggable();
+        // Compartments must be stored in an additional structure
+        //
+        /* TODO
+        if(figure instanceof graphiti.CompartmentFigure)
+        {
+          this.compartments.add(figure);
+        }
+        figure.draggable.addEventListener(&quot;drag&quot;, function (oEvent)
+        {
+          var figure = oThisWorkflow.getFigure(oEvent.target.element.id);
+          if(figure == null)
+            return;
+          if(figure.isSelectable()==false)
+            return;
+
+          oThisWorkflow.moveResizeHandles(figure);
+        });
+    */    
+
+      }
+      
+      figure.setPosition(xPos,yPos);
+
+      figure.repaint();
+      figure.fireMoveEvent();
+      this.setDocumentDirty();
+    },
+
+<span id='graphiti-Canvas-method-getBestCompartmentFigure'>    /**
+</span>     * @method
+     * Returns the best comparment figure at the location [x,y].
+     *
+     * @param {Number} x The x position.
+     * @param {Number} y The y position.
+     * @param {graphiti.Figure} figureToIgnore The figure which should be ignored.
+     **/
+    getBestCompartmentFigure:function( x,  y, figureToIgnore)
+    {
+      var result = null;
+      for(var i=0;i&lt;this.figures.getSize();i++)
+      {
+        var figure = this.figures.get(i);
+        if((figure instanceof graphiti.CompartmentFigure) &amp;&amp; figure.isOver(x,y)==true &amp;&amp; figure!=figureToIgnore)
+        {
+            if(result==null)
+               result = figure;
+            else if(result.getZOrder() &lt; figure.getZOrder())
+               result = figure;
+        }
+      }
+      return result;
+    },
+    
+<span id='graphiti-Canvas-method-showMenu'>    /**
+</span>     * @param {graphiti.Menu} menu The menu to show.
+     * @param {int} x The x position.
+     * @param {int} y The y position.
+     * @private
+     **/
+    showMenu:function(menu , xPos , yPos)
+    {
+     if(this.menu!=null)
+     {
+       this.html.removeChild(this.menu.getHTMLElement());
+       this.menu.setWorkflow(null);
+     }
+
+     this.menu = menu;
+     if(this.menu!=null)
+     {
+       this.menu.setCanvas(this);
+       this.menu.setPosition(xPos,yPos);
+
+       this.html.appendChild(this.menu.getHTMLElement());
+       this.menu.paint();
+      }
+    },
+
+<span id='graphiti-Canvas-method-getCommandStack'>    /**
+</span>     * @method
+     * Returns the command stack for the Canvas. Required for undo/redo  support.
+     *
+     * @type {graphiti.command.CommandStack}
+     **/
+    getCommandStack:function()
+    {
+      return this.commandStack;
+    },
+
+<span id='graphiti-Canvas-method-getCurrentSelection'>    /**
+</span>     * @method
+     * Returns the current selected figure in the Canvas.
+     *
+     **/
+    getCurrentSelection:function()
+    {
+      return this.currentSelection;
+    },
+
+
+<span id='graphiti-Canvas-method-setCurrentSelection'>    /**
+</span>     * Set the current selected figure in the workflow Canvas.
+     *
+     * @param {@NAMESPACE@Figure} figure The new selection.
+     **/
+    setCurrentSelection:function(/*:@NAMESPACE@Figure*/ figure )
+    {
+      if(figure==null)
+      {
+        this.hideResizeHandles();
+      //  this.hideLineResizeHandles();
+      }
+
+      this.currentSelection = figure;
+
+      // inform all selection listeners about the new selection.
+      //
+      for(var i=0;i &lt; this.selectionListeners.getSize();i++)
+      {
+        var w = this.selectionListeners.get(i);
+        if(w.onSelectionChanged)
+          w.onSelectionChanged(this.currentSelection);
+      }
+    },
+    
+<span id='graphiti-Canvas-method-setDocumentDirty'>    /**
+</span>     * @method
+     * Mark the current document as dirty. Any unsaved changes are present.
+     * 
+     */
+    setDocumentDirty:function()  {
+     
+    },
+
+<span id='graphiti-Canvas-property-getBestLine'>    /**
+</span>     * @private
+     * @type @NAMESPACE@Line
+     **/
+    getBestLine:function(/*:int*/ x, /*:int*/ y, /*:@NAMESPACE@Line*/ lineToIgnore)
+    {
+      var result = null;
+      var count = this.lines.getSize();
+      for(var i=0;i&lt; count;i++)
+      {
+        var line = this.lines.get(i);
+        if(line.containsPoint(x,y)==true &amp;&amp; line!=lineToIgnore)
+        {
+            if(result==null)
+               result = line;
+         //   else if(result.getZOrder() &lt; line.getZOrder())
+         //      result = line;
+        }
+      }
+      return result;
+    },
+
+<span id='graphiti-Canvas-method-showResizeHandles'>    /**
+</span>     * @method
+     * @private
+     **/
+    showResizeHandles:function(figure)
+    {
+        /*
+      if( this.getCurrentSelection()!==figure)
+      {
+        this.hideLineResizeHandles();
+        this.hideResizeHandles();
+      }
+      */
+      // We must reset the alpha blending of the resizeHandles if the last selected object != figure
+      // Reason: We would fadeIn the ResizeHandles at the new selected object but the fast toggle from oldSeleciton =&gt; newSelection
+      //         doesn't reset the alpha to 0.0. So, we do it manually.
+      //
+      if(this.getEnableSmoothFigureHandling()==true &amp;&amp; this.getCurrentSelection()!==figure)
+      {
+         this.resizeHandle1.setAlpha(0.01);
+         this.resizeHandle2.setAlpha(0.01);
+         this.resizeHandle3.setAlpha(0.01);
+         this.resizeHandle4.setAlpha(0.01);
+         this.resizeHandle5.setAlpha(0.01);
+         this.resizeHandle6.setAlpha(0.01);
+         this.resizeHandle7.setAlpha(0.01);
+         this.resizeHandle8.setAlpha(0.01);
+      }
+
+      var resizeWidth = this.resizeHandle1.getWidth();
+      var resizeHeight= this.resizeHandle1.getHeight();
+      var objHeight   = figure.getHeight();
+      var objWidth    = figure.getWidth();
+      var xPos = figure.getX();
+      var yPos = figure.getY();
+      this.resizeHandle1.show(this,xPos-resizeWidth,yPos-resizeHeight);
+      this.resizeHandle3.show(this,xPos+objWidth,yPos-resizeHeight);
+      this.resizeHandle5.show(this,xPos+objWidth,yPos+objHeight);
+      this.resizeHandle7.show(this,xPos-resizeWidth,yPos+objHeight);
+
+      this.resizeHandle1.setDraggable(figure.isResizeable());
+      this.resizeHandle3.setDraggable(figure.isResizeable());
+      this.resizeHandle5.setDraggable(figure.isResizeable());
+      this.resizeHandle7.setDraggable(figure.isResizeable());
+
+      if(figure.isResizeable())
+      {
+        var green = new graphiti.util.Color(0,255,0);
+        this.resizeHandle1.setBackgroundColor(green);
+        this.resizeHandle3.setBackgroundColor(green);
+        this.resizeHandle5.setBackgroundColor(green);
+        this.resizeHandle7.setBackgroundColor(green);
+      }
+      else
+      {
+        this.resizeHandle1.setBackgroundColor(null);
+        this.resizeHandle3.setBackgroundColor(null);
+        this.resizeHandle5.setBackgroundColor(null);
+        this.resizeHandle7.setBackgroundColor(null);
+      }
+
+      if(figure.isStrechable() &amp;&amp; figure.isResizeable())
+      {
+        this.resizeHandle2.setDraggable(figure.isResizeable());
+        this.resizeHandle4.setDraggable(figure.isResizeable());
+        this.resizeHandle6.setDraggable(figure.isResizeable());
+        this.resizeHandle8.setDraggable(figure.isResizeable());
+        this.resizeHandle2.show(this,xPos+(objWidth/2)-this.resizeHandleHalfWidth,yPos-resizeHeight);
+        this.resizeHandle4.show(this,xPos+objWidth,yPos+(objHeight/2)-(resizeHeight/2));
+        this.resizeHandle6.show(this,xPos+(objWidth/2)-this.resizeHandleHalfWidth,yPos+objHeight);
+        this.resizeHandle8.show(this,xPos-resizeWidth,yPos+(objHeight/2)-(resizeHeight/2));
+      }
+    },
+
+<span id='graphiti-Canvas-method-hideResizeHandles'>    /**
+</span>     * @method
+     * @private
+     **/
+    hideResizeHandles:function()
+    {
+       this.resizeHandle1.hide();
+       this.resizeHandle2.hide();
+       this.resizeHandle3.hide();
+       this.resizeHandle4.hide();
+       this.resizeHandle5.hide();
+       this.resizeHandle6.hide();
+       this.resizeHandle7.hide();
+       this.resizeHandle8.hide();
+    },
+
+<span id='graphiti-Canvas-method-moveResizeHandles'>    /**
+</span>     * @method
+     * @private
+     **/
+    moveResizeHandles:function(/*:@NAMESPACE@Figure*/ figure)
+    {
+      var resizeWidth = this.resizeHandle1.getWidth();
+      var resizeHeight= this.resizeHandle1.getHeight();
+      var objHeight   = figure.getHeight();
+      var objWidth    = figure.getWidth();
+      var xPos = figure.getX();
+      var yPos = figure.getY();
+      this.resizeHandle1.setPosition(xPos-resizeWidth,yPos-resizeHeight);
+      this.resizeHandle3.setPosition(xPos+objWidth,yPos-resizeHeight);
+      this.resizeHandle5.setPosition(xPos+objWidth,yPos+objHeight);
+      this.resizeHandle7.setPosition(xPos-resizeWidth,yPos+objHeight);
+      if(figure.isStrechable())
+      {
+        this.resizeHandle2.setPosition(xPos+(objWidth/2)-this.resizeHandleHalfWidth,yPos-resizeHeight);
+        this.resizeHandle4.setPosition(xPos+objWidth,yPos+(objHeight/2)-(resizeHeight/2));
+        this.resizeHandle6.setPosition(xPos+(objWidth/2)-this.resizeHandleHalfWidth,yPos+objHeight);
+        this.resizeHandle8.setPosition(xPos-resizeWidth,yPos+(objHeight/2)-(resizeHeight/2));
+      }
+    },
+
+<span id='graphiti-Canvas-method-getEnableSmoothFigureHandling'>    /**
+</span>     * @method
+     * Returns the flag if the Canvas has enabled the smooth figure handling during add, remove, selection,
+     * drag&amp;drop.
+     *
+     * @type boolean
+     **/
+    getEnableSmoothFigureHandling:function()
+    {
+        return this.enableSmoothFigureHandling;
+    },
+
+<span id='graphiti-Canvas-method-setEnableSmoothFigureHandling'>    /**
+</span>     * @method
+     * Set the flag for the smooth figure handling during add, remove, selection,
+     * drag&amp;drop.
+     *
+     * @param {boolean} flag The smooth figure handling flag.
+     **/
+    setEnableSmoothFigureHandling:function(/*:boolean*/ flag)
+    {
+        this.enableSmoothFigureHandling=flag;
+    },
+
+<span id='graphiti-Canvas-method-onClick'>    /**
+</span>     * @method
+     * Called when a user clicks on the element
+     * @template
+     */
+    onClick: function(){
+        
+    }
+});
+
+</pre>
+</body>
+</html>
