@@ -6,7 +6,9 @@
   <!-- common, all times required, imports -->
 	<SCRIPT src="../../lib/raphael.js"></SCRIPT>
 	<SCRIPT src="../../lib/jquery-1.6.4.js"></SCRIPT>
+	<SCRIPT src="../../lib/jquery-touch_punch.js"></SCRIPT>
 	<SCRIPT src="../../lib/Class.js"></SCRIPT>
+    
     
   <!--REGEXP_START_REMOVE-->
 
@@ -26,6 +28,7 @@
 	<SCRIPT src="../../src/command/CommandMove.js"></SCRIPT>
 	<SCRIPT src="../../src/command/CommandResize.js"></SCRIPT>
 	<SCRIPT src="../../src/command/CommandConnect.js"></SCRIPT>
+	<SCRIPT src="../../src/command/CommandReconnect.js"></SCRIPT>
 	
 	<SCRIPT src="../../src/layout/router/AbstractRouter.js"></SCRIPT>
 	<SCRIPT src="../../src/layout/router/DirectRouter.js"></SCRIPT>
@@ -55,14 +58,9 @@
 	<SCRIPT src="End.js"></SCRIPT>
 
 
-</head>
-
-<body>
-<div id="gfx_holder" style="width:500px; height:500px;">
-</div>
-
-
 <script type="text/javascript">
+$(document).ready(function() {
+
 
   var canvas = new graphiti.Canvas("gfx_holder");
 
@@ -74,7 +72,16 @@
   
   canvas.addFigure( new example.Start(), 50,50);
   canvas.addFigure( new example.End(), 150,150);
+  
+});
 </script>
+
+</head>
+
+<body>
+<div id="gfx_holder" style="width:500px; height:500px;">
+</div>
+
 
 </body>
 </html>

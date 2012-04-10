@@ -19,8 +19,8 @@ graphiti.LineResizeHandle = graphiti.ResizeHandle.extend({
     {
         this._startDrag = function (x,y,event) 
         {
-           Event.stop(event);
-           this.workflow.showMenu(null);
+           $.Event(event).stopPropagation();
+           this.canvas.showMenu(null);
 
            if(!this.isDraggable())
              return;
@@ -102,7 +102,7 @@ graphiti.LineResizeHandle = graphiti.ResizeHandle.extend({
       // This happens if the selected figure has set the "nonResizeable" flag
       // In this case the ResizeHandle can't be dragged. => no resize
       //
-      if(!this.canDrag)
+      if(!this.isDraggable())
         return false;
     
       this.ox = this.x;

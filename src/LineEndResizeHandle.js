@@ -42,7 +42,7 @@ graphiti.LineEndResizeHandle = graphiti.LineResizeHandle.extend({
     
       line.setEndPoint(objPos.x-diffX, objPos.y-diffY);
       line.isMoving = true;
-      this.detachMoveListener(figure);
+      this.detachMoveListener(line);
     },
     
     /**

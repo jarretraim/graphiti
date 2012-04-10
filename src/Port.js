@@ -499,7 +499,7 @@ graphiti.Port = graphiti.Circle.extend({
        //
        if(request.getPolicy() ===graphiti.EditPolicy.MOVE)
        {
-         if(!this.canDrag)
+         if(!this.isDraggable())
             return null;
          return new graphiti.command.CommandMovePort(this);
        }

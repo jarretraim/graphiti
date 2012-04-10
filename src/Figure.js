@@ -134,11 +134,11 @@ graphiti.Figure = Class.extend({
            
            this.canvas.showMenu(null);
     
-           var line = this.canvas.getBestLine(this.x+x, y+this.y);
+           var line = this.canvas.getBestLine(this.x+x, this.y+y);
            if(line!==null)
            {
              this.canvas.setCurrentSelection(line);
-             this.canvas.onMouseDown(oThis.x+oEvent.x, oEvent.y+oThis.y);
+             this.canvas.onMouseDown(this.x+oEvent.x, oEvent.y+this.y);
              return;
            }
            

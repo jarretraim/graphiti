@@ -133,8 +133,8 @@ graphiti.Connection = graphiti.Line.extend({
       {
         var oEvent = arguments[0] || window.event;
         oEvent.returnValue = false;
-        oThis.getWorkflow().setCurrentSelection(oThis);
-        oThis.getWorkflow().showLineResizeHandles(oThis);
+        oThis.getCanvas().setCurrentSelection(oThis);
+        oThis.getCanvas().showLineResizeHandles(oThis);
       };
     
       if (figure.getHTMLElement().addEventListener)
@@ -627,14 +627,15 @@ graphiti.Connection = graphiti.Line.extend({
      **/
     createCommand:function(/*:graphiti.EditPolicy*/ request)
     {
-      if(request.getPolicy() == graphiti.EditPolicy.MOVE)
+      if(request.getPolicy() === graphiti.EditPolicy.MOVE)
       {
         // DragDrop of a connection doesn't create a undo command at this point. This will be done in
         // the onDrop method
+          console.log("Reconnect");
         return new graphiti.command.CommandReconnect(this);
       }
  
-      if(request.getPolicy() == graphiti.EditPolicy.DELETE)
+      if(request.getPolicy() === graphiti.EditPolicy.DELETE)
       {
         if(this.isDeleteable()==true)
           return new graphiti.command.CommandDelete(this);

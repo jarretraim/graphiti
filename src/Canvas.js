@@ -7,6 +7,8 @@
  */
 graphiti.Canvas = Class.extend(
 {
+    COLOR_GREEN : new  graphiti.util.Color(0,255,0),
+
     /**
      * @constructor
      * Create a new canvas with the given HTML dom references.
@@ -15,8 +17,10 @@ graphiti.Canvas = Class.extend(
      */
     init : function(canvasId)
     {
+        this.scrollArea = document.body;
         this.canvasId = canvasId;
-        this.html = document.getElementById(canvasId);
+        this.html = $("#"+canvasId);
+        console.log(this.html);
         this.paper = Raphael(canvasId, this.getWidth(), this.getHeight());
         this.zoomFactor = 1.0;
         this.enableSmoothFigureHandling=false;
@@ -53,8 +57,128 @@ graphiti.Canvas = Class.extend(
         this.selectionListeners = new graphiti.util.ArrayList();
 
         this.commandStack = new graphiti.command.CommandStack();
+
+    /*
+    
+        var mouseMove = function(event)
+        {
+           var diffX = event.clientX;// - oThis.html.offsetLeft;
+           var diffY = event.clientY;// - oThis.html.offsetTop;
+           var scrollLeft = oThis.getScrollLeft();
+           var scrollTop  = oThis.getScrollTop();
+           var xOffset = oThis.getAbsoluteX();
+           var yOffset = oThis.getAbsoluteY();
+           oThis.currentMouseX = diffX+scrollLeft-xOffset;
+           oThis.currentMouseY = diffY+scrollTop-yOffset;
+           var obj = oThis.getBestFigure(oThis.currentMouseX, oThis.currentMouseY);
+           // Note: The event will be handle by "obj" if obj!=null
+           //       Don't add additional checks for this case.
+           if(oThis.currentHover!=null && obj==null)
+           {
+              oThis.currentHover.onMouseLeave();
+           }
+           else if(oThis.currentHover!=obj)
+           {
+              if(obj!=null)
+                obj.onMouseEnter();
+                
+              if(oThis.currentHover!=null)
+                 obj.onMouseLeave();
+           }
+           else
+           {
+              var diffX = event.clientX;// - oThis.html.offsetLeft;
+              var diffY = event.clientY;// - oThis.html.offsetTop;
+              var scrollLeft = oThis.getScrollLeft();
+              var scrollTop  = oThis.getScrollTop();
+              var xOffset = oThis.getAbsoluteX();
+              var yOffset = oThis.getAbsoluteY();
+              oThis.onMouseMove(diffX+scrollLeft-xOffset, diffY+scrollTop-yOffset);
+           }
+           oThis.currentHover = obj;
+      
+           // Tooltip handling
+           //
+           if(oThis.tooltip!=null)
+           {
+             if(Math.abs(oThis.currentTooltipX-oThis.currentMouseX)>10 ||Math.abs(oThis.currentTooltipY-oThis.currentMouseY)>10)
+             {
+                oThis.showTooltip(null);
+             }
+           }
+         };
+*/
+        this.html.bind("mousedown touchstart",$.proxy(function(event)
+         {
+            event = this._getEvent(event);
+            console.log(event);
+         
+           var diffX = event.clientX;
+           var diffY = event.clientY;
+           var scrollLeft = this.getScrollLeft();
+           var scrollTop  = this.getScrollTop();
+           var xOffset = this.getAbsoluteX();
+           var yOffset = this.getAbsoluteY();
+           this.onMouseDown(diffX+scrollLeft-xOffset, diffY+scrollTop-yOffset);
+         
+            console.log("touch");
+         },this));
     },
     
+    
+
+    /**
+     * @private
+     * @param event
+     * @returns
+     */
+    _getEvent: function(event){
+      if(event.originalEvent.touches && event.originalEvent.touches.length) {
+           return event.originalEvent.touches[0];
+      } else if(event.originalEvent.changedTouches && event.originalEvent.changedTouches.length) {
+           return event.originalEvent.changedTouches[0];
+      }
+      return event;
+    },
+
+
+    /**
+     * @returns The Y coordinate in relation the Canvas.
+     * @type int
+     **/
+    getScrollLeft:function()
+    {
+      return this.scrollArea.scrollLeft;
+    },
+
+    /**
+     * @returns The X coordinate in relation to the canvas
+     * @type int
+     **/
+    getScrollTop:function()
+    {
+      return this.scrollArea.scrollTop;
+    },
+
+
+    /**
+     * @returns The Y coordinate in relation to the Canvas.
+     * @type int
+     **/
+    getAbsoluteY:function()
+    {
+      return this.html.offset().top;
+    },
+
+    /**
+     * @returns The X coordinate in relation to the canvas
+     * @type int
+     **/
+    getAbsoluteX:function()
+    {
+        return this.html.offset().left;
+    },
+
 
     /**
      * @method
@@ -64,7 +188,7 @@ graphiti.Canvas = Class.extend(
      **/
     getWidth : function()
     {
-        return parseInt(this.html.style.width);
+        return this.html.width();
     },
 
 
@@ -75,7 +199,7 @@ graphiti.Canvas = Class.extend(
      * @return {Number}
      **/
     getHeight:function() {
-      return parseInt(this.html.style.height);
+      return this.html.height();
     },
  
 
@@ -88,6 +212,9 @@ graphiti.Canvas = Class.extend(
      **/
     addFigure:function( figure , x,  y)
     {
+        if(figure.getCanvas()===this)
+            return;
+        
       figure.setCanvas(this);
 
       // important inital 
@@ -96,6 +223,7 @@ graphiti.Canvas = Class.extend(
       if(figure instanceof graphiti.Line)
       {
         this.lines.add(figure);
+        console.log("ADD line------->");
       }
       else
       {
@@ -108,9 +236,9 @@ graphiti.Canvas = Class.extend(
         {
           this.compartments.add(figure);
         }
+        figure.setPosition(x,y);
       }
       
-      figure.setPosition(x,y);
 
       figure.fireMoveEvent();
       this.setDocumentDirty();
@@ -127,7 +255,11 @@ graphiti.Canvas = Class.extend(
     removeFigure:function(figure)
     {
         this.figures.remove(figure);
-        this.lines.remove(figure);
+        
+        if(figure instanceof graphiti.Line){
+            this.lines.remove(figure);
+            console.log("<----------REMOVE Line");
+        }
 
         figure.setCanvas(null);
 
@@ -303,7 +435,9 @@ graphiti.Canvas = Class.extend(
     {
       this.connectionLine.setStartPoint(x1,y1);
       this.connectionLine.setEndPoint(x2,y2);
-      this.addFigure(this.connectionLine);
+      
+      this.connectionLine.setCanvas(this);
+      this.connectionLine.getShapeElement();
     },
 
     /**
@@ -311,7 +445,7 @@ graphiti.Canvas = Class.extend(
      **/
     hideConnectionLine:function()
     {
-       this.removeFigure(this.connectionLine);
+       this.connectionLine.setCanvas(null);
     },
 
     /**
@@ -503,8 +637,8 @@ graphiti.Canvas = Class.extend(
       this.resizeHandleEnd.setDraggable(line.isResizeable());
       if(line.isResizeable())
       {
-        this.resizeHandleStart.setBackgroundColor(/*:NAMESPACE*/Workflow.COLOR_GREEN);
-        this.resizeHandleEnd.setBackgroundColor(/*:NAMESPACE*/Workflow.COLOR_GREEN);
+        this.resizeHandleStart.setBackgroundColor(this.COLOR_GREEN);
+        this.resizeHandleEnd.setBackgroundColor(this.COLOR_GREEN);
         // required for reconnect of connections
     //TODO   this.resizeHandleStart.draggable.targets= this.dropTargets;
     //TODO   this.resizeHandleEnd.draggable.targets= this.dropTargets;
@@ -708,7 +842,89 @@ graphiti.Canvas = Class.extend(
      * @template
      */
     onClick: function(){
-        
+        console.log("clicked");
+    },
+
+
+    /**
+     * @private
+     **/
+    onMouseDown:function(/*:int*/ x, /*:int*/ y)
+    {
+      this.dragging = true;
+      this.mouseDownPosX = x;
+      this.mouseDownPosY = y;
+
+      this.setCurrentSelection(null);
+      this.showMenu(null);
+
+      // check if a line has been hit
+      //
+      var line = this.getBestLine(x,y);
+      if(line!=null && line.isSelectable())
+      {
+        this.hideResizeHandles();
+        this.setCurrentSelection(line);
+        this.showLineResizeHandles(this.currentSelection);
+        // you can move a line with Drag&Drop...but not a connection.
+        // A Connection is fixed linked with the corresponding ports.
+        //
+        if(line instanceof graphiti.Line && !(line instanceof graphiti.Connection))
+        {
+           this.draggingLineCommand = line.createCommand(new graphiti.EditPolicy(graphiti.EditPolicy.MOVE));
+           if(this.draggingLineCommand!=null)
+              this.draggingLine = line;
+        }
+      }
+    },
+
+    /**
+     * @private
+     **/
+    onMouseUp:function(/*:int*/ x ,/*:int*/ y)
+    {
+      this.dragging = false;
+      if(this.draggingLineCommand!=null)
+      {
+        this.getCommandStack().execute(this.draggingLineCommand);
+        this.draggingLine = null;
+        this.draggingLineCommand=null;
+      }
+    },
+
+    /**
+     * @private
+     **/
+    onMouseMove:function(/*:int*/ x ,/*:int*/ y)
+    {
+      // DragDrop of a connection/Line
+      if(this.dragging==true && this.draggingLine!=null)
+      {
+       var diffX = x-this.mouseDownPosX;
+       var diffY = y-this.mouseDownPosY;
+       // don't use "setStartPoint(...)". This enforce a repaint of the the connection.
+       // We need only one repaint of the connect and this will be done with "setEndPoint(...)"
+       // This is a simple performance "hack".
+       this.draggingLine.startX= this.draggingLine.getStartX()+diffX;
+       this.draggingLine.startY= this.draggingLine.getStartY()+diffY;
+       this.draggingLine.setEndPoint(this.draggingLine.getEndX()+diffX, this.draggingLine.getEndY()+diffY);
+       this.mouseDownPosX = x;
+       this.mouseDownPosY = y;
+       this.showLineResizeHandles(this.currentSelection);
+      }
+      else if(this.dragging==true && this.panning==true)
+      {
+       var diffX = x-this.mouseDownPosX;
+       var diffY = y-this.mouseDownPosY;
+
+       // set the new viewpoint
+       //
+       this.scrollTo(this.getScrollLeft()-diffX,  this.getScrollTop()-diffY,true);
+
+       // adjust all palletes and toolbars
+       //
+       this.onScroll();
+      }
     }
 
 });

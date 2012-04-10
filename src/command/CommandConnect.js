@@ -12,13 +12,13 @@ graphiti.command.CommandConnect = graphiti.command.Command.extend({
      * @constructor
      * Create a new CommandConnect objects which can be execute via the CommandStack.
      *
-     * @param {graphiti.Figure} figure the figure to move
+     * @param {graphiti.Canvas} canvas the canvas to user
      * @param {graphiti.Port} source the source port for the connection to create
      * @param {graphiti.Port} target the target port for the connection to create
      */
-    init : function(figure, source, target)
+    init : function(canvas, source, target)
      {
-       this._super("Move Figure");
+       this._super("Connecting Ports");
        this.canvas = canvas;
        this.source   = source;
        this.target   = target;
