@@ -30,9 +30,6 @@ graphiti.Rectangle = graphiti.VectorFigure.extend({
      **/
     repaint: function()
     {
-      if(this.shape===null)
-         return;
-
       this._super({width: this.width, height:this.height});
     },
 
@@ -41,14 +38,7 @@ graphiti.Rectangle = graphiti.VectorFigure.extend({
      **/
     createShapeElement : function()
     {
-       if(this.canvas===null)
-         return null;
-         
-       this.shape = this.canvas.paper.rect(this.getX(),this.getY(),this.getWidth(), this.getHeight());
-       
-       this.setBackgroundColor(this.bgColor);
-       this.setLineWidth(this.stroke);
-       return this.shape;
+       return this.canvas.paper.rect(this.getX(),this.getY(),this.getWidth(), this.getHeight());
     }
 
 

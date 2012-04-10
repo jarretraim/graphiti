@@ -1,16 +1,20 @@
 /**
  * @class graphiti.command.CommandResize
- * 
- * Generic support class for the undo/redo concept within graphiti.
- * All add,drag&drop,delete operations should be execute via Commands and the related CommandStack.
+ * Resize command for figures. Can be execute/undo/redo via a CommandStack.
+ *
+ * @inheritable
+ * @author Andreas Herz
+ * @extends graphiti.command.Command
  */
 graphiti.command.CommandResize = graphiti.command.Command.extend({
     
     /**
      * @constructor
-     * Create a new Command objects which can be execute via the CommandStack.
-     * 
-     * @param {String} label
+     * Create a new resize Command objects which can be execute via the CommandStack.
+     *
+     * @param {graphiti.Figure} figure the figure to resize
+     * @param {Number} [width] the current width
+     * @param {Number} [height] the current height
      */
     init : function(figure, width, height)
     {
@@ -30,22 +34,26 @@ graphiti.command.CommandResize = graphiti.command.Command.extend({
     },
   
     /**
-     * Execute the command the first time
-     * 
+     * @method
+     * Set the new dimension of the element.
+     *
+     * @param {Number} width the new width.
+     * @param {Number} height the new height of the element.
      **/
-    setDimension:function(/*:int*/ width, /*:int*/ height)
+    setDimension:function( width, height)
     {
-       this.newWidth  = width;
-       this.newHeight = height;
+       this.newWidth  = parseInt(width);
+       this.newHeight = parseInt(height);
     },
-    
+
     /**
+     * @method
      * Returns [true] if the command can be execute and the execution of the
      * command modify the model. A CommandMove with [startX,startX] == [endX,endY] should
      * return false. <br>
      * the execution of the Command doesn't modify the model.
      *
-     * @type boolean
+     * @return {boolean}
      **/
     canExecute:function()
     {
@@ -54,6 +62,7 @@ graphiti.command.CommandResize = graphiti.command.Command.extend({
     },
     
     /**
+     * @method
      * Execute the command the first time
      * 
      **/
@@ -63,21 +72,22 @@ graphiti.command.CommandResize = graphiti.command.Command.extend({
     },
     
     /**
+     * @method
      * Undo the command
      *
      **/
     undo:function()
     {
        this.figure.setDimension(this.oldWidth, this.oldHeight);
-       this.figure.getCanvas().moveResizeHandles(this.figure);
     },
     
-    /** Redo the command after the user has undo this command
+    /**
+     * @method
+     * Redo the command after the user has undo this command
      *
      **/
     redo:function()
     {
        this.figure.setDimension(this.newWidth, this.newHeight);
-       this.figure.getCanvas().moveResizeHandles(this.figure);
     }
 });

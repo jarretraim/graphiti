@@ -22,3 +22,17 @@ graphiti.util = {};
  * Global namespace for undo/redo util classes
  */
 graphiti.command = {};
+
+
+/**
+ * @class
+ * Global namespace for automatic layout of nodes and routing
+ */
+graphiti.layout = {};
+
+
+/**
+ * @class
+ * Global namespace for automatic layout of nodes and routing
+ */
+graphiti.layout.router = {};

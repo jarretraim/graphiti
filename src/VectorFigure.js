@@ -4,22 +4,22 @@
  * 
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.Figure
+ * @extends graphiti.Node
  */
-graphiti.VectorFigure = graphiti.Figure.extend({
+graphiti.VectorFigure = graphiti.Node.extend({
     /**
      * @constructor
      * Creates a new figure element which are not assigned to any canvas.
      * 
      */
-    init: function( ) {
-        this._super( );
-        this.bgColor = null;
-        this.shape = null;
-        this.alpha =1;
-        this.lineColor = new  graphiti.util.Color(0,0,0);
-        this.stroke=1;
-   },
+    init : function()
+    {
+        this.bgColor =  new graphiti.util.Color(100, 100, 100);;
+        this.lineColor = new graphiti.util.Color(0, 0, 0);
+        this.stroke = 1;
+
+        this._super();
+    },
       
 
    /**
@@ -33,27 +33,17 @@ graphiti.VectorFigure = graphiti.Figure.extend({
 
         if(typeof attributes === "undefined" )
             attributes = {};
-        
-        this._super();
 
         attributes.x= this.x;
         attributes.y = this.y;
-        attributes.opacity= this.alpha;
         attributes["stroke-width"] = this.stroke;
         attributes.fill = "#" + this.bgColor.hex();
-        this.shape.attr(attributes);
+        
+        this.shape.node.style.cursor = 'pointer';  
+        
+        this._super(attributes);
     },
 
-   /**
-     * @method 
-     * Set the alpha blending of this figure.
-     * @param {Number} percent Value between [0..1].
-     */
-   setAlpha:function( percent)
-   {
-     this.alpha = percent;
-     this.repaint();
-   },
 
    /**
     * @method

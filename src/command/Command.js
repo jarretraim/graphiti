@@ -2,6 +2,9 @@
  * @class graphiti.command.Command
  * Generic support class for the undo/redo concept within graphiti.
  * All add,drag&drop,delete operations should be execute via Commands and the related CommandStack.
+ *
+ * @inheritable
+ * @author Andreas Herz
  */
 graphiti.command.Command = Class.extend({
     
@@ -21,6 +24,7 @@ graphiti.command.Command = Class.extend({
      * Returns a label of the Command. e.g. "move figure".
      *
      * @final
+     * @return {String} the label for this command
      **/
     getLabel:function()
     {
@@ -34,7 +38,7 @@ graphiti.command.Command = Class.extend({
      * command modifies the model. e.g.: a CommandMove with [startX,startX] == [endX,endY] should
      * return false. Rhe execution of this Command doesn't modify the model.
      *
-     * @type boolean
+     * @return boolean
      **/
     canExecute:function()
     {
@@ -45,6 +49,8 @@ graphiti.command.Command = Class.extend({
      * @method
      * Execute the command the first time.
      * Sup-classes must implement this method.
+     *
+     * @template
      **/
     execute:function()
     {
@@ -54,6 +60,7 @@ graphiti.command.Command = Class.extend({
      * @method
      * Will be called if the user cancel the operation.
      *
+     * @template
      **/
     cancel:function()
     {
@@ -64,6 +71,7 @@ graphiti.command.Command = Class.extend({
      * Undo the command.
      * Sup-classes must implement this method.
      *
+     * @template
      **/
     undo:function()
     {
@@ -74,6 +82,7 @@ graphiti.command.Command = Class.extend({
      * Redo the command after the user has undo this command.
      * Sup-classes must implement this method.
      *
+     * @template
      **/
     redo:function()
     {

@@ -1,20 +1,24 @@
 /**
  * @class graphiti.command.CommandMove
- * 
- * Generic support class for the undo/redo concept within graphiti.
- * All add,drag&drop,delete operations should be execute via Commands and the related CommandStack.
+ * Command for the movement of figures.
+ *
+ * @inheritable
+ * @author Andreas Herz
+ * @extends graphiti.command.Command
  */
 graphiti.command.CommandMove = graphiti.command.Command.extend({
     
     /**
      * @constructor
      * Create a new Command objects which can be execute via the CommandStack.
-     * 
-     * @param {String} label
+     *
+     * @param {graphiti.Figure} figure the figure to move
+     * @param {Number} [x] the current x position
+     * @param {Number} [y] the current y position
      */
     init : function(figure, x, y)
     {
-        this._super("move figure");
+        this._super("Move Figure");
         this.figure = figure;
         if (x == undefined)
         {
@@ -31,8 +35,11 @@ graphiti.command.CommandMove = graphiti.command.Command.extend({
     
   
     /**
+     * @method
      * Set the initial position of the element
      *
+     * @param {Number} x the new initial x position
+     * @param {Number} y the new initial y position
      **/
     setStartPosition:function( x,  y)
     {
@@ -41,8 +48,11 @@ graphiti.command.CommandMove = graphiti.command.Command.extend({
     },
     
     /**
+     * @method
      * Set the target/final position of the figure move command.
-     * 
+     *
+     * @param {Number} x the new x position
+     * @param {Number} y the new y position
      **/
     setPosition:function( x,  y)
     {
@@ -50,14 +60,15 @@ graphiti.command.CommandMove = graphiti.command.Command.extend({
        this.newY = y;
        this.newCompartment = this.figure.getCanvas().getBestCompartmentFigure(x,y,this.figure);
     },
-    
+
     /**
+     * @method
      * Returns [true] if the command can be execute and the execution of the
      * command modify the model. A CommandMove with [startX,startX] == [endX,endY] should
      * return false. <br>
      * the execution of the Command doesn't modify the model.
      *
-     * @type boolean
+     * @return {boolean}
      **/
     canExecute:function()
     {
@@ -66,6 +77,7 @@ graphiti.command.CommandMove = graphiti.command.Command.extend({
     },
     
     /**
+     * @method
      * Execute the command the first time
      * 
      **/
@@ -75,7 +87,9 @@ graphiti.command.CommandMove = graphiti.command.Command.extend({
     },
     
     /**
-     * Undo the command
+     * @method
+     *
+     * Undo the move command
      *
      **/
     undo:function()
@@ -86,11 +100,11 @@ graphiti.command.CommandMove = graphiti.command.Command.extend({
     
        if(this.oldCompartment!==null)
           this.oldCompartment.addChild(this.figure);
-    
-       this.figure.getCanvas().moveResizeHandles(this.figure);
     },
     
-    /** Redo the command after the user has undo this command
+    /**
+     * @method
+     * Redo the move command after the user has undo this command
      *
      **/
     redo:function()
@@ -101,7 +115,5 @@ graphiti.command.CommandMove = graphiti.command.Command.extend({
     
        if(this.newCompartment!==null)
           this.newCompartment.addChild(this.figure);
-    
-       this.figure.getCanvas().moveResizeHandles(this.figure);
-    },
+    }
 });

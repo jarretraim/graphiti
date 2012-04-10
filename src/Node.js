@@ -1,0 +1,241 @@
+/**
+ * @class graphiti.Node
+ * 
+ * A Node is the base class for all figures which can have {@link @NAMESPACE@Port}s. A {@link @NAMESPACE@Port} is the
+ * anchor for a {@link @NAMESPACE@Connection} line.<br><br><b>Hint:</b> A {@link @NAMESPACE@Port} is a green dot which can 
+ * be dragged and dropped over another port.<br>
+ * 
+ * @extends graphiti.Figure 
+ * @inheritable
+ * @author Andreas Herz
+ */
+graphiti.Node = graphiti.Figure.extend({
+
+    /**
+     * @constructor
+     * Creates a new Node element which are not assigned to any canvas.
+     */
+    init: function( ) {
+      this.bgColor = new  graphiti.util.Color(255,255,255);
+      this.lineColor = new  graphiti.util.Color(128,128,255);
+      this.lineStroke=1;
+      this.ports = new graphiti.util.ArrayList();
+      this._super();
+    },
+    
+
+    /**
+     * @method
+     * Return all ports of the node.
+     *
+     * @return  graphiti.util.ArrayList
+     **/
+    getPorts: function()
+    {
+      return this.ports;
+    },
+    
+    
+    /**
+     * @method
+     * Return all input ports of the node.
+     *
+     * @type  graphiti.util.ArrayList
+     **/
+    getInputPorts: function()
+    {
+      var result = new graphiti.util.ArrayList();
+      for(var i=0;i<this.ports.getSize();i++)
+      {
+       var port = this.ports.get(i);
+       if(port instanceof graphiti.util.InputPort)
+          result.add(port);
+      }
+      return result;
+    },
+    
+    /**
+     * @method
+     * Return all output ports of the node.
+     *
+     * @return  graphiti.util.ArrayList
+     **/
+    getOutputPorts: function()
+    {
+      var result = new graphiti.util.ArrayList();
+      for(var i=0;i<this.ports.getSize();i++)
+      {
+       var port = this.ports.get(i);
+       if(port instanceof graphiti.OutputPort)
+          result.add(port);
+      }
+      return result;
+    },
+    
+    /**
+     * @method
+     * Return the port with the corresponding name.
+     *
+     * @see graphiti.Port#getName
+     * @see graphiti.Port#setName
+     * 
+     * @param {String} portName The name of the port to return.
+     * @return {graphiti.Port} Returns the port with the hands over name or null.
+     **/
+    getPort: function( portName)
+    {
+      for(var i=0;i<this.ports.getSize();i++)
+      {
+       var port = this.ports.get(i);
+       if(port.getName() === portName)
+          return port;
+      }
+      
+      return null;
+    },
+    
+    /**
+     * @method
+     * Return the input port with the corresponding name.
+     *
+     * @see graphiti.Port#getName
+     * @see graphiti.Port#setName
+     * 
+     * @param {String} portName The name of the port to return.
+     * @return {graphiti.InputPort} Returns the port with the hands over name or null.
+     **/
+    getInputPort: function( portName)
+    {
+      for(var i=0;i<this.ports.getSize();i++)
+      {
+       var port = this.ports.get(i);
+       if(port.getName() === portName && port instanceof graphiti.InputPort)
+          return port;
+      }
+      
+      return null;
+    },
+    
+    /**
+     * @method
+     * Return the output port with the corresponding name.
+     *
+     * @see graphiti.Port#getName
+     * @see graphitiPort#setName
+     * @param {String} portName The name of the port to return.
+     * @return {graphitiOutputPort} Returns the port with the hands over name or null.
+     **/
+    getOutputPort: function( portName)
+    {
+      for(var i=0;i<this.ports.getSize();i++)
+      {
+       var port = this.ports.get(i);
+       if(port.getName() === portName && port instanceof graphiti.OutputPort)
+          return port;
+      }
+      
+      return null;
+    },
+    
+    /**
+     * @method
+     * Add a port to this node at the given position.<br>
+     *
+     * @param {graphiti.Port} port The new port to add.
+     * @param {Number}  x The x position.
+     * @param {Number}  y The y position.
+     **/
+    addPort: function(port, x, y)
+    {
+      this.ports.add(port);
+      port.setOrigin(x,y);
+      port.setPosition(this.x+x,this.y+y);
+      port.setParent(this);
+      
+      // You can't delete a port with the [DEL] key if a port is a child of a node
+      port.setDeleteable(false);
+    
+      port.getShapeElement();
+      if(this.canvas!==null)
+      {
+        this.canvas.registerPort(port);
+      }
+    },
+    
+    /**
+     * @method
+     * Removes a port and all related connections from this node.<br>
+     *
+     * @param {graphiti.Port} port The port to remove.
+     *
+     **/
+    removePort: function( port)
+    {
+      this.ports.remove(port);
+        
+      port.setCanvas(null);
+      
+      if(this.canvas!==null)
+        this.canvas.unregisterPort(port);
+    
+      // remove the related connections of the port too.
+      var connections = port.getConnections();
+      for (var i = 0; i < connections.getSize(); ++i)
+      {
+        this.canvas.removeFigure(connections.get(i));
+      }
+    },
+    
+    /**
+     * @private
+     **/
+    setCanvas: function( canvas)
+    {
+      var oldCanvas = this.canvas;
+      this._super(canvas);
+    
+      if(oldCanvas!==null)
+      {
+          for(var i=0;i<this.ports.getSize();i++)
+          {
+              oldCanvas.unregisterPort(this.ports.get(i));
+          }
+      }
+    
+      if(this.canvas!==null)
+      {
+          for(var i=0;i<this.ports.getSize();i++)
+          {
+             this.canvas.registerPort(this.ports.get(i));
+          }
+      }
+    },
+
+    /**
+     * @method
+     * Returns the List of the connection model objects for which this Figure's model is the source. 
+     * Callers must not modify the returned List. <br>
+     * Only called if you use the MVC pattern of Draw2D<br>
+     *
+     * @return {graphiti.util.ArrayList} the List of model source connections
+     * @template
+     */
+    getModelSourceConnections: function()
+    {
+       throw "You must override the method [Node.prototype.getModelSourceConnections]";
+    },
+    
+    /**
+     * @method
+     * Only called if you use the MVC pattern of Draw2D
+     * 
+     * @private
+     * @final
+     */
+    refreshConnections: function()
+    {
+       // notify the view that the element has been changed
+       if(this.canvas!==null)
+          this.canvas.refreshConnections(this);
+    }
+});

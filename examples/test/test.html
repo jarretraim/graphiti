@@ -13,8 +13,11 @@
 	<SCRIPT src="../../src/graphiti.js"></SCRIPT>
 	<SCRIPT src="../../src/util/Color.js"></SCRIPT>
 	<SCRIPT src="../../src/util/ArrayList.js"></SCRIPT>
+	<SCRIPT src="../../src/util/UUID.js"></SCRIPT>
+	
 	<SCRIPT src="../../src/geo/PositionConstants.js"></SCRIPT>
 	<SCRIPT src="../../src/geo/Point.js"></SCRIPT>
+	
 	<SCRIPT src="../../src/EditPolicy.js"></SCRIPT>
 	<SCRIPT src="../../src/command/Command.js"></SCRIPT>
 	<SCRIPT src="../../src/command/CommandStack.js"></SCRIPT>
@@ -22,15 +25,34 @@
 	<SCRIPT src="../../src/command/CommandStackEventListener.js"></SCRIPT>
 	<SCRIPT src="../../src/command/CommandMove.js"></SCRIPT>
 	<SCRIPT src="../../src/command/CommandResize.js"></SCRIPT>
+	<SCRIPT src="../../src/command/CommandConnect.js"></SCRIPT>
+	
+	<SCRIPT src="../../src/layout/router/AbstractRouter.js"></SCRIPT>
+	<SCRIPT src="../../src/layout/router/DirectRouter.js"></SCRIPT>
+
 	<SCRIPT src="../../src/Canvas.js"></SCRIPT>
 	<SCRIPT src="../../src/Figure.js"></SCRIPT>
+	<SCRIPT src="../../src/Node.js"></SCRIPT>
 	<SCRIPT src="../../src/VectorFigure.js"></SCRIPT>
 	<SCRIPT src="../../src/Rectangle.js"></SCRIPT>
-	<SCRIPT src="../../src/ResizeHandle.js"></SCRIPT>
 	<SCRIPT src="../../src/CompartmentFigure.js"></SCRIPT>
 	<SCRIPT src="../../src/Line.js"></SCRIPT>
+	<SCRIPT src="../../src/Connection.js"></SCRIPT>
 	<SCRIPT src="../../src/VectorFigure.js"></SCRIPT>
+	<SCRIPT src="../../src/ResizeHandle.js"></SCRIPT>
+	<SCRIPT src="../../src/LineResizeHandle.js"></SCRIPT>
+	<SCRIPT src="../../src/LineStartResizeHandle.js"></SCRIPT>
+	<SCRIPT src="../../src/LineEndResizeHandle.js"></SCRIPT>
 	<SCRIPT src="../../src/Oval.js"></SCRIPT>
+	<SCRIPT src="../../src/Circle.js"></SCRIPT>
+	<SCRIPT src="../../src/Port.js"></SCRIPT>
+	<SCRIPT src="../../src/InputPort.js"></SCRIPT>
+	<SCRIPT src="../../src/OutputPort.js"></SCRIPT>
+	<SCRIPT src="../../src/ConnectionAnchor.js"></SCRIPT>
+
+
+	<SCRIPT src="Start.js"></SCRIPT>
+	<SCRIPT src="End.js"></SCRIPT>
 
 
 </head>
@@ -49,6 +71,9 @@
   canvas.addFigure(figure1,100,100);
   canvas.addFigure(figure2,120,150);
   figure2.setDimension(50,50);
+  
+  canvas.addFigure( new example.Start(), 50,50);
+  canvas.addFigure( new example.End(), 150,150);
 </script>
 
 </body>

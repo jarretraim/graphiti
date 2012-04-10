@@ -1,11 +1,10 @@
 /**
  * @class graphiti.CompartmentFigure
- * The base class for all visible elements inside a canvas.
+ * Container class which can hold other figures inside.
  * 
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.VectorFigure
- * @since 2.1
+ * @extends graphiti.Figure
  */
 graphiti.CompartmentFigure = graphiti.Figure.extend({
  
@@ -36,23 +35,26 @@ graphiti.CompartmentFigure = graphiti.Figure.extend({
     },
     
     /**
+     * @method
      * Sub class can override this method to reset the highlight or do other stuff.<br>
      * <br>
      * Don't forget to call the super method via <code>Figure.prototype.onFigureEnter.call(this,figure)</code> if you inherit
      *
      * @param {graphiti.Figure} figure The current drag drop figure.
+     * @template
      **/
     onFigureEnter : function( figure)
     {
     },
     
     /**
+     * @method
      * Sub class can override this method to reset the highlight or do other stuff.<br>
      * <br>
      * Don't forget to call the super method via <code>Figure.prototype.onFigureLeave.call(this,figure)</code> if you inherit
      * 
      * @param {graphiti.Figure} figure The current drag drop figure.
-     * @private
+     * @template
      **/
     onFigureLeave : function(figure)
     {
@@ -60,10 +62,12 @@ graphiti.CompartmentFigure = graphiti.Figure.extend({
     
     
     /**
+     * @method
      * Sub class can override this method to reset the highlight or do other stuff.<br>
      * <br>
      *
      * @param {graphiti.Figure} figure The current drag drop figure.
+     * @template
      **/
     onFigureDrop : function(/*:graphiti.Figure*/ figure)
     {
@@ -71,6 +75,7 @@ graphiti.CompartmentFigure = graphiti.Figure.extend({
     
     
     /**
+     * @method
      * Returns the children of this container figure.
      *
      * @return {graphiti.util.ArrayList}
@@ -81,11 +86,12 @@ graphiti.CompartmentFigure = graphiti.Figure.extend({
     },
     
     /**
+     * @method
      * Add the hands over element to this compartment figure. This is a kind of grouping elements
      * 
      * @param {graphiti.Figure} figure The new figure to add.
      **/
-    addChild : function(/*:graphiti.Figure*/ figure)
+    addChild : function( figure)
     {
       // The child of a compartment is always above the compartment
       //
@@ -98,13 +104,14 @@ graphiti.CompartmentFigure = graphiti.Figure.extend({
     },
     
     /**
+     * @method
      * Remove the hands over figure from this compartment figure.
      * This method does NOT remove the figure from the cnavas. It only remove the figure in
      * child hirachie of this compartment.
      *
      * @param {graphiti.Figure} figure The figure to remove.
      **/
-    removeChild : function(/*:graphiti.Figure*/ figure)
+    removeChild : function( figure)
     {
       figure.setParent(null);
       this.children.remove(figure);
@@ -112,9 +119,12 @@ graphiti.CompartmentFigure = graphiti.Figure.extend({
     
     
     /**
-     * @param {int} index Set the new z-index of the element
+     * @method
+     * Set the z-order of the leemnt.
+     *
+     * @param {Number} index Set the new z-index of the element
      **/
-    setZOrder:function(/*:int*/ index)
+    setZOrder:function( index)
     {
       /*:NAMESPACE*/Node.prototype.setZOrder.call(this,index);
     
@@ -127,10 +137,11 @@ graphiti.CompartmentFigure = graphiti.Figure.extend({
     },
     
     /**
+     * @method
      * Set the new position of the object
      *
-     * @param {int} xPos The new x coordinate of the figure
-     * @param {int} yPos The new y coordinate of the figure 
+     * @param {Number} xPos The new x coordinate of the figure
+     * @param {Number} yPos The new y coordinate of the figure
      **/
     setPosition:function(/*:int*/ xPos , /*:int*/yPos )
     {

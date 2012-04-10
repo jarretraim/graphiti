@@ -24,10 +24,13 @@ graphiti.Figure = Class.extend({
         
         this.parent = null;
         
+        this.id = graphiti.util.UUID.create();
         this.x = 0;
         this.y = 0;
         this.width = this.getMinWidth();
         this.height = this.getMinHeight();
+ 
+        this.alpha = 1.0;
         
         this.canSnapToHelper = true;
         this.snapToGridAnchor = new graphiti.geo.Point(0,0);
@@ -43,13 +46,19 @@ graphiti.Figure = Class.extend({
      */
     setCanvas: function( canvas )
     {
+      // remove the shape if we reset the canvas and the element
+        // was already drawn
       if(canvas===null && this.shape!==null)
       {
          this.shape.remove();
          this.shape=null;
       }
+     
       this.canvas = canvas;
-    },
+      
+      if(this.canvas!==null)
+          this.getShapeElement();
+     },
     
     /**
      * @method
@@ -73,7 +82,9 @@ graphiti.Figure = Class.extend({
        if(this.shape!==null)
          return this.shape;
 
-      return this.shape=this.createShapeElement();
+      this.shape=this.createShapeElement();
+      
+      return this.shape;
     },
 
 
@@ -89,6 +100,25 @@ graphiti.Figure = Class.extend({
         throw "Inherited class ["+this.type+"] must override the abstract method createShapeElement";
     },
     
+    /**
+     * @method
+     * propagate all attributes like color, stroke,... to the shape element
+     * 
+     **/
+     repaint : function(attributes)
+     {
+         if (this.shape === null)
+             return;
+
+         if(typeof attributes === "undefined" )
+             attributes = {};
+         
+         // enrich with common properties
+         attributes.opacity = this.alpha;
+         
+         this.shape.attr(attributes);
+     },
+     
     /** 
      * @method
      * Create the draggable elements. Called by the framework of the element has been added to the 
@@ -107,15 +137,13 @@ graphiti.Figure = Class.extend({
            var line = this.canvas.getBestLine(this.x+x, y+this.y);
            if(line!==null)
            {
-             w.setCurrentSelection(line);
-             w.showLineResizeHandles(line);
-             w.onMouseDown(oThis.x+oEvent.x, oEvent.y+oThis.y);
+             this.canvas.setCurrentSelection(line);
+             this.canvas.onMouseDown(oThis.x+oEvent.x, oEvent.y+oThis.y);
              return;
            }
            
            if(this.isSelectable())
            {
-             this.canvas.showResizeHandles(this);
              this.canvas.setCurrentSelection(this);
            }
     
@@ -172,15 +200,14 @@ graphiti.Figure = Class.extend({
       // Adjust the new location if the object can snap to a helper
       // like grid, geometry, ruler,...
       //
-      /*
       if(this.getCanSnapToHelper())
       {
         var p = new graphiti.geo.Point(this.x,this.y);
-        p = this.getWorkflow().snapToHelper(this, p);
+        p = this.getCanvas().snapToHelper(this, p);
         this.x = p.x;
         this.y = p.y;
       }
-      */
+
       this.setPosition(this.x, this.y);
       
       // enable the alpha blending of the first real move of the object
@@ -188,7 +215,8 @@ graphiti.Figure = Class.extend({
       if(this.isMoving==false)
       {
        this.isMoving = true;
-       this.setAlpha(0.5);
+       this._originalAlpha = this.getAlpha();
+       this.setAlpha(this._originalAlpha*0.7);
       }
       this.fireMoveEvent();
     },
@@ -239,7 +267,7 @@ graphiti.Figure = Class.extend({
       }
       else*/
       {
-          this.setAlpha(1.0);
+          this.setAlpha(this._originalAlpha);
       }
       // Element ist zwar schon an seine Position, das Command muss aber trotzdem
       // in dem CommandStack gelegt werden damit das Undo funktioniert.
@@ -254,14 +282,6 @@ graphiti.Figure = Class.extend({
 
     /**
      * @method
-     * propagate all attributes like color, stroke,... to the shape element
-     **/
-    repaint: function()
-    {
-    },
-
-    /**
-     * @method
      * Set the alpha blending of this figure. 
      *
      * @template
@@ -270,9 +290,23 @@ graphiti.Figure = Class.extend({
      **/
     setAlpha:function( percent)
     {
+      if(percent==this.alpha)
+         return;
+
+      this.alpha = percent;
+      this.repaint();
     },
-
-
+    
+    /**
+     * @method
+     * Return the alpha blending of the figure
+     * 
+     * @return {Number}
+     */
+    getAlpha: function(){
+        return this.alpha;
+    },
+    
     /**
      * Set the flag if this object can snap to grid or geometry.
      * A window of dialog should set this flag to false.
@@ -384,7 +418,10 @@ graphiti.Figure = Class.extend({
 
 
     /**
-     * @return The Y coordinate in relation the Canvas.
+     * @method
+     * The absolute postion fo the figure in relation to the canvas.
+     *
+     * @return The Y coordinate in relation to the Canvas.
      **/
     getAbsoluteY:function()
     {
@@ -392,6 +429,9 @@ graphiti.Figure = Class.extend({
     },
 
     /**
+     * @method
+     * The absolute position of the figure in relation to the canvas.
+     *
      * @return The X coordinate in relation to the canvas
      **/
     getAbsoluteX:function()
@@ -614,6 +654,10 @@ graphiti.Figure = Class.extend({
 
     /**
      * @method
+     * Register the handsover figure as a moveListener of this figure.<br>
+     * All position changes will be broadcast to all move listener. This is
+     * usefull for Connectors and Layouter for router handling.
+     *
      * @param {graphiti.Figure} figure The figure to monitor
      *
      **/
@@ -628,6 +672,8 @@ graphiti.Figure = Class.extend({
 
     /**
      * @method
+     * Remove the hands over figure from notification queue.
+     *
      * @param {graphiti.Figure} figure The figure to remove the monitor
      *
      **/

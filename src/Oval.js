@@ -5,7 +5,6 @@
  * @inheritable
  * @author Andreas Herz
  * @extends graphiti.VectorFigure
- * @since 2.1
  */
 graphiti.Oval = graphiti.VectorFigure.extend({
     /**
@@ -27,25 +26,26 @@ graphiti.Oval = graphiti.VectorFigure.extend({
    {
      var halfW = this.getWidth()/2;
      var halfH = this.getHeight()/2;
-     this.shape= this.canvas.paper.ellipse(this.getX()+halfW, this.getY()+halfH, halfW, halfH);
-
-     this.repaint();
-     
-     return this.shape;
+     return this.canvas.paper.ellipse(this.getX()+halfW, this.getY()+halfH, halfW, halfH);
    },
 
    /**
     * @method
     * propagate all attributes like color, stroke,... to the shape element
     **/
-   repaint: function()
+   repaint: function(attributes)
    {
-     if(this.shape===null)
-        return;
-        
-     var halfW = this.width/2;
-     var halfH = this.height/2;
-     this._super({rx: halfW, ry:halfH, cx: this.x+halfW, cy:this.y+halfH});
+       if(typeof attributes === "undefined"){
+           attributes = {rx: this.width/2, ry: this.height/2 };
+       }
+       
+       // don't override cx/cy if inherited class has set the center already.
+       if(typeof attributes.cx === "undefined"){
+           attributes.cx = this.x+attributes.rx;
+           attributes.cy = this.y+attributes.ry;
+       }
+       
+       this._super(attributes);
    },
     
 });
