@@ -59,7 +59,7 @@ graphiti.command.CommandStack = Class.extend({
        if(command===null)
           return; //silently
     
-       if(command === undefined)
+       if(typeof command === "undefined")
           throw "Missing parameter [command] for method call CommandStack.prototype.execute";
           
        // return if the command can't execute or it doesn't change the model

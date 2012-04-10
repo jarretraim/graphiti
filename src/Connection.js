@@ -631,7 +631,6 @@ graphiti.Connection = graphiti.Line.extend({
       {
         // DragDrop of a connection doesn't create a undo command at this point. This will be done in
         // the onDrop method
-          console.log("Reconnect");
         return new graphiti.command.CommandReconnect(this);
       }
  

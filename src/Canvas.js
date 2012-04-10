@@ -20,7 +20,6 @@ graphiti.Canvas = Class.extend(
         this.scrollArea = document.body;
         this.canvasId = canvasId;
         this.html = $("#"+canvasId);
-        console.log(this.html);
         this.paper = Raphael(canvasId, this.getWidth(), this.getHeight());
         this.zoomFactor = 1.0;
         this.enableSmoothFigureHandling=false;
@@ -108,21 +107,19 @@ graphiti.Canvas = Class.extend(
            }
          };
 */
-        this.html.bind("mousedown touchstart",$.proxy(function(event)
-         {
+        this.html.bind("mousedown touchstart", $.proxy(function(event)
+        {
             event = this._getEvent(event);
-            console.log(event);
-         
-           var diffX = event.clientX;
-           var diffY = event.clientY;
-           var scrollLeft = this.getScrollLeft();
-           var scrollTop  = this.getScrollTop();
-           var xOffset = this.getAbsoluteX();
-           var yOffset = this.getAbsoluteY();
-           this.onMouseDown(diffX+scrollLeft-xOffset, diffY+scrollTop-yOffset);
-         
-            console.log("touch");
-         },this));
+
+            var diffX = event.clientX;
+            var diffY = event.clientY;
+            var scrollLeft = this.getScrollLeft();
+            var scrollTop = this.getScrollTop();
+            var xOffset = this.getAbsoluteX();
+            var yOffset = this.getAbsoluteY();
+            this.onMouseDown(diffX + scrollLeft - xOffset, diffY + scrollTop - yOffset);
+
+        }, this));
     },
     
     
@@ -171,8 +168,10 @@ graphiti.Canvas = Class.extend(
     },
 
     /**
-     * @returns The X coordinate in relation to the canvas
-     * @type int
+     * @method
+     * The X coordinate in relation to the canvas
+     *
+     * @return {Number}
      **/
     getAbsoluteX:function()
     {
@@ -223,7 +222,6 @@ graphiti.Canvas = Class.extend(
       if(figure instanceof graphiti.Line)
       {
         this.lines.add(figure);
-        console.log("ADD line------->");
       }
       else
       {
@@ -258,8 +256,7 @@ graphiti.Canvas = Class.extend(
         
         if(figure instanceof graphiti.Line){
             this.lines.remove(figure);
-            console.log("<----------REMOVE Line");
-        }
+         }
 
         figure.setCanvas(null);
 
@@ -531,7 +528,7 @@ graphiti.Canvas = Class.extend(
      * @method
      * Returns the command stack for the Canvas. Required for undo/redo  support.
      *
-     * @type {graphiti.command.CommandStack}
+     * @return {graphiti.command.CommandStack}
      **/
     getCommandStack:function()
     {
@@ -542,6 +539,7 @@ graphiti.Canvas = Class.extend(
      * @method
      * Returns the current selected figure in the Canvas.
      *
+     * @return {graphiti.Figure}
      **/
     getCurrentSelection:function()
     {
@@ -563,7 +561,11 @@ graphiti.Canvas = Class.extend(
       }
 
       
-      if(figure!==null)
+      if(figure instanceof graphiti.Line)
+      {
+          this.showLineResizeHandles(figure);
+      }
+      else if(figure instanceof graphiti.Figure)
       {
           this.showResizeHandles(figure);
       }
@@ -842,7 +844,6 @@ graphiti.Canvas = Class.extend(
      * @template
      */
     onClick: function(){
-        console.log("clicked");
     },
 
 

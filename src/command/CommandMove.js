@@ -20,7 +20,7 @@ graphiti.command.CommandMove = graphiti.command.Command.extend({
     {
         this._super("Move Figure");
         this.figure = figure;
-        if (x == undefined)
+        if (typeof x === "undefined")
         {
             this.oldX = figure.getX();
             this.oldY = figure.getY();

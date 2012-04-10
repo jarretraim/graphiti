@@ -2,45 +2,478 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="32fa60a3-ab2d-41c8-b37f-f842f9d1727f" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/app.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/data.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/eg-iframe.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/ext-all.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/boundlist/trigger-arrow.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/box/corners-blue.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/box/corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/box/l-blue.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/box/l.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/box/r-blue.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/box/r.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/box/tb-blue.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/box/tb.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn-group/btn-group-default-framed-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn-group/btn-group-default-framed-notitle-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn-group/btn-group-default-framed-notitle-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn-group/btn-group-default-framed-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-large-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-large-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-large-disabled-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-large-disabled-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-large-disabled-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-large-focus-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-large-focus-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-large-focus-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-large-over-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-large-over-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-large-over-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-large-pressed-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-large-pressed-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-large-pressed-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-large-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-medium-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-medium-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-medium-disabled-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-medium-disabled-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-medium-disabled-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-medium-focus-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-medium-focus-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-medium-focus-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-medium-over-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-medium-over-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-medium-over-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-medium-pressed-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-medium-pressed-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-medium-pressed-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-medium-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-small-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-small-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-small-disabled-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-small-disabled-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-small-disabled-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-small-focus-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-small-focus-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-small-focus-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-small-over-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-small-over-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-small-over-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-small-pressed-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-small-pressed-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-small-pressed-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-small-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-large-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-large-disabled-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-large-disabled-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-large-focus-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-large-focus-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-large-focus-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-large-over-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-large-over-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-large-over-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-large-pressed-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-large-pressed-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-large-pressed-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-large-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-medium-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-medium-disabled-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-medium-disabled-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-medium-focus-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-medium-focus-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-medium-focus-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-medium-over-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-medium-over-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-medium-over-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-medium-pressed-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-medium-pressed-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-medium-pressed-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-medium-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-small-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-small-disabled-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-small-disabled-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-small-focus-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-small-focus-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-small-focus-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-small-over-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-small-over-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-small-over-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-small-pressed-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-small-pressed-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-small-pressed-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/btn/btn-default-toolbar-small-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/button/arrow.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/button/btn.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/button/group-cs.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/button/group-lr.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/button/group-tb.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/button/s-arrow-b-noline.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/button/s-arrow-b.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/button/s-arrow-bo.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/button/s-arrow-light.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/button/s-arrow-noline.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/button/s-arrow-o.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/button/s-arrow.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/datepicker/datepicker-footer-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/datepicker/datepicker-footer-bg.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/datepicker/datepicker-header-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/datepicker/datepicker-header-bg.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/dd/drop-add.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/dd/drop-no.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/dd/drop-yes.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/editor/tb-sprite.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/form-invalid-tip/form-invalid-tip-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/form-invalid-tip/form-invalid-tip-default-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/form-invalid-tip/form-invalid-tip-default-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/form-invalid-tip/form-invalid-tip-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/form/checkbox.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/form/clear-trigger.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/form/date-trigger.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/form/error-tip-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/form/exclamation.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/form/radio.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/form/search-trigger.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/form/spinner-small.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/form/spinner.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/form/text-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/form/trigger-square.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/form/trigger-tpl.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/form/trigger.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/arrow-left-white.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/arrow-right-white.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/cell-special-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/cell-special-bg.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/cell-special-selected-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/cell-special-selected-bg.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/checked.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/col-move-bottom.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/col-move-top.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/column-header-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/column-header-bg.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/column-header-over-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/column-header-over-bg.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/columns.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/dd-insert-arrow-left.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/dd-insert-arrow-left.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/dd-insert-arrow-right.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/dd-insert-arrow-right.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/dirty.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/done.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/drop-no.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/drop-yes.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/footer-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/grid-blue-hd.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/grid-blue-split.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/grid-hrow.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/grid-loading.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/grid-split.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/grid-vista-hd.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/grid3-hd-btn.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/grid3-hrow-over.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/grid3-hrow.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/grid3-rowheader.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/group-by.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/group-collapse.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/group-expand-sprite.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/group-expand.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/hd-pop.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/hmenu-asc.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/hmenu-desc.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/hmenu-lock.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/hmenu-lock.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/hmenu-unlock.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/hmenu-unlock.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/invalid_line.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/loading.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/mso-hd.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/nowait.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/page-first-disabled.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/page-first.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/page-last-disabled.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/page-last.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/page-next-disabled.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/page-next.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/page-prev-disabled.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/page-prev.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/pick-button.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/property-cell-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/property-cell-selected-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/refresh-disabled.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/refresh.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/row-check-sprite.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/row-expand-sprite.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/row-over.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/row-sel.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/sort-hd.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/sort_asc.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/sort_desc.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/unchecked.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/grid/wait.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/layout/mini-bottom.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/layout/mini-left.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/layout/mini-right.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/layout/mini-top.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/menu/checked.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/menu/group-checked.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/menu/item-over.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/menu/menu-item-active-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/menu/menu-item-active-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/menu/menu-item-active-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/menu/menu-parent.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/menu/menu.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/menu/unchecked.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-bottom-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-bottom-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-bottom-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-bottom-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-collapsed-bottom-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-collapsed-bottom-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-collapsed-bottom-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-collapsed-left-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-collapsed-left-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-collapsed-left-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-collapsed-right-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-collapsed-right-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-collapsed-right-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-collapsed-top-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-collapsed-top-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-collapsed-top-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-left-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-left-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-left-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-right-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-right-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-right-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-top-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-top-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-framed-top-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-left-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-right-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel-header/panel-header-default-top-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel/panel-default-framed-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/panel/panel-default-framed-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/progress/progress-default-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/shared/blue-loading.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/shared/calendar.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/shared/glass-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/shared/hd-sprite.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/shared/icon-error.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/shared/icon-info.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/shared/icon-question.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/shared/icon-warning.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/shared/large-loading.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/shared/left-btn.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/shared/loading-balls.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/shared/right-btn.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/shared/shadow-c.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/shared/shadow-lr.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/shared/shadow.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/shared/warning.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/sizer/e-handle-dark.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/sizer/e-handle.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/sizer/ne-handle-dark.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/sizer/ne-handle.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/sizer/nw-handle-dark.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/sizer/nw-handle.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/sizer/s-handle-dark.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/sizer/s-handle.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/sizer/se-handle-dark.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/sizer/se-handle.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/sizer/square.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/sizer/sw-handle-dark.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/sizer/sw-handle.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/slider/slider-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/slider/slider-bg.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/slider/slider-thumb.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/slider/slider-thumb.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/slider/slider-v-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/slider/slider-v-bg.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/slider/slider-v-thumb.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/slider/slider-v-thumb.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab-bar/scroll-left.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab-bar/scroll-right.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab-bar/tab-bar-default-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-bottom-active-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-bottom-active-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-bottom-active-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-bottom-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-bottom-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-bottom-disabled-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-bottom-disabled-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-bottom-disabled-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-bottom-over-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-bottom-over-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-bottom-over-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-bottom-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-close.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-top-active-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-top-active-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-top-active-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-top-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-top-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-top-disabled-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-top-disabled-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-top-disabled-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-top-over-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-top-over-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-top-over-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tab/tab-default-top-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tip/tip-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tip/tip-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/toolbar/more.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/toolbar/scroll-left.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/toolbar/scroll-right.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/toolbar/toolbar-default-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tools/tool-sprite-tpl.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tools/tool-sprites.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tools/tools-sprites-trans.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/arrows.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/drop-above.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/drop-add.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/drop-append.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/drop-below.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/drop-between.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/drop-no.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/drop-over.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/drop-under.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/drop-yes.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/elbow-end-minus-nl.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/elbow-end-minus.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/elbow-end-plus-nl.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/elbow-end-plus.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/elbow-end.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/elbow-line.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/elbow-minus-nl.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/elbow-minus.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/elbow-plus-nl.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/elbow-plus.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/elbow.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/folder-open.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/folder.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/leaf.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/loading.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/tree/s.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/util/splitter/mini-bottom.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/util/splitter/mini-left.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/util/splitter/mini-right.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/util/splitter/mini-top.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/window-header/window-header-default-bottom-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/window-header/window-header-default-bottom-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/window-header/window-header-default-left-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/window-header/window-header-default-left-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/window-header/window-header-default-right-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/window-header/window-header-default-right-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/window-header/window-header-default-top-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/window-header/window-header-default-top-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/window/window-default-corners.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/extjs/resources/themes/images/default/window/window-default-sides.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/favicon.ico" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/index.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.Canvas.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.CompartmentFigure.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.EditPolicy.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.Figure.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.Line.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.Oval.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.Rectangle.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.ResizeHandle.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.VectorFigure.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.Command.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.CommandMove.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.CommandResize.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.CommandStack.POST_EXECUTE.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.CommandStack.POST_REDO.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.CommandStack.POST_UNDO.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.CommandStack.PRE_EXECUTE.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.CommandStack.PRE_REDO.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.CommandStack.PRE_UNDO.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.CommandStack.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.CommandStackEvent.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.CommandStackEventListener.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.geo.Point.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.geo.PositionConstants.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.geo.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.util.ArrayList.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.util.Color.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.util.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/css/app.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/css/touch.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/ajax-loader.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/arrows.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/class-m.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/comment-bubble.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/comment.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/component-m.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/default-guide.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/doc-m.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/down-arr.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/elbow-end.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/example-icons.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/expandcollapse.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/gettingstarted.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/group-expand-sprite.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/guide-icon.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/guides.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/header.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/hero-extjs4-alt.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/icons.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/link-arrow-next.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/link-green-standard-over.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/link-green-standard.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/loading-title.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/loading.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/logo-screen-noglow.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/logo.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/member-collapsed.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/member-expanded.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/member-hover.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/more.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/phone-l.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/phone-p.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/phone-small-l.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/phone-small-p.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/preview.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/print.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/sample-over.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/search-box.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/sencha-stamp.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/singleton-m.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/tablet-l.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/tablet-p.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/tabs.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/text-bg.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/version-tabs.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/vote-arrows.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/welcome-bg-js4.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/x.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/x12.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/images/x122.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/prettify/prettify.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/resources/prettify/prettify.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/ArrayList.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/Canvas.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/Color.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/Command.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/CommandMove.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/CommandResize.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/CommandStack.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/CommandStackEvent.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/CommandStackEventListener.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/CompartmentFigure.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/EditPolicy.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/Figure.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/Line.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/Oval.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/Point.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/PositionConstants.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/Rectangle.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/ResizeHandle.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/VectorFigure.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/graphiti.html" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Canvas.js" afterPath="$PROJECT_DIR$/src/Canvas.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CompartmentFigure.js" afterPath="$PROJECT_DIR$/src/CompartmentFigure.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Figure.js" afterPath="$PROJECT_DIR$/src/Figure.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Oval.js" afterPath="$PROJECT_DIR$/src/Oval.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ResizeHandle.js" afterPath="$PROJECT_DIR$/src/ResizeHandle.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/VectorFigure.js" afterPath="$PROJECT_DIR$/src/VectorFigure.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/command/Command.js" afterPath="$PROJECT_DIR$/src/command/Command.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/command/CommandMove.js" afterPath="$PROJECT_DIR$/src/command/CommandMove.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/command/CommandResize.js" afterPath="$PROJECT_DIR$/src/command/CommandResize.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/geo/PositionConstants.js" afterPath="$PROJECT_DIR$/src/geo/PositionConstants.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/util/ArrayList.js" afterPath="$PROJECT_DIR$/src/util/ArrayList.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/data.js" afterPath="$PROJECT_DIR$/target/jsdoc/data.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/index.html" afterPath="$PROJECT_DIR$/target/jsdoc/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.Canvas.js" afterPath="$PROJECT_DIR$/target/jsdoc/output/graphiti.Canvas.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.CompartmentFigure.js" afterPath="$PROJECT_DIR$/target/jsdoc/output/graphiti.CompartmentFigure.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.Figure.js" afterPath="$PROJECT_DIR$/target/jsdoc/output/graphiti.Figure.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.Line.js" afterPath="$PROJECT_DIR$/target/jsdoc/output/graphiti.Line.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.Oval.js" afterPath="$PROJECT_DIR$/target/jsdoc/output/graphiti.Oval.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.Rectangle.js" afterPath="$PROJECT_DIR$/target/jsdoc/output/graphiti.Rectangle.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.ResizeHandle.js" afterPath="$PROJECT_DIR$/target/jsdoc/output/graphiti.ResizeHandle.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.VectorFigure.js" afterPath="$PROJECT_DIR$/target/jsdoc/output/graphiti.VectorFigure.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.Command.js" afterPath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.Command.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.CommandMove.js" afterPath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.CommandMove.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.CommandResize.js" afterPath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.CommandResize.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.CommandStack.js" afterPath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.CommandStack.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.geo.PositionConstants.js" afterPath="$PROJECT_DIR$/target/jsdoc/output/graphiti.geo.PositionConstants.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.util.ArrayList.js" afterPath="$PROJECT_DIR$/target/jsdoc/output/graphiti.util.ArrayList.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/source/ArrayList.html" afterPath="$PROJECT_DIR$/target/jsdoc/source/ArrayList.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/source/Canvas.html" afterPath="$PROJECT_DIR$/target/jsdoc/source/Canvas.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/source/Command.html" afterPath="$PROJECT_DIR$/target/jsdoc/source/Command.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/source/CommandMove.html" afterPath="$PROJECT_DIR$/target/jsdoc/source/CommandMove.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/source/CommandResize.html" afterPath="$PROJECT_DIR$/target/jsdoc/source/CommandResize.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/source/CommandStack.html" afterPath="$PROJECT_DIR$/target/jsdoc/source/CommandStack.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/source/CompartmentFigure.html" afterPath="$PROJECT_DIR$/target/jsdoc/source/CompartmentFigure.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/source/Figure.html" afterPath="$PROJECT_DIR$/target/jsdoc/source/Figure.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/source/Oval.html" afterPath="$PROJECT_DIR$/target/jsdoc/source/Oval.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/source/PositionConstants.html" afterPath="$PROJECT_DIR$/target/jsdoc/source/PositionConstants.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/source/ResizeHandle.html" afterPath="$PROJECT_DIR$/target/jsdoc/source/ResizeHandle.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsdoc/source/VectorFigure.html" afterPath="$PROJECT_DIR$/target/jsdoc/source/VectorFigure.html" />
     </list>
     <ignored path="graphiti.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -62,10 +495,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Node.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Node.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Node.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="3" selection-start="18" selection-end="18" vertical-scroll-proportion="-4.696721">
+            <state line="3" column="3" selection-start="35" selection-end="35" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Canvas.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Canvas.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="567" column="6" selection-start="16956" selection-end="16956" vertical-scroll-proportion="0.4746761">
               <folding />
             </state>
           </provider>
@@ -101,7 +543,6 @@
         <option value="$PROJECT_DIR$/build.xml" />
         <option value="$PROJECT_DIR$/src/Figure.js" />
         <option value="$PROJECT_DIR$/src/util/ArrayList.js" />
-        <option value="$PROJECT_DIR$/src/Canvas.js" />
         <option value="$PROJECT_DIR$/src/CompartmentFigure.js" />
         <option value="$PROJECT_DIR$/src/Oval.js" />
         <option value="$PROJECT_DIR$/src/command/CommandMove.js" />
@@ -109,14 +550,14 @@
         <option value="$PROJECT_DIR$/src/command/CommandResize.js" />
         <option value="$PROJECT_DIR$/src/ResizeHandle.js" />
         <option value="$PROJECT_DIR$/src/Node.js" />
+        <option value="$PROJECT_DIR$/src/Canvas.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="467" />
-    <option name="y" value="47" />
-    <option name="width" value="1246" />
-    <option name="height" value="891" />
+    <option name="y" value="22" />
+    <option name="width" value="1920" />
+    <option name="height" value="995" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -256,13 +697,13 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="467" y="47" width="1246" height="891" extended-state="0" />
+    <frame x="0" y="22" width="1920" height="995" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33278823" sideWeight="0.53367877" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33278823" sideWeight="0.45725387" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21454929" sideWeight="0.53424656" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21454929" sideWeight="0.45776257" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33278823" sideWeight="0.52720207" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -367,13 +808,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Canvas.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="78" column="4" selection-start="2387" selection-end="2387" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/CompartmentFigure.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="2" column="55" selection-start="96" selection-end="96" vertical-scroll-proportion="0.0">
@@ -425,7 +859,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Node.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="3" selection-start="18" selection-end="18" vertical-scroll-proportion="-4.696721">
+        <state line="3" column="3" selection-start="35" selection-end="35" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Canvas.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="567" column="6" selection-start="16956" selection-end="16956" vertical-scroll-proportion="0.4746761">
           <folding />
         </state>
       </provider>

@@ -1,6 +1,7 @@
 ﻿<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
 <title></title>
+<meta name="viewport" content="width=device-width, maximum-scale=1.0" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
   <!-- common, all times required, imports -->
@@ -70,10 +71,14 @@ $(document).ready(function() {
   canvas.addFigure(figure2,120,150);
   figure2.setDimension(50,50);
   
+  canvas.addFigure( new example.Start(), 80,80);
   canvas.addFigure( new example.Start(), 50,50);
+
   canvas.addFigure( new example.End(), 150,150);
+  canvas.addFigure( new example.End(), 350,250);
   
 });
+
 </script>
 
 </head>

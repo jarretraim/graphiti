@@ -53,13 +53,13 @@ graphiti.InputPort = graphiti.Port.extend({
       // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
       else if (port instanceof graphiti.LineStartResizeHandle)
       {
-        var line = this.workflow.currentSelection;
+        var line = this.getCanvas().getCurrentSelection();
         if(line instanceof graphiti.Connection && line.getSource() instanceof graphiti.InputPort)
            this._super(line.getTarget());
       }
       else if (port instanceof graphiti.LineEndResizeHandle)
       {
-        var line = this.workflow.currentSelection;
+        var line = this.getCanvas().getCurrentSelection();
         if(line instanceof graphiti.Connection && line.getTarget() instanceof graphiti.InputPort)
            this._super(line.getSource());
       }

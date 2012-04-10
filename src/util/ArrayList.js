@@ -103,7 +103,7 @@ graphiti.util.ArrayList = Class.extend({
       */
      getFirstElement:function() 
      {
-        if (this.data[0] !== null && this.data[0] !==undefined) 
+        if (this.data[0] !== null && typeof this.data[0] !=="undefined") 
         {
            return this.data[0];
         }
