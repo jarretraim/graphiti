@@ -1,18 +1,19 @@
 /**
  * @class graphiti.command.CommandStackEventListener
- * @inherit
+ * 
  * Event class which will be fired for every CommandStack operation. Required for CommandStackListener.
+ * 
+ * @inherit
+ * @author Andreas Herz
  */
 graphiti.command.CommandStackEventListener = Class.extend({
     
     /**
      * @constructor
-     * Create a new CommandStack objects which can be execute via the CommandStack.
-     * @param {graphiti.command.Command} command the related command
-     * @param {Number} details the current state of the command execution
+     * Creates a new Listener Object
      * 
      */
-    init : function(command, details)
+    init : function()
     {
     },
     
@@ -21,7 +22,8 @@ graphiti.command.CommandStackEventListener = Class.extend({
      * Sent when an event occurs on the command stack. graphiti.command.CommandStackEvent.getDetail() 
      * can be used to identify the type of event which has occurred.
      * 
-     * @abstract
+     * @template
+     * 
      * @param {graphiti.command.CommandStackEvent} event
      **/
     stackChanged:function(event)

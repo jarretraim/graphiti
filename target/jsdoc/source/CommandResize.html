@@ -17,17 +17,21 @@
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js"><span id='graphiti-command-CommandResize'>/**
 </span> * @class graphiti.command.CommandResize
- * 
- * Generic support class for the undo/redo concept within graphiti.
- * All add,drag&amp;drop,delete operations should be execute via Commands and the related CommandStack.
+ * Resize command for figures. Can be execute/undo/redo via a CommandStack.
+ *
+ * @inheritable
+ * @author Andreas Herz
+ * @extends graphiti.command.Command
  */
 graphiti.command.CommandResize = graphiti.command.Command.extend({
     
 <span id='graphiti-command-CommandResize-method-constructor'>    /**
 </span>     * @constructor
-     * Create a new Command objects which can be execute via the CommandStack.
-     * 
-     * @param {String} label
+     * Create a new resize Command objects which can be execute via the CommandStack.
+     *
+     * @param {graphiti.Figure} figure the figure to resize
+     * @param {Number} [width] the current width
+     * @param {Number} [height] the current height
      */
     init : function(figure, width, height)
     {
@@ -47,22 +51,26 @@ graphiti.command.CommandResize = graphiti.command.Command.extend({
     },
   
 <span id='graphiti-command-CommandResize-method-setDimension'>    /**
-</span>     * Execute the command the first time
-     * 
+</span>     * @method
+     * Set the new dimension of the element.
+     *
+     * @param {Number} width the new width.
+     * @param {Number} height the new height of the element.
      **/
-    setDimension:function(/*:int*/ width, /*:int*/ height)
+    setDimension:function( width, height)
     {
-       this.newWidth  = width;
-       this.newHeight = height;
+       this.newWidth  = parseInt(width);
+       this.newHeight = parseInt(height);
     },
-    
-<span id='graphiti-command-CommandResize-property-canExecute'>    /**
-</span>     * Returns [true] if the command can be execute and the execution of the
+
+<span id='graphiti-command-CommandResize-method-canExecute'>    /**
+</span>     * @method
+     * Returns [true] if the command can be execute and the execution of the
      * command modify the model. A CommandMove with [startX,startX] == [endX,endY] should
      * return false. &lt;br&gt;
      * the execution of the Command doesn't modify the model.
      *
-     * @type boolean
+     * @return {boolean}
      **/
     canExecute:function()
     {
@@ -71,7 +79,8 @@ graphiti.command.CommandResize = graphiti.command.Command.extend({
     },
     
 <span id='graphiti-command-CommandResize-method-execute'>    /**
-</span>     * Execute the command the first time
+</span>     * @method
+     * Execute the command the first time
      * 
      **/
     execute:function()
@@ -80,22 +89,23 @@ graphiti.command.CommandResize = graphiti.command.Command.extend({
     },
     
 <span id='graphiti-command-CommandResize-method-undo'>    /**
-</span>     * Undo the command
+</span>     * @method
+     * Undo the command
      *
      **/
     undo:function()
     {
        this.figure.setDimension(this.oldWidth, this.oldHeight);
-       this.figure.workflow.moveResizeHandles(this.figure);
     },
     
-<span id='graphiti-command-CommandResize-method-redo'>    /** Redo the command after the user has undo this command
-</span>     *
+<span id='graphiti-command-CommandResize-method-redo'>    /**
+</span>     * @method
+     * Redo the command after the user has undo this command
+     *
      **/
     redo:function()
     {
        this.figure.setDimension(this.newWidth, this.newHeight);
-       this.figure.workflow.moveResizeHandles(this.figure);
     }
 });</pre>
 </body>

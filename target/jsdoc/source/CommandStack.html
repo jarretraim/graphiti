@@ -21,7 +21,23 @@
  */
 graphiti.command.CommandStack = Class.extend({
 
-<span id='graphiti-command-CommandStack-method-constructor'>    /**
+<span id='PRE_EXECUTE'>	/** Constant indicating notification prior to executing a command (value is 1).*/
+</span>	PRE_EXECUTE:1,
+<span id='PRE_REDO'>	/** Constant indicating notification prior to redoing a command (value is 2).*/
+</span>	PRE_REDO:2,
+<span id='PRE_UNDO'>	/** Constant indicating notification prior to undoing a command (value is 4).*/
+</span>	PRE_UNDO:4,
+<span id='POST_EXECUTE'>	/**  Constant indicating notification after a command has been executed (value is 8).*/
+</span>	POST_EXECUTE:8,
+<span id='POST_REDO'>	/** Constant indicating notification after a command has been redone (value is 16).*/
+</span>	POST_REDO:16,
+<span id='POST_UNDO'>	/** Constant indicating notification after a command has been undone (value is 32).*/
+</span>	POST_UNDO:32,
+
+	POST_MASK : this.POST_EXECUTE | this.POST_UNDO | this.POST_REDO,
+	PRE_MASK  : this.PRE_EXECUTE  | this.PRE_UNDO  |this. PRE_REDO,
+
+<span id='POST_UNDO-method-constructor'>    /**
 </span>     * @constructor
      * Create a new CommandStack objects which can be execute via the CommandStack.
      * 
@@ -34,7 +50,7 @@ graphiti.command.CommandStack = Class.extend({
     },
     
  
-<span id='graphiti-command-CommandStack-method-setUndoLimit'>    /**
+<span id='POST_UNDO-method-setUndoLimit'>    /**
 </span>     * @method
      * Set the maximal undo stack size. Entries will be remove if the max. stack 
      * size has been reached.
@@ -47,9 +63,9 @@ graphiti.command.CommandStack = Class.extend({
       this.maxundo = count;
     },
     
-<span id='graphiti-command-CommandStack-method-markSaveLocation'>    /**
+<span id='POST_UNDO-method-markSaveLocation'>    /**
 </span>     * @method
-     * Remove the undo / redo history. This is usefull if the user has been save the 
+     * Remove the undo / redo history. This is useful if the user has been save the 
      * document.
      *
      **/
@@ -59,7 +75,7 @@ graphiti.command.CommandStack = Class.extend({
        this.redostack = [];
     },
     
-<span id='graphiti-command-CommandStack-method-execute'>    /**
+<span id='POST_UNDO-method-execute'>    /**
 </span>     * @method
      * 
      * Executes the specified Command if possible. Prior to executing the command, a
@@ -76,12 +92,12 @@ graphiti.command.CommandStack = Class.extend({
        if(command===null)
           return; //silently
     
-       if(command === undefined)
-          throw &quot;Missing parameter [command] for method call CommandStack.prototype.execute&quot;;
+       if(typeof command === &quot;undefined&quot;)
+          throw &quot;Missing parameter [command] for method call CommandStack.execute&quot;;
           
        // return if the command can't execute or it doesn't change the model
        // =&gt; Empty command
-       if(command.canExecute()==false)
+       if(command.canExecute()===false)
           return;
     
        this.notifyListeners(command, graphiti.command.CommandStack.PRE_EXECUTE);
@@ -103,8 +119,9 @@ graphiti.command.CommandStack = Class.extend({
        this.notifyListeners(command, graphiti.command.CommandStack.POST_EXECUTE);
     },
     
-<span id='graphiti-command-CommandStack-method-undo'>    /**
-</span>     * Undo the command
+<span id='POST_UNDO-method-undo'>    /**
+</span>     * @method
+     * Undo on command from the stack and store them on the redo command stack.
      *
      **/
     undo:function()
@@ -119,8 +136,10 @@ graphiti.command.CommandStack = Class.extend({
        }
     },
     
-<span id='graphiti-command-CommandStack-method-redo'>    /** Redo the command after the user has undo this command
-</span>     *
+<span id='POST_UNDO-method-redo'>    /** 
+</span>     * @method
+     * Redo a command after the user has undo a command
+     *
      **/
     redo:function()
     {
@@ -135,10 +154,11 @@ graphiti.command.CommandStack = Class.extend({
        }
     },
     
-<span id='graphiti-command-CommandStack-method-getRedoLabel'>    /**
-</span>     * Return the Redo text of the next REDO command.
+<span id='POST_UNDO-method-getRedoLabel'>    /**
+</span>     * @method
+     * Return the label of the next REDO command.
      *
-     * @return String
+     * @return {String}
     **/
     getRedoLabel:function()
     {
@@ -155,11 +175,11 @@ graphiti.command.CommandStack = Class.extend({
     },
     
     
-<span id='graphiti-command-CommandStack-method-getUndoLabel'>    /**
+<span id='POST_UNDO-method-getUndoLabel'>    /**
 </span>     * @method
-     * Return the Undo text of the next REDO command.
+     * Return the label of the next UNDO command.
      *
-     * @return String
+     * @return {String}
      **/
     getUndoLabel:function()
     {
@@ -176,7 +196,7 @@ graphiti.command.CommandStack = Class.extend({
     },
     
     
-<span id='graphiti-command-CommandStack-method-canRedo'>    /**
+<span id='POST_UNDO-method-canRedo'>    /**
 </span>     * @method
      * Indicates whenever a REDO is possible.
      * 
@@ -187,16 +207,18 @@ graphiti.command.CommandStack = Class.extend({
        return this.redostack.length&gt;0;
     },
     
-<span id='graphiti-command-CommandStack-property-canUndo'>    /**
-</span>     * @type boolean
-     * @returns &lt;code&gt;true&lt;/code&gt; if {@link #undo()} can be called
+<span id='POST_UNDO-method-canUndo'>    /**
+</span>     * @method 
+     * indicator whenever a undo is possible.
+     * 
+     * @return {boolean} &lt;code&gt;true&lt;/code&gt; if {@link #undo()} can be called
      **/ 
     canUndo:function()
     {
        return this.undostack.length&gt;0;
     },
     
-<span id='graphiti-command-CommandStack-method-addCommandStackEventListener'>    /**
+<span id='POST_UNDO-method-addCommandStackEventListener'>    /**
 </span>     * @method
      * Adds a listener to the command stack, which will be notified whenever a command has been processed on the stack.
      * 
@@ -210,7 +232,7 @@ graphiti.command.CommandStack = Class.extend({
           throw &quot;Object doesn't implement required callback interface [graphiti.command.CommandStackListener]&quot;;
     },
     
-<span id='graphiti-command-CommandStack-method-removeCommandStackEventListener'>    /**
+<span id='POST_UNDO-method-removeCommandStackEventListener'>    /**
 </span>     * @method
      * Removes a listener from the command stack.
      * 
@@ -221,7 +243,7 @@ graphiti.command.CommandStack = Class.extend({
        this.eventListeners.remove(listener);
     },
     
-<span id='graphiti-command-CommandStack-method-notifyListeners'>    /**
+<span id='POST_UNDO-method-notifyListeners'>    /**
 </span>     * @method
      * Notifies command stack event listeners that the command stack has changed to the
      * specified state.
@@ -239,21 +261,6 @@ graphiti.command.CommandStack = Class.extend({
     }
 });
 
-<span id='graphiti-command-CommandStack-PRE_EXECUTE'>/** Constant indicating notification prior to executing a command (value is 1).*/
-</span>graphiti.command.CommandStack.PRE_EXECUTE=1;
-<span id='graphiti-command-CommandStack-PRE_REDO'>/** Constant indicating notification prior to redoing a command (value is 2).*/
-</span>graphiti.command.CommandStack.PRE_REDO=2;
-<span id='graphiti-command-CommandStack-PRE_UNDO'>/** Constant indicating notification prior to undoing a command (value is 4).*/
-</span>graphiti.command.CommandStack.PRE_UNDO=4;
-<span id='graphiti-command-CommandStack-POST_EXECUTE'>/**  Constant indicating notification after a command has been executed (value is 8).*/
-</span>graphiti.command.CommandStack.POST_EXECUTE=8;
-<span id='graphiti-command-CommandStack-POST_REDO'>/** Constant indicating notification after a command has been redone (value is 16).*/
-</span>graphiti.command.CommandStack.POST_REDO=16;
-<span id='graphiti-command-CommandStack-POST_UNDO'>/** Constant indicating notification after a command has been undone (value is 32).*/
-</span>graphiti.command.CommandStack.POST_UNDO=32;
-
-graphiti.command.CommandStack.POST_MASK = graphiti.command.CommandStack.POST_EXECUTE | graphiti.command.CommandStack.POST_UNDO | graphiti.command.CommandStack.POST_REDO;
-graphiti.command.CommandStack.PRE_MASK = graphiti.command.CommandStack.PRE_EXECUTE | graphiti.command.CommandStack.PRE_UNDO | graphiti.command.CommandStack.PRE_REDO;
 
 </pre>
 </body>

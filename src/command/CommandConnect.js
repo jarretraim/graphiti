@@ -1,9 +1,11 @@
 /**
  * @class graphiti.command.CommandConnect
- * Command for the movement of figures.
+ * 
+ * Connects two ports with a connection.
  *
  * @inheritable
  * @author Andreas Herz
+ * 
  * @extends graphiti.command.Command
  */
 graphiti.command.CommandConnect = graphiti.command.Command.extend({
@@ -31,6 +33,7 @@ graphiti.command.CommandConnect = graphiti.command.Command.extend({
     },
     
     /**
+     * @method
      * Execute the command the first time
      * 
      **/
@@ -44,6 +47,7 @@ graphiti.command.CommandConnect = graphiti.command.Command.extend({
     },
     
     /**
+     * @method
      * Redo the command after the user has undo this command.
      *
      **/
@@ -54,6 +58,7 @@ graphiti.command.CommandConnect = graphiti.command.Command.extend({
     },
     
     /** 
+     * @method
      * Undo the command.
      *
      **/

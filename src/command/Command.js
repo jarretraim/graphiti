@@ -1,5 +1,6 @@
 /**
  * @class graphiti.command.Command
+ * 
  * Generic support class for the undo/redo concept within graphiti.
  * All add,drag&drop,delete operations should be execute via Commands and the related CommandStack.
  *

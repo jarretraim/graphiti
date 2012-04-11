@@ -60,5 +60,5 @@ graphiti.command.CommandStackEvent = Class.extend({
     isPreChangeEvent:function()
     {
        return 0 != (this.getDetails() & graphiti.command.CommandStack.PRE_MASK);
-    },
+    }
 });

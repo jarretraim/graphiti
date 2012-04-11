@@ -17,13 +17,16 @@
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js"><span id='graphiti'>/**
 </span> * @class
+ * 
  * Global namespace for the graphiti lib
+ * @private
  */
 graphiti = {};
 
 <span id='graphiti-geo'>/**
 </span> * @class
  * Global namespace for geometrie util classes. (non visible points, rectangle, circle,...)
+ * @private
  */
 graphiti.geo = {};
 
@@ -31,14 +34,32 @@ graphiti.geo = {};
 <span id='graphiti-util'>/**
 </span> * @class
  * Global namespace utility classes
+ * @private
  */
 graphiti.util = {};
 
 <span id='graphiti-command'>/**
 </span> * @class
  * Global namespace for undo/redo util classes
+ * @private
  */
 graphiti.command = {};
+
+
+<span id='graphiti-layout'>/**
+</span> * @class
+ * Global namespace for automatic layout of nodes and routing
+ * @private
+ */
+graphiti.layout = {};
+
+
+<span id='graphiti-layout-router'>/**
+</span> * @class
+ * Global namespace for automatic layout of nodes and routing
+ * @private
+ */
+graphiti.layout.router = {};
 </pre>
 </body>
 </html>

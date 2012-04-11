@@ -299,7 +299,7 @@ graphiti.Connection = graphiti.Line.extend({
     /**
      * Return the recalculated position of the start point if we have set an anchor.
      * 
-     * @type graphiti.Point
+     * @return graphiti.geo.Point
      **/
      getStartPoint:function()
      {
@@ -313,7 +313,7 @@ graphiti.Connection = graphiti.Line.extend({
     /**
      * Return the recalculated position of the start point if we have set an anchor.
      *
-     * @type graphiti.Point
+     * @return graphiti.geo.Point
      **/
      getEndPoint:function()
      {

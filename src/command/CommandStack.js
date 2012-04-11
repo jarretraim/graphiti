@@ -4,6 +4,22 @@
  */
 graphiti.command.CommandStack = Class.extend({
 
+	/** Constant indicating notification prior to executing a command (value is 1).*/
+	PRE_EXECUTE:1,
+	/** Constant indicating notification prior to redoing a command (value is 2).*/
+	PRE_REDO:2,
+	/** Constant indicating notification prior to undoing a command (value is 4).*/
+	PRE_UNDO:4,
+	/**  Constant indicating notification after a command has been executed (value is 8).*/
+	POST_EXECUTE:8,
+	/** Constant indicating notification after a command has been redone (value is 16).*/
+	POST_REDO:16,
+	/** Constant indicating notification after a command has been undone (value is 32).*/
+	POST_UNDO:32,
+
+	POST_MASK : this.POST_EXECUTE | this.POST_UNDO | this.POST_REDO,
+	PRE_MASK  : this.PRE_EXECUTE  | this.PRE_UNDO  |this. PRE_REDO,
+
     /**
      * @constructor
      * Create a new CommandStack objects which can be execute via the CommandStack.
@@ -32,7 +48,7 @@ graphiti.command.CommandStack = Class.extend({
     
     /**
      * @method
-     * Remove the undo / redo history. This is usefull if the user has been save the 
+     * Remove the undo / redo history. This is useful if the user has been save the 
      * document.
      *
      **/
@@ -60,11 +76,11 @@ graphiti.command.CommandStack = Class.extend({
           return; //silently
     
        if(typeof command === "undefined")
-          throw "Missing parameter [command] for method call CommandStack.prototype.execute";
+          throw "Missing parameter [command] for method call CommandStack.execute";
           
        // return if the command can't execute or it doesn't change the model
        // => Empty command
-       if(command.canExecute()==false)
+       if(command.canExecute()===false)
           return;
     
        this.notifyListeners(command, graphiti.command.CommandStack.PRE_EXECUTE);
@@ -87,7 +103,8 @@ graphiti.command.CommandStack = Class.extend({
     },
     
     /**
-     * Undo the command
+     * @method
+     * Undo on command from the stack and store them on the redo command stack.
      *
      **/
     undo:function()
@@ -104,7 +121,7 @@ graphiti.command.CommandStack = Class.extend({
     
     /** 
      * @method
-     * Redo the command after the user has undo this command
+     * Redo a command after the user has undo a command
      *
      **/
     redo:function()
@@ -227,19 +244,4 @@ graphiti.command.CommandStack = Class.extend({
     }
 });
 
-/** Constant indicating notification prior to executing a command (value is 1).*/
-graphiti.command.CommandStack.PRE_EXECUTE=1;
-/** Constant indicating notification prior to redoing a command (value is 2).*/
-graphiti.command.CommandStack.PRE_REDO=2;
-/** Constant indicating notification prior to undoing a command (value is 4).*/
-graphiti.command.CommandStack.PRE_UNDO=4;
-/**  Constant indicating notification after a command has been executed (value is 8).*/
-graphiti.command.CommandStack.POST_EXECUTE=8;
-/** Constant indicating notification after a command has been redone (value is 16).*/
-graphiti.command.CommandStack.POST_REDO=16;
-/** Constant indicating notification after a command has been undone (value is 32).*/
-graphiti.command.CommandStack.POST_UNDO=32;
-
-graphiti.command.CommandStack.POST_MASK = graphiti.command.CommandStack.POST_EXECUTE | graphiti.command.CommandStack.POST_UNDO | graphiti.command.CommandStack.POST_REDO;
-graphiti.command.CommandStack.PRE_MASK = graphiti.command.CommandStack.PRE_EXECUTE | graphiti.command.CommandStack.PRE_UNDO | graphiti.command.CommandStack.PRE_REDO;
 

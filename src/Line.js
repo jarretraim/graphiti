@@ -293,7 +293,7 @@ graphiti.Line = graphiti.Figure.extend({
 
    /**
     *
-    * @type graphiti.Point
+    * @return graphiti.geo.Point
     **/
    getStartPoint:function()
    {
@@ -321,7 +321,7 @@ graphiti.Line = graphiti.Figure.extend({
 
    /**
     *
-    * @type graphiti.Point
+    * @return graphiti.geo.Point
     **/
    getEndPoint:function()
    {
