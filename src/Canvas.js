@@ -13,7 +13,7 @@ graphiti.Canvas = Class.extend(
      * @constructor
      * Create a new canvas with the given HTML dom references.
      * 
-     * @param {String} pValue
+     * @param {String} canvasId the id of the DOM element to use a parent container
      */
     init : function(canvasId)
     {
@@ -45,7 +45,8 @@ graphiti.Canvas = Class.extend(
         
         this.resizeHandleHalfWidth = parseInt(this.resizeHandle2.getWidth()/2);
        
-        this.verticalSnapToHelperLine = null; /*:@NAMESPACE@Line*/
+        // @type 
+        this.verticalSnapToHelperLine = null; /*graphity.Line*/
         this.horizontalSnapToHelperLine = null; /*:@NAMESPACE@Line*/
 
         this.figures = new graphiti.util.ArrayList();

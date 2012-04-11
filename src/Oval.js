@@ -46,7 +46,7 @@ graphiti.Oval = graphiti.VectorFigure.extend({
        }
        
        this._super(attributes);
-   },
+   }
     
 });
 

@@ -1,9 +1,11 @@
 /**
  * @class graphiti.command.CommandMove
+ * 
  * Command for the movement of figures.
  *
  * @inheritable
  * @author Andreas Herz
+ * 
  * @extends graphiti.command.Command
  */
 graphiti.command.CommandMove = graphiti.command.Command.extend({
@@ -104,6 +106,7 @@ graphiti.command.CommandMove = graphiti.command.Command.extend({
     
     /**
      * @method
+     * 
      * Redo the move command after the user has undo this command
      *
      **/

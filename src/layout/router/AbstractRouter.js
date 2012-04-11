@@ -1,26 +1,39 @@
-
 /**
  * @class 
- * Routes a {@link @NAMESPACE@Connection}, possibly using a constraint.
+ * Routes a {@link graphiti.Connection}, possibly using a constraint.
  *
- * @version @VERSION@
  * @author Andreas Herz
- * @constructor
  */
 graphiti.layout.router.AbstractRouter = Class.extend({
 
+	/**
+	 * @constructor 
+	 * Creates a new Router object
+	 */
     init: function(){
     },
     
     /**
+     * @method
      * Returns the direction the point <i>p</i> is in relation to the given rectangle.
-     * Possible values are LEFT (-1,0), RIGHT (1,0), UP (0,-1) and DOWN (0,1).
+     * Util method for inherit router implementations.
      * 
-     * @param r the rectangle
-     * @param p the point
-     * @return the direction from <i>r</i> to <i>p</i>
+     * <p>
+     * Possible values:
+     * <ul>
+     *   <li>up -&gt; 0</li>
+     *   <li>right -&gt; 1</li>
+     *   <li>down -&gt; 2</li>
+     *   <li>left -&gt; 3</li>
+     * </ul>
+     * <p>
+     * 
+     * @param {graphiti.geo.Dimesion} r the rectangle
+     * @param {graphiti.geo.Point} p the point in relation to the given rectangle
+     * 
+     * @return {Number} the direction from <i>r</i> to <i>p</i>
      */
-    getDirection:function(/*:@NAMESPACE@Dimension*/ r, /*:@NAMESPACE@Point*/ p) 
+    getDirection:function( r,  p) 
     {
         //  up     -> 0
         //  right  -> 1
@@ -53,7 +66,25 @@ graphiti.layout.router.AbstractRouter = Class.extend({
        return direction;
     },
     
-    getEndDirection:function(/*:@NAMESPACE@Connection*/ conn)
+    /**
+     * @method
+     * Returns the direction for the connection in relation to the given port and it's parent.
+     * 
+     * <p>
+     * Possible values:
+     * <ul>
+     *   <li>up -&gt; 0</li>
+     *   <li>right -&gt; 1</li>
+     *   <li>down -&gt; 2</li>
+     *   <li>left -&gt; 3</li>
+     * </ul>
+     * <p>
+     * 
+     * @param {graphiti.Connection} conn the connection with the end port to examine
+     * 
+     * @return {Number} the direction
+     */
+    getEndDirection:function( conn)
     {
        var p = conn.getEndPoint();
        var rect = conn.getTarget().getParent().getBounds();
@@ -61,7 +92,29 @@ graphiti.layout.router.AbstractRouter = Class.extend({
     },
     
     
-    getStartDirection:function(/*:@NAMESPACE@Connection*/ conn)
+    /**
+     * @method
+     * Returns the **direction** for the connection in relation to the given port and it's parent.
+     * 
+     * <p>
+     * Possible values:
+     * <ul>
+     *   <li>up -&gt; 0</li>
+     *   <li>right -&gt; 1</li>
+     *   <li>down -&gt; 2</li>
+     *   <li>left -&gt; 3</li>
+     * </ul>
+     * <p>
+     * 
+     * @param {graphiti.Connection} conn the connection with the start port to examine
+     * 
+     * @return {Number} the direction. Possible values are:
+     *  - up -> 0
+     *  - right -> 1
+     *  - down -> 2
+     *  - left -> 3
+     */
+    getStartDirection:function( conn)
     {
        var p = conn.getStartPoint();
        var rect = conn.getSource().getParent().getBounds();
@@ -72,8 +125,10 @@ graphiti.layout.router.AbstractRouter = Class.extend({
     /**
      * Routes the Connection.
      * @param connection The Connection to route
+     * @template
      */
-    route:function(/*:@NAMESPACE@Connection*/ connection)
+    route:function( connection)
     {
+    	throw "subclasses must implement the method [AbstractRouter.route]";
     }
 });

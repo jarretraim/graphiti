@@ -21,25 +21,33 @@
  * 
  * @inheritable
  * @author Andreas Herz
- * @version 2.1
  */
 graphiti.Canvas = Class.extend(
 {
+    COLOR_GREEN : new  graphiti.util.Color(0,255,0),
+
 <span id='graphiti-Canvas-method-constructor'>    /**
 </span>     * @constructor
      * Create a new canvas with the given HTML dom references.
      * 
-     * @param {String} pValue
+     * @param {String} canvasId the id of the DOM element to use a parent container
      */
     init : function(canvasId)
     {
+        this.scrollArea = document.body;
         this.canvasId = canvasId;
-        this.html = document.getElementById(canvasId);
+        this.html = $(&quot;#&quot;+canvasId);
         this.paper = Raphael(canvasId, this.getWidth(), this.getHeight());
         this.zoomFactor = 1.0;
         this.enableSmoothFigureHandling=false;
         this.currentSelection = null;
         
+        this.snapToGridHelper = null;
+        this.snapToGeometryHelper = null;
+        
+        // the line between the dragging port and its origin position
+        this.connectionLine    = new graphiti.Line();
+      
         this.resizeHandle1 = new graphiti.ResizeHandle(this,1); // 1 = LEFT TOP
         this.resizeHandle2 = new graphiti.ResizeHandle(this,2); // 2 = CENTER_TOP
         this.resizeHandle3 = new graphiti.ResizeHandle(this,3); // 3 = RIGHT_TOP
@@ -49,26 +57,144 @@ graphiti.Canvas = Class.extend(
         this.resizeHandle7 = new graphiti.ResizeHandle(this,7); // 7 = LEFT_BOTTOM
         this.resizeHandle8 = new graphiti.ResizeHandle(this,8); // 8 = LEFT_MIDDLE
 
-        this.resizeHandleHalfWidth = parseInt(this.resizeHandle2.getWidth()/2);
+        this.resizeHandleStart = new graphiti.LineStartResizeHandle(this);
+        this.resizeHandleEnd   = new graphiti.LineEndResizeHandle(this);
         
+        this.resizeHandleHalfWidth = parseInt(this.resizeHandle2.getWidth()/2);
+       
+        this.verticalSnapToHelperLine = null; /*:@NAMESPACE@Line*/
+        this.horizontalSnapToHelperLine = null; /*:@NAMESPACE@Line*/
+
         this.figures = new graphiti.util.ArrayList();
         this.lines = new graphiti.util.ArrayList();
-        
+        this.commonPorts = new graphiti.util.ArrayList();
+        this.dropTargets = new graphiti.util.ArrayList();
+       
         this.selectionListeners = new graphiti.util.ArrayList();
 
         this.commandStack = new graphiti.command.CommandStack();
+
+    /*
+    
+        var mouseMove = function(event)
+        {
+           var diffX = event.clientX;// - oThis.html.offsetLeft;
+           var diffY = event.clientY;// - oThis.html.offsetTop;
+           var scrollLeft = oThis.getScrollLeft();
+           var scrollTop  = oThis.getScrollTop();
+           var xOffset = oThis.getAbsoluteX();
+           var yOffset = oThis.getAbsoluteY();
+           oThis.currentMouseX = diffX+scrollLeft-xOffset;
+           oThis.currentMouseY = diffY+scrollTop-yOffset;
+           var obj = oThis.getBestFigure(oThis.currentMouseX, oThis.currentMouseY);
+           // Note: The event will be handle by &quot;obj&quot; if obj!=null
+           //       Don't add additional checks for this case.
+           if(oThis.currentHover!=null &amp;&amp; obj==null)
+           {
+              oThis.currentHover.onMouseLeave();
+           }
+           else if(oThis.currentHover!=obj)
+           {
+              if(obj!=null)
+                obj.onMouseEnter();
+                
+              if(oThis.currentHover!=null)
+                 obj.onMouseLeave();
+           }
+           else
+           {
+              var diffX = event.clientX;// - oThis.html.offsetLeft;
+              var diffY = event.clientY;// - oThis.html.offsetTop;
+              var scrollLeft = oThis.getScrollLeft();
+              var scrollTop  = oThis.getScrollTop();
+              var xOffset = oThis.getAbsoluteX();
+              var yOffset = oThis.getAbsoluteY();
+              oThis.onMouseMove(diffX+scrollLeft-xOffset, diffY+scrollTop-yOffset);
+           }
+           oThis.currentHover = obj;
+      
+           // Tooltip handling
+           //
+           if(oThis.tooltip!=null)
+           {
+             if(Math.abs(oThis.currentTooltipX-oThis.currentMouseX)&gt;10 ||Math.abs(oThis.currentTooltipY-oThis.currentMouseY)&gt;10)
+             {
+                oThis.showTooltip(null);
+             }
+           }
+         };
+*/
+        this.html.bind(&quot;mousedown touchstart&quot;, $.proxy(function(event)
+        {
+            event = this._getEvent(event);
+
+            var diffX = event.clientX;
+            var diffY = event.clientY;
+            var scrollLeft = this.getScrollLeft();
+            var scrollTop = this.getScrollTop();
+            var xOffset = this.getAbsoluteX();
+            var yOffset = this.getAbsoluteY();
+            this.onMouseDown(diffX + scrollLeft - xOffset, diffY + scrollTop - yOffset);
+
+        }, this));
     },
     
-<span id='graphiti-Canvas-method-getCommandStack'>    /**
-</span>     * @method
-     * Returns the command stack for the Canvas. Required for undo/redo  support.
-     *
-     * @return {graphiti.command.CommandStack}
-     **/
-    getCommandStack : function()
-    {
-      return this.commandStack;
+    
+
+<span id='graphiti-Canvas-method-_getEvent'>    /**
+</span>     * @private
+     * @param event
+     * @returns
+     */
+    _getEvent: function(event){
+      if(event.originalEvent.touches &amp;&amp; event.originalEvent.touches.length) {
+           return event.originalEvent.touches[0];
+      } else if(event.originalEvent.changedTouches &amp;&amp; event.originalEvent.changedTouches.length) {
+           return event.originalEvent.changedTouches[0];
+      }
+      return event;
     },
+
+
+<span id='graphiti-Canvas-property-getScrollLeft'>    /**
+</span>     * @returns The Y coordinate in relation the Canvas.
+     * @type int
+     **/
+    getScrollLeft:function()
+    {
+      return this.scrollArea.scrollLeft;
+    },
+
+<span id='graphiti-Canvas-property-getScrollTop'>    /**
+</span>     * @returns The X coordinate in relation to the canvas
+     * @type int
+     **/
+    getScrollTop:function()
+    {
+      return this.scrollArea.scrollTop;
+    },
+
+
+<span id='graphiti-Canvas-property-getAbsoluteY'>    /**
+</span>     * @returns The Y coordinate in relation to the Canvas.
+     * @type int
+     **/
+    getAbsoluteY:function()
+    {
+      return this.html.offset().top;
+    },
+
+<span id='graphiti-Canvas-method-getAbsoluteX'>    /**
+</span>     * @method
+     * The X coordinate in relation to the canvas
+     *
+     * @return {Number}
+     **/
+    getAbsoluteX:function()
+    {
+        return this.html.offset().left;
+    },
+
 
 <span id='graphiti-Canvas-method-getWidth'>    /**
 </span>     * @method
@@ -78,7 +204,7 @@ graphiti.Canvas = Class.extend(
      **/
     getWidth : function()
     {
-        return parseInt(this.html.style.width);
+        return this.html.width();
     },
 
 
@@ -89,7 +215,7 @@ graphiti.Canvas = Class.extend(
      * @return {Number}
      **/
     getHeight:function() {
-      return parseInt(this.html.style.height);
+      return this.html.height();
     },
  
 
@@ -100,11 +226,16 @@ graphiti.Canvas = Class.extend(
      * @param {Number} x The x position.
      * @param {Number} y The y position.
      **/
-    addFigure:function( figure , xPos,  yPos)
+    addFigure:function( figure , x,  y)
     {
+        if(figure.getCanvas()===this)
+            return;
+        
       figure.setCanvas(this);
 
-      var shape = figure.getShapeElement();
+      // important inital 
+      figure.getShapeElement();
+      
       if(figure instanceof graphiti.Line)
       {
         this.lines.add(figure);
@@ -113,32 +244,251 @@ graphiti.Canvas = Class.extend(
       {
         this.figures.add(figure);
         figure.createDraggable();
+
         // Compartments must be stored in an additional structure
         //
-        /* TODO
         if(figure instanceof graphiti.CompartmentFigure)
         {
           this.compartments.add(figure);
         }
-        figure.draggable.addEventListener(&quot;drag&quot;, function (oEvent)
-        {
-          var figure = oThisWorkflow.getFigure(oEvent.target.element.id);
-          if(figure == null)
-            return;
-          if(figure.isSelectable()==false)
-            return;
-
-          oThisWorkflow.moveResizeHandles(figure);
-        });
-    */    
-
+        figure.setPosition(x,y);
       }
       
-      figure.setPosition(xPos,yPos);
 
-      figure.repaint();
       figure.fireMoveEvent();
       this.setDocumentDirty();
+    },
+
+
+<span id='graphiti-Canvas-method-removeFigure'>    /**
+</span>     * @method
+     * Remove a figure from the Canvas.
+     *
+     * @param {graphiti.Figure} figure The figure to remove
+     *
+     **/
+    removeFigure:function(figure)
+    {
+        this.figures.remove(figure);
+        
+        if(figure instanceof graphiti.Line){
+            this.lines.remove(figure);
+         }
+
+        figure.setCanvas(null);
+
+        if(figure instanceof graphiti.CompartmentFigure)
+           this.compartments.remove(figure);
+
+        if(figure instanceof graphiti.Connection)
+           figure.disconnect();
+
+        if(this.currentSelection === figure)
+          this.setCurrentSelection(null);
+
+        this.setDocumentDirty();
+    },
+    
+<span id='graphiti-Canvas-method-getLines'>    /**
+</span>     * @method
+     * Returns all lines/connections in this workflow/canvas.&lt;br&gt;
+     *
+     *
+     * @return {graphiti.util.ArrayList}
+     **/
+    getLines:function()
+    {
+      return this.lines;
+    },
+
+<span id='graphiti-Canvas-method-setSnapToGrid'>    /**
+</span>     * Enable/disable the snap to grid behavior of the canvas. All figures will snap to the grid during the
+     * the drag and drop operation.
+     * 
+     * @param {boolean} flag true if you want snap to the grid.
+     **/
+    setSnapToGrid:function( flag)
+    {
+      if(flag===true)
+       this.snapToGridHelper = new graphiti.SnapToGrid(this);
+      else
+       this.snapToGridHelper = null;
+    },
+
+
+<span id='graphiti-Canvas-property-getSnapToGrid'>    /**
+</span>     * 
+     * @type boolean &lt;b&gt;true&lt;/b&gt; if snap to the grid enabled.
+     **/
+    getSnapToGrid:function()
+    {
+      return this.snapToGridHelper !== null;
+    },
+
+<span id='graphiti-Canvas-method-setSnapToGeometry'>    /**
+</span>     * Used to perform snapping to existing elements. Snapping is based on the existing children of a container. 
+     * When snapping a rectangle, the edges of the rectangle will snap to edges of other rectangles generated from 
+     * the children of the given container/canvas. Similarly, the centers and middles of rectangles will snap to each other.
+     *
+     * @param {boolean} flag true if you want snap to the geometry.
+     */
+    setSnapToGeometry:function( flag)
+    {
+      if(flag===true)
+       this.snapToGeometryHelper = new graphiti.SnapToGeometry(this);
+      else
+       this.snapToGeometryHelper = null;
+    },
+
+
+<span id='graphiti-Canvas-property-getSnapToGeometry'>    /**
+</span>     * 
+     * @type boolean &lt;b&gt;true&lt;/b&gt; if snap to the grid enabled.
+     **/
+    getSnapToGeometry:function()
+    {
+      return this.snapToGeometryHelper !== null;
+    },
+
+
+<span id='graphiti-Canvas-method-snapToHelper'>    /** 
+</span>     * @method
+     *  Adjust the x to the next grid line.
+     *
+     * @param  {graphiti.Figure} figure The related figure
+     * @param  {graphiti.geo.Point} pos The position to adjust
+     * @return {graphiti.geo.Point} the adjusted position
+     **/
+    snapToHelper:function(figure,  pos)
+    {
+       if(this.snapToGeometryHelper!==null)
+       {
+          // The user drag&amp;drop a ResizeHandle
+          //
+          if(figure instanceof graphiti.ResizeHandle)
+          {
+             var snapPoint = figure.getSnapToGridAnchor();
+             pos.x+= snapPoint.x;
+             pos.y+= snapPoint.y;
+             var result1 = new graphiti.geo.Point(pos.x,pos.y);
+             var result2 = new graphiti.geo.Point(pos.x,pos.y);
+             if(figure.supportsSnapToHelper())
+             {
+                var snapDirections = figure.getSnapToDirection();
+                var direction1 = this.snapToGeometryHelper.snapPoint(graphiti.SnapToHelper.EAST_WEST, pos,result1);
+                var direction2 = this.snapToGeometryHelper.snapPoint(graphiti.SnapToHelper.NORTH_SOUTH, pos,result2);
+                // Show a vertical line if the snapper has modified the inputPoint
+                //
+                if((snapDirections &amp; graphiti.SnapToHelper.EAST_WEST) &amp;&amp; !(direction1 &amp; graphiti.SnapToHelper.EAST_WEST))
+                   this.showSnapToHelperLineVertical(result1.x);
+                else
+                   this.hideSnapToHelperLineVertical();
+
+                // Show a horizontal line if the snapper has modified the inputPoint
+                //
+                if((snapDirections &amp; graphiti.SnapToHelper.NORTH_SOUTH) &amp;&amp; !(direction2 &amp; graphiti.SnapToHelper.NORTH_SOUTH))
+                   this.showSnapToHelperLineHorizontal(result2.y);
+                else
+                   this.hideSnapToHelperLineHorizontal();
+
+             }
+             result1.x-= snapPoint.x;
+             result2.y-= snapPoint.y;
+             return new graphiti.geo.Point(result1.x,result2.y);
+          }
+          // The user drag&amp;drop a normal figure
+          else
+          {
+             var inputBounds = new graphiti.geo.Dimension(pos.x,pos.y, figure.getWidth(), figure.getHeight());
+             var result = new graphiti.geo.Dimension(pos.x,pos.y, figure.getWidth(), figure.getHeight());
+
+             var snapDirections = graphiti.SnapToHelper.NSEW;
+             var direction = this.snapToGeometryHelper.snapRectangle( inputBounds, result);
+
+             // Show a vertical line if the snapper has modified the inputPoint
+             //
+             if((snapDirections &amp; graphiti.SnapToHelper.WEST) &amp;&amp; !(direction &amp; graphiti.SnapToHelper.WEST))
+                this.showSnapToHelperLineVertical(result.x);
+             else if((snapDirections &amp; graphiti.SnapToHelper.EAST) &amp;&amp; !(direction &amp; graphiti.SnapToHelper.EAST))
+                this.showSnapToHelperLineVertical(result.getX()+result.getWidth());
+             else
+                this.hideSnapToHelperLineVertical();
+
+             // Show a horizontal line if the snapper has modified the inputPoint
+             //
+             if((snapDirections &amp; graphiti.SnapToHelper.NORTH) &amp;&amp; !(direction &amp; graphiti.SnapToHelper.NORTH))
+                this.showSnapToHelperLineHorizontal(result.y);
+             else if((snapDirections &amp; graphiti.SnapToHelper.SOUTH) &amp;&amp; !(direction &amp; graphiti.SnapToHelper.SOUTH))
+                this.showSnapToHelperLineHorizontal(result.getY()+result.getHeight());
+             else
+                this.hideSnapToHelperLineHorizontal();
+
+             return result.getTopLeft();
+          }
+       }
+       else if(this.snapToGridHelper!=null)
+       {
+          var snapPoint = figure.getSnapToGridAnchor();
+          pos.x= pos.x+snapPoint.x;
+          pos.y= pos.y+snapPoint.y;
+          var result = new graphiti.geo.Point(pos.x,pos.y);
+          this.snapToGridHelper.snapPoint(0,pos,result);
+          result.x= result.x-snapPoint.x;
+          result.y= result.y-snapPoint.y;
+          return result;
+       }
+
+       return pos;
+    },
+
+
+<span id='graphiti-Canvas-method-showConnectionLine'>    /**
+</span>     * @private
+     **/
+    showConnectionLine:function(/*:int*/ x1  ,/*:int*/ y1 ,/*:int*/ x2,/*:int*/ y2 )
+    {
+      this.connectionLine.setStartPoint(x1,y1);
+      this.connectionLine.setEndPoint(x2,y2);
+      
+      this.connectionLine.setCanvas(this);
+      this.connectionLine.getShapeElement();
+    },
+
+<span id='graphiti-Canvas-method-hideConnectionLine'>    /**
+</span>     * @private
+     **/
+    hideConnectionLine:function()
+    {
+       this.connectionLine.setCanvas(null);
+    },
+
+<span id='graphiti-Canvas-method-registerPort'>    /**
+</span>     * @method
+     * @param {@NAMESPACE@Port} port The new port which has been added to the Canvas.
+     * @private
+     **/
+    registerPort:function(port )
+    {
+      // All elements have the same drop targets.
+      //
+      port.targets= this.dropTargets;
+      port.createDraggable();
+      
+      this.commonPorts.add(port);
+      this.dropTargets.add(port);
+    },
+
+<span id='graphiti-Canvas-method-unregisterPort'>    /**
+</span>     * @method
+     * @param {graphiti.Port} p The port to remove from the Canvas.
+     * @private
+     **/
+    unregisterPort:function(port )
+    {
+      port.targets=null;
+
+      this.commonPorts.remove(port);
+      this.dropTargets.remove(port);
     },
 
 <span id='graphiti-Canvas-method-getBestCompartmentFigure'>    /**
@@ -168,11 +518,11 @@ graphiti.Canvas = Class.extend(
     
 <span id='graphiti-Canvas-method-showMenu'>    /**
 </span>     * @param {graphiti.Menu} menu The menu to show.
-     * @param {int} x The x position.
-     * @param {int} y The y position.
+     * @param {Number} x The x position.
+     * @param {Number} y The y position.
      * @private
      **/
-    showMenu:function(menu , xPos , yPos)
+    showMenu:function(menu , x , y)
     {
      if(this.menu!=null)
      {
@@ -184,7 +534,7 @@ graphiti.Canvas = Class.extend(
      if(this.menu!=null)
      {
        this.menu.setCanvas(this);
-       this.menu.setPosition(xPos,yPos);
+       this.menu.setPosition(x,y);
 
        this.html.appendChild(this.menu.getHTMLElement());
        this.menu.paint();
@@ -195,7 +545,7 @@ graphiti.Canvas = Class.extend(
 </span>     * @method
      * Returns the command stack for the Canvas. Required for undo/redo  support.
      *
-     * @type {graphiti.command.CommandStack}
+     * @return {graphiti.command.CommandStack}
      **/
     getCommandStack:function()
     {
@@ -206,6 +556,7 @@ graphiti.Canvas = Class.extend(
 </span>     * @method
      * Returns the current selected figure in the Canvas.
      *
+     * @return {graphiti.Figure}
      **/
     getCurrentSelection:function()
     {
@@ -216,16 +567,26 @@ graphiti.Canvas = Class.extend(
 <span id='graphiti-Canvas-method-setCurrentSelection'>    /**
 </span>     * Set the current selected figure in the workflow Canvas.
      *
-     * @param {@NAMESPACE@Figure} figure The new selection.
+     * @param {graphiti.Figure} figure The new selection.
      **/
-    setCurrentSelection:function(/*:@NAMESPACE@Figure*/ figure )
+    setCurrentSelection:function( figure )
     {
-      if(figure==null)
+      if(figure===null)
       {
         this.hideResizeHandles();
-      //  this.hideLineResizeHandles();
+        this.hideLineResizeHandles();
       }
 
+      
+      if(figure instanceof graphiti.Line)
+      {
+          this.showLineResizeHandles(figure);
+      }
+      else if(figure instanceof graphiti.Figure)
+      {
+          this.showResizeHandles(figure);
+      }
+      
       this.currentSelection = figure;
 
       // inform all selection listeners about the new selection.
@@ -236,6 +597,7 @@ graphiti.Canvas = Class.extend(
         if(w.onSelectionChanged)
           w.onSelectionChanged(this.currentSelection);
       }
+
     },
     
 <span id='graphiti-Canvas-method-setDocumentDirty'>    /**
@@ -247,11 +609,18 @@ graphiti.Canvas = Class.extend(
      
     },
 
-<span id='graphiti-Canvas-property-getBestLine'>    /**
-</span>     * @private
-     * @type @NAMESPACE@Line
+<span id='graphiti-Canvas-method-getBestLine'>    /**
+</span>     * @method
+     * Return the line which match the handsover coordinate
+     *
+     * @param {Number} x the x-coordinate for the hit test
+     * @param {Number} y the x-coordinate for the hit test
+     * @param {graphiti.Line} lineToIgnore a possible line which should be ignored for the hit test
+     *
+     * @private
+     * @return {graphiti.Line}
      **/
-    getBestLine:function(/*:int*/ x, /*:int*/ y, /*:@NAMESPACE@Line*/ lineToIgnore)
+    getBestLine:function( x,  y,  lineToIgnore)
     {
       var result = null;
       var count = this.lines.getSize();
@@ -269,24 +638,64 @@ graphiti.Canvas = Class.extend(
       return result;
     },
 
+   
+
+<span id='graphiti-Canvas-method-showLineResizeHandles'>    /**
+</span>     * @param {graphiti.Line} line The line for the resize handles.
+     * @private
+     **/
+    showLineResizeHandles:function( line )
+    {
+      var resizeWidthHalf = this.resizeHandleStart.getWidth()/2;
+      var resizeHeightHalf= this.resizeHandleStart.getHeight()/2;
+      var startPoint = line.getStartPoint();
+      var endPoint   = line.getEndPoint();
+      this.resizeHandleStart.show(this,startPoint.x-resizeWidthHalf,startPoint.y-resizeHeightHalf);
+      this.resizeHandleEnd.show(this,endPoint.x-resizeWidthHalf,endPoint.y-resizeHeightHalf);
+      this.resizeHandleStart.setDraggable(line.isResizeable());
+      this.resizeHandleEnd.setDraggable(line.isResizeable());
+      if(line.isResizeable())
+      {
+        this.resizeHandleStart.setBackgroundColor(this.COLOR_GREEN);
+        this.resizeHandleEnd.setBackgroundColor(this.COLOR_GREEN);
+        // required for reconnect of connections
+    //TODO   this.resizeHandleStart.draggable.targets= this.dropTargets;
+    //TODO   this.resizeHandleEnd.draggable.targets= this.dropTargets;
+      }
+      else
+      {
+        this.resizeHandleStart.setBackgroundColor(null);
+        this.resizeHandleEnd.setBackgroundColor(null);
+      }
+    },
+
+<span id='graphiti-Canvas-method-hideLineResizeHandles'>    /**
+</span>     * @private
+     **/
+    hideLineResizeHandles:function()
+    {
+        this.resizeHandleStart.hide();
+        this.resizeHandleEnd.hide();
+    },
+    
 <span id='graphiti-Canvas-method-showResizeHandles'>    /**
 </span>     * @method
      * @private
      **/
     showResizeHandles:function(figure)
     {
-        /*
+     
       if( this.getCurrentSelection()!==figure)
       {
         this.hideLineResizeHandles();
         this.hideResizeHandles();
       }
-      */
+
       // We must reset the alpha blending of the resizeHandles if the last selected object != figure
       // Reason: We would fadeIn the ResizeHandles at the new selected object but the fast toggle from oldSeleciton =&gt; newSelection
       //         doesn't reset the alpha to 0.0. So, we do it manually.
       //
-      if(this.getEnableSmoothFigureHandling()==true &amp;&amp; this.getCurrentSelection()!==figure)
+      if(this.getEnableSmoothFigureHandling()===true &amp;&amp; this.getCurrentSelection()!==figure)
       {
          this.resizeHandle1.setAlpha(0.01);
          this.resizeHandle2.setAlpha(0.01);
@@ -314,7 +723,7 @@ graphiti.Canvas = Class.extend(
       this.resizeHandle5.setDraggable(figure.isResizeable());
       this.resizeHandle7.setDraggable(figure.isResizeable());
 
-      if(figure.isResizeable())
+      if(figure.isResizeable()===true)
       {
         var green = new graphiti.util.Color(0,255,0);
         this.resizeHandle1.setBackgroundColor(green);
@@ -361,9 +770,12 @@ graphiti.Canvas = Class.extend(
 
 <span id='graphiti-Canvas-method-moveResizeHandles'>    /**
 </span>     * @method
+     * Move the ResizeHandles to the handsover figure.
+     *
+     * @param {graphiti.Figure} figure
      * @private
      **/
-    moveResizeHandles:function(/*:@NAMESPACE@Figure*/ figure)
+    moveResizeHandles:function( figure)
     {
       var resizeWidth = this.resizeHandle1.getWidth();
       var resizeHeight= this.resizeHandle1.getHeight();
@@ -382,6 +794,40 @@ graphiti.Canvas = Class.extend(
         this.resizeHandle6.setPosition(xPos+(objWidth/2)-this.resizeHandleHalfWidth,yPos+objHeight);
         this.resizeHandle8.setPosition(xPos-resizeWidth,yPos+(objHeight/2)-(resizeHeight/2));
       }
+    },
+
+
+<span id='graphiti-Canvas-method-hideSnapToHelperLines'>    /**
+</span>     * @private
+     **/
+    hideSnapToHelperLines:function()
+    {
+      this.hideSnapToHelperLineHorizontal();
+      this.hideSnapToHelperLineVertical();
+    },
+
+<span id='graphiti-Canvas-method-hideSnapToHelperLineHorizontal'>    /**
+</span>     * @private
+     **/
+    hideSnapToHelperLineHorizontal:function()
+    {
+       if(this.horizontalSnapToHelperLine!=null)
+       {
+          this.removeFigure(this.horizontalSnapToHelperLine);
+          this.horizontalSnapToHelperLine = null;
+       }
+    },
+
+<span id='graphiti-Canvas-method-hideSnapToHelperLineVertical'>    /**
+</span>     * @private
+     **/
+    hideSnapToHelperLineVertical:function()
+    {
+       if(this.verticalSnapToHelperLine!=null)
+       {
+          this.removeFigure(this.verticalSnapToHelperLine);
+          this.verticalSnapToHelperLine = null;
+       }
     },
 
 <span id='graphiti-Canvas-method-getEnableSmoothFigureHandling'>    /**
@@ -410,12 +856,95 @@ graphiti.Canvas = Class.extend(
 
 <span id='graphiti-Canvas-method-onClick'>    /**
 </span>     * @method
-     * Called when a user clicks on the element
+     * Called when a user clicks on the element.
+     *
      * @template
      */
     onClick: function(){
-        
+    },
+
+
+<span id='graphiti-Canvas-method-onMouseDown'>    /**
+</span>     * @private
+     **/
+    onMouseDown:function(/*:int*/ x, /*:int*/ y)
+    {
+      this.dragging = true;
+      this.mouseDownPosX = x;
+      this.mouseDownPosY = y;
+
+      this.setCurrentSelection(null);
+      this.showMenu(null);
+
+      // check if a line has been hit
+      //
+      var line = this.getBestLine(x,y);
+      if(line!=null &amp;&amp; line.isSelectable())
+      {
+        this.hideResizeHandles();
+        this.setCurrentSelection(line);
+        this.showLineResizeHandles(this.currentSelection);
+        // you can move a line with Drag&amp;Drop...but not a connection.
+        // A Connection is fixed linked with the corresponding ports.
+        //
+        if(line instanceof graphiti.Line &amp;&amp; !(line instanceof graphiti.Connection))
+        {
+           this.draggingLineCommand = line.createCommand(new graphiti.EditPolicy(graphiti.EditPolicy.MOVE));
+           if(this.draggingLineCommand!=null)
+              this.draggingLine = line;
+        }
+      }
+    },
+
+<span id='graphiti-Canvas-method-onMouseUp'>    /**
+</span>     * @private
+     **/
+    onMouseUp:function(/*:int*/ x ,/*:int*/ y)
+    {
+      this.dragging = false;
+      if(this.draggingLineCommand!=null)
+      {
+        this.getCommandStack().execute(this.draggingLineCommand);
+        this.draggingLine = null;
+        this.draggingLineCommand=null;
+      }
+    },
+
+<span id='graphiti-Canvas-method-onMouseMove'>    /**
+</span>     * @private
+     **/
+    onMouseMove:function(/*:int*/ x ,/*:int*/ y)
+    {
+      // DragDrop of a connection/Line
+      if(this.dragging==true &amp;&amp; this.draggingLine!=null)
+      {
+       var diffX = x-this.mouseDownPosX;
+       var diffY = y-this.mouseDownPosY;
+       // don't use &quot;setStartPoint(...)&quot;. This enforce a repaint of the the connection.
+       // We need only one repaint of the connect and this will be done with &quot;setEndPoint(...)&quot;
+       // This is a simple performance &quot;hack&quot;.
+       this.draggingLine.startX= this.draggingLine.getStartX()+diffX;
+       this.draggingLine.startY= this.draggingLine.getStartY()+diffY;
+       this.draggingLine.setEndPoint(this.draggingLine.getEndX()+diffX, this.draggingLine.getEndY()+diffY);
+       this.mouseDownPosX = x;
+       this.mouseDownPosY = y;
+       this.showLineResizeHandles(this.currentSelection);
+      }
+      else if(this.dragging==true &amp;&amp; this.panning==true)
+      {
+       var diffX = x-this.mouseDownPosX;
+       var diffY = y-this.mouseDownPosY;
+
+       // set the new viewpoint
+       //
+       this.scrollTo(this.getScrollLeft()-diffX,  this.getScrollTop()-diffY,true);
+
+       // adjust all palletes and toolbars
+       //
+       this.onScroll();
+      }
     }
+
 });
 
 </pre>

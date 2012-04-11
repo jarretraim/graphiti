@@ -178,7 +178,7 @@ graphiti.CompartmentFigure = graphiti.Figure.extend({
          var child = this.children.get(i);
          child.setPosition(child.getX()+this.getX()-oldX, child.getY()+this.getY()-oldY);
       }
-    },
+    }
     
 });
 

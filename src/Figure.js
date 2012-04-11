@@ -13,6 +13,7 @@ graphiti.Figure = Class.extend({
      * Creates a new figure element which are not assigned to any canvas.
      */
     init: function( ) {
+    	this.command = null;
         this.canvas = null;
         this.shape  = null;
          
@@ -128,33 +129,34 @@ graphiti.Figure = Class.extend({
      **/
     createDraggable:function()
     {
-        this._startDrag = function (x,y,event) 
-        {
-           jQuery.Event(event).stopPropagation();
-           
-           this.canvas.showMenu(null);
-    
-           var line = this.canvas.getBestLine(this.x+x, this.y+y);
-           if(line!==null)
-           {
-             this.canvas.setCurrentSelection(line);
-             this.canvas.onMouseDown(this.x+oEvent.x, oEvent.y+this.y);
-             return;
-           }
-           
-           if(this.isSelectable())
-           {
-             this.canvas.setCurrentSelection(this);
-           }
-    
-           if(!this.isDraggable())
-             return;
+		this._startDrag = function(x, y, event) {
+			this._allowDragDrop = false;
 
-           this.ox = this.x;
-           this.oy = this.y;
-    
-           this._allowDragDrop = this.onDragstart(x,y);
-        };
+			event = $.Event(event);
+			event.stopPropagation();
+
+			this.canvas.showMenu(null);
+
+			var line = this.canvas.getBestLine(this.x + x, this.y + y);
+			if (line !== null) {
+				this.canvas.setCurrentSelection(line);
+				this.canvas.onMouseDown(this.x + event.x, event.y + this.y);
+				return;
+			}
+
+			if (this.isSelectable()===true) {
+				this.canvas.setCurrentSelection(this);
+			}
+
+			if (this.isDraggable()===false)
+				return;
+
+			this.ox = this.x;
+			this.oy = this.y;
+
+			this._allowDragDrop = this.onDragstart(x, y);
+		};
+		
         this._moveDrag = function (dx, dy) 
         {
            if(this.isSelectable()===false)
@@ -168,9 +170,10 @@ graphiti.Figure = Class.extend({
              
            this.onDrag(dx,dy);
         };
+        
         this._upDrag = function () 
         {
-           if(!this.isDraggable())
+           if(this.isDraggable()===false)
              return;
     
            if(this._allowDragDrop===false)
@@ -234,7 +237,8 @@ graphiti.Figure = Class.extend({
     onDragstart : function( x, y)
     {
       this.command = this.createCommand(new graphiti.EditPolicy(graphiti.EditPolicy.MOVE));
-      return this.command!=null;
+      
+      return this.command!==null;
     },
 
     /**
@@ -732,21 +736,21 @@ graphiti.Figure = Class.extend({
      **/
     createCommand:function( request)
     {
-      if(request.getPolicy() == graphiti.EditPolicy.MOVE)
+      if(request.getPolicy() === graphiti.EditPolicy.MOVE)
       {
         if(!this.isDraggable())
           return null;
         return new graphiti.command.CommandMove(this);
       }
 
-      if(request.getPolicy() == graphiti.EditPolicy.DELETE)
+      if(request.getPolicy() === graphiti.EditPolicy.DELETE)
       {
         if(!this.isDeleteable())
            return null;
         return new graphiti.command.CommandDelete(this);
       }
       
-      if(request.getPolicy() == graphiti.EditPolicy.RESIZE)
+      if(request.getPolicy() === graphiti.EditPolicy.RESIZE)
       {
         if(!this.isResizeable())
            return null;

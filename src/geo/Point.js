@@ -5,7 +5,7 @@ graphiti.geo.Point = Class.extend({
 
     /**
      * @constructor 
-     * Creates a new Poit object with the handsover coordinates.
+     * Creates a new Point object with the hands over coordinates.
      * @param {Number} x
      * @param {Number} y
      */
@@ -18,7 +18,7 @@ graphiti.geo.Point = Class.extend({
     /**
      * @method 
      * The X value of the point
-     * 
+     * @since 0.1
      * @return {Number}
      */
     getX : function()
@@ -110,9 +110,10 @@ graphiti.geo.Point = Class.extend({
      * @method 
      * Return a new Point translated with the x/y values of the hands over point.
      * 
+     * @param {graphiti.geo.Point} other the offset to add for the new point.
      * @return {graphiti.geo.Point} The new translated point.
      */
-    getTranslated : function(/* :graphiti.geo.Point */other)
+    getTranslated : function(other)
     {
         return new graphiti.geo.Point(this.x + other.x, this.y + other.y);
     },

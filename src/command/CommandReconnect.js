@@ -1,6 +1,22 @@
+/**
+ * @class graphiti.command.CommandConnect
+ * 
+ * Reconnects two ports. This command is used during the DragDrop operation of a graphiti.Connection.
+ *
+ * @inheritable
+ * @author Andreas Herz
+ * 
+ * @extends graphiti.command.Command
+ */
 graphiti.command.CommandReconnect = graphiti.command.Command.extend({
     
 
+    /**
+     * @constructor
+     * Create a new Command objects which can be execute via the CommandStack.
+     *
+     * @param {graphiti.Connection} con the related Connection which is currently in the drag&drop operation
+     */
     init : function(con){
        this.con      = con;
        this.oldSourcePort  = con.getSource();
@@ -9,12 +25,13 @@ graphiti.command.CommandReconnect = graphiti.command.Command.extend({
    },
     
     /**
+     * @method
      * Returns [true] if the command can be execute and the execution of the
      * command modify the model. A CommandMove with [startX,startX] == [endX,endY] should
      * return false. <br>
      * the execution of the Command doesn't modify the model.
      *
-     * @type boolean
+     * @return {boolean}
      **/
     canExecute:function()
     {
@@ -22,13 +39,21 @@ graphiti.command.CommandReconnect = graphiti.command.Command.extend({
       return true;
     },
     
-    setNewPorts:function(/*:@NAMESPACE@Port*/ source, /*:@NAMESPACE@Port*/ target)
+    /**
+     * @method
+     * The new ports to use during the execute of this command.
+     * 
+     * @param {graphiti.Port} source
+     * @param {graphiti.Port} target
+     */
+    setNewPorts:function(source,  target)
     {
       this.newSourcePort = source;
       this.newTargetPort = target;
     },
     
     /**
+     * @method
      * Execute the command the first time
      * 
      **/
@@ -38,6 +63,7 @@ graphiti.command.CommandReconnect = graphiti.command.Command.extend({
     },
     
     /**
+     * @method
      * Execute the command the first time
      * 
      **/
@@ -52,6 +78,7 @@ graphiti.command.CommandReconnect = graphiti.command.Command.extend({
     },
     
     /**
+     * @method
      * Undo the command
      *
      **/
@@ -65,6 +92,7 @@ graphiti.command.CommandReconnect = graphiti.command.Command.extend({
     },
     
     /** 
+     * @method
      * Redo the command after the user has undo this command
      *
      **/

@@ -159,5 +159,5 @@ graphiti.util.Color = Class.extend({
         if (blue  < 0) blue  = 0; else if (blue  > 255) blue  = 255;
     
         return new /*:NAMESPACE*/Color(red, green, blue);
-    },
+    }
 });

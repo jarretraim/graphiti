@@ -19,23 +19,15 @@ graphiti.LineResizeHandle = graphiti.ResizeHandle.extend({
     {
         this._startDrag = function (x,y,event) 
         {
-console.log("startDrag1");
            $.Event(event).stopPropagation();
-           console.log("startDrag2");
            this.canvas.showMenu(null);
-           console.log("startDrag3");
-
            if(!this.isDraggable())
              return;
-           console.log("startDrag4");
              
            this.ox = this.x;
-           console.log("startDrag5");
            this.oy = this.y;
-           console.log("startDrag6");
         
            this.onDragstart(x,y);
-           console.log("startDrag7");
         };
         this._moveDrag = function (dx, dy) 
         {
@@ -165,6 +157,6 @@ console.log("startDrag1");
       }
       this.command = null;
       this.getCanvas().hideSnapToHelperLines();
-    },
+    }
 
 });
