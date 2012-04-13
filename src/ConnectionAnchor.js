@@ -1,16 +1,34 @@
 
+/**
+ * @class
+ *  An object to which a {@link graphiti.Connection} will be anchored.
+ *  
+ * @inheritable
+ * @author Andreas Herz
+ */
 graphiti.ConnectionAnchor = Class.extend({
     NAME : "graphiti.ConnectionAnchor", // only for debugging
 
+    /**
+     * @constructor
+     * 
+     * @param {graphiti.Figure} owner the figure to use for the anchor calculation 
+     */
     init:function(owner){
+    	if(typeof owner ==="undefined"){
+    		throw "Missing parameter for 'owner' in ConnectionAnchor";
+    	}
+    	
         this.owner = owner;
     },
 
     /**
+     * @method
      * Returns the location where the Connection should be anchored in absolute coordinates. 
      * The anchor may use the given reference Point to calculate this location.
-     * @param reference The reference Point in absolute coordinates
-     * @return The anchor's location
+     * 
+     * @param
+     * @return {Number] reference The reference Point in absolute coordinates
      */
     getLocation:function(/*:@NAMESPACE@Point*/ reference)
     {
@@ -19,8 +37,10 @@ graphiti.ConnectionAnchor = Class.extend({
     },
     
     /**
+     * @method
      * Returns the Figure that contains this ConnectionAnchor.
-     * @return The Figure that contains this ConnectionAnchor
+     * 
+     * @return {graphiti.Figure} The Figure that contains this ConnectionAnchor
      */
     getOwner:function()
     {
@@ -28,18 +48,25 @@ graphiti.ConnectionAnchor = Class.extend({
     },
     
     /**
+     * @method
      * Set the owner of the Anchor.
+     * 
+     * @param {graphiti.Figure} owner the new owner of the anchor locator
      */
-    setOwner:function(/*:@NAMESPACE@Port*/ owner)
+    setOwner:function( owner)
     {
-       this.owner=owner;
+    	if(typeof owner ==="undefined"){
+    		throw "Missing parameter for 'owner' in ConnectionAncho.setOwnerr";
+    	}
+        this.owner=owner;
     },
     
     /**
+     * @method
      * Returns the bounds of this Anchor's owner.  Subclasses can override this method
      * to adjust the box. Maybe you return the box of the port parent (the parent figure)
      *
-     * @return The bounds of this Anchor's owner
+     * @return {graphiti.geo.Dimension} The bounds of this Anchor's owner
      */
     getBox:function()
     {
@@ -47,17 +74,14 @@ graphiti.ConnectionAnchor = Class.extend({
     },
     
     /**
+     * @method
      * Returns the reference point for this anchor in absolute coordinates. This might be used
      * by another anchor to determine its own location.
-     * @return The reference Point
+     * 
+     * @return {graphiti.geo.Point} The reference Point
      */
     getReferencePoint:function()
     {
-       if (this.getOwner()===null){
-         return null;
-       }
-       else {
-         return this.getOwner().getAbsolutePosition();
-       }
+       return this.getOwner().getAbsolutePosition();
     }
 });

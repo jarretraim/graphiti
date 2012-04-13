@@ -4,9 +4,8 @@
  * A Port is the anchor for a {@link graphiti.Connection}. A {@link graphiti.Connection} must have a start and a end Port.
  * 
  * @author Andreas Herz
- * @constructor
- */
-      
+ * @extends graphiti.Circle
+ */ 
 graphiti.Port = graphiti.Circle.extend({
     NAME : "graphiti.Port", // only for debugging
 

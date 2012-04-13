@@ -1,4 +1,13 @@
-
+/**
+ * @class graphiti.LineStartResizeHandle
+ * Selection handle for connections and normal lines.
+ * 
+ * TODO: Split the LineEndResizeHandle to ConnectionEndResizeHandle and LineEndResizeHandle!!!!
+ *
+ * @inheritable
+ * @author Andreas Herz
+ * @extends graphiti.LineResizeHandle 
+ */
 graphiti.LineStartResizeHandle = graphiti.LineResizeHandle.extend({
     NAME : "graphiti.LineStartResizeHandle", // only for debugging
 

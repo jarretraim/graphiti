@@ -88,7 +88,8 @@ graphiti.layout.router.AbstractRouter = Class.extend({
     getEndDirection:function( conn)
     {
        var p = conn.getEndPoint();
-       var rect = conn.getTarget().getParent().getBounds();
+       var rect = conn.getTarget().getParent().getBoundingBox();
+       
        return this.getDirection(rect, p);
     },
     
@@ -109,23 +110,21 @@ graphiti.layout.router.AbstractRouter = Class.extend({
      * 
      * @param {graphiti.Connection} conn the connection with the start port to examine
      * 
-     * @return {Number} the direction. Possible values are:
-     *  - up -> 0
-     *  - right -> 1
-     *  - down -> 2
-     *  - left -> 3
+     * @return {Number} the direction.
      */
     getStartDirection:function( conn)
     {
        var p = conn.getStartPoint();
-       var rect = conn.getSource().getParent().getBounds();
+       var rect = conn.getSource().getParent().getBoundingBox();
        return this.getDirection(rect, p);
     },
     
     
     /**
+     * @method
      * Routes the Connection.
-     * @param connection The Connection to route
+     * 
+     * @param {graphiti.Connection} connection The Connection to route
      * @template
      */
     route:function( connection)

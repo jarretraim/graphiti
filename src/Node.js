@@ -6,9 +6,9 @@
  * anchor for a {@link @NAMESPACE@Connection} line.<br><br><b>Hint:</b> A {@link @NAMESPACE@Port} is a green dot which can 
  * be dragged and dropped over another port.<br>
  * 
- * @extends graphiti.Figure 
  * @inheritable
  * @author Andreas Herz
+ * @extends graphiti.Figure 
  */
 graphiti.Node = graphiti.Figure.extend({
     NAME : "graphiti.Node", // only for debugging

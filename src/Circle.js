@@ -2,7 +2,8 @@
 
 /**
  * @class graphiti.Circle
- * The base class for all visible elements inside a canvas.
+ * A circle figure with basic background and stroke API. A circle can not be streched. The aspect ration
+ * is always 1:1
  * 
  * @inheritable
  * @author Andreas Herz
@@ -12,6 +13,11 @@ graphiti.Circle = graphiti.Oval.extend({
     
     NAME : "graphiti.Circle", // only for debug
     
+    /**
+     * @constructor
+     * 
+     * @param {Number} [radius] the initial radius for the circle
+     */
     init:function( radius)
     {
       this._super();
@@ -41,8 +47,7 @@ graphiti.Circle = graphiti.Oval.extend({
     
     /**
      * @method
-     * A Circle can't streched. In this case this method returns always false. So - no resize handles at the top, 
-     * bottom,left and the right are visible.<br>
+     * A Circle can't be streched. The aspect ratio is always 1:1<br>
      *
      * @return {boolean} Returns always false. It is not possible to strech a circle.
      */

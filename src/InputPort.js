@@ -1,4 +1,10 @@
-
+/**
+ * @class graphiti.InputPort
+ * A OutputPort is the end anchor for a {@link graphiti.Connection}.
+ * 
+ * @author Andreas Herz
+ * @extends graphiti.Port
+ */ 
 graphiti.InputPort = graphiti.Port.extend({
 
     NAME : "graphiti.InputPort", // only for debugging

@@ -1,9 +1,11 @@
-
 /**
+ * @class graphiti.LineResizeHandle
+ * Base class for selection handle for connections and normal lines.
  * 
- * @version @VERSION@
+ *
+ * @inheritable
  * @author Andreas Herz
- * @constructor
+ * @extends graphiti.Circle
  */
 graphiti.LineResizeHandle = graphiti.Circle.extend({
     NAME : "graphiti.LineResizeHandle", // only for debugging
@@ -27,8 +29,11 @@ graphiti.LineResizeHandle = graphiti.Circle.extend({
     },
 
     /**
+     * @method
+     * Return the port below the ResizeHandle.
+     * 
      * @template
-     * @returns
+     * @return {graphiti.Port}
      */
     getRelatedPort:function()
     {
@@ -38,7 +43,7 @@ graphiti.LineResizeHandle = graphiti.Circle.extend({
 
     /**
      * @method
-     * Init the repaint of the element
+     * Trigger the repaint of the element
      * 
      * @template
      * @param attributes
@@ -52,7 +57,7 @@ graphiti.LineResizeHandle = graphiti.Circle.extend({
         //
        attributes.fill="r(.4,.3)#b4e391-#61c419:60-#299a0b";
         
-        this._super(attributes);
+       this._super(attributes);
     },
 
     /**
@@ -106,8 +111,12 @@ graphiti.LineResizeHandle = graphiti.Circle.extend({
     },
     
     /**
-     * @method Will be called after a drag and drop action.<br>
-     *         Sub classes can override this method to implement additional stuff. Don't forget to call the super implementation via <code>Figure.prototype.onDragend.call(this);</code>
+     * @method 
+     * Called after a drag and drop action.<br>
+     * Sub classes can override this method to implement additional stuff. 
+     * Don't forget to call the super implementation via <code>this._super();</code>
+     * 
+     * @return {Boolean}
      */
     onDragend : function()
     {
@@ -149,12 +158,12 @@ graphiti.LineResizeHandle = graphiti.Circle.extend({
 
 
     /**
+     * @method
      * The LineResizeHandle didn't support the SnapToHelper feature if the
      * corresponding object is an Connection. A Connection is always bounded to
      * Port. In this case it makes no sense to use a Grid or Geometry for snapping.
      *
-     * @type boolean
-     * @public
+     * @return {Boolean] return false fi the corresponding object didn't support snapTo###
      **/
     supportsSnapToHelper:function()
     {
@@ -171,7 +180,7 @@ graphiti.LineResizeHandle = graphiti.Circle.extend({
      * Additional bring it in to the front of other figures.
      *
      * @param {graphiti.Canvas} canvas the canvas to use
-     * @param {Number} x the x-positin
+     * @param {Number} x the x-position
      * @param {Number} y the y-position
      **/
     show:function(canvas, x, y)
@@ -191,7 +200,7 @@ graphiti.LineResizeHandle = graphiti.Circle.extend({
     
     /**
      * @method
-     * Hide the resize handle and remove it from the cnavas.
+     * Hide the resize handle and remove it from the canvas.
      *
      **/
     hide:function()

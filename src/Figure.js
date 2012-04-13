@@ -1,7 +1,7 @@
 
 /**
  * @class graphiti.Figure
- * The base class for all visible elements inside a canvas.
+ * A lightweight graphical object. Figures are rendered to a {#link graphiti.Canvas} object.
  * 
  * @inheritable
  * @author Andreas Herz
@@ -579,6 +579,17 @@ graphiti.Figure = Class.extend({
       }
     },
 
+
+    /**
+     * @method
+     * Return the bounding box of the figure in absolute position to the canvas.
+     * 
+     * @return {graphiti.geo.Dimension}
+     **/
+    getBoundingBox:function()
+    {
+      return new graphiti.geo.Dimension(this.getAbsoluteX(),this.getAbsoluteY(),this.getWidth(),this.getHeight());
+    },
 
     /**
      * @method

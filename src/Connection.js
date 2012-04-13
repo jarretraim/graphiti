@@ -3,14 +3,15 @@
  * @class graphiti.Connection
  *  A Connection is the line between two {@link graphiti.Port}s.
  *
- * @version @VERSION@
+ * @inheritable
  * @author Andreas Herz
- * @constructor
+ * @extends graphiti.Line
  */
 graphiti.Connection = graphiti.Line.extend({
     NAME : "graphiti.Connection", // only for debugging
 
-    DEFAULT_ROUTER: new graphiti.layout.router.DirectRouter(),
+//    DEFAULT_ROUTER: new graphiti.layout.router.DirectRouter(),
+    DEFAULT_ROUTER: new graphiti.layout.router.ManhattanConnectionRouter(),
     
     /**
      * @constructor

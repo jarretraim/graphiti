@@ -23,6 +23,9 @@ graphiti.Oval = graphiti.VectorFigure.extend({
       
 
    /** 
+    * @method
+    * Creates the shape object for a oval.
+    * 
     * @template
     **/
    createShapeElement : function()
@@ -34,7 +37,9 @@ graphiti.Oval = graphiti.VectorFigure.extend({
 
    /**
     * @method
-    * propagate all attributes like color, stroke,... to the shape element
+    * Trigger the repaint of the element and transport all style properties to the visual representation.<br>
+    * Called by the framework.
+    * 
     * @template
     **/
    repaint: function(attributes)
