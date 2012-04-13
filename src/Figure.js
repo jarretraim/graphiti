@@ -33,6 +33,11 @@ graphiti.Figure = Class.extend({
         this.canSnapToHelper = true;
         this.snapToGridAnchor = new graphiti.geo.Point(0,0);   // hot spot for snap to grid  
         
+        // model for the MVC pattern
+        //
+        this.model = null; 
+ 
+        
         // possible parent of the figure. Can be a ComparmentFigure or, in a case of a Port,
         // a normal Figure.
         //
@@ -71,6 +76,16 @@ graphiti.Figure = Class.extend({
     
     /**
      * @method
+     * Set the id of this element. 
+     * 
+     * @param {String} id the new id for this figure
+     */
+    setId: function(id){
+        this.id = id; 
+    },
+    
+    /**
+     * @method
      * Set the canvas element of this figures.
      * 
      * @param {graphiti.Canvas} canvas the new parent of the figure or null
@@ -103,6 +118,79 @@ graphiti.Figure = Class.extend({
        return this.canvas;
     },
     
+
+    /**
+     * Set the primary model object that this Line represents. This method is used 
+     * by an EditPartFactory when creating an Line.
+     * 
+     * @param {graphiti.mvc.AbstractObjectModel} model The model
+     * @final
+     */
+    setModel:function( model)
+    {
+       if(this.model!==null){
+          this.model.removePropertyChangeListener(this);
+       }
+
+       this.model = model;
+
+       if(this.model!==null){
+          this.model.addPropertyChangeListener(this);
+       }
+    },
+
+
+    /**
+     * Returns the primary model object that this Figure represents.
+     * 
+     * @type {graphiti.mvc.AbstractObjectModel}
+     * @final
+     */
+    getModel:function()
+    {
+       return this.model;
+    },
+
+    /**
+     * @method
+     * Method will be called if the MVC pattern is used.
+     * Override this method to synch. the model into the figure/view
+     * 
+     * @template
+     */
+    updateViewFromModel:function()
+    {
+    },
+
+    /**
+     * @method
+     * Called by the MVC framework if any data on the related model has been changed. The figure
+     * enfoces a repaint or only an update of the position related to type of event.
+     * 
+     * @private
+     * @param {graphiti.mvc.PropertyChangeEvent} event
+     */
+    propertyChange:function( event)
+    {
+      switch(event.property)
+      {
+        case graphiti.mvc.AbstractObjectModel.EVENT_PROPERTY_CHANGED:
+            this.repaint();
+            break;
+        case graphiti.mvc.AbstractObjectModel.EVENT_POSITION_CHANGED:
+            this.setPosition(event.newValue.x,event.newValue.y);
+            break;
+        case graphiti.mvc.AbstractObjectModel.EVENT_CONNECTION_ADDED:
+            this.refreshConnections();
+            break;
+        case graphiti.mvc.AbstractObjectModel.EVENT_CONNECTION_REMOVED:
+            this.refreshConnections();
+            break;
+        default:
+            break;
+       }
+    },
+
     /**
      * @method
      * return the current SVG shape element or create it on demand.
@@ -302,7 +390,7 @@ graphiti.Figure = Class.extend({
       this.command.setPosition(this.x, this.y);
       this.isInDragDrop = false;
 
-  //    this.canvas.commandStack.execute(this.command);
+      this.canvas.commandStack.execute(this.command);
       this.command = null;
       this.isMoving = false;
       this.fireMoveEvent();
@@ -527,11 +615,11 @@ graphiti.Figure = Class.extend({
      * @method
      * Returns the absolute y-position of the port.
      *
-     * @return {graphiti.geo.Dimension}
+     * @return {graphiti.geo.Rectangle}
      **/
     getAbsoluteBounds:function()
     {
-      return new graphiti.geo.Dimension(this.getAbsoluteX(), this.getAbsoluteY(),this.getWidth(),this.getHeight());
+      return new graphiti.geo.Rectangle(this.getAbsoluteX(), this.getAbsoluteY(),this.getWidth(),this.getHeight());
     },
     
 
@@ -584,11 +672,11 @@ graphiti.Figure = Class.extend({
      * @method
      * Return the bounding box of the figure in absolute position to the canvas.
      * 
-     * @return {graphiti.geo.Dimension}
+     * @return {graphiti.geo.Rectangle}
      **/
     getBoundingBox:function()
     {
-      return new graphiti.geo.Dimension(this.getAbsoluteX(),this.getAbsoluteY(),this.getWidth(),this.getHeight());
+      return new graphiti.geo.Rectangle(this.getAbsoluteX(),this.getAbsoluteY(),this.getWidth(),this.getHeight());
     },
 
     /**

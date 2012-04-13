@@ -222,8 +222,8 @@ graphiti.Canvas = Class.extend(
      * Add a figure at the hands over x/y position.
      *
      * @param {graphiti.Figure} figure The figure to add.
-     * @param {Number} x The x position.
-     * @param {Number} y The y position.
+     * @param {Number} [x] The x position.
+     * @param {Number} [y] The y position.
      **/
     addFigure:function( figure , x,  y)
     {
@@ -253,7 +253,10 @@ graphiti.Canvas = Class.extend(
         {
           this.compartments.add(figure);
         }
-        figure.setPosition(x,y);
+        
+        if(typeof y !== "undefined"){
+        	figure.setPosition(x,y);
+        }
       }
       
 
@@ -305,6 +308,20 @@ graphiti.Canvas = Class.extend(
     {
       return this.lines;
     },
+
+
+    /**
+     * @method
+     * Returns the internal figures container.<br>
+     *
+     *
+     * @private
+     **/
+    getFigures:function()
+    {
+      return this.figures;
+    },
+
 
     /**
      * Enable/disable the snap to grid behavior of the canvas. All figures will snap to the grid during the
@@ -415,8 +432,8 @@ graphiti.Canvas = Class.extend(
           // The user drag&drop a normal figure
           else
           {
-             var inputBounds = new graphiti.geo.Dimension(pos.x,pos.y, figure.getWidth(), figure.getHeight());
-             result = new graphiti.geo.Dimension(pos.x,pos.y, figure.getWidth(), figure.getHeight());
+             var inputBounds = new graphiti.geo.Rectangle(pos.x,pos.y, figure.getWidth(), figure.getHeight());
+             result = new graphiti.geo.Rectangle(pos.x,pos.y, figure.getWidth(), figure.getHeight());
 
              snapDirections = graphiti.SnapToHelper.NSEW;
              var direction = this.snapToGeometryHelper.snapRectangle( inputBounds, result);

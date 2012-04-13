@@ -230,7 +230,7 @@ graphiti.Node = graphiti.Figure.extend({
      */
     getModelSourceConnections: function()
     {
-       throw "You must override the method [Node.prototype.getModelSourceConnections]";
+       return graphiti.util.ArrayList.EMPTY_LIST;
     },
     
     /**

@@ -25,9 +25,7 @@ graphiti.Line = graphiti.Figure.extend({
         
         this.endX   = 100;
         this.endY   = 100;
-
-        this.model = null; // model for the MVC pattern
-        
+       
         // click area for the line hit test
         this.corona = 20;
 
@@ -343,39 +341,6 @@ graphiti.Line = graphiti.Figure.extend({
      return null;
    },
 
-
-   /**
-    * Set the primary model object that this Line represents. This method is used 
-    * by an EditPartFactory when creating an Line.
-    * 
-    * @param {graphiti.AbstractObjectModel} model The model
-    * @since 0.9.15
-    * @final
-    */
-   setModel:function(/*:graphiti.AbstractObjectModel*/ model)
-   {
-      if(this.model!==null){
-         this.model.removePropertyChangeListener(this);
-      }
-
-      this.model = model;
-
-      if(this.model!==null){
-         this.model.addPropertyChangeListener(this);
-      }
-   },
-
-
-   /**
-    * Returns the primary model object that this Figure represents.
-    * 
-    * @type {graphiti.AbstractObjectModel}
-    * @final
-    */
-   getModel:function()
-   {
-      return this.model;
-   },
 
    /**
     * Callback method for the double click event of user interaction.

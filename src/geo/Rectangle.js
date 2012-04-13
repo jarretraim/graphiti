@@ -1,5 +1,5 @@
 /**
- * @class graphiti.geo.Dimension
+ * @class graphiti.geo.Rectangle
  * 
  * Util class for geometrie handling.
  * 
@@ -8,7 +8,7 @@
  * 
  * @extends graphiti.geo.Point
  */
-graphiti.geo.Dimension = graphiti.geo.Point.extend({
+graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 
     /**
      * @constructor 
@@ -36,7 +36,7 @@ graphiti.geo.Dimension = graphiti.geo.Point.extend({
 	 * @param {Number} dx  Shift along X axis
 	 * @param {Number} dy  Shift along Y axis
 	 * 
-	 * @return  {graphiti.geo.Dimension} The method return the object itself
+	 * @return  {graphiti.geo.Rectangle} The method return the object itself
 	 **/
 	translate:function( dx,  dy)
 	{
@@ -58,7 +58,7 @@ graphiti.geo.Dimension = graphiti.geo.Point.extend({
 	 * @param {int} dw  Amount by which width is to be resized
 	 * @param {int} dh  Amount by which height is to be resized
 	 * 
-	 * @return  {graphiti.geo.Dimension} The method return the object itself
+	 * @return  {graphiti.geo.Rectangle} The method return the object itself
 	 **/
 	resize:function(/*:int*/ dw, /*:int*/ dh)
 	{
@@ -74,9 +74,9 @@ graphiti.geo.Dimension = graphiti.geo.Point.extend({
 	 * The method return the object itself. This allows you to do command chaining, where 
 	 * you can perform multiple methods on the same elements.
 	 *
-	 * @param {graphiti.geo.Dimension} Rectangle providing the bounding values
+	 * @param {graphiti.geo.Rectangle} Rectangle providing the bounding values
 	 * 
-	 * @return  {graphiti.geo.Dimension} The method return the object itself
+	 * @return  {graphiti.geo.Rectangle} The method return the object itself
 	 */
 	setBounds:function( rect)
 	{
@@ -182,7 +182,7 @@ graphiti.geo.Dimension = graphiti.geo.Point.extend({
 	 * @method
 	 * Compares two Dimension objects
 	 * 
-	 * @param {graphiti.geo.Dimension}
+	 * @param {graphiti.geo.Rectangle}
 	 *@return {Boolean}
 	 **/
 	equals:function( o)

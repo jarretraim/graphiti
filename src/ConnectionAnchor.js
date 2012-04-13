@@ -66,7 +66,7 @@ graphiti.ConnectionAnchor = Class.extend({
      * Returns the bounds of this Anchor's owner.  Subclasses can override this method
      * to adjust the box. Maybe you return the box of the port parent (the parent figure)
      *
-     * @return {graphiti.geo.Dimension} The bounds of this Anchor's owner
+     * @return {graphiti.geo.Rectangle} The bounds of this Anchor's owner
      */
     getBox:function()
     {
