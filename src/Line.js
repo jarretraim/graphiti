@@ -1,3 +1,4 @@
+
 /**
  * @class graphiti.Line
  * The base class for all visible elements inside a canvas.
@@ -7,6 +8,7 @@
  * @extends graphiti.Figure
  */
 graphiti.Line = graphiti.Figure.extend({
+    NAME : "graphiti.Line", // only for debugging
 
     /**
      * @constructor
@@ -15,24 +17,22 @@ graphiti.Line = graphiti.Figure.extend({
     init: function( ) {
         this._super();
         
-        this.lineColor = new  graphiti.util.Color(0,0,0);
+        this.lineColor = new graphiti.util.Color(0,0,0);
         this.stroke=1;
+        
         this.startX = 30;
         this.startY = 30;
         
         this.endX   = 100;
         this.endY   = 100;
-        
-        this.isMoving = false;
 
         this.model = null; // model for the MVC pattern
         
-
         // click area for the line hit test
         this.corona = 20;
 
         // a figure can store additional, user defined, properties
-        this.properties = new Object(); /*:Map<name,value>*/
+        this.properties = {} ; /*:Map<name,value>*/
 
         this.setSelectable(true);
         this.setDeleteable(true);
@@ -49,6 +49,17 @@ graphiti.Line = graphiti.Figure.extend({
       this.corona = width;
    },
 
+   /**
+    * @method
+    * Set the canvas element of this figures.
+    * 
+    * @param {graphiti.Canvas} canvas the new parent of the figure or null
+    */
+   setCanvas: function(canvas){
+       this._super(canvas);
+       
+       this.repaint();
+   },
 
    /**
     * Called by the framework. Don't call them manually.
@@ -65,40 +76,7 @@ graphiti.Line = graphiti.Figure.extend({
                   "stroke-width":this.stroke,
                   "path":"M"+this.getStartX()+" "+this.getStartY()+"L"+this.getEndX()+" "+this.getEndY()});
    },
-
-   /**
-    * @private
-    * @param {graphiti.Canvas} canvas
-    **/
-   setCanvas:function( canvas)
-   {
-     if(canvas===null && this.shape!==null)
-     {
-        this.shape.remove();
-        this.shape = null;
-     }
-     this.canvas = canvas;
-   },
-
-   /**
-    * @type graphiti.Canvas
-    **/
-   getCanvas:function()
-   {
-      return this.canvas;
-   },
    
-   /**
-    * Set the unique id of this element.
-    *
-    * @param {String} id The new unique id of this element
-    * @since 0.9.15
-    **/
-   setId:function(/*:String*/ id)
-   {
-     this.id=id;
-   },
-
    /**
     * A figure can store user defined attributes. This method returns all properties stored in this figure.<br>
     *
@@ -140,15 +118,6 @@ graphiti.Line = graphiti.Figure.extend({
 
 
    /**
-    * @type Workflow
-    **/
-   getWorkflow:function()
-   {
-      return this.workflow;
-   },
-
-
-   /**
     * You can't drag&drop the resize handles if the line not resizeable.
     * @type boolean
     **/
@@ -157,47 +126,6 @@ graphiti.Line = graphiti.Figure.extend({
      return true;
    },
 
-
-   /**
-    * 
-    * @param {graphiti.Figure} figure The figure to monitor any movements
-    **/
-   attachMoveListener:function(/*:graphiti.Figure*/ figure)
-   {
-     this.moveListener.add(figure);
-   },
-
-   /**
-    *
-    * @param {graphiti.Figure} figure The figure to to remove the movement monitor
-    **/
-   detachMoveListener:function(/*:graphiti.Figure*/ figure) 
-   {
-     this.moveListener.remove(figure);
-   },
-
-   /**
-    *
-    * @private
-    **/
-   fireMoveEvent:function()
-   {
-     var size= this.moveListener.getSize();
-     for(var i=0;i<size;i++)
-     {
-       this.moveListener.get(i).onOtherFigureMoved(this);
-     }
-   },
-
-   /**
-    * This method will be called if an figure, which has been registered befor, has been moved.
-    *
-    * @param {graphiti.Figure} figure The figure which has been moved
-    * @private
-    **/
-   onOtherFigureMoved:function(/*:graphiti.Figure*/ figure)
-   {
-   },
 
    /**
     * Set the line width. This enforce a repaint of the line.
@@ -210,8 +138,7 @@ graphiti.Line = graphiti.Figure.extend({
      this.stroke=w;
      this.setDocumentDirty();
      
-     if(this.shape!==null)
-        this.shape.attr({"stroke-width":this.stroke});
+     this.repaint();
    },
 
 
@@ -225,8 +152,7 @@ graphiti.Line = graphiti.Figure.extend({
      this.lineColor = color;
      this.setDocumentDirty();
 
-     if(this.shape!==null)
-        this.shape.attr({"stroke":"#"+this.lineColor.hex()});
+     this.repaint();
    },
 
    /**
@@ -247,8 +173,9 @@ graphiti.Line = graphiti.Figure.extend({
     **/
    setStartPoint:function(/*:int*/ x, /*:int*/ y)
    {
-     if(this.startX==x && this.startY==y)
+     if(this.startX===x && this.startY===y){
         return;
+     }
 
      this.startX = x;
      this.startY = y;
@@ -265,8 +192,9 @@ graphiti.Line = graphiti.Figure.extend({
     **/
    setEndPoint:function(/*:int*/x, /*:int*/ y)
    {
-     if(this.endX==x && this.endY==y)
+     if(this.endX===x && this.endY===y){
         return;
+     }
 
      this.endX = x;
      this.endY = y;
@@ -330,49 +258,7 @@ graphiti.Line = graphiti.Figure.extend({
 
 
    /**
-    * Return true if the user can select the line.
-    * @type boolean
-    **/
-   isSelectable:function()
-   {
-     return this.selectable;
-   },
-
-
-   /**
-    * You can change the selectable behaviour of this object. Hands over [false] and
-    * the figure has no selection handles if you try to select them with the mouse.<br>
-    *
-    * @param {boolean} flag The selectable flag.
-    **/
-   setSelectable:function(/*:boolean*/ flag)
-   {
-     this.selectable=flag;
-   },
-
-
-   /**
-    * Return false if you avoid that the user can delete your figure.
-    * Sub class can override this method.
-    * @type boolean
-    **/
-   isDeleteable:function()
-   {
-     return this.deleteable;
-   },
-
-   /**
-    * Return false if you avoid that the user can delete your figure.
-    * Sub class can override this method.
-    * @type boolean
-    **/
-   setDeleteable:function(/*:boolean */flag)
-   {
-     this.deleteable = flag;
-   },
-
-
-   /**
+    * @method
     * Returns the length of the line.
     * 
     * @type int
@@ -380,13 +266,15 @@ graphiti.Line = graphiti.Figure.extend({
    getLength:function()
    {
      // call native path method if possible
-     if(this.shape!==null)
+     if(this.shape!==null){
        return this.shape.getTotalLength();
+     }
        
      return Math.sqrt((this.startX-this.endX)*(this.startX-this.endX)+(this.startY-this.endY)*(this.startY-this.endY));
    },
 
    /**
+    * @method
     * Returns the angle of the line in degree
     *
     * <pre>
@@ -412,15 +300,18 @@ graphiti.Line = graphiti.Figure.extend({
 
      if(angle<0)
      {
-        if(this.endX<this.startX)
+        if(this.endX<this.startX){
           angle = Math.abs(angle) + 180;
-        else
+        }
+        else{
           angle = 360- Math.abs(angle);
+        }
      }
      else
      {
-        if(this.endX<this.startX)
+        if(this.endX<this.startX){
           angle = 180-angle;
+        }
      }
      return angle;
    },
@@ -431,9 +322,8 @@ graphiti.Line = graphiti.Figure.extend({
     * @param {graphiti.EditPolicy} request describes the Command being requested
     * @return null or a Command
     * @type graphiti.Command 
-    * @since 0.9.15
     **/
-   createCommand:function(/*:graphiti.EditPolicy*/ request)
+   createCommand:function( request)
    {
      if(request.getPolicy() == graphiti.EditPolicy.MOVE)
      {
@@ -445,8 +335,9 @@ graphiti.Line = graphiti.Figure.extend({
      }
      if(request.getPolicy() == graphiti.EditPolicy.DELETE)
      {
-        if(this.isDeleteable()==false)
+        if(this.isDeleteable()===false){
            return null;
+        }
         return new graphiti.command.CommandDelete(this);
      }
      return null;
@@ -463,13 +354,15 @@ graphiti.Line = graphiti.Figure.extend({
     */
    setModel:function(/*:graphiti.AbstractObjectModel*/ model)
    {
-      if(this.model!=null)
+      if(this.model!==null){
          this.model.removePropertyChangeListener(this);
+      }
 
       this.model = model;
 
-      if(this.model!=null)
+      if(this.model!==null){
          this.model.addPropertyChangeListener(this);
+      }
    },
 
 
@@ -494,13 +387,16 @@ graphiti.Line = graphiti.Figure.extend({
 
 
    /**
-    * Checks if the hands over coordinate on the line.
+    * @method
+    * Checks if the hands over coordinate close to the line. The 'corona' is considered
+    * for this test. This means the point isn't direct on the line. Is it only close to the
+    * line!
     *
     * @param {Number} px the x coordinate of the test point
     * @param {Number} py the y coordinate of the test point
-    * @type boolean
+    * @return {boolean}
     **/
-   containsPoint: function( px, py)
+   hitTest: function( px, py)
    {
      return graphiti.Line.hit(this.corona, this.startX,this.startY, this.endX, this.endY, px,py);
    }

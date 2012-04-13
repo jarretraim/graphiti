@@ -18,9 +18,9 @@ example.End = graphiti.Rectangle.extend({
 
         if (canvas !== null && this.inputPort === null)
         {
-            this.inputPort = new graphiti.InputPort();
+            this.inputPort = new graphiti.InputPort(canvas);
             this.inputPort.setCanvas(canvas);
-            this.addPort(this.inputPort, -10, this.height / 2);
+            this.addPort(this.inputPort, 0, this.height / 2);
         }
     }
 

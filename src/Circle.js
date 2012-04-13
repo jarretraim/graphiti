@@ -1,3 +1,5 @@
+
+
 /**
  * @class graphiti.Circle
  * The base class for all visible elements inside a canvas.
@@ -8,12 +10,14 @@
  */
 graphiti.Circle = graphiti.Oval.extend({
     
+    NAME : "graphiti.Circle", // only for debug
     
     init:function( radius)
     {
       this._super();
-      if(radius)
+      if(typeof radius !== "undefined"){
         this.setDimension(radius,radius);
+      }
     },
     
     
@@ -27,10 +31,12 @@ graphiti.Circle = graphiti.Oval.extend({
      **/
     setDimension:function( w,  h)
     {
-      if(w>h)
+      if(w>h){
          this._super(w,w);
-      else
+      }
+      else{
          this._super(h,h);
+      }
     },
     
     /**

@@ -1,3 +1,4 @@
+
 /**
  * @class graphiti.command.Command
  * 
@@ -8,7 +9,9 @@
  * @author Andreas Herz
  */
 graphiti.command.Command = Class.extend({
-    
+
+    NAME : "graphiti.command.Command", // only for debug
+
     /**
      * @constructor
      * Create a new Command objects which can be execute via the CommandStack.

@@ -1,3 +1,4 @@
+
 /**
  * @class graphiti.Node
  * 
@@ -10,6 +11,7 @@
  * @author Andreas Herz
  */
 graphiti.Node = graphiti.Figure.extend({
+    NAME : "graphiti.Node", // only for debugging
 
     /**
      * @constructor
@@ -48,8 +50,9 @@ graphiti.Node = graphiti.Figure.extend({
       for(var i=0;i<this.ports.getSize();i++)
       {
        var port = this.ports.get(i);
-       if(port instanceof graphiti.util.InputPort)
+       if(port instanceof graphiti.util.InputPort){
           result.add(port);
+       }
       }
       return result;
     },
@@ -66,8 +69,9 @@ graphiti.Node = graphiti.Figure.extend({
       for(var i=0;i<this.ports.getSize();i++)
       {
        var port = this.ports.get(i);
-       if(port instanceof graphiti.OutputPort)
+       if(port instanceof graphiti.OutputPort){
           result.add(port);
+       }
       }
       return result;
     },
@@ -87,8 +91,9 @@ graphiti.Node = graphiti.Figure.extend({
       for(var i=0;i<this.ports.getSize();i++)
       {
        var port = this.ports.get(i);
-       if(port.getName() === portName)
+       if(port.getName() === portName){
           return port;
+       }
       }
       
       return null;
@@ -109,8 +114,9 @@ graphiti.Node = graphiti.Figure.extend({
       for(var i=0;i<this.ports.getSize();i++)
       {
        var port = this.ports.get(i);
-       if(port.getName() === portName && port instanceof graphiti.InputPort)
+       if(port.getName() === portName && port instanceof graphiti.InputPort){
           return port;
+       }
       }
       
       return null;
@@ -130,8 +136,9 @@ graphiti.Node = graphiti.Figure.extend({
       for(var i=0;i<this.ports.getSize();i++)
       {
        var port = this.ports.get(i);
-       if(port.getName() === portName && port instanceof graphiti.OutputPort)
+       if(port.getName() === portName && port instanceof graphiti.OutputPort){
           return port;
+       }
       }
       
       return null;
@@ -148,8 +155,7 @@ graphiti.Node = graphiti.Figure.extend({
     addPort: function(port, x, y)
     {
       this.ports.add(port);
-      port.setOrigin(x,y);
-      port.setPosition(this.x+x,this.y+y);
+      port.setPosition(x,y);
       port.setParent(this);
       
       // You can't delete a port with the [DEL] key if a port is a child of a node
@@ -175,8 +181,9 @@ graphiti.Node = graphiti.Figure.extend({
         
       port.setCanvas(null);
       
-      if(this.canvas!==null)
+      if(this.canvas!==null){
         this.canvas.unregisterPort(port);
+      }
     
       // remove the related connections of the port too.
       var connections = port.getConnections();
@@ -191,12 +198,13 @@ graphiti.Node = graphiti.Figure.extend({
      **/
     setCanvas: function( canvas)
     {
+        var i=0;
       var oldCanvas = this.canvas;
       this._super(canvas);
     
       if(oldCanvas!==null)
       {
-          for(var i=0;i<this.ports.getSize();i++)
+          for( i=0;i<this.ports.getSize();i++)
           {
               oldCanvas.unregisterPort(this.ports.get(i));
           }
@@ -204,7 +212,7 @@ graphiti.Node = graphiti.Figure.extend({
     
       if(this.canvas!==null)
       {
-          for(var i=0;i<this.ports.getSize();i++)
+          for( i=0;i<this.ports.getSize();i++)
           {
              this.canvas.registerPort(this.ports.get(i));
           }
@@ -235,7 +243,8 @@ graphiti.Node = graphiti.Figure.extend({
     refreshConnections: function()
     {
        // notify the view that the element has been changed
-       if(this.canvas!==null)
+       if(this.canvas!==null){
           this.canvas.refreshConnections(this);
+       }
     }
 });

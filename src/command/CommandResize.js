@@ -1,3 +1,5 @@
+
+
 /**
  * @class graphiti.command.CommandResize
  * Resize command for figures. Can be execute/undo/redo via a CommandStack.
@@ -7,7 +9,8 @@
  * @extends graphiti.command.Command
  */
 graphiti.command.CommandResize = graphiti.command.Command.extend({
-    
+    NAME : "graphiti.command.CommandResize", // only for debug
+
     /**
      * @constructor
      * Create a new resize Command objects which can be execute via the CommandStack.

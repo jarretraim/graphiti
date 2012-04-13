@@ -1,3 +1,4 @@
+
 /**
  * @class graphiti.command.CommandMove
  * 
@@ -9,7 +10,8 @@
  * @extends graphiti.command.Command
  */
 graphiti.command.CommandMove = graphiti.command.Command.extend({
-    
+    NAME : "graphiti.command.CommandMove", // only for debug
+  
     /**
      * @constructor
      * Create a new Command objects which can be execute via the CommandStack.

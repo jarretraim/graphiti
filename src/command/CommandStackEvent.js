@@ -1,8 +1,10 @@
+
 /**
  * @class graphiti.command.CommandStackEvent
  * Event class which will be fired for every CommandStack operation. Required for CommandStackListener.
  */
 graphiti.command.CommandStackEvent = Class.extend({
+    NAME : "graphiti.command.CommandStackEvent", // only for debug
 
     /**
      * @constructor

@@ -1,3 +1,4 @@
+
 /**
  * @class graphiti.Rectangle
  * A Rectangle Figure.
@@ -6,6 +7,7 @@
  * @extends graphiti.VectorFigure
  */
 graphiti.Rectangle = graphiti.VectorFigure.extend({
+    NAME : "graphiti.Rectangle", // only for debugging
 
     /**
      * @constructor
@@ -18,10 +20,12 @@ graphiti.Rectangle = graphiti.VectorFigure.extend({
       this.setBackgroundColor( new graphiti.util.Color(0,0,0));
       this.setColor(new  graphiti.util.Color(0,0,0));
 
-      if(width && height)
-        this.setDimension(width, height);
-      else
+      if(typeof width === "undefined"){
         this.setDimension(10, 10);
+      }
+      else{
+        this.setDimension(width, height);
+      }
     },
     
     /**

@@ -1,3 +1,4 @@
+
 /**
  * @class graphiti.Figure
  * The base class for all visible elements inside a canvas.
@@ -7,36 +8,65 @@
  * @since 2.1
  */
 graphiti.Figure = Class.extend({
+    NAME : "graphiti.Figure", // only for debugging
 
     /**
      * @constructor
      * Creates a new figure element which are not assigned to any canvas.
      */
     init: function( ) {
-    	this.command = null;
+        this.id = graphiti.util.UUID.create();
+
+        // for undo/redo operation. It holds the command during a drag/drop operation
+        // and execute it on the CommandStack if the user drop the figure.
+        this.command = null;
+        
         this.canvas = null;
         this.shape  = null;
          
+        // behavior flags
+        //
         this.selectable = true;
         this.deleteable = true;
         this.resizeable = true;
         this.draggable = true;
-        this.isMoving = false;
+        this.canSnapToHelper = true;
+        this.snapToGridAnchor = new graphiti.geo.Point(0,0);   // hot spot for snap to grid  
         
+        // possible parent of the figure. Can be a ComparmentFigure or, in a case of a Port,
+        // a normal Figure.
+        //
         this.parent = null;
         
-        this.id = graphiti.util.UUID.create();
+        // appearance, position and dim properties
+        //
         this.x = 0;
         this.y = 0;
-        this.width = this.getMinWidth();
+        this.width  = this.getMinWidth();
         this.height = this.getMinHeight();
- 
         this.alpha = 1.0;
         
-        this.canSnapToHelper = true;
-        this.snapToGridAnchor = new graphiti.geo.Point(0,0);
-       
+        // status flags for the Drag&Drop operation handling
+        //
+        this.isInDragDrop =false;
+        this.isMoving = false;
+        this.originalAlpha = this.alpha;
+        this.ox = 0;
+        this.oy = 0;
+         
+        // listener for movement. required for Ports or property panes in the UI
+        //
         this.moveListener = new graphiti.util.ArrayList();
+    },
+    
+    /**
+     * @method
+     * Return the UUID of this element. 
+     * 
+     * @return {String}
+     */
+    getId: function(){
+       return this.id; 
     },
     
     /**
@@ -57,8 +87,9 @@ graphiti.Figure = Class.extend({
      
       this.canvas = canvas;
       
-      if(this.canvas!==null)
+      if(this.canvas!==null){
           this.getShapeElement();
+      }
      },
     
     /**
@@ -80,8 +111,9 @@ graphiti.Figure = Class.extend({
      */
     getShapeElement:function()
     {
-       if(this.shape!==null)
+       if(this.shape!==null){
          return this.shape;
+       }
 
       this.shape=this.createShapeElement();
       
@@ -108,11 +140,13 @@ graphiti.Figure = Class.extend({
      **/
      repaint : function(attributes)
      {
-         if (this.shape === null)
+         if (this.shape === null){
              return;
+         }
 
-         if(typeof attributes === "undefined" )
+         if(typeof attributes === "undefined" ){
              attributes = {};
+         }
          
          // enrich with common properties
          attributes.opacity = this.alpha;
@@ -129,61 +163,66 @@ graphiti.Figure = Class.extend({
      **/
     createDraggable:function()
     {
-		this._startDrag = function(x, y, event) {
-			this._allowDragDrop = false;
-
-			event = $.Event(event);
-			event.stopPropagation();
-
-			this.canvas.showMenu(null);
-
-			var line = this.canvas.getBestLine(this.x + x, this.y + y);
-			if (line !== null) {
-				this.canvas.setCurrentSelection(line);
-				this.canvas.onMouseDown(this.x + event.x, event.y + this.y);
-				return;
-			}
+		this._startDrag = $.proxy(function(dx, dy, event) {
 
 			if (this.isSelectable()===true) {
 				this.canvas.setCurrentSelection(this);
 			}
 
-			if (this.isDraggable()===false)
-				return;
-
-			this.ox = this.x;
-			this.oy = this.y;
-
-			this._allowDragDrop = this.onDragstart(x, y);
-		};
+			this.isInDragDrop = this.onDragstart();
+		},this);
 		
-        this._moveDrag = function (dx, dy) 
+        this._moveDrag = $.proxy(function (dx, dy) 
         {
-           if(this.isSelectable()===false)
-             return;
-           
-           if(this.isDraggable()===false)
-             return;
-    
-           if(this._allowDragDrop===false)
-             return;
-             
+           if(this.isInDragDrop===false){
+              return;
+           }
+   
            this.onDrag(dx,dy);
-        };
+        },this);
         
-        this._upDrag = function () 
+        this._upDrag = $.proxy(function () 
         {
-           if(this.isDraggable()===false)
-             return;
-    
-           if(this._allowDragDrop===false)
-             return;
-    
-            this.onDragend();
-        };
-        this.shape.drag(this._moveDrag, this._startDrag, this._upDrag,this,this,this);
+           if(this.isInDragDrop===false){
+                return;
+           }
+
+           this.onDragend();
+        },this);
+        this.shape.drag(this._moveDrag, this._startDrag, this._upDrag);
+        
+        this.shape.hover(function (event) {
+            this.onMouseEnter();
+        }, function (event) {
+            this.onMouseLeave();
+        }, this, this);
     },
     
+
+    /**
+     * @method
+     * Will be called if the drag and drop action beginns. You can return [false] if you
+     * want avoid that the figure can be move.
+     * 
+     * @return {boolean}
+     **/
+    onDragstart : function( )
+    {
+      this.isInDragDrop =false;
+      this.isMoving = false;
+      this.originalAlpha = this.getAlpha();
+
+      this.command = this.createCommand(new graphiti.EditPolicy(graphiti.EditPolicy.MOVE));
+
+      if(this.command!==null){
+         this.ox = this.x;
+         this.oy = this.y;
+         this.isInDragDrop =true;
+         return true;
+      }
+      
+      return false;
+    },
 
     /**
      * @method
@@ -192,8 +231,8 @@ graphiti.Figure = Class.extend({
      * Sub classes can override this method to implement additional stuff. Don't forget to call
      * the super implementation via <code>Figure.prototype.onDrag.call(this);</code>
      * @private
-     * @param {Number} dx 
-     * @param {Number} dy
+     * @param {Number} dx the x difference between the start of the drag drop operation and now
+     * @param {Number} dy the y difference between the start of the drag drop operation and now
      **/
     onDrag : function( dx,  dy)
     {
@@ -213,32 +252,15 @@ graphiti.Figure = Class.extend({
 
       this.setPosition(this.x, this.y);
       
+
       // enable the alpha blending of the first real move of the object
       //
-      if(this.isMoving==false)
+      if(this.isMoving===false)
       {
        this.isMoving = true;
-       this._originalAlpha = this.getAlpha();
-       this.setAlpha(this._originalAlpha*0.7);
+       this.setAlpha(this.originalAlpha*0.7);
       }
       this.fireMoveEvent();
-    },
-
-
-    /**
-     * @method
-     * Will be called if the drag and drop action beginns. You can return [false] if you
-     * want avoid that the figure can be move.
-     * 
-     * @param {Number} x the x-coordinate of the click event
-     * @param {Number} y the y-coordinate of the click event
-     * @return {boolean}
-     **/
-    onDragstart : function( x, y)
-    {
-      this.command = this.createCommand(new graphiti.EditPolicy(graphiti.EditPolicy.MOVE));
-      
-      return this.command!==null;
     },
 
     /**
@@ -270,18 +292,42 @@ graphiti.Figure = Class.extend({
           oFigure.timer = window.setInterval(slowShow,20);
       }
       else*/
-      {
-          this.setAlpha(this._originalAlpha);
-      }
+//      {
+          this.setAlpha(this.originalAlpha);
+  //    }
+  
       // Element ist zwar schon an seine Position, das Command muss aber trotzdem
       // in dem CommandStack gelegt werden damit das Undo funktioniert.
       //
       this.command.setPosition(this.x, this.y);
- //     this.canvas.commandStack.execute(this.command);
+      this.isInDragDrop = false;
+
+  //    this.canvas.commandStack.execute(this.command);
       this.command = null;
       this.isMoving = false;
- //     this.canvas.hideSnapToHelperLines();
       this.fireMoveEvent();
+    },
+
+    /**
+     * @method
+     * Callback method for the mouse enter event. Usefull for mouse hover-effects.
+     * Override this method for yourown effects. Don't call them manually.
+     *
+     * @template
+     **/
+    onMouseEnter:function()
+    {
+    },
+    
+    
+    /**
+     * @method
+     * Callback method for the mouse leave event. Usefull for mouse hover-effects.
+     * 
+     * @template
+     **/
+    onMouseLeave:function()
+    {
     },
 
     /**
@@ -294,26 +340,39 @@ graphiti.Figure = Class.extend({
      **/
     setAlpha:function( percent)
     {
-      if(percent==this.alpha)
+      if(percent===this.alpha){
          return;
+      }
 
       this.alpha = percent;
       this.repaint();
     },
-    
+
+        
     /**
-     * @method
-     * Return the alpha blending of the figure
-     * 
+     * @method Return the alpha blending of the figure
      * @return {Number}
      */
-    getAlpha: function(){
+    getAlpha : function()
+    {
         return this.alpha;
     },
     
     /**
+     * @method
+     * Return true if the figure visible and part of the cnavas.
+     * 
+     * @return {Boolean}
+     */
+    isVisible: function(){
+        return this.shape!==null;
+    },
+    
+    /**
+     * @method
      * Set the flag if this object can snap to grid or geometry.
      * A window of dialog should set this flag to false.
+     * 
      * @param {boolean} flag The snap to grid/geometry enable flag.
      *
      **/
@@ -323,10 +382,11 @@ graphiti.Figure = Class.extend({
     },
 
     /**
-     * Returns true if the figure cna snap to any helper like a grid, guide, geometrie
+     * @method
+     * Returns true if the figure can snap to any helper like a grid, guide, geometrie
      * or something else.
      *
-     * @type boolean
+     * @return {boolean}
      **/
     getCanSnapToHelper:function()
     {
@@ -400,6 +460,17 @@ graphiti.Figure = Class.extend({
 
     /**
      * @method
+     * The x-offset related to the parent figure or canvas.
+     * 
+     * @return {Number} the x-offset to the parent figure
+     **/
+    getX :function()
+    {
+        return this.x;
+    },
+
+    /**
+     * @method
      * The y-offset related to the parent figure or canvas.
      * 
      * @return {Number} The y-offset to the parent figure.
@@ -409,58 +480,80 @@ graphiti.Figure = Class.extend({
         return this.y;
     },
 
+    
     /**
      * @method
-     * The x-offset related to the parent figure or cnavas.
+     * The x-offset related to the canvas.
      * 
      * @return {Number} the x-offset to the parent figure
      **/
-    getX :function()
+    getAbsoluteX :function()
     {
-        return this.x;
+        if(this.parent===null){
+            return this.x;
+        }
+        return this.x + this.parent.getAbsoluteX();  
     },
 
 
     /**
      * @method
-     * The absolute postion fo the figure in relation to the canvas.
-     *
-     * @return The Y coordinate in relation to the Canvas.
+     * The y-offset related to the canvas.
+     * 
+     * @return {Number} The y-offset to the parent figure.
      **/
-    getAbsoluteY:function()
+    getAbsoluteY :function()
     {
-      return this.y;
+        if(this.parent ===null){
+            return this.y;
+        }
+        return this.y + this.parent.getAbsoluteY();  
     },
 
+
+    
     /**
      * @method
-     * The absolute position of the figure in relation to the canvas.
+     * Returns the absolute y-position of the port.
      *
-     * @return The X coordinate in relation to the canvas
+     * @type {graphiti.geo.Point}
      **/
-    getAbsoluteX:function()
+    getAbsolutePosition:function()
     {
-      return this.x;
+      return new graphiti.geo.Point(this.getAbsoluteX(), this.getAbsoluteY());
     },
+    
+    /**
+     * @method
+     * Returns the absolute y-position of the port.
+     *
+     * @return {graphiti.geo.Dimension}
+     **/
+    getAbsoluteBounds:function()
+    {
+      return new graphiti.geo.Dimension(this.getAbsoluteX(), this.getAbsoluteY(),this.getWidth(),this.getHeight());
+    },
+    
 
     /**
      * @method
      * Set the position of the object.
      *
-     * @param {Number} xPos The new x coordinate of the figure
-     * @param {Number} yPos The new y coordinate of the figure 
+     * @param {Number} x The new x coordinate of the figure
+     * @param {Number} y The new y coordinate of the figure 
      **/
-    setPosition:function(xPos , yPos )
+    setPosition:function(x , y )
     {
-      this.x= xPos;
-      this.y= yPos;
+      this.x= x;
+      this.y= y;
 
       this.repaint();
 
       // Update the resize handles if the user change the position of the element via an API call.
       //
-      if(this.canvas!==null && this.canvas.getCurrentSelection()===this)
+      if(this.canvas!==null && this.canvas.getCurrentSelection()===this){
          this.canvas.moveResizeHandles(this);
+      }
     },
     
     /**
@@ -475,14 +568,13 @@ graphiti.Figure = Class.extend({
       this.width = Math.max(this.getMinWidth(),w);
       this.height= Math.max(this.getMinHeight(),h);
       
-         
       this.repaint();
       
       this.fireMoveEvent();
 
       // Update the resize handles if the user change the dimension via an API call
       //
-      if(this.canvas!=null && this.canvas.getCurrentSelection()==this)  {
+      if(this.canvas!==null && this.canvas.getCurrentSelection()===this)  {
          this.canvas.moveResizeHandles(this);
       }
     },
@@ -490,13 +582,13 @@ graphiti.Figure = Class.extend({
 
     /**
      * @method
-     * Detect whenever the handsover coordinate is inside the figure.
-     * 
+     * Detect whenever the hands over coordinate is inside the figure.
+     *
      * @param {Number} iX
      * @param {Number} iY
      * @returns {Boolean}
      */
-    isOver : function ( iX , iY)
+    hitTest : function ( iX , iY)
     {
         var x = this.getAbsoluteX();
         var y = this.getAbsoluteY();
@@ -543,7 +635,7 @@ graphiti.Figure = Class.extend({
      * @method
      * Get the Drag drop enable flag
      *
-     * @type boolean The new drag drop indicator
+     * @return {boolean} The new drag drop indicator
      **/
     isDraggable:function()
     {
@@ -555,8 +647,7 @@ graphiti.Figure = Class.extend({
      * @method
      * Returns the true if the figure can be resized.
      *
-     * @see #setResizeable
-     * @type boolean
+     * @return {boolean}
      **/
     isResizeable:function()
     {
@@ -568,7 +659,6 @@ graphiti.Figure = Class.extend({
      * You can change the resizeable behaviour of this object. Hands over [false] and
      * the figure has no resizehandles if you select them with the mouse.<br>
      *
-     * @see #getResizeable
      * @param {boolean} flag The resizeable flag.
      **/
     setResizeable:function(/*:boolean*/ flag)
@@ -579,7 +669,8 @@ graphiti.Figure = Class.extend({
     /**
      * @method
      * Indicates whenever the element is selectable by user interaction or API.
-     * @type boolean
+     * 
+     * @return {boolean}
      **/
     isSelectable:function()
     {
@@ -603,7 +694,8 @@ graphiti.Figure = Class.extend({
      * @method
      * Return true if the object doesn't care about the aspect ratio.
      * You can change the height and width independent.
-     * @type boolean
+     * 
+     * @return {boolean}
      */
     isStrechable:function()
     {
@@ -614,6 +706,7 @@ graphiti.Figure = Class.extend({
      * @method
      * Return false if you avoid that the user can delete your figure.
      * Sub class can override this method.
+     * 
      * @return {boolean}
      **/
     isDeleteable:function()
@@ -667,8 +760,9 @@ graphiti.Figure = Class.extend({
      **/
     attachMoveListener : function( figure)
     {
-      if(figure==null || this.moveListener==null)
+      if(figure===null){
         return;
+      }
 
       this.moveListener.add(figure);
     },
@@ -681,16 +775,20 @@ graphiti.Figure = Class.extend({
      * @param {graphiti.Figure} figure The figure to remove the monitor
      *
      **/
-    detachMoveListener : function(/*:@NAMESPACE@Figure*/ figure) 
+    detachMoveListener : function(figure) 
     {
-      if(figure==null || this.moveListener==null)
+      if(figure===null || this.moveListener===null){
         return;
+      }
 
       this.moveListener.remove(figure);
     },
 
     /**
      * @method
+     * Called from the figure itself when any positin changes happens. All listenter
+     * will be informed
+     * 
      * @private
      **/
     fireMoveEvent: function()
@@ -709,7 +807,7 @@ graphiti.Figure = Class.extend({
      * before.
      *
      * @param {graphiti.Figure} figure The figure which has changed its position
-     * @private
+     * @template
      */
     onOtherFigureMoved:function(figure)
     {
@@ -723,8 +821,9 @@ graphiti.Figure = Class.extend({
      **/
     setDocumentDirty:function()
     {
-      if(this.canvas!=null)
+      if(this.canvas!==null){
         this.canvas.setDocumentDirty();
+      }
     },
 
     /**
@@ -736,24 +835,30 @@ graphiti.Figure = Class.extend({
      **/
     createCommand:function( request)
     {
+      if(request===null)
+          return null;
+      
       if(request.getPolicy() === graphiti.EditPolicy.MOVE)
       {
-        if(!this.isDraggable())
+        if(!this.isDraggable()){
           return null;
+        }
         return new graphiti.command.CommandMove(this);
       }
 
       if(request.getPolicy() === graphiti.EditPolicy.DELETE)
       {
-        if(!this.isDeleteable())
+        if(!this.isDeleteable()){
            return null;
+        }
         return new graphiti.command.CommandDelete(this);
       }
       
       if(request.getPolicy() === graphiti.EditPolicy.RESIZE)
       {
-        if(!this.isResizeable())
+        if(!this.isResizeable()){
            return null;
+        }
         return new graphiti.command.CommandResize(this);
       }
       

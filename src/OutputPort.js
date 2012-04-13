@@ -1,43 +1,48 @@
 
 graphiti.OutputPort = graphiti.Port.extend({
 
+    NAME : "graphiti.OutputPort", // only for debugging
+
     /**
      * @constructor
      * 
      */
-    init : function()
+    init : function(canvas)
     {
-        this._super();
+        this._super(canvas);
+        
         this.maxFanOut = 100; // the maximimum connections which goes out of this port
     },
 
-    onDragEnter:function( port)
+    onDragEnter : function(port)
     {
-      if(this.getMaxFanOut()<=this.getFanOut())
-        return;
-    
-      if(port instanceof graphiti.InputPort)
-      {
-        this._super( port);
-      }
-      // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
-      else if (port instanceof graphiti.LineStartResizeHandle)
-      {
-        var line = this.getCanvas().getCurrentSelection();
-        if(line instanceof graphiti.Connection && line.getSource() instanceof graphiti.OutputPort)
-          this._super(line.getTarget());
-      }
-      // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
-      else if (port instanceof graphiti.LineEndResizeHandle)
-      {
-        var line = this.getCanvas().getCurrentSelection();
-        if(line instanceof graphiti.Connection && line.getTarget() instanceof graphiti.OutputPort)
-           this._super( line.getSource());
-      }
+        var line = null;
+        if (this.getMaxFanOut() <= this.getFanOut()) {
+            return;
+        }
+
+        if (port instanceof graphiti.InputPort) {
+            this._super(port);
+        }
+        // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
+        else if (port instanceof graphiti.LineStartResizeHandle) {
+            line = this.getCanvas().getCurrentSelection();
+            if (line instanceof graphiti.Connection && line.getSource() instanceof graphiti.OutputPort) {
+                this._super(line.getTarget());
+            }
+        }
+        // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
+        else if (port instanceof graphiti.LineEndResizeHandle) {
+            line = this.getCanvas().getCurrentSelection();
+            if (line instanceof graphiti.Connection && line.getTarget() instanceof graphiti.OutputPort) {
+                this._super(line.getSource());
+            }
+        }
     },
     
     onDragLeave:function( port)
     {
+      var line = null;
       if(port instanceof graphiti.InputPort)
       {
         this._super( port);
@@ -45,33 +50,35 @@ graphiti.OutputPort = graphiti.Port.extend({
       // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
       else if (port instanceof graphiti.LineStartResizeHandle)
       {
-        var line = this.getCanvas().getCurrentSelection();
-        if(line instanceof graphiti.Connection && line.getSource() instanceof graphiti.OutputPort)
+        line = this.getCanvas().getCurrentSelection();
+        if(line instanceof graphiti.Connection && line.getSource() instanceof graphiti.OutputPort){
            this._super( line.getTarget());
+        }
       }
       else if (port instanceof graphiti.LineEndResizeHandle)
       {
-        var line = this.getCanvas().getCurrentSelection();
-        if(line instanceof graphiti.Connection && line.getTarget() instanceof graphiti.OutputPort)
+        line = this.getCanvas().getCurrentSelection();
+        if(line instanceof graphiti.Connection && line.getTarget() instanceof graphiti.OutputPort){
            this._super( line.getSource());
+        }
       }
     },
     
     /**
      * @private
      **/
-    onDragstart:function(/*:int*/ x, /*:int*/ y)
+    onDragstart:function()
     {
-      if(!this.canDrag)
+   
+      if(this.getMaxFanOut()===-1){
+        return this._super(x,y);
+      }
+    
+      if(this.getMaxFanOut()<=this.getFanOut()){
         return false;
+      }
     
-      if(this.maxFanOut===-1)
-        return true;
-    
-      if(this.getMaxFanOut()<=this.getFanOut())
-        return false;
-    
-      return true;
+      return this._super();
     },
     
     
@@ -90,8 +97,9 @@ graphiti.OutputPort = graphiti.Port.extend({
      **/
     getFanOut:function()
     {
-      if(this.getParent().getCanvas()===null)
+      if(this.getParent().getCanvas()===null){
         return 0;
+      }
     
       var count =0;
       var lines = this.getParent().getCanvas().getLines();
@@ -101,10 +109,12 @@ graphiti.OutputPort = graphiti.Port.extend({
         var line = lines.get(i);
         if(line instanceof graphiti.Connection)
         {
-          if(line.getSource()==this)
+          if(line.getSource()===this){
             count++;
-          else if(line.getTarget()==this)
+          }
+          else if(line.getTarget()===this){
             count++;
+          }
         }
       }
       return count;
@@ -124,12 +134,14 @@ graphiti.OutputPort = graphiti.Port.extend({
        //
        if(request.getPolicy() === graphiti.EditPolicy.CONNECT)
        {
-         if(request.source.parentNode.id === request.target.parentNode.id)
+         if(request.source.getParent().getId() === request.target.getParent().getId()){
             return null;
+         }
     
-         if(request.source instanceof graphiti.InputPort)
+         if(request.source instanceof graphiti.InputPort){
             // This is the different to the InputPort implementation of createCommand.
             return new graphiti.command.CommandConnect(request.canvas,request.target,request.source);
+         }
     
          return null;
        }

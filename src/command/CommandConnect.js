@@ -1,3 +1,4 @@
+
 /**
  * @class graphiti.command.CommandConnect
  * 
@@ -9,6 +10,7 @@
  * @extends graphiti.command.Command
  */
 graphiti.command.CommandConnect = graphiti.command.Command.extend({
+    NAME : "graphiti.command.CommandConnect", // only for debug
     
     /**
      * @constructor

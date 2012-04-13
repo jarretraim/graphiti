@@ -1,3 +1,4 @@
+
 /**
  * @class graphiti.Connection
  *  A Connection is the line between two {@link graphiti.Port}s.
@@ -7,6 +8,7 @@
  * @constructor
  */
 graphiti.Connection = graphiti.Line.extend({
+    NAME : "graphiti.Connection", // only for debugging
 
     DEFAULT_ROUTER: new graphiti.layout.router.DirectRouter(),
     
@@ -19,8 +21,6 @@ graphiti.Connection = graphiti.Line.extend({
       
       this.sourcePort = null;
       this.targetPort = null;
-    
-      this.canDrag = true;
     
       this.oldPoint=null;
       
@@ -44,73 +44,48 @@ graphiti.Connection = graphiti.Line.extend({
     /**
      * @private
      **/
-    disconnect:function()
+    disconnect : function()
     {
-      if(this.sourcePort!==null)
-      {
-        this.sourcePort.detachMoveListener(this);
-        this.fireSourcePortRouteEvent();
-      }
-    
-      if(this.targetPort!==null)
-      {
-        this.targetPort.detachMoveListener(this);
-        this.fireTargetPortRouteEvent();
-      }
+        if (this.sourcePort !== null) {
+            this.sourcePort.detachMoveListener(this);
+            this.fireSourcePortRouteEvent();
+        }
+
+        if (this.targetPort !== null) {
+            this.targetPort.detachMoveListener(this);
+            this.fireTargetPortRouteEvent();
+        }
     },
     
     /**
      * @private
      **/
-    reconnect:function()
+    reconnect : function()
     {
-      if(this.sourcePort!==null)
-      {
-        this.sourcePort.attachMoveListener(this);
-        this.fireSourcePortRouteEvent();
-      }
-      
-      if(this.targetPort!==null)
-      {
-        this.targetPort.attachMoveListener(this);
-        this.fireTargetPortRouteEvent();
-      }
-      
-      this.repaint();
+        if (this.sourcePort !== null) {
+            this.sourcePort.attachMoveListener(this);
+            this.fireSourcePortRouteEvent();
+        }
+
+        if (this.targetPort !== null) {
+            this.targetPort.attachMoveListener(this);
+            this.fireTargetPortRouteEvent();
+        }
+
+        this.repaint();
     },
     
     
     /**
      * You can't drag&drop the resize handles of a connector.
      * @type boolean
-     * @deprecated use getCanDrag instead
      **/
-    isResizeable:function()
+    isResizeable : function()
     {
-      return this.getDraggable();
+        return this.isDraggable();
     },
     
-    /**
-     * Switch on/off the drag drop behaviour of this object
-     *
-     * @param {boolean} flag The new drag drop indicator
-     **/
-    setDraggable:function(/*:boolean*/flag)
-    {
-      this.canDrag= flag;
-    },
-    
-    
-    /**
-     * Return [true] if the connection can be moved (reconnect).
-     *
-     * @type boolean
-     **/
-    getDraggable:function()
-    {
-      return this.canDrag;
-    },
-    
+   
     /**
      * Add a child figure to the Connection. The hands over figure doesn't support drag&drop 
      * operations. It's only a decorator for the connection.<br>
@@ -119,28 +94,30 @@ graphiti.Connection = graphiti.Line.extend({
      * @param {graphiti.Figure} figure the figure to add as decoration to the connection.
      * @param {graphiti.ConnectionLocator} locator the locator for the child. 
     **/
-    addFigure:function(/*:graphiti.Figure*/ figure, /*:graphiti.ConnectionLocator*/ locator)
+    addFigure : function(/* :graphiti.Figure */figure, /* :graphiti.ConnectionLocator */locator)
     {
-      var entry = {};
-      entry.figure  = figure;
-      entry.locator = locator;
-    
-      this.children.add(entry);
-      this.repaint();
-    
-      var oThis = this;
-      var mouseDown = function()
-      {
-        var oEvent = arguments[0] || window.event;
-        oEvent.returnValue = false;
-        oThis.getCanvas().setCurrentSelection(oThis);
-        oThis.getCanvas().showLineResizeHandles(oThis);
-      };
-    
-      if (figure.getHTMLElement().addEventListener)
-        figure.getHTMLElement().addEventListener("mousedown", mouseDown, false);
-      else if (figure.getHTMLElement().attachEvent)
-         figure.getHTMLElement().attachEvent("onmousedown", mouseDown);
+        var entry = {};
+        entry.figure = figure;
+        entry.locator = locator;
+
+        this.children.add(entry);
+        this.repaint();
+
+        var oThis = this;
+        var mouseDown = function()
+        {
+            var oEvent = arguments[0] || window.event;
+            oEvent.returnValue = false;
+            oThis.getCanvas().setCurrentSelection(oThis);
+            oThis.getCanvas().showLineResizeHandles(oThis);
+        };
+
+        if (figure.getHTMLElement().addEventListener) {
+            figure.getHTMLElement().addEventListener("mousedown", mouseDown, false);
+        }
+        else if (figure.getHTMLElement().attachEvent) {
+            figure.getHTMLElement().attachEvent("onmousedown", mouseDown);
+        }
     },
     
     /**
@@ -155,10 +132,10 @@ graphiti.Connection = graphiti.Line.extend({
     },
     
     /**
+     * @method
      * Get the current source ConnectionDecorator for this object.
      *
      * @type graphiti.ConnectionDecorator
-     * @since 0.9.18
      **/
     getSourceDecorator:function()
     {
@@ -166,6 +143,7 @@ graphiti.Connection = graphiti.Line.extend({
     },
     
     /**
+     * @method
      * Set the ConnectionDecorator for this object.
      *
      * @param {graphiti.ConnectionDecorator} the new target decorator for the connection
@@ -177,10 +155,10 @@ graphiti.Connection = graphiti.Line.extend({
     },
     
     /**
+     * @method
      * Get the current target ConnectionDecorator for this object.
      *
      * @type graphiti.ConnectionDecorator
-     * @since 0.9.18
      **/
     getTargetDecorator:function()
     {
@@ -188,6 +166,7 @@ graphiti.Connection = graphiti.Line.extend({
     },
     
     /**
+     * @method
      * Set the ConnectionAnchor for this object. An anchor is responsible for the endpoint calculation
      * of an connection.
      *
@@ -201,6 +180,7 @@ graphiti.Connection = graphiti.Line.extend({
     },
     
     /**
+     * @method
      * Set the ConnectionAnchor for this object.
      *
      * @param {graphiti.ConnectionAnchor} the new target anchor for the connection
@@ -214,21 +194,25 @@ graphiti.Connection = graphiti.Line.extend({
     
     
     /**
-     * Set the ConnectionRouter for this object.
+     * @method
+     * Set the ConnectionRouter.
      *
      **/
     setRouter:function(/*:graphiti.ConnectionRouter*/ router)
     {
-      if(router !==null)
+      if(router !==null){
        this.router = router;
-      else
+      }
+      else{
        this.router = new graphiti.layout.router.NullRouter();
+      }
     
       // repaint the connection with the new router
       this.repaint();
     },
     
     /**
+     * @method
      * Return the current active router of this connection.
      *
      * @type graphiti.ConnectionRouter
@@ -246,10 +230,17 @@ graphiti.Connection = graphiti.Line.extend({
     {
       this._super();
     
+      if(this.shape===null){
+          return;
+      }
+      
+      var i=0;
+      
        try
        {
-         if(this.sourcePort===null || this.targetPort===null)
+         if(this.sourcePort===null || this.targetPort===null){
             return;
+         }
     
         this.startStroke();
     
@@ -259,13 +250,15 @@ graphiti.Connection = graphiti.Line.extend({
     
         // paint the decorator if any exists
         //
-        if(this.getSource().getParent().isMoving==false && this.getTarget().getParent().isMoving==false )
+        if(this.getSource().getParent().isMoving===false && this.getTarget().getParent().isMoving===false )
         {
-          if(this.targetDecorator!==null)
+          if(this.targetDecorator!==null){
             this.targetDecorator.paint(new graphiti.Graphics(this.graphics,this.getEndAngle(),this.getEndPoint()));
+          }
     
-          if(this.sourceDecorator!==null)
+          if(this.sourceDecorator!==null){
             this.sourceDecorator.paint(new graphiti.Graphics(this.graphics,this.getStartAngle(),this.getStartPoint()));
+          }
         }
         
         if(this.shape!==null)
@@ -273,7 +266,7 @@ graphiti.Connection = graphiti.Line.extend({
           var ps = this.getPoints();
           var p = ps.get(0);
           var path = "M"+p.x+" "+p.y;
-          for(var i=0;i<ps.getSize();i++)
+          for( i=0;i<ps.getSize();i++)
           {
             p = ps.get(i);
             path=path+"L"+p.x+" "+p.y;
@@ -283,7 +276,7 @@ graphiti.Connection = graphiti.Line.extend({
         
         this.finishStroke();
     
-        for(var i=0; i<this.children.getSize();i++)
+        for( i=0; i<this.children.getSize();i++)
         {
             var entry = this.children.get(i);
             entry.locator.relocate(entry.figure);
@@ -303,10 +296,12 @@ graphiti.Connection = graphiti.Line.extend({
      **/
      getStartPoint:function()
      {
-      if(this.isMoving==false)
+      if(this.isMoving===false){
          return this.sourceAnchor.getLocation(this.targetAnchor.getReferencePoint());
-      else
+      }
+      else{
          return this._super();
+      }
      },
     
     
@@ -317,10 +312,12 @@ graphiti.Connection = graphiti.Line.extend({
      **/
      getEndPoint:function()
      {
-      if(this.isMoving==false)
+      if(this.isMoving===false){
          return this.targetAnchor.getLocation(this.sourceAnchor.getReferencePoint());
-      else
+      }
+      else{
          return this._super();
+      }
      },
     
     
@@ -359,8 +356,9 @@ graphiti.Connection = graphiti.Line.extend({
          result.add(line.start);
       }
       // add the last point
-      if(line!==null)
+      if(line!==null){
         result.add(line.end);
+      }
       return result;
     },
     
@@ -370,7 +368,7 @@ graphiti.Connection = graphiti.Line.extend({
      **/
     addPoint:function(/*:graphiti.Point*/ p)
     {
-      p = new graphiti.geo.Point(parseInt(p.x), parseInt(p.y));
+      p = new graphiti.geo.Point(p.x, p.y);
       if(this.oldPoint!==null)
       {
         // store the painted line segment for the "mouse selection test"
@@ -389,10 +387,10 @@ graphiti.Connection = graphiti.Line.extend({
     
     
     /**
+     * @method
      * Called by the inherit class if the source port model of the connections has been changed.<br>
      * Only used if you are working with the MVC pattern.
      *
-     * @since 0.9.18
      **/
     refreshSourcePort:function()
     {
@@ -415,6 +413,7 @@ graphiti.Connection = graphiti.Line.extend({
     },
     
     /**
+     * @method
      * Called by the inherit class if the target port model of the connections has been changed.<br>
      * Only used if you are working with the MVC pattern.
      *
@@ -440,6 +439,7 @@ graphiti.Connection = graphiti.Line.extend({
     },
     
     /**
+     * @method
      * Set the new source port of this connection. This enforce a repaint of the connection.
      *
      * @param {graphiti.Port} port The new source port of this connection.
@@ -447,12 +447,15 @@ graphiti.Connection = graphiti.Line.extend({
      **/
     setSource:function(/*:graphiti.Port*/ port)
     {
-      if(this.sourcePort!==null)
+      if(this.sourcePort!==null){
         this.sourcePort.detachMoveListener(this);
+      }
     
       this.sourcePort = port;
-      if(this.sourcePort===null)
+      if(this.sourcePort===null){
         return;
+      }
+      
       this.sourceAnchor.setOwner(this.sourcePort);
       this.fireSourcePortRouteEvent();
       this.sourcePort.attachMoveListener(this);
@@ -460,6 +463,7 @@ graphiti.Connection = graphiti.Line.extend({
     },
     
     /**
+     * @method
      * Returns the source port of this connection.
      *
      * @type graphiti.Port
@@ -470,18 +474,22 @@ graphiti.Connection = graphiti.Line.extend({
     },
     
     /**
+     * @method
      * Set the target port of this connection. This enforce a repaint of the connection.
      * 
      * @param {graphiti.Port} port The new target port of this connection
      **/
     setTarget:function(/*:graphiti.Port*/ port)
     {
-      if(this.targetPort!==null)
+      if(this.targetPort!==null){
         this.targetPort.detachMoveListener(this);
+      }
     
       this.targetPort = port;
-      if(this.targetPort===null)
+      if(this.targetPort===null){
         return;
+      }
+      
       this.targetAnchor.setOwner(this.targetPort);
       this.fireTargetPortRouteEvent();
       this.targetPort.attachMoveListener(this);
@@ -489,6 +497,7 @@ graphiti.Connection = graphiti.Line.extend({
     },
     
     /**
+     * @method
      * Returns the target port of this connection.
      *
      * @type graphiti.Port
@@ -503,26 +512,32 @@ graphiti.Connection = graphiti.Line.extend({
      **/
     onOtherFigureMoved:function(/*:graphiti.Figure*/ figure)
     {
-      if(figure===this.sourcePort)
+      if(figure===this.sourcePort){
         this.setStartPoint(this.sourcePort.getAbsoluteX(), this.sourcePort.getAbsoluteY());
-      else
+      }
+      else{
         this.setEndPoint(this.targetPort.getAbsoluteX(), this.targetPort.getAbsoluteY());
+      }
     },
     
     /**
-     * Checks if the hands over coordinate hits the line.
-     *
-     * @param {int} px the x coordinate of the test point
-     * @param {int} py the y coordinate of the test point
-     * @type boolean
+     * @method
+    * Checks if the hands over coordinate close to the line. The 'corona' is considered
+    * for this test. This means the point isn't direct on the line. Is it only close to the
+    * line!
+    *
+    * @param {Number} px the x coordinate of the test point
+    * @param {Number} py the y coordinate of the test point
+    * @return {boolean}
      **/
-    containsPoint:function(/*:int*/ px, /*:int*/ py)
+    hitTest:function( px, py)
     {
       for(var i = 0; i< this.lineSegments.getSize();i++)
       {
          var line = this.lineSegments.get(i);
-         if(graphiti.Line.hit(this.corona, line.start.x,line.start.y,line.end.x, line.end.y, px,py))
+         if(graphiti.Line.hit(this.corona, line.start.x,line.start.y,line.end.x, line.end.y, px,py)){
            return true;
+         }
       }
       return false;
     },
@@ -544,23 +559,27 @@ graphiti.Connection = graphiti.Line.extend({
     
       if(angle<0)
       {
-         if(p2.x<p1.x)
+         if(p2.x<p1.x){
            angle = Math.abs(angle) + 180;
-         else
+         }
+         else{
            angle = 360- Math.abs(angle);
+         }
       }
       else
       {
-         if(p2.x<p1.x)
+         if(p2.x<p1.x){
            angle = 180-angle;
+         }
       }
       return angle;
     },
     
     getEndAngle:function()
     {
-      if (this.lineSegments.getSize() === 0) 
+      if (this.lineSegments.getSize() === 0) {
         return 90;
+      }
     
       var p1 = this.lineSegments.get(this.lineSegments.getSize()-1).end;
       var p2 = this.lineSegments.get(this.lineSegments.getSize()-1).start;
@@ -573,15 +592,18 @@ graphiti.Connection = graphiti.Line.extend({
     
       if(angle<0)
       {
-         if(p2.x<p1.x)
+         if(p2.x<p1.x){
            angle = Math.abs(angle) + 180;
-         else
+         }
+         else{
            angle = 360- Math.abs(angle);
+         }
       }
       else
       {
-         if(p2.x<p1.x)
+         if(p2.x<p1.x){
            angle = 180-angle;
+         }
       }
       return angle;
     },
@@ -627,7 +649,7 @@ graphiti.Connection = graphiti.Line.extend({
      **/
     createCommand:function(/*:graphiti.EditPolicy*/ request)
     {
-      if(request.getPolicy() === graphiti.EditPolicy.MOVE)
+      if(request.getPolicy() === graphiti.EditPolicy.MOVE_BASEPOINT)
       {
         // DragDrop of a connection doesn't create a undo command at this point. This will be done in
         // the onDrop method
@@ -636,8 +658,9 @@ graphiti.Connection = graphiti.Line.extend({
  
       if(request.getPolicy() === graphiti.EditPolicy.DELETE)
       {
-        if(this.isDeleteable()==true)
+        if(this.isDeleteable()===true){
           return new graphiti.command.CommandDelete(this);
+        }
       }
     
       return null;

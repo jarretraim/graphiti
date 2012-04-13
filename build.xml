@@ -1,54 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Test-JsDoc" default="docGen" basedir=".">
+<project name="Test-JsDoc" default="all" basedir=".">
 
-    <property name="src.dir" location="${basedir}/src" />
+   <property name="src.dir"       location="${basedir}/src" />
+	<property name="localweb.dir"  value="/Users/andherz/Sites/graphiti/"/>
 
-    <property name="jsdoc.dir" location="${basedir}/build/jsdoc-toolkit" />
-    <property name="jsdoc3.dir" location="${basedir}/build/jsdoc3-toolkit" />
-    <property name="rhino.dir" location="${basedir}/build/rhino1_7R2" />
-    <property name="ant-task.dir" location="${basedir}/build/ant" />
+	<taskdef name="jslint" classname="net.happygiraffe.jslint.ant.JSLintTask">
+	  <classpath>
+	    <pathelement location="./build/jslint4java-1.2.1+rhino.jar"/>
+	  </classpath>
+	</taskdef>
 
-    <property name="out.dir" location="${basedir}/target/jsdoc" />
-    <property name="out3.dir" location="${basedir}/target/jsdoc3" />
+	<target name="local" >
+		<delete includeemptydirs="true">
+		    <fileset dir="${localweb.dir}" includes="**/*"/>
+		</delete>
 
-    <!-- Define the classpath for the Apache Ant task - needs Rhino as well. -->
-    <path id="jsdoc.classpath.jsdoc2">
-        <pathelement path="${rhino.dir}/js.jar" />
-        <pathelement path="${ant-task.dir}/jsdoc-toolkit-ant-task-1.1.2.jar" />
-     </path>
+		<copy todir="${localweb.dir}" overwrite="true">
+		    <fileset dir="${basedir}"/>
+		 </copy>
+	</target>
+		
+	<target name="lint" description="Check the javascript">
+	  <jslint >
+	    <formatter type="plain" />
+	    <fileset dir="${src.dir}" includes="*.js" />
+	  </jslint>
+	</target>
 
-    <path id="jsdoc.classpath.jsdoc3">
-        <pathelement path="${jsdoc3.dir}/lib/js.jar" />
-        <pathelement path="${ant-task.dir}/jsdoc3-ant-task-1.0.jar" />
-     </path>
-
-	
-	<!-- Define the Ant Task -->
-    <taskdef name="jsdoctoolkit" classname="uk.co.darrenhurley.ant.tasks.JsDocToolkit" classpathref="jsdoc.classpath.jsdoc2" />
-	
-	<taskdef name="jsdoc" classname="net.jannon.ant.tasks.JsDoc3" classpathref="jsdoc.classpath.jsdoc3" />
-	
     <!-- This is the default target - it generates the JsDoc documents -->
-    <target name="docGen" depends="" description="Generate JsDoc.">
-    <!--	
-    <jsdoc jsdochome="${jsdoc3.dir}" to="${out3.dir}" dir="${src.dir}" /> 
-    -->
-   
-    	
-        <jsdoctoolkit jsdochome="${jsdoc.dir}/" template="jsdoc" outputdir="${out.dir}" includeprivate="false">
-        	<fileset dir="${src.dir}">
-        		<include name="*.js"/>
-        	</fileset>
-       
-        </jsdoctoolkit>
-       
-    	
-    	<!--
-    	   <exec executable="/Users/andherz/bin/jsdoc/jsdoc.pl">
-    	      <arg line="-d ${out.dir} ${src.dir}"/>
-    	   </exec>
-       -->
-    	
+    <target name="all" depends="" description="Generate JsDoc.">
     </target>
 
     <!-- Neat and Tidy, Tidy and Neat - best to clean up afterwards... -->

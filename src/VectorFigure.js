@@ -1,3 +1,4 @@
+
 /**
  * @class graphiti.VectorFigure
  * The base class for all visible elements inside a canvas.
@@ -7,6 +8,8 @@
  * @extends graphiti.Node
  */
 graphiti.VectorFigure = graphiti.Node.extend({
+    NAME : "graphiti.VectorFigure", // only for debugging
+
     /**
      * @constructor
      * Creates a new figure element which are not assigned to any canvas.
@@ -14,7 +17,7 @@ graphiti.VectorFigure = graphiti.Node.extend({
      */
     init : function()
     {
-        this.bgColor =  new graphiti.util.Color(100, 100, 100);;
+        this.bgColor =  new graphiti.util.Color(100, 100, 100);
         this.lineColor = new graphiti.util.Color(0, 0, 0);
         this.stroke = 1;
 
@@ -28,16 +31,22 @@ graphiti.VectorFigure = graphiti.Node.extend({
     **/
     repaint : function(attributes)
     {
-        if (this.shape === null)
+        if (this.shape === null){
             return;
+        }
 
-        if(typeof attributes === "undefined" )
+        if(typeof attributes === "undefined" ){
             attributes = {};
+        }
 
-        attributes.x= this.x;
-        attributes.y = this.y;
+        attributes.x= this.getAbsoluteX();
+        attributes.y = this.getAbsoluteY();
+        attributes.stroke = "#" + this.lineColor.hex();
         attributes["stroke-width"] = this.stroke;
-        attributes.fill = "#" + this.bgColor.hex();
+        
+        if(typeof attributes.fill === "undefined"){
+           attributes.fill = "#" + this.bgColor.hex();
+        }
         
         this.shape.node.style.cursor = 'pointer';  
         
@@ -54,10 +63,12 @@ graphiti.VectorFigure = graphiti.Node.extend({
     **/
    setBackgroundColor: function( color)
    {
-     if(color == null)
+     if(color === null){
        this.bgColor = new graphiti.util.Color(255,255,255,0.1);
-     else
+     }
+     else{
        this.bgColor = color;
+     }
        
      this.repaint();
    },
@@ -104,10 +115,12 @@ graphiti.VectorFigure = graphiti.Node.extend({
     **/
    setColor: function(  color)
    {
-     if(color == null)
+     if(color === null){
        this.lineColor = new graphiti.util.Color(255,255,255,0);
-     else
+     }
+     else{
        this.lineColor = color;
+     }
        
      this.repaint();
    },

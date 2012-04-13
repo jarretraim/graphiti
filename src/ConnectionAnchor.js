@@ -1,4 +1,6 @@
+
 graphiti.ConnectionAnchor = Class.extend({
+    NAME : "graphiti.ConnectionAnchor", // only for debugging
 
     init:function(owner){
         this.owner = owner;
@@ -51,9 +53,11 @@ graphiti.ConnectionAnchor = Class.extend({
      */
     getReferencePoint:function()
     {
-       if (this.getOwner()===null)
+       if (this.getOwner()===null){
          return null;
-       else 
+       }
+       else {
          return this.getOwner().getAbsolutePosition();
+       }
     }
 });

@@ -1,3 +1,4 @@
+
 /**
  * @class graphiti.geo.PositionConstants
  * Static values for point orientation.

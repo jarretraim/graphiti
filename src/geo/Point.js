@@ -1,3 +1,4 @@
+
 /**
  * @class graphiti.geo.Point Util class for geometrie handling.
  */

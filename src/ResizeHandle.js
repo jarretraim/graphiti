@@ -21,6 +21,8 @@
  * @extends graphiti.Rectangle
  */
 graphiti.ResizeHandle = graphiti.Rectangle.extend({
+    NAME : "graphiti.ResizeHandle", // only for debugging
+
     /**
      * @constructor
      * Creates a new figure element which are not assigned to any canvas.
@@ -30,12 +32,22 @@ graphiti.ResizeHandle = graphiti.Rectangle.extend({
      */
     init: function( canvas, type) {
  
-      this._super(5,5);
-         
+      this._super();
+      
+      if(canvas.isTouchDevice())
+          this.setDimension(15,15);
+      else
+          this.setDimension(8,8);
+          
       this.type = type;
       this.canvas = canvas;
+      this.command = null;
+      this.commandMove=null;
+      this.commandResize=null;
+      
       var offset= this.getWidth();
       var offset2 = offset/2;
+      
       switch(this.type)
       {
         case 1:
@@ -61,6 +73,7 @@ graphiti.ResizeHandle = graphiti.Rectangle.extend({
           break;
         case 8:
           this.setSnapToGridAnchor(new graphiti.geo.Point(offset,offset2));
+          break;
         case 9:
           this.setSnapToGridAnchor(new graphiti.geo.Point(offset2,offset2));
           break;
@@ -69,47 +82,10 @@ graphiti.ResizeHandle = graphiti.Rectangle.extend({
       this.setBackgroundColor(new  graphiti.util.Color(151,255,250));
       this.setZOrder(10000);
       this.setLineWidth(0.5);
+      this.setSelectable(false);
     },
     
-  
-    /** 
-     * @private
-     **/
-    createDraggable:function()
-    {
-        this._startDrag = function (x,y,event) 
-        {
-           $.Event(event).stopPropagation();
-           this.canvas.showMenu(null);
-        
-           if(!this.isDraggable())
-             return;
-             
-           this.ox = this.x;
-           this.oy = this.y;
-        
-           this.onDragstart(x,y);
-        };
-        this._moveDrag = function (dx, dy) 
-        {
-           if(this.isSelectable()===false)
-             return;
-           
-           if(this.isDraggable()===false)
-             return;
-             
-           this.onDrag(dx,dy);
-        };
-        this._upDrag = function () 
-        {
-           if(!this.isDraggable())
-             return;
-        
-            this.onDragend();
-        };
-        this.shape.drag(this._moveDrag, this._startDrag, this._upDrag,this,this,this);
-    },
-    
+
     /**
      * @method
      * The edge of the rectangle for the snapTo mechanism.
@@ -147,85 +123,89 @@ graphiti.ResizeHandle = graphiti.Rectangle.extend({
      * Will be called if the drag and drop action beginns. You can return [false] if you
      * want avoid that the figure can be move.
      * 
-     * @param {Number} x 
-     * @param {Number} y
-     *  
-     * @return {boolean} true whenever the drag drop operation is allowed.
+    * @return {boolean} true whenever the drag drop operation is allowed.
      **/
-    onDragstart:function( x,  y)
+    onDragstart : function()
     {
-      this.ox = this.x;
-      this.oy = this.y;
-      // This happens if the selected figure has set the "nonResizeable" flag
-      // In this case the ResizeHandle can't be dragged. => no resize
-      //
-      if(!this.isDraggable())
-        return false;
-    
-      var figure = this.canvas.currentSelection;
-    
-      this.commandMove  = figure.createCommand(new graphiti.EditPolicy(graphiti.EditPolicy.MOVE));
-      this.commandResize= figure.createCommand(new graphiti.EditPolicy(graphiti.EditPolicy.RESIZE));
-    
-      return true;
+        // This happens if the selected figure has set the "nonResizeable" flag
+        // In this case the ResizeHandle can't be dragged. => no resize
+        //
+        if (!this.isDraggable()) {
+            return false;
+        }
+
+        this.ox = this.getAbsoluteX();
+        this.oy = this.getAbsoluteY();
+
+        var figure = this.getCanvas().getCurrentSelection();
+
+        this.commandMove = figure.createCommand(new graphiti.EditPolicy(graphiti.EditPolicy.MOVE));
+        this.commandResize = figure.createCommand(new graphiti.EditPolicy(graphiti.EditPolicy.RESIZE));
+
+        return true;
     },
     
     
     /**
-     * @method
-     * Called by the framework if the figure is moved by user interaction.
-     *
-     * @param {Number} dx the move x offset
-     * @param {Number} dy the move y offset
-     **/
-    onDrag :function( dx,  dy)
+     * @method Called by the framework if the figure is moved by user interaction.
+     * @param {Number}
+     *            dx the move x offset
+     * @param {Number}
+     *            dy the move y offset
+     */
+    onDrag : function(dx, dy)
     {
-      var oldX = this.getX();
-      var oldY = this.getY();
-      this._super(dx,dy);
-      
-      var diffX = this.getX()-oldX;
-      var diffY = this.getY()-oldY;
-  
-      var obj = this.canvas.currentSelection;
-      var objPosX = obj.getX();
-      var objPosY = obj.getY();
-      var objWidth= obj.getWidth();
-      var objHeight= obj.getHeight();
-      
-      switch(this.type)
-      {
+        if (this.isDraggable() === false) {
+            return false;
+        }
+
+        var oldX = this.getAbsoluteX();
+        var oldY = this.getAbsoluteY();
+        
+        // call the super.drag method with all snapTo### handler and adjustments
+        this._super(dx, dy);
+
+        var diffX = this.getAbsoluteX() - oldX;
+        var diffY = this.getAbsoluteY() - oldY;
+
+        var obj = this.getCanvas().getCurrentSelection();
+        var objPosX = obj.getAbsoluteX();
+        var objPosY = obj.getAbsoluteY();
+        var objWidth = obj.getWidth();
+        var objHeight = obj.getHeight();
+
+        switch (this.type) {
         case 1:
-            obj.setDimension(objWidth-diffX, objHeight-diffY);
-            obj.setPosition(objPosX+(objWidth-obj.getWidth()), objPosY+(objHeight-obj.getHeight()));
-          break;
+            obj.setDimension(objWidth - diffX, objHeight - diffY);
+            obj.setPosition(objPosX + (objWidth - obj.getWidth()), objPosY + (objHeight - obj.getHeight()));
+            break;
         case 2:
-            obj.setDimension(objWidth, objHeight-diffY);
-            obj.setPosition(objPosX, objPosY+(objHeight-obj.getHeight()));
-          break;
+            obj.setDimension(objWidth, objHeight - diffY);
+            obj.setPosition(objPosX, objPosY + (objHeight - obj.getHeight()));
+            break;
         case 3:
-            obj.setDimension(objWidth+diffX, objHeight-diffY);
-            obj.setPosition(objPosX, objPosY+(objHeight-obj.getHeight()));
-          break;
+            obj.setDimension(objWidth + diffX, objHeight - diffY);
+            obj.setPosition(objPosX, objPosY + (objHeight - obj.getHeight()));
+            break;
         case 4:
-            obj.setDimension(objWidth+diffX, objHeight);
-          break;
+            obj.setDimension(objWidth + diffX, objHeight);
+            break;
         case 5:
-            obj.setDimension(objWidth+diffX, objHeight+diffY);
-          break;
+            obj.setDimension(objWidth + diffX, objHeight + diffY);
+            break;
         case 6:
-            obj.setDimension(objWidth, objHeight+diffY);
-          break;
+            obj.setDimension(objWidth, objHeight + diffY);
+            break;
         case 7:
-            obj.setDimension(objWidth-diffX, objHeight+diffY);
-            obj.setPosition(objPosX+(objWidth-obj.getWidth()), objPosY);
-          break;
+            obj.setDimension(objWidth - diffX, objHeight + diffY);
+            obj.setPosition(objPosX + (objWidth - obj.getWidth()), objPosY);
+            break;
         case 8:
-            obj.setDimension(objWidth-diffX, objHeight);
-            obj.setPosition(objPosX+(objWidth-obj.getWidth()), objPosY);
-          break;
-      }
-      this.canvas.moveResizeHandles(obj);
+            obj.setDimension(objWidth - diffX, objHeight);
+            obj.setPosition(objPosX + (objWidth - obj.getWidth()), objPosY);
+            break;
+        }
+        this.canvas.moveResizeHandles(obj);
     },
 
     /**
@@ -236,26 +216,28 @@ graphiti.ResizeHandle = graphiti.Rectangle.extend({
      **/
     onDragend : function()
     {
-      var figure = this.canvas.currentSelection;
-    
-      // An non draggable resizeHandle doesn't create a move/resize command.
-      // This happens if the selected figure has set the "nonResizeable" flag.
-      //
-      if(this.commandMove!=null)
-      {
-         this.commandMove.setPosition(figure.getX(), figure.getY());
-         this.canvas.getCommandStack().execute(this.commandMove);
-         this.commandMove = null;
-      }
-    
-      if(this.commandResize!=null)
-      {
-         this.commandResize.setDimension(figure.getWidth(), figure.getHeight());
-         this.canvas.getCommandStack().execute(this.commandResize);
-         this.commandResize = null;
-      }
-    
-      this.canvas.hideSnapToHelperLines();
+        if (!this.isDraggable()) {
+            return;
+        }
+
+        var figure = this.canvas.getCurrentSelection();
+
+        // An non draggable resizeHandle doesn't create a move/resize command.
+        // This happens if the selected figure has set the "nonResizeable" flag.
+        //
+        if (this.commandMove !== null) {
+            this.commandMove.setPosition(figure.getX(), figure.getY());
+            this.canvas.getCommandStack().execute(this.commandMove);
+            this.commandMove = null;
+        }
+
+        if (this.commandResize !== null) {
+            this.commandResize.setDimension(figure.getWidth(), figure.getHeight());
+            this.canvas.getCommandStack().execute(this.commandResize);
+            this.commandResize = null;
+        }
+
+        this.canvas.hideSnapToHelperLines();
     },
     
     /**
@@ -277,6 +259,16 @@ graphiti.ResizeHandle = graphiti.Rectangle.extend({
     },
     
     
+    repaint:function(attributes){
+        if(typeof attributes === "undefined"){
+            attributes ={};
+        }
+        
+        attributes.fill="r(.4,.3)#499bea-#207ce5:60-#207ce5";
+        
+        this._super(attributes);
+    },
+    
     /**
      * @method
      * Show the ResizeHandle and add it to the canvas.<br>
@@ -290,11 +282,13 @@ graphiti.ResizeHandle = graphiti.Rectangle.extend({
     {
       // don't call the parent function. The parent functions delete this object
       // and a resize handle can't be deleted.
-      if(this.shape===null)
-      {
+      if(this.shape===null) {
          this.setCanvas(canvas);
-         this.createDraggable();
+         if(this.dragDropHandlingByCanvas===false){
+             this.createDraggable();
+         }
       }
+     
       this.setPosition(x,y);
       this.shape.toFront();
     },
@@ -308,8 +302,9 @@ graphiti.ResizeHandle = graphiti.Rectangle.extend({
     {
       // don't call the parent function. The parent functions delete this object
       // and a resize handle shouldn't be deleted.
-      if(this.shape===null)
+      if(this.shape===null){
         return;
+      }
         
       this.setCanvas(null);
     },

@@ -1,8 +1,10 @@
+
 /**
  * @class graphiti.command.CommandStack
  * Stack for undo/redo operations
  */
 graphiti.command.CommandStack = Class.extend({
+    NAME : "graphiti.command.CommandStack", // only for debug
 
 	/** Constant indicating notification prior to executing a command (value is 1).*/
 	PRE_EXECUTE:1,

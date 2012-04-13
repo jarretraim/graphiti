@@ -1,3 +1,4 @@
+
 /**
  * @class graphiti.command.CommandStackEventListener
  * 
@@ -7,7 +8,8 @@
  * @author Andreas Herz
  */
 graphiti.command.CommandStackEventListener = Class.extend({
-    
+    NAME : "graphiti.command.CommandStackEventListener", // only for debug
+
     /**
      * @constructor
      * Creates a new Listener Object

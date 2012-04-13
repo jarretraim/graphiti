@@ -1,3 +1,5 @@
+
+
 /**
  * @class
  * EditPolicies should determine an Figures editing capabilities. 
@@ -9,6 +11,7 @@
  * and code management is easier. 
  */
 graphiti.EditPolicy = Class.extend({
+    NAME : "graphiti.EditPolicy", // only for debugging
 
     /**
      * @constructor
@@ -31,9 +34,10 @@ graphiti.EditPolicy = Class.extend({
     }
 });
  
-graphiti.EditPolicy.DELETE = "DELETE";
-graphiti.EditPolicy.MOVE   = "MOVE";
-graphiti.EditPolicy.CONNECT= "CONNECT";
-graphiti.EditPolicy.RESIZE = "RESIZE";
+graphiti.EditPolicy.DELETE    = "DELETE";
+graphiti.EditPolicy.MOVE      = "MOVE";
+graphiti.EditPolicy.CONNECT   = "CONNECT";
+graphiti.EditPolicy.MOVE_BASEPOINT = "MOVE_BASEPOINT";
+graphiti.EditPolicy.RESIZE    = "RESIZE";
 
 

@@ -1,24 +1,53 @@
 
 graphiti.LineStartResizeHandle = graphiti.LineResizeHandle.extend({
+    NAME : "graphiti.LineStartResizeHandle", // only for debugging
 
     init: function( canvas) {
         this._super(canvas);
     },
     
+    /**
+     * @method
+     * Return the Port below the ResizeHandle
+     * 
+     * @return {graphiti.Port}
+     */
     getRelatedPort:function()
     {
        var line = this.getCanvas().getCurrentSelection();
-       if(line instanceof graphiti.Connection)
+       if(line instanceof graphiti.Connection){
          return line.getSource();
+       }
          
       return null;
     },
     
     /**
-     *
-     * @private
+     * @method
+     * Return the Port on the opposite side of the ResizeHandle
+     * 
+     * @returns
+     */
+    getOppositeSidePort:function()
+    {
+       var line = this.getCanvas().getCurrentSelection();
+       
+       if(line instanceof graphiti.Connection){
+         return line.getTarget();
+       }
+         
+      return null;
+    },
+    
+    /**
+     * @method
+     * Called from the framework during a drag&drop operation
+     * 
+     * @param {Number} dx the x difference between the start of the drag drop operation and now
+     * @param {Number} dy the y difference between the start of the drag drop operation and now
+     * @return {boolean}
      **/
-    onDrag:function(/* :int */ dx, /* :int */ dy)
+    onDrag:function( dx, dy)
     {
       var oldX = this.getX();
       var oldY = this.getY();
@@ -32,13 +61,17 @@ graphiti.LineStartResizeHandle = graphiti.LineResizeHandle.extend({
     
       line.setStartPoint(objPos.x-diffX, objPos.y-diffY);
       line.isMoving = true;
+      
+      return true;
     },
     
     /**
+     * @method
      * Resizehandle has been drop on a InputPort/OutputPort.
-     * @private
+     * 
+     * @param {graphiti.Port} dropTarget
      **/
-    onDrop:function(/*: @NAMESPACE@Port*/ dropTarget)
+    onDrop:function( dropTarget)
     {
       var line = this.getCanvas().getCurrentSelection();
       line.isMoving=false;

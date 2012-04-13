@@ -1,3 +1,4 @@
+
 /**
  * @class graphiti.layout.router.DirectRouter
  * Router for direct connections between two ports. Beeline

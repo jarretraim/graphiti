@@ -1,3 +1,4 @@
+
 /**
  * @class
  * Util class to handle colors in the graphiti enviroment

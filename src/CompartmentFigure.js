@@ -1,3 +1,4 @@
+
 /**
  * @class graphiti.CompartmentFigure
  * Container class which can hold other figures inside.
@@ -7,7 +8,8 @@
  * @extends graphiti.Figure
  */
 graphiti.CompartmentFigure = graphiti.Figure.extend({
- 
+    NAME : "graphiti.CompartmentFigure", // only for debugging
+
     /**
      * @constructor
      * Creates a new figure element which are not assigned to any canvas.
