@@ -69,6 +69,6 @@ graphiti.ui.parts.GraphicalEditor = Class.extend(
 	executeCommand:function( command)
 	{
 	  this.view.getCommandStack().execute(command);
-	},
+	}
 
 });

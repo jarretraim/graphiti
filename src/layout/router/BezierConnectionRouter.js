@@ -258,4 +258,4 @@
    }
    this._route(pointList, conn,point, dir, toPt, toDir);
    pointList.push(fromPt);
-}
+};

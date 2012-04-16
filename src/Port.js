@@ -34,7 +34,7 @@ graphiti.Port = graphiti.Circle.extend({
 
         this.hideIfConnected = false;
 
-        this.coronaWidth = 10; // the corona width for the hitTest method. Usefull during drag&drop of ports. Better SnapTo behaviour.
+        this.coronaWidth = 5; // the corona width for the hitTest method. Usefull during drag&drop of ports. Better SnapTo behaviour.
         this.corona = null; // Circle
         this.currentTarget = null; // Port
 

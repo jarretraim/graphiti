@@ -27,7 +27,7 @@ graphiti.Line = graphiti.Figure.extend({
         this.endY   = 100;
        
         // click area for the line hit test
-        this.corona = 20;
+        this.corona = 10;
 
         // a figure can store additional, user defined, properties
         this.properties = {} ; /*:Map<name,value>*/

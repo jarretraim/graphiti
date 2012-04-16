@@ -157,6 +157,7 @@ graphiti.Node = graphiti.Figure.extend({
       this.ports.add(port);
       port.setPosition(x,y);
       port.setParent(this);
+      port.setCanvas(this.canvas);
       
       // You can't delete a port with the [DEL] key if a port is a child of a node
       port.setDeleteable(false);
@@ -175,48 +176,42 @@ graphiti.Node = graphiti.Figure.extend({
      * @param {graphiti.Port} port The port to remove.
      *
      **/
-    removePort: function( port)
+    removePort : function(port)
     {
-      this.ports.remove(port);
-        
-      port.setCanvas(null);
-      
-      if(this.canvas!==null){
-        this.canvas.unregisterPort(port);
-      }
-    
-      // remove the related connections of the port too.
-      var connections = port.getConnections();
-      for (var i = 0; i < connections.getSize(); ++i)
-      {
-        this.canvas.removeFigure(connections.get(i));
-      }
+        this.ports.remove(port);
+
+        if (port.getCanvas() !== null) {
+            port.getCanvas().unregisterPort(port);
+            // remove the related connections of the port too.
+            var connections = port.getConnections();
+            for ( var i = 0; i < connections.getSize(); ++i) {
+                port.getCanvas().removeFigure(connections.get(i));
+            }
+        }
+
+        port.setCanvas(null);
     },
     
     /**
      * @private
      **/
-    setCanvas: function( canvas)
+    setCanvas : function(canvas)
     {
-        var i=0;
-      var oldCanvas = this.canvas;
-      this._super(canvas);
-    
-      if(oldCanvas!==null)
-      {
-          for( i=0;i<this.ports.getSize();i++)
-          {
-              oldCanvas.unregisterPort(this.ports.get(i));
-          }
-      }
-    
-      if(this.canvas!==null)
-      {
-          for( i=0;i<this.ports.getSize();i++)
-          {
-             this.canvas.registerPort(this.ports.get(i));
-          }
-      }
+        var i = 0;
+        var oldCanvas = this.canvas;
+        this._super(canvas);
+
+        if (oldCanvas !== null) {
+            for (i = 0; i < this.ports.getSize(); i++) {
+                oldCanvas.unregisterPort(this.ports.get(i));
+            }
+        }
+
+        if (this.canvas !== null) {
+            for (i = 0; i < this.ports.getSize(); i++) {
+                this.canvas.registerPort(this.ports.get(i));
+            }
+        }
     },
 
     /**

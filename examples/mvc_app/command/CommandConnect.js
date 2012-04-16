@@ -52,7 +52,6 @@ example.mvc_simple.CommandConnect = graphiti.command.Command.extend({
        if(this.model===null){
           this.model= new example.mvc_simple.ConnectionModel(this.source.getId(), this.target.getId());
        }
-          
        this.source.addConnectionModel(this.model);
     },
     

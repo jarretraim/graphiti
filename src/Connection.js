@@ -399,7 +399,7 @@ graphiti.Connection = graphiti.Line.extend({
        var portName = this.getModel().getSourcePortName();
        // try to find the corresponding port in the workflow document to this model
        //
-       var figures = this.getCanvas().getDocument().getFigures();
+       var figures = this.getCanvas().getFigures();
        var count = figures.getSize();
        for(var i=0;i<count;i++)
        {
@@ -425,7 +425,7 @@ graphiti.Connection = graphiti.Line.extend({
        var portName = this.getModel().getTargetPortName();
        // try to find the corresponding port in the workflow document to this model
        //
-       var figures = this.getCanvas().getDocument().getFigures();
+       var figures = this.getCanvas().getFigures();
        var count = figures.getSize();
        for(var i=0;i<count;i++)
        {

@@ -641,6 +641,7 @@ graphiti.Figure = Class.extend({
       if(this.canvas!==null && this.canvas.getCurrentSelection()===this){
          this.canvas.moveResizeHandles(this);
       }
+      this.fireMoveEvent();
     },
     
     /**

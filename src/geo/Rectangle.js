@@ -188,6 +188,6 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 	equals:function( o)
 	{
 	  return this.x==o.x && this.y==o.y && this.w==o.w && this.h==o.h;
-	},
+	}
 
 });

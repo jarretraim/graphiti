@@ -58,9 +58,28 @@
 	<SCRIPT src="../../src/OutputPort.js"></SCRIPT>
 	<SCRIPT src="../../src/ConnectionAnchor.js"></SCRIPT>
 
+	<SCRIPT src="../../src/ui/parts/GraphicalEditor.js"></SCRIPT>
+	<SCRIPT src="../../src/ui/parts/GraphicalViewer.js"></SCRIPT>
 
-	<SCRIPT src="Start.js"></SCRIPT>
-	<SCRIPT src="End.js"></SCRIPT>
+	<SCRIPT src="../../src/mvc/controller/EditPartFactory.js"></SCRIPT>
+	<SCRIPT src="../../src/mvc/AbstractObjectModel.js"></SCRIPT>
+	<SCRIPT src="../../src/mvc/AbstractConnectionModel.js"></SCRIPT>
+	<SCRIPT src="../../src/mvc/Event.js"></SCRIPT>
+
+	<SCRIPT src="./MyGraphicalEditor.js"></SCRIPT>
+	<SCRIPT src="./MyGraphicalEditorFactory.js"></SCRIPT>
+	<SCRIPT src="./model/CircuitModel.js"></SCRIPT>
+	<SCRIPT src="./model/ConnectionModel.js"></SCRIPT>
+	<SCRIPT src="./model/NodeModel.js"></SCRIPT>
+	<SCRIPT src="./presenter/NodeFigure.js"></SCRIPT>
+	<SCRIPT src="./presenter/ConnectionFigure.js"></SCRIPT>
+	<SCRIPT src="./presenter/InputPort.js"></SCRIPT>
+	<SCRIPT src="./presenter/OutputPort.js"></SCRIPT>
+	<SCRIPT src="./command/CommandMove.js"></SCRIPT>
+	<SCRIPT src="./command/CommandConnect.js"></SCRIPT>
+	<SCRIPT src="./command/CommandReconnect.js"></SCRIPT>
+	<SCRIPT src="./command/CommandDisconnect.js"></SCRIPT>
+	<SCRIPT src="./jsonToModel.js"></SCRIPT>
 
 	<style>
 #gfx_holder {
@@ -78,21 +97,22 @@ $(document).ready(function() {
     document.ontouchmove = function(e) {
         e.preventDefault();
     };
+
+    var circuit = { nodes:[
+                           {id:"node1", x:20, y:20},
+                           {id:"node2", x:150, y:200}
+                           ],
+                    connections:[
+                            {source:"node1",  target:"node2"   }
+                           ]
+                   };
+
+    var circuitModel = jsonToModel(circuit);
+
+    var editor  = new example.mvc_simple.MyGraphicalEditor("gfx_holder",false);
+
+    editor.setModel(circuitModel);
     
-  var canvas = new graphiti.Canvas("gfx_holder");
-
-  var figure1 = new graphiti.Oval();
-  var figure2 = new graphiti.Rectangle();
-  canvas.addFigure(figure1,100,100);
-  canvas.addFigure(figure2,120,150);
-  figure2.setDimension(50,50);
-  
-  canvas.addFigure( new example.Start(), 80,80);
-  canvas.addFigure( new example.Start(), 50,50);
-
-  canvas.addFigure( new example.End(), 150,150);
-  canvas.addFigure( new example.End(), 350,250);
-
 });
 
 </script>
