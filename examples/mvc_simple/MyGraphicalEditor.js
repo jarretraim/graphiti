@@ -1,7 +1,17 @@
+/**
+ * declase the namespace object for this example
+ */
 var example = {
 		mvc_simple: {}
 };
 
+/**
+ * @class example.mvc_simple.MyGraphicalEditor
+ * Simple editor to move one kind of figure and connect these via InputPort and OutputPort
+ * 
+ * @author Andreas Herz
+ * @extends graphiti.ui.parts.GraphicalEditor
+ */
 example.mvc_simple.MyGraphicalEditor = graphiti.ui.parts.GraphicalEditor.extend(
 {
     NAME : "example.mvc_simple.MyGraphicalEditor", // only for debugging
@@ -23,7 +33,7 @@ example.mvc_simple.MyGraphicalEditor = graphiti.ui.parts.GraphicalEditor.extend(
 	 * Called to configure the graphical viewer before it receives its contents. 
 	 * Subclasses should extend or override this method as needed.
 	 * 
-	 * @param {graphiti.mvc.AbstractObjectModel}
+	 * @param {graphiti.mvc.AbstractObjectModel} model
 	 **/
 	setModel:function( model)
 	{

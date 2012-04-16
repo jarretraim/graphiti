@@ -34,6 +34,7 @@ graphiti.Canvas = Class.extend(
         this.canvasId = canvasId;
         this.html = $("#"+canvasId);
         this.paper = Raphael(canvasId, this.getWidth(), this.getHeight());
+            
         this.zoomFactor = 1.0;
         this.enableSmoothFigureHandling=false;
         this.currentSelection = null;
@@ -127,6 +128,12 @@ graphiti.Canvas = Class.extend(
             this.onMouseDown(this.mouseDownX + scrollLeft - xOffset, this.mouseDownY + scrollTop - yOffset);
         }, this));
         
+        $(document).bind("keydown",$.proxy(function(event)
+        {
+          var ctrl = event.ctrlKey;
+          this.onKeyDown(event.keyCode, ctrl);
+        },this));
+
     },
     
     
@@ -156,8 +163,10 @@ graphiti.Canvas = Class.extend(
 
 
     /**
-     * @returns The Y coordinate in relation the Canvas.
-     * @type int
+     * @method
+     * The left scroll position.
+     * 
+     * @return {Number} 
      **/
     getScrollLeft:function()
     {
@@ -165,33 +174,36 @@ graphiti.Canvas = Class.extend(
     },
 
     /**
-     * @returns The X coordinate in relation to the canvas
-     * @type int
+     * @method
+     * The top scroll position
+     * 
+     * @return {Number} The X coordinate in relation to the canvas
      **/
     getScrollTop:function()
     {
       return this.scrollArea.scrollTop;
     },
 
-
-    /**
-     * @returns The Y coordinate in relation to the Canvas.
-     * @type int
-     **/
-    getAbsoluteY:function()
-    {
-      return this.html.offset().top;
-    },
-
     /**
      * @method
-     * The X coordinate in relation to the canvas
+     * The absolute document x offset.
      *
      * @return {Number}
      **/
     getAbsoluteX:function()
     {
         return this.html.offset().left;
+    },
+
+    /**
+     * @method
+     * The absolute document y offset.
+     * 
+     * @return {Number} 
+     **/
+    getAbsoluteY:function()
+    {
+      return this.html.offset().top;
     },
 
 
@@ -219,6 +231,7 @@ graphiti.Canvas = Class.extend(
  
 
     /**
+     * @method
      * Add a figure at the hands over x/y position.
      *
      * @param {graphiti.Figure} figure The figure to add.
@@ -236,6 +249,7 @@ graphiti.Canvas = Class.extend(
       // important inital 
       figure.getShapeElement();
       
+     
       if(figure instanceof graphiti.Line)
       {
         this.lines.add(figure);
@@ -259,7 +273,10 @@ graphiti.Canvas = Class.extend(
         }
       }
       
-
+      // init a repaint of the figure. This enforce that all properties
+      // ( color, dim, stroke,...) will be set.
+      figure.repaint();
+ 
       figure.fireMoveEvent();
       this.setDocumentDirty();
     },
@@ -270,7 +287,6 @@ graphiti.Canvas = Class.extend(
      * Remove a figure from the Canvas.
      *
      * @param {graphiti.Figure} figure The figure to remove
-     *
      **/
     removeFigure:function(figure)
     {
@@ -301,7 +317,7 @@ graphiti.Canvas = Class.extend(
      * @method
      * Returns all lines/connections in this workflow/canvas.<br>
      *
-     *
+     * @protected
      * @return {graphiti.util.ArrayList}
      **/
     getLines:function()
@@ -314,12 +330,51 @@ graphiti.Canvas = Class.extend(
      * @method
      * Returns the internal figures container.<br>
      *
-     *
-     * @private
+     * @protected
+     * @return {graphiti.util.ArrayList}
      **/
     getFigures:function()
     {
       return this.figures;
+    },
+
+    /**
+     * @method
+     * Returns the line with the given id.
+     *
+     * @param {String} id The id of the line.
+     * @type draw2d.Line
+     **/
+    getLine:function( id)
+    {
+      var count = this.lines.getSize();
+      for(var i=0; i<count;i++)
+      {
+         var line = this.lines.get(i);
+         if(line.getId()===id)
+            return line;
+      }
+      return null;
+    },
+
+    
+
+    /**
+     * @method
+     * Returns the figure with the given id. 
+     *
+     * @param {String} id The id of the figure.
+     * @return {graphiti.Figure}
+     **/
+    getFigure:function(/*:String*/ id)
+    {
+      for(var i=0; i<this.figures.getSize();i++)
+      {
+         var figure = this.figures.get(i);
+         if(figure.id==id)
+            return figure;
+      }
+      return null;;
     },
 
 
@@ -341,8 +396,10 @@ graphiti.Canvas = Class.extend(
 
 
     /**
+     * @method
+     * <b>true</b> if snap to the grid enabled.
      * 
-     * @type boolean <b>true</b> if snap to the grid enabled.
+     * @return {Boolean}
      **/
     getSnapToGrid:function()
     {
@@ -350,6 +407,7 @@ graphiti.Canvas = Class.extend(
     },
 
     /**
+     * @method
      * Used to perform snapping to existing elements. Snapping is based on the existing children of a container. 
      * When snapping a rectangle, the edges of the rectangle will snap to edges of other rectangles generated from 
      * the children of the given container/canvas. Similarly, the centers and middles of rectangles will snap to each other.
@@ -368,8 +426,10 @@ graphiti.Canvas = Class.extend(
 
 
     /**
+     * @method
+     * <b>true</b> if snap to the grid enabled.
      * 
-     * @type boolean <b>true</b> if snap to the grid enabled.
+     * @return {boolean}
      **/
     getSnapToGeometry:function()
     {
@@ -383,6 +443,7 @@ graphiti.Canvas = Class.extend(
      *
      * @param  {graphiti.Figure} figure The related figure
      * @param  {graphiti.geo.Point} pos The position to adjust
+     * 
      * @return {graphiti.geo.Point} the adjusted position
      **/
     snapToHelper:function(figure,  pos)
@@ -504,8 +565,9 @@ graphiti.Canvas = Class.extend(
 
     /**
      * @method
-     * @param {@NAMESPACE@Port} port The new port which has been added to the Canvas.
-     * @private
+     * Register a port to the canvas. This is required for other ports to find a valid drop target.
+     * 
+     * @param {graphiti.Port} port The new port which has been added to the Canvas.
      **/
     registerPort:function(port )
     {
@@ -522,7 +584,10 @@ graphiti.Canvas = Class.extend(
 
     /**
      * @method
-     * @param {graphiti.Port} p The port to remove from the Canvas.
+     * Remove a port from the internal cnavas registration. Now other ports can't find the
+     * port anymore as drop target. The port itself is still visible.
+     * 
+     * @param {graphiti.Port} p The port to unregister as potential drop target
      * @private
      **/
     unregisterPort:function(port )
@@ -533,35 +598,9 @@ graphiti.Canvas = Class.extend(
       this.dropTargets.remove(port);
     },
 
-    
-    /**
-     * @param {graphiti.Menu} menu The menu to show.
-     * @param {Number} x The x position.
-     * @param {Number} y The y position.
-     * @private
-     **/
-    showMenu:function(menu , x , y)
-    {
-     if(this.menu!==null)
-     {
-       this.html.removeChild(this.menu.getHTMLElement());
-       this.menu.setWorkflow(null);
-     }
-
-     this.menu = menu;
-     if(this.menu!==null)
-     {
-       this.menu.setCanvas(this);
-       this.menu.setPosition(x,y);
-
-       this.html.appendChild(this.menu.getHTMLElement());
-       this.menu.paint();
-      }
-    },
-
     /**
      * @method
-     * Returns the command stack for the Canvas. Required for undo/redo  support.
+     * Returns the command stack for the Canvas. Required for undo/redo support.
      *
      * @return {graphiti.command.CommandStack}
      **/
@@ -583,6 +622,7 @@ graphiti.Canvas = Class.extend(
 
 
     /**
+     * @method
      * Set the current selected figure in the workflow Canvas.
      *
      * @param {graphiti.Figure} figure The new selection.
@@ -630,7 +670,7 @@ graphiti.Canvas = Class.extend(
 
     /**
      * @method
-     * Returns the best comparment figure at the location [x,y].
+     * Returns the best figure at the location [x,y]. It is a simple hit test.
      *
      * @param {Number} x The x position.
      * @param {Number} y The y position.
@@ -689,7 +729,7 @@ graphiti.Canvas = Class.extend(
 
     /**
      * @method
-     * Returns the best comparment figure at the location [x,y].
+     * Returns the best compartment figure at the location [x,y].
      *
      * @param {Number} x The x position.
      * @param {Number} y The y position.
@@ -716,7 +756,7 @@ graphiti.Canvas = Class.extend(
 
     /**
      * @method
-     * Return the line which match the handsover coordinate
+     * Return the line which match the hands over coordinate
      *
      * @param {Number} x the x-coordinate for the hit test
      * @param {Number} y the x-coordinate for the hit test
@@ -960,6 +1000,23 @@ graphiti.Canvas = Class.extend(
     onClick: function(){
     },
 
+
+
+    /**
+     * @private
+     **/
+    onKeyDown:function( /*:int*/ keyCode, /*:boolean*/ ctrl)
+    {
+      // Figure l�scht sich selbst, da dies den KeyDown Event empfangen
+      // kann. Bei einer Linie geht dies leider nicht, und muss hier abgehandelt werden.
+      //
+      if(keyCode==46 && this.currentSelection!==null)
+         this.commandStack.execute(this.currentSelection.createCommand(new graphiti.EditPolicy(graphiti.EditPolicy.DELETE)));
+      else if(keyCode==90 && ctrl)
+         this.commandStack.undo();
+      else if(keyCode==89 && ctrl)
+         this.commandStack.redo();
+    },
 
     /**
      * @private

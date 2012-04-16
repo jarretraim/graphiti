@@ -10,13 +10,6 @@
 graphiti.mvc.AbstractObjectModel = Class.extend({
     NAME : "graphiti.mvc.AbstractObjectModel", // only for debugging
 
-	EVENT_ELEMENT_ADDED     : "element added",
-	EVENT_ELEMENT_REMOVED   : "element removed",
-	EVENT_CONNECTION_ADDED  : "connection addedx",
-	EVENT_CONNECTION_REMOVED: "connection removed",
-	EVENT_PROPERTY_CHANGED  : "property changed",
-	EVENT_POSITION_CHANGED  : "position changed",
-
 	init:function(){
 		this.listeners = new graphiti.util.ArrayList();
 		this.id = graphiti.util.UUID.create();
@@ -25,7 +18,7 @@ graphiti.mvc.AbstractObjectModel = Class.extend({
 	/**
 	 * Return all model children of this model object.
 	 *
-	 * @type  draw2d.ArrayList
+	 * @type  graphiti.util.ArrayList
 	 **/
 	getModelChildren:function()
 	{
@@ -83,7 +76,7 @@ graphiti.mvc.AbstractObjectModel = Class.extend({
 	    return;
 	   }
 	
-	   var event = new graphiti.mvc.PropertyChangeEvent(this, propertyName, oldValue, newValue);
+	   var event = new graphiti.mvc.Event(this, propertyName, oldValue, newValue);
 	   for(var i=0; i<count;i++)
 	   {
 	       try

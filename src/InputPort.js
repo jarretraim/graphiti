@@ -11,11 +11,14 @@ graphiti.InputPort = graphiti.Port.extend({
 
     /**
      * @constructor
+     * Create a new InputPort element
      * 
+     * @param {graphiti.Canvas} canvas
+     * @param {String} [name] the name for the Port. Required for MVC
      */
-    init : function(canvas)
+    init : function(canvas, name)
     {
-        this._super(canvas);
+        this._super(canvas, name);
     },
 
     
@@ -72,13 +75,13 @@ graphiti.InputPort = graphiti.Port.extend({
     
     
     /**
+     * @method
      * Returns the Command to perform the specified Request or null.<br>
      * Inherited figures can override this method to return the own implementation
      * of the request.<br>
      *
      * @param {graphiti.EditPolicy} request describes the Command being requested
      * @return {graphiti.command.Command} null or a valid command
-     * @since 0.9.15
      **/
     createCommand:function( request)
     {

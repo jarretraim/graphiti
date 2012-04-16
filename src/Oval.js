@@ -44,6 +44,10 @@ graphiti.Oval = graphiti.VectorFigure.extend({
     **/
    repaint: function(attributes)
    {
+       if(this.shape===null){
+           return;
+       }
+
        if(typeof attributes === "undefined"){
            attributes = {};
        }

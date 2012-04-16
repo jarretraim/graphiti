@@ -1,72 +1,68 @@
 
 /**
- * @class
- * 
+ * @class graphiti.mvc.AbstractConnectionModel
+ * Base model class for connection handling in the MVC pattern.
  *
+ * @extends graphiti.mvc.AbstractObjectModel
  **/
-draw2d.AbstractConnectionModel=function()
-{
-   draw2d.AbstractObjectModel.call(this);
-};
+graphiti.mvc.AbstractConnectionModel = graphiti.mvc.AbstractObjectModel.extend({
+    
+    init: function(){
+        this._super();
+    },
+    
+    /**
+     *
+     * @return {graphiti.mvc.AbstractObjectModel}
+     **/
+    getSourceModel:function()
+    {
+       throw "you must override the method [AbstractConnectionModel.getSourceModel]";
+    },
+    
+    /**
+     *
+     * @return {graphiti.mvc.AbstractObjectModel}
+     **/
+    getTargetModel:function()
+    {
+       throw "you must override the method [AbstractConnectionModel.getTargetModel]";
+    },
+   
+    
+    /**
+     *
+     * @return {String}
+     **/
+    getSourcePortName:function()
+    {
+       throw "you must override the method [AbstractConnectionModel.getSourcePortName]";
+    },
+    
+    /**
+     *
+     * @return {String}
+     **/
+    getTargetPortName:function()
+    {
+       throw "you must override the method [AbstractConnectionModel.getTargetPortName]";
+    },
 
-draw2d.AbstractConnectionModel.prototype = new draw2d.AbstractObjectModel();
-/** @private */
-draw2d.AbstractConnectionModel.prototype.type="draw2d.AbstractConnectionModel";
-
-
-/**
- *
- * @type draw2d.ObjectModel
- **/
-draw2d.AbstractConnectionModel.prototype.getSourceModel=function()
-{
-   throw "you must override the method [AbstractConnectionModel.prototype.getSourceModel]";
-};
-
-/**
- *
- * @type draw2d.ObjectModel
- **/
-draw2d.AbstractConnectionModel.prototype.getTargetModel=function()
-{
-   throw "you must override the method [AbstractConnectionModel.prototype.getTargetModel]";
-};
-
-
-/**
- *
- * @type String
- **/
-draw2d.AbstractConnectionModel.prototype.getSourcePortName=function()
-{
-   throw "you must override the method [AbstractConnectionModel.prototype.getSourcePortName]";
-};
-
-/**
- *
- * @type String
- **/
-draw2d.AbstractConnectionModel.prototype.getTargetPortName=function()
-{
-   throw "you must override the method [AbstractConnectionModel.prototype.getTargetPortName]";
-};
-
-
-
-/**
- *
- * @type draw2d.ObjectModel
- **/
-draw2d.AbstractConnectionModel.prototype.getSourcePortModel=function()
-{
-   throw "you must override the method [AbstractConnectionModel.prototype.getSourcePortModel]";
-};
-
-/**
- *
- * @type draw2d.ObjectModel
- **/
-draw2d.AbstractConnectionModel.prototype.getTargetPortModel=function()
-{
-   throw "you must override the method [AbstractConnectionModel.prototype.getTargetPortModel]";
-};
+    /**
+     *
+     * @return {graphiti.mvc.AbstractObjectModel}
+     **/
+    getSourcePortModel:function()
+    {
+       throw "you must override the method [AbstractConnectionModel.getSourcePortModel]";
+    },
+    
+    /**
+     *
+     * @return {graphiti.mvc.AbstractObjectModel}
+     **/
+    getTargetPortModel:function()
+    {
+       throw "you must override the method [AbstractConnectionModel.getTargetPortModel]";
+    }
+});

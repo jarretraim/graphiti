@@ -18,7 +18,7 @@ graphiti.Rectangle = graphiti.VectorFigure.extend({
       this._super();
 
       this.setBackgroundColor( new graphiti.util.Color(0,0,0));
-      this.setColor(new  graphiti.util.Color(0,0,0));
+      this.setColor(new graphiti.util.Color(0,0,0));
 
       if(typeof width === "undefined"){
         this.setDimension(10, 10);
@@ -32,14 +32,25 @@ graphiti.Rectangle = graphiti.VectorFigure.extend({
      * @method
      * propagate all attributes like color, stroke,... to the shape element
      **/
-    repaint: function()
+    repaint : function(attributes)
     {
-      this._super({width: this.width, height:this.height});
+        if(this.shape===null){
+            return;
+        }
+        
+        if (typeof attributes === "undefined") {
+            attributes = {};
+        }
+
+        attributes.width = this.width;
+        attributes.height = this.height;
+
+        this._super(attributes);
     },
 
     /**
      * @private
-     **/
+     */
     createShapeElement : function()
     {
        return this.canvas.paper.rect(this.getX(),this.getY(),this.getWidth(), this.getHeight());

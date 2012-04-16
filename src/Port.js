@@ -14,9 +14,10 @@ graphiti.Port = graphiti.Circle.extend({
     /**
      * @constructor
      * Creates a new Node element which are not assigned to any canvas.
-     * 
+     * @param {graphiti.Canvas} canvas
+     * @param {String} [name] the name of the port. required for MVC
      */
-    init : function(canvas)
+    init : function(canvas, name)
     {
         this._super();
         
@@ -47,6 +48,14 @@ graphiti.Port = graphiti.Circle.extend({
         
         this.ox = this.x;
         this.oy = this.y;
+        
+        if(typeof name ==="undefined"){
+            this.name = null;
+        }
+        else{
+            this.name = name;
+        }
+            
     },
 
      /**
@@ -57,6 +66,10 @@ graphiti.Port = graphiti.Circle.extend({
       * @param attributes
       */
      repaint:function(attributes){
+         if(this.shape===null){
+             return;
+         }
+
          if(typeof attributes === "undefined"){
              attributes= {};
          }
@@ -347,7 +360,7 @@ graphiti.Port = graphiti.Circle.extend({
      * @see graphiti.Node#getPort
      * @param {String} name The new name of this port.
      **/
-    setName:function(/*:String*/ name)
+    setName:function( name)
     {
       this.name=name;
     },

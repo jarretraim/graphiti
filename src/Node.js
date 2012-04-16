@@ -3,7 +3,7 @@
  * @class graphiti.Node
  * 
  * A Node is the base class for all figures which can have {@link @NAMESPACE@Port}s. A {@link @NAMESPACE@Port} is the
- * anchor for a {@link @NAMESPACE@Connection} line.<br><br><b>Hint:</b> A {@link @NAMESPACE@Port} is a green dot which can 
+ * anchor for a {@link graphiti.Connection} line.<br><br><b>Hint:</b> A {@link graphiti.Port} is a green dot which can 
  * be dragged and dropped over another port.<br>
  * 
  * @inheritable

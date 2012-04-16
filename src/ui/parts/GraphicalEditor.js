@@ -1,5 +1,7 @@
 
 /**
+ * @class graphiti.ui.parts.GraphicalEditor
+ * 
  * This class serves as a quick starting point for clients who are new to graphiti. It will 
  * create an Editor containing a single GraphicalViewer as its control.<br>
  * <br>

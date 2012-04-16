@@ -15,6 +15,7 @@ graphiti.Circle = graphiti.Oval.extend({
     
     /**
      * @constructor
+     * Create a new fcircle figure.
      * 
      * @param {Number} [radius] the initial radius for the circle
      */

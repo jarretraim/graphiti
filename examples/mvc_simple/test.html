@@ -63,14 +63,23 @@
 
 	<SCRIPT src="../../src/mvc/controller/EditPartFactory.js"></SCRIPT>
 	<SCRIPT src="../../src/mvc/AbstractObjectModel.js"></SCRIPT>
-	<SCRIPT src="../../src/mvc/PropertyChangeEvent.js"></SCRIPT>
+	<SCRIPT src="../../src/mvc/AbstractConnectionModel.js"></SCRIPT>
+	<SCRIPT src="../../src/mvc/Event.js"></SCRIPT>
 
 	<SCRIPT src="./MyGraphicalEditor.js"></SCRIPT>
 	<SCRIPT src="./MyGraphicalEditorFactory.js"></SCRIPT>
 	<SCRIPT src="./model/CircuitModel.js"></SCRIPT>
+	<SCRIPT src="./model/ConnectionModel.js"></SCRIPT>
 	<SCRIPT src="./model/NodeModel.js"></SCRIPT>
-	<SCRIPT src="./view/NodeFigure.js"></SCRIPT>
+	<SCRIPT src="./presenter/NodeFigure.js"></SCRIPT>
+	<SCRIPT src="./presenter/ConnectionFigure.js"></SCRIPT>
+	<SCRIPT src="./presenter/InputPort.js"></SCRIPT>
+	<SCRIPT src="./presenter/OutputPort.js"></SCRIPT>
 	<SCRIPT src="./command/CommandMove.js"></SCRIPT>
+	<SCRIPT src="./command/CommandConnect.js"></SCRIPT>
+	<SCRIPT src="./command/CommandReconnect.js"></SCRIPT>
+	<SCRIPT src="./command/CommandDisconnect.js"></SCRIPT>
+	<SCRIPT src="./jsonToModel.js"></SCRIPT>
 
 	<style>
 #gfx_holder {
@@ -88,12 +97,21 @@ $(document).ready(function() {
     document.ontouchmove = function(e) {
         e.preventDefault();
     };
-    
-    var model = new example.mvc_simple.CircuitModel();
-    
+
+    var circuit = { nodes:[
+                           {id:"node1"},
+                           {id:"node2"}
+                           ],
+                    connections:[
+                            {id:"conn01", source:"node1",  target:"node2"   }
+                           ]
+                   };
+
+    var circuitModel = jsonToModel(circuit);
+
     var editor  = new example.mvc_simple.MyGraphicalEditor("gfx_holder",false);
 
-    editor.setModel(model);
+    editor.setModel(circuitModel);
     
 });
 

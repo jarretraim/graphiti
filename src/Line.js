@@ -40,27 +40,18 @@ graphiti.Line = graphiti.Figure.extend({
    /**
     * Set the width for the click hit test of this line.
     *
-    * @param {int} width the width of the line hit test.
+    * @param {Number} width the width of the line hit test.
     **/
    setCoronaWidth:function(/*:int*/ width)
    {
       this.corona = width;
    },
 
-   /**
-    * @method
-    * Set the canvas element of this figures.
-    * 
-    * @param {graphiti.Canvas} canvas the new parent of the figure or null
-    */
-   setCanvas: function(canvas){
-       this._super(canvas);
-       
-       this.repaint();
-   },
 
    /**
+    * @method
     * Called by the framework. Don't call them manually.
+    * 
     * @private
     **/
    createShapeElement:function()
@@ -68,9 +59,18 @@ graphiti.Line = graphiti.Figure.extend({
      return this.canvas.paper.path("M"+this.getStartX()+" "+this.getStartY()+"L"+this.getEndX()+" "+this.getEndY());
    },
 
+   /**
+    * @method
+    * Trigger the repaint of the element.
+    * 
+    */
    repaint:function()
    {
-     this._super({"stroke":"#"+this.lineColor.hex(),
+       if(this.shape===null){
+           return;
+       }
+
+       this._super({"stroke":"#"+this.lineColor.hex(),
                   "stroke-width":this.stroke,
                   "path":"M"+this.getStartX()+" "+this.getStartY()+"L"+this.getEndX()+" "+this.getEndY()});
    },
@@ -129,7 +129,7 @@ graphiti.Line = graphiti.Figure.extend({
     * Set the line width. This enforce a repaint of the line.
     * This method fires a <i>document dirty</i> event.
     *
-    * @param {int} w The new line width of the figure.
+    * @param {Number} w The new line width of the figure.
     **/
    setLineWidth:function(/*:int*/ w)
    {
@@ -141,11 +141,13 @@ graphiti.Line = graphiti.Figure.extend({
 
 
    /**
+    * @mehod
     * Set the color of the line.
     * This method fires a <i>document dirty</i> event.
-    * @param {graphiti.Color} color The new color of the line.
+    * 
+    * @param {graphiti.util.Color} color The new color of the line.
     **/
-   setColor:function(/*:graphiti.Color*/ color)
+   setColor:function( color)
    {
      this.lineColor = color;
      this.setDocumentDirty();
@@ -154,8 +156,10 @@ graphiti.Line = graphiti.Figure.extend({
    },
 
    /**
+    * @method
     * Return the current paint color.
-    * @type graphiti.Color The paint color of the line.
+    * 
+    * @return {graphiti.util.Color} The paint color of the line.
     **/
    getColor:function()
    {
@@ -163,13 +167,14 @@ graphiti.Line = graphiti.Figure.extend({
    },
 
    /**
+    * @method
     * Set the start point of the line.
     * This method fires a <i>document dirty</i> event.
     *
-    * @param {int} x the x coordinate of the start point
-    * @param {int} y the y coordinate of the start point
+    * @param {Numer} x the x coordinate of the start point
+    * @param {Number} y the y coordinate of the start point
     **/
-   setStartPoint:function(/*:int*/ x, /*:int*/ y)
+   setStartPoint:function( x, y)
    {
      if(this.startX===x && this.startY===y){
         return;
@@ -185,8 +190,8 @@ graphiti.Line = graphiti.Figure.extend({
     * Set the end point of the line.
     * This method fires a <i>document dirty</i> event.
     *
-    * @param {int} x the x coordinate of the end point
-    * @param {int} y the y coordinate of the end point
+    * @param {Number} x the x coordinate of the end point
+    * @param {Number} y the y coordinate of the end point
     **/
    setEndPoint:function(/*:int*/x, /*:int*/ y)
    {
@@ -201,7 +206,10 @@ graphiti.Line = graphiti.Figure.extend({
    },
 
    /**
-    * @type int
+    * @method
+    * Return the x coordinate of the start.
+    * 
+    * @return {Number}
     **/
    getStartX:function()
    {
@@ -209,8 +217,10 @@ graphiti.Line = graphiti.Figure.extend({
    },
 
    /**
-    *
-    * @type int
+    * @method
+    * Return the y coordinate of the start.
+    * 
+    * @return {Number}
     **/
    getStartY:function()
    {
@@ -218,8 +228,10 @@ graphiti.Line = graphiti.Figure.extend({
    },
 
    /**
-    *
-    * @return graphiti.geo.Point
+    * @method
+    * Return the start point.
+    * 
+    * @return {graphiti.geo.Point}
     **/
    getStartPoint:function()
    {
@@ -228,8 +240,10 @@ graphiti.Line = graphiti.Figure.extend({
 
 
    /**
-    *
-    * @type int
+    * @method
+    * Return the x coordinate of the end point
+    * 
+    * @return {Number}
     **/
    getEndX:function()
    {
@@ -237,8 +251,10 @@ graphiti.Line = graphiti.Figure.extend({
    },
 
    /**
-    *
-    * @type int
+    * @method
+    * Return the y coordinate of the end point.
+    * 
+    * @return {Number}
     **/
    getEndY:function()
    {
@@ -246,8 +262,10 @@ graphiti.Line = graphiti.Figure.extend({
    },
 
    /**
-    *
-    * @return graphiti.geo.Point
+    * @method
+    * Return the end point.
+    * 
+    * @return {graphiti.geo.Point}
     **/
    getEndPoint:function()
    {
@@ -259,7 +277,7 @@ graphiti.Line = graphiti.Figure.extend({
     * @method
     * Returns the length of the line.
     * 
-    * @type int
+    * @return {Number}
     **/
    getLength:function()
    {
@@ -289,7 +307,7 @@ graphiti.Line = graphiti.Figure.extend({
     *                               V +Y
     *                              90°
     * </pre>
-    * @type float
+    * @return {Number}
     **/
    getAngle:function()
    {
@@ -315,11 +333,11 @@ graphiti.Line = graphiti.Figure.extend({
    },
 
    /**
+    * @method
     * Returns the Command to perform the specified Request or null.
-     *
+    *
     * @param {graphiti.EditPolicy} request describes the Command being requested
-    * @return null or a Command
-    * @type graphiti.Command 
+    * @return {graphiti.command.Command} null or a Command
     **/
    createCommand:function( request)
    {
@@ -340,16 +358,6 @@ graphiti.Line = graphiti.Figure.extend({
      }
      return null;
    },
-
-
-   /**
-    * Callback method for the double click event of user interaction.
-    * Sub classes can override this method to implement their own behaviour.
-    **/
-   onDoubleClick:function()
-   {
-   },
-
 
    /**
     * @method

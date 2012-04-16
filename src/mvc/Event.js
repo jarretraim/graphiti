@@ -1,6 +1,6 @@
 
 /**
- * @class graphiti.PropertyChangeEvent
+ * @class graphiti.mvc.Event
  * 
  * A "PropertyChange" event gets delivered whenever a model changes a property. A PropertyChangeEvent object is sent
  * as an argument to the PropertyChangeListener methods.<br>
@@ -12,7 +12,7 @@
  *
  * @author Andreas Herz
  */
-graphiti.mvc.PropertyChangeEvent= Class.extend({
+graphiti.mvc.Event= Class.extend({
 		
 	/**
 	 * @constructor
@@ -31,3 +31,13 @@ graphiti.mvc.PropertyChangeEvent= Class.extend({
 	   this.newValue = newValue;
 	}
 });
+
+
+graphiti.mvc.Event.ELEMENT_ADDED     = "element added";
+graphiti.mvc.Event.ELEMENT_REMOVED   = "element removed";
+graphiti.mvc.Event.CONNECTION_ADDED  = "connection addedx";
+graphiti.mvc.Event.CONNECTION_REMOVED= "connection removed";
+graphiti.mvc.Event.PROPERTY_CHANGED  = "property changed";
+graphiti.mvc.Event.POSITION_CHANGED  = "position changed";
+graphiti.mvc.Event.SOURCE_CHANGED    = "source changed";
+graphiti.mvc.Event.TARGET_CHANGED    = "target changed";

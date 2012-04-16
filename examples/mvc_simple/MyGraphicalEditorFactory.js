@@ -19,31 +19,30 @@ example.mvc_simple.MyGraphicalEditorFactory =graphiti.mvc.controller.EditPartFac
 	 *
 	 * @return {graphiti.Figure}
 	 **/
-	createEditPart:function(model)
-	{
-		   var figure=null;
-		
-		   if(model instanceof example.mvc_simple.NodeModel)
-		   {
-		      figure = new example.mvc_simple.NodeFigure();
-		   }
-	
-		   
-		   if(figure===null)
-		   {
-		     throw "MyGraphicalEditorFactory called with unknown model class";
-		   }
-		   
-		   figure.setModel(model);
-		   
-		   if(this.readonly)
-		   {
-		      figure.setDeleteable(false);
-		      figure.setDraggable(false);
-		      figure.setSelectable(false);
-		   }
-		   
-		   return figure;
-	}
+	createEditPart : function(model)
+    {
+        var figure = null;
+
+        if (model instanceof example.mvc_simple.NodeModel) {
+            figure = new example.mvc_simple.NodeFigure();
+        }
+        else if (model instanceof example.mvc_simple.ConnectionModel) {
+            figure = new example.mvc_simple.ConnectionFigure();
+        }
+
+        if (figure === null) {
+            throw "MyGraphicalEditorFactory called with unknown model class";
+        }
+
+        figure.setModel(model);
+
+        if (this.readonly) {
+            figure.setDeleteable(false);
+            figure.setDraggable(false);
+            figure.setSelectable(false);
+        }
+
+        return figure;
+    }
 
 });

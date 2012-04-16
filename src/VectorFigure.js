@@ -48,7 +48,7 @@ graphiti.VectorFigure = graphiti.Node.extend({
            attributes.fill = "#" + this.bgColor.hex();
         }
         
-        this.shape.node.style.cursor = 'pointer';  
+  //      this.shape.node.style.cursor = 'pointer';  
         
         this._super(attributes);
     },

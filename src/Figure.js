@@ -168,22 +168,22 @@ graphiti.Figure = Class.extend({
      * enfoces a repaint or only an update of the position related to type of event.
      * 
      * @private
-     * @param {graphiti.mvc.PropertyChangeEvent} event
+     * @param {graphiti.mvc.Event} event
      */
     propertyChange:function( event)
     {
       switch(event.property)
       {
-        case graphiti.mvc.AbstractObjectModel.EVENT_PROPERTY_CHANGED:
+        case graphiti.mvc.Event.PROPERTY_CHANGED:
             this.repaint();
             break;
-        case graphiti.mvc.AbstractObjectModel.EVENT_POSITION_CHANGED:
+        case graphiti.mvc.Event.POSITION_CHANGED:
             this.setPosition(event.newValue.x,event.newValue.y);
             break;
-        case graphiti.mvc.AbstractObjectModel.EVENT_CONNECTION_ADDED:
+        case graphiti.mvc.Event.CONNECTION_ADDED:
             this.refreshConnections();
             break;
-        case graphiti.mvc.AbstractObjectModel.EVENT_CONNECTION_REMOVED:
+        case graphiti.mvc.Event.CONNECTION_REMOVED:
             this.refreshConnections();
             break;
         default:
@@ -423,7 +423,6 @@ graphiti.Figure = Class.extend({
      * Set the alpha blending of this figure. 
      *
      * @template
-     * @abstract
      * @param {Number} percent Value between [0..1].
      **/
     setAlpha:function( percent)
@@ -448,7 +447,7 @@ graphiti.Figure = Class.extend({
     
     /**
      * @method
-     * Return true if the figure visible and part of the cnavas.
+     * Return true if the figure visible and part of the canvas.
      * 
      * @return {Boolean}
      */

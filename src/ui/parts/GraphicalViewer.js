@@ -1,5 +1,6 @@
 /**
- * @class 
+ * @class graphiti.ui.parts.GraphicalViewer
+ * 
  * The viewer is responsible for the editpart lifecycle. 
  * Editparts have visuals, such as {#link graphiti.Figures}, which are hosted 
  * by the viewer and its control. The viewer provides targeting of editparts via their visuals. 
@@ -72,17 +73,17 @@ graphiti.ui.parts.GraphicalViewer = graphiti.Canvas.extend(
 	 * @method 
 	 * Called from the model if any changes happens
 	 * 
-	 * @param {graphiti.mvc.PropertyChangeEvent} event
+	 * @param {graphiti.mvc.Event} event
 	 */
 	propertyChange:function(  event)
 	{
 	  switch(event.property)
 	  {
-	    case graphiti.mvc.AbstractObjectModel.EVENT_ELEMENT_REMOVED:
+	    case graphiti.mvc.Event.ELEMENT_REMOVED:
 	        var figure = this.getFigure(event.oldValue.getId());
 	        this.removeFigure(figure);
 	        break;
-	    case graphiti.mvc.AbstractObjectModel.EVENT_ELEMENT_ADDED:
+	    case graphiti.mvc.Event.ELEMENT_ADDED:
 	        var figure = this.factory.createEditPart(event.newValue);
 	        figure.setId(event.newValue.getId());
 	        figure.updateViewFromModel();

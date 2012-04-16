@@ -1,6 +1,6 @@
 
 /**
- * @class graphiti.command.CommandConnect
+ * @class graphiti.command.CommandReconnect
  * 
  * Reconnects two ports. This command is used during the DragDrop operation of a graphiti.Connection.
  *

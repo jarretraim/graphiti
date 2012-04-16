@@ -55,8 +55,8 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 	 * you can perform multiple methods on the same elements.
 	 *
 	 *
-	 * @param {int} dw  Amount by which width is to be resized
-	 * @param {int} dh  Amount by which height is to be resized
+	 * @param {Number} dw  Amount by which width is to be resized
+	 * @param {Number} dh  Amount by which height is to be resized
 	 * 
 	 * @return  {graphiti.geo.Rectangle} The method return the object itself
 	 **/
