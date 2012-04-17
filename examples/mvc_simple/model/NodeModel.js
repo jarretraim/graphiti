@@ -6,6 +6,8 @@ example.mvc_simple.NodeModel= graphiti.mvc.AbstractObjectModel.extend({
 	
 	/**
 	 * @constructor
+	 * 
+	 * @param {String} id The unique id of the node.
 	 */
 	init: function( id){
 	   this._super();
@@ -17,7 +19,7 @@ example.mvc_simple.NodeModel= graphiti.mvc.AbstractObjectModel.extend({
 	
 	/**
 	 * @method
-	 * Update the postion of the model.
+	 * Update the position of the model.
 	 * 
 	 * @param {Number} x
 	 * @param {Number} y
@@ -35,7 +37,7 @@ example.mvc_simple.NodeModel= graphiti.mvc.AbstractObjectModel.extend({
 	
 	/**
 	 * @method
-	 * Return the postion of the model object
+	 * Return the position of the model object.
 	 * 
 	 * @return {graphiti.geo.Point}
 	 */

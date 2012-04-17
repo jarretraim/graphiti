@@ -33,11 +33,11 @@ graphiti.mvc.Event= Class.extend({
 });
 
 
-graphiti.mvc.Event.ELEMENT_ADDED     = "element added";
-graphiti.mvc.Event.ELEMENT_REMOVED   = "element removed";
-graphiti.mvc.Event.CONNECTION_ADDED  = "connection addedx";
-graphiti.mvc.Event.CONNECTION_REMOVED= "connection removed";
-graphiti.mvc.Event.PROPERTY_CHANGED  = "property changed";
-graphiti.mvc.Event.POSITION_CHANGED  = "position changed";
-graphiti.mvc.Event.SOURCE_CHANGED    = "source changed";
-graphiti.mvc.Event.TARGET_CHANGED    = "target changed";
+graphiti.mvc.Event.ELEMENT_ADDED     = "MVC Element added";
+graphiti.mvc.Event.ELEMENT_REMOVED   = "MVC Element removed";
+graphiti.mvc.Event.CONNECTION_ADDED  = "MVC Connection added";
+graphiti.mvc.Event.CONNECTION_REMOVED= "MVC connection removed";
+graphiti.mvc.Event.PROPERTY_CHANGED  = "MVC Property changed";
+graphiti.mvc.Event.POSITION_CHANGED  = "MVC Position changed";
+graphiti.mvc.Event.SOURCE_CHANGED    = "MVC Source changed";
+graphiti.mvc.Event.TARGET_CHANGED    = "MVC Target changed";

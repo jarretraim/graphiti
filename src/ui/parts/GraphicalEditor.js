@@ -21,8 +21,7 @@ graphiti.ui.parts.GraphicalEditor = Class.extend(
      */
     init : function(canvasId)
     {
-    	this.view =  new graphiti.ui.parts.GraphicalViewer(canvasId);
-    	this.initializeGraphicalViewer();
+    	this.initializeGraphicalViewer(canvasId);
     },
 	
 	/**
@@ -30,9 +29,11 @@ graphiti.ui.parts.GraphicalEditor = Class.extend(
 	 * Called to configure the graphical viewer before it receives its contents.  This is
 	 * where the root editpart should be configured. Subclasses should extend or override this
 	 * method as needed.
+	 * @template
 	 **/
-	initializeGraphicalViewer:function()
+	initializeGraphicalViewer:function(canvasId)
 	{
+    	this.view =  new graphiti.ui.parts.GraphicalViewer(canvasId);
 	},
 	
 	

@@ -6,18 +6,23 @@ example.mvc_simple.NodeModel= graphiti.mvc.AbstractObjectModel.extend({
 	
 	/**
 	 * @constructor
+	 * 
+	 * @param {String} id The unique id of the node.
 	 */
 	init: function( id){
 	   this._super();
 		
-	   this.id = id;
+	   // use the id if provided. Otherwise the generated id of the sysem will be used.
+	   if(typeof id !== "undefined")
+		   this.id = id;
+
 	   this.pos= new graphiti.geo.Point(0,0);
 	   this.connections = new graphiti.util.ArrayList();
 	},
 	
 	/**
 	 * @method
-	 * Update the postion of the model.
+	 * Update the position of the model.
 	 * 
 	 * @param {Number} x
 	 * @param {Number} y
@@ -35,7 +40,7 @@ example.mvc_simple.NodeModel= graphiti.mvc.AbstractObjectModel.extend({
 	
 	/**
 	 * @method
-	 * Return the postion of the model object
+	 * Return the position of the model object.
 	 * 
 	 * @return {graphiti.geo.Point}
 	 */

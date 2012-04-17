@@ -7,7 +7,8 @@ var example = {
 
 /**
  * @class example.mvc_simple.MyGraphicalEditor
- * Simple editor to move one kind of figure and connect these via InputPort and OutputPort
+ * 
+ * The **GraphicalEditor** is responsible for layout and dialog handling.
  * 
  * @author Andreas Herz
  * @extends graphiti.ui.parts.GraphicalEditor
@@ -21,10 +22,9 @@ example.mvc_simple.MyGraphicalEditor = graphiti.ui.parts.GraphicalEditor.extend(
      * 
      * @param {String} canvasId the id of the DOM element to use as paint container
      */
-    init : function(canvasId, readonly)
+    init : function(canvasId)
     {
     	this._super(canvasId);
-    	this.readonly = readonly;
     },
 
 	
@@ -43,11 +43,38 @@ example.mvc_simple.MyGraphicalEditor = graphiti.ui.parts.GraphicalEditor.extend(
 		   // assign the model to the view
 		   this.getGraphicalViewer().setModel(this.model);
 		   // ...and the factory for the editparts/figures
-	       this.getGraphicalViewer().setEditPartFactory(new example.mvc_simple.MyGraphicalEditorFactory(this.readonly));
+	       this.getGraphicalViewer().setEditPartFactory(new example.mvc_simple.MyGraphicalEditorFactory());
 	
 //	       this.getGraphicalViewer().setViewPort("scrollarea");
 //	       this.getGraphicalViewer().setPanning(true);
 	       this.getGraphicalViewer().setCurrentSelection(null);
+	       
+	       
+	       // layout FIRST the body
+	       this.mainLayout = $('#container').layout({
+	   	     west: {
+	              resizable:true,
+	              closable:true,
+	              resizeWhileDragging:true,
+	              paneSelector: "#navigation",
+	            },
+	            center: {
+	              resizable:true,
+	              closable:true,
+	              resizeWhileDragging:true,
+	              paneSelector: "#canvas"
+	            }
+	       });
+	       
+	       
+           $(".palette_node_element").draggable({
+               appendTo:"#container",
+               stack:"#container",
+               zIndex: 27000,
+               helper:"clone",
+            //   start: function(e, ui){$(ui.helper).addClass("ui-state-active ui-draggable-helper .ui-button.ui-state-focus");}
+          });
+
 	    }
 		catch(e)
 		{
@@ -55,17 +82,11 @@ example.mvc_simple.MyGraphicalEditor = graphiti.ui.parts.GraphicalEditor.extend(
 		}
 	},
 	
-	/**
-	 * @method
-	 * Return true if the editor is in readonly mode.
-	 * 
-	 * @return {Boolean}
-	 */
-	isReadonly:function()
+	initializeGraphicalViewer:function(canvasId)
 	{
-	   return this.readonly;
+    	this.view = new example.mvc_simple.MyGraphicalViewer(this.model, canvasId);
 	},
-	
+
 	
 	/**
 	 * @method

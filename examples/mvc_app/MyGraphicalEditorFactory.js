@@ -6,8 +6,8 @@ example.mvc_simple.MyGraphicalEditorFactory =graphiti.mvc.controller.EditPartFac
      * 
      * @param {String} canvasId the id of the DOM element to use as paint container
      */
-    init : function( readonly){
-    	this.readonly = readonly;
+    init : function( ){
+
     	this._super();
     },
 
@@ -35,12 +35,6 @@ example.mvc_simple.MyGraphicalEditorFactory =graphiti.mvc.controller.EditPartFac
         }
 
         figure.setModel(model);
-
-        if (this.readonly) {
-            figure.setDeleteable(false);
-            figure.setDraggable(false);
-            figure.setSelectable(false);
-        }
 
         return figure;
     }

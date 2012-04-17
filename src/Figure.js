@@ -175,6 +175,7 @@ graphiti.Figure = Class.extend({
       switch(event.property)
       {
         case graphiti.mvc.Event.PROPERTY_CHANGED:
+        	this.updateViewFromModel();
             this.repaint();
             break;
         case graphiti.mvc.Event.POSITION_CHANGED:
@@ -220,7 +221,17 @@ graphiti.Figure = Class.extend({
     {
         throw "Inherited class ["+this.type+"] must override the abstract method createShapeElement";
     },
-    
+
+    /**
+     * @method
+     * Template method to synch. the model into the view. Required if the MVC pattern is used.
+     * 
+     * @template
+     */
+    updateViewFromModel:function()
+    {
+    },
+
     /**
      * @method
      * propagate all attributes like color, stroke,... to the shape element

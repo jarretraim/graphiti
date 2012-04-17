@@ -399,8 +399,8 @@ graphiti.Canvas = Class.extend(
           // The user drag&amp;drop a normal figure
           else
           {
-             var inputBounds = new graphiti.geo.Dimension(pos.x,pos.y, figure.getWidth(), figure.getHeight());
-             var result = new graphiti.geo.Dimension(pos.x,pos.y, figure.getWidth(), figure.getHeight());
+             var inputBounds = new graphiti.geo.Rectangle(pos.x,pos.y, figure.getWidth(), figure.getHeight());
+             var result = new graphiti.geo.Rectangle(pos.x,pos.y, figure.getWidth(), figure.getHeight());
 
              var snapDirections = graphiti.SnapToHelper.NSEW;
              var direction = this.snapToGeometryHelper.snapRectangle( inputBounds, result);

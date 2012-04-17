@@ -30,7 +30,7 @@ graphiti.Canvas = Class.extend(
                 (navigator.platform.indexOf("iPad") != -1)
             );
 
-        this.scrollArea = document.body;
+        this.scrollArea = this.setScrollArea(document.body);
         this.canvasId = canvasId;
         this.html = $("#"+canvasId);
         this.paper = Raphael(canvasId, this.getWidth(), this.getHeight());
@@ -136,7 +136,22 @@ graphiti.Canvas = Class.extend(
 
     },
     
-    
+
+    /**
+     * @method
+     * Transforms a document coordinate to canvas coordinate
+     * 
+     * @param {Number} x the x coordinate relative to the window 
+     * @param {Number} y the y coordinate relative to the window
+     * @returns {graphiti.util.Point}
+     */
+	fromDocumentToCanvasCoordinate : function(x,y) {
+		
+		return new graphiti.geo.Point(
+				x - this.getAbsoluteX() + this.getScrollLeft(),
+				y - this.getAbsoluteY() + this.getScrollTop());
+	},
+	
     /**
      * @method
      * Indicate whenever the device can handle touch events.
@@ -161,6 +176,17 @@ graphiti.Canvas = Class.extend(
       return event;
     },
 
+    /**
+     * @method
+     * 
+     * Set the area which are scrolling the cnavas
+     * 
+     * @return {Number} 
+     **/
+    setScrollArea:function(elementSelector)
+    {
+       this.scrollArea= $(elementSelector);
+    },
 
     /**
      * @method
@@ -170,7 +196,7 @@ graphiti.Canvas = Class.extend(
      **/
     getScrollLeft:function()
     {
-      return this.scrollArea.scrollLeft;
+      return this.scrollArea.scrollLeft();
     },
 
     /**
@@ -181,7 +207,7 @@ graphiti.Canvas = Class.extend(
      **/
     getScrollTop:function()
     {
-      return this.scrollArea.scrollTop;
+      return this.scrollArea.scrollTop();
     },
 
     /**

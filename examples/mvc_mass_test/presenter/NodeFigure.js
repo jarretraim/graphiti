@@ -11,27 +11,6 @@ example.mvc_simple.NodeFigure = graphiti.Rectangle.extend({
         this.setAlpha(0.5);
     },
 
-    propertyChange:function( /*:draw2d.PropertyChangeEvent*/ event)
-    {
-      switch(event.property)
-      {
-        case graphiti.mvc.Event.PROPERTY_CHANGED:
-            this.updateViewFromModel();
-            break;
-        case graphiti.mvc.Event.POSITION_CHANGED:
-            this.setPosition(event.newValue.x,event.newValue.y);
-            break;
-        case graphiti.mvc.Event.CONNECTION_ADDED:
-            this.refreshConnections();
-            break;
-        case graphiti.mvc.Event.CONNECTION_REMOVED:
-            this.refreshConnections();
-            break;
-        default:
-            break;
-       }
-    },
-
 
     /**
      * @method
@@ -50,7 +29,7 @@ example.mvc_simple.NodeFigure = graphiti.Rectangle.extend({
             this.addPort(this.outputPort, this.width,this.height/2);
 
             if(this.inputPort===null)
-            this.inputPort = new example.mvc_simple.InputPort(canvas);
+            	this.inputPort = new example.mvc_simple.InputPort(canvas);
             this.addPort(this.inputPort, 0,this.height/2);
         }
         else if(this.outputPort!==null){
@@ -60,22 +39,22 @@ example.mvc_simple.NodeFigure = graphiti.Rectangle.extend({
     },
 
 
-    updateViewFromModel:function()
-    {
-	   var pos = this.getModel().getPosition();
-	   this.setPosition(pos.getX(), pos.getY());
-//    	   this.initPorts();
-    },
+    updateViewFromModel : function() {
+		this._super();
+		var pos = this.getModel().getPosition();
+		this.setPosition(pos.getX(), pos.getY());
+		// this.initPorts();
+	},
 
 
     /**
-     * Returns the List of the connection model objects for which this Figure's model is the source. 
-     * Callers must not modify the returned List. 
-     * Only called if you use the MVC pattern of Draw2D
-     *
-     * @type draw2d.ArrayList
-     * @return the List of model source connections
-     */
+	 * Returns the List of the connection model objects for which this Figure's
+	 * model is the source. Callers must not modify the returned List. Only
+	 * called if you use the MVC pattern of Draw2D
+	 * 
+	 * @type draw2d.ArrayList
+	 * @return the List of model source connections
+	 */
     getModelSourceConnections:function()
     {
        return this.getModel().getConnectionModels();

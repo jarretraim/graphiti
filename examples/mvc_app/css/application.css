@@ -1,0 +1,24 @@
+#container{
+	padding:0px;
+	margin:0px;
+}
+
+
+#navigation{
+	padding:0px;
+	margin:0px;
+}
+
+
+#canvas{
+	padding:0px;
+	margin:0px;
+}
+
+
+.palette_node_element{
+	border:1px solid gray;
+	background-color: #f3f3f3;
+	padding:10px;
+	cursor:pointer;
+}

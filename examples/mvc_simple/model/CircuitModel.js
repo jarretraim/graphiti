@@ -30,13 +30,29 @@ example.mvc_simple.CircuitModel= graphiti.mvc.AbstractObjectModel.extend({
 	addNode : function(node)
     {
         this.nodes.add(node);
-        // set the backlink
+        // set the back link
         node.setModelParent(this);
         
         // inform all listener, mainly the visual representation, about the changes.
         this.firePropertyChange(graphiti.mvc.Event.ELEMENT_ADDED, null, node);
     },
 	
+    /**
+     * @method
+     * Remove the node from the data model. The UI will synch automaticlly.
+     * 
+     * @param {graphiti.AbstrobObjectModel} node the node to remove
+     **/
+    removeNode:function(node)
+    {
+       if(this.nodes.remove(node)!==null)
+       {
+         node.setModelParent(null);
+         // inform all listener, mainly the visual representation, about the changes.
+         this.firePropertyChange(graphiti.mvc.Event.ELEMENT_REMOVED,node,null);
+       }
+    },
+
 	/**
 	 * @method
 	 * Return all children of this model
@@ -50,11 +66,13 @@ example.mvc_simple.CircuitModel= graphiti.mvc.AbstractObjectModel.extend({
 
 
 	/**
-	 * Return the table model with the hands over name.
+	 * @method
+	 * Return the table model with the hands over id.
 	 *
-	 * @type draw2d.AbstractCloudNodeModel
+	 * @param {String} id the unique id of the requested node model
+     * @return {graphiti.AbstractObjectModel}
 	 **/
-	getNodeModel:function(/*:String*/ id)
+	getNodeModel:function( id)
 	{
 	   var count=this.nodes.getSize();
 	   for(var i=0;i<count;i++)
@@ -68,10 +86,31 @@ example.mvc_simple.CircuitModel= graphiti.mvc.AbstractObjectModel.extend({
 	   return null;
 	},
 
+	/**
+	 * Return all connections from the model.
+	 *
+	 * @return graphiti.util.ArrayList
+	 **/
+	getConnectionModels:function()
+	{
+	  var result = new graphiti.util.ArrayList();
+	  var count = this.nodes.getSize();
+
+	  for(var i=0; i<count;i++)
+	  {
+	     var model = this.nodes.get(i);
+	     result.addAll(model.getConnectionModels());
+	  }
+
+	  return result;
+	},
+	
+	
     /**
-     * Return the root  element of the model.
+     * @method
+     * Return the root element of the model.
      *
-     * @type draw2d.VirtualNetworkCloudModel
+     * @return {graphiti.AbstractObjectModel}
      **/
     getCircuitModel:function()
     {

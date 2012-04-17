@@ -5,17 +5,15 @@
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
+   <link type="text/css" rel="stylesheet" href="./css/jquery.layout.css" />
+   <link type="text/css" rel="stylesheet" href="./css/application.css" />
+
   <!-- common, all times required, imports -->
 	<SCRIPT src="../../lib/raphael.js"></SCRIPT>
 	<SCRIPT src="../../lib/jquery-1.6.4.js"></SCRIPT>
 	<SCRIPT src="../../lib/jquery-ui-1.8.16.custom.min.js"></SCRIPT>
-<!-- 	<SCRIPT src="../../lib/jquery-touch_punch.js"></SCRIPT> -->
 	<SCRIPT src="../../lib/Class.js"></SCRIPT>
     
-    
-  <!--REGEXP_START_REMOVE-->
-
-
 	<SCRIPT src="../../src/graphiti.js"></SCRIPT>
 	<SCRIPT src="../../src/util/Color.js"></SCRIPT>
 	<SCRIPT src="../../src/util/ArrayList.js"></SCRIPT>
@@ -33,6 +31,7 @@
 	<SCRIPT src="../../src/command/CommandResize.js"></SCRIPT>
 	<SCRIPT src="../../src/command/CommandConnect.js"></SCRIPT>
 	<SCRIPT src="../../src/command/CommandReconnect.js"></SCRIPT>
+	<SCRIPT src="../../src/command/CommandDelete.js"></SCRIPT>
 	
 	<SCRIPT src="../../src/layout/router/AbstractRouter.js"></SCRIPT>
 	<SCRIPT src="../../src/layout/router/DirectRouter.js"></SCRIPT>
@@ -66,7 +65,11 @@
 	<SCRIPT src="../../src/mvc/AbstractConnectionModel.js"></SCRIPT>
 	<SCRIPT src="../../src/mvc/Event.js"></SCRIPT>
 
+
+	<SCRIPT src="./external_lib/jquery.layout.js"></SCRIPT>
+
 	<SCRIPT src="./MyGraphicalEditor.js"></SCRIPT>
+	<SCRIPT src="./MyGraphicalViewer.js"></SCRIPT>
 	<SCRIPT src="./MyGraphicalEditorFactory.js"></SCRIPT>
 	<SCRIPT src="./model/CircuitModel.js"></SCRIPT>
 	<SCRIPT src="./model/ConnectionModel.js"></SCRIPT>
@@ -79,6 +82,7 @@
 	<SCRIPT src="./command/CommandConnect.js"></SCRIPT>
 	<SCRIPT src="./command/CommandReconnect.js"></SCRIPT>
 	<SCRIPT src="./command/CommandDisconnect.js"></SCRIPT>
+	<SCRIPT src="./command/CommandDelete.js"></SCRIPT>
 	<SCRIPT src="./jsonToModel.js"></SCRIPT>
 
 	<style>
@@ -109,7 +113,7 @@ $(document).ready(function() {
 
     var circuitModel = jsonToModel(circuit);
 
-    var editor  = new example.mvc_simple.MyGraphicalEditor("gfx_holder",false);
+    var editor  = new example.mvc_simple.MyGraphicalEditor("canvas",false);
 
     editor.setModel(circuitModel);
     
@@ -119,10 +123,14 @@ $(document).ready(function() {
 
 </head>
 
-<body>
-<div id="gfx_holder" style="width:1500px; height:1500px;-webkit-tap-highlight-color: rgba(0,0,0,0); ">
-</div>
+<body id="container">
 
+   <div id="navigation" class="">
+    	<div class="palette_node_element">AND</div>
+    	<div class="palette_node_element">OR</div>
+    	<div class="palette_node_element">NAND</div>
+   </div>
+   <div id="canvas"     class="" style="width:1500px; height:1500px;-webkit-tap-highlight-color: rgba(0,0,0,0); "></div>
 
 </body>
 </html>
