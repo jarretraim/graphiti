@@ -13,11 +13,25 @@ graphiti.command.CommandStackEvent = Class.extend({
      * @param {Number} details the current state of the command execution
      * 
      */
-    init : function(command, details)
+    init : function(stack, command, details)
     {
+    	this.stack = stack;
         this.command = command;
         this.details = details;
     },
+    
+    
+    /**
+     * @method
+     * Return the corresponding stack of the event.
+     * 
+     * @return {graphiti.command.CommandStack}
+     **/
+    getStack:function()
+    {
+       return this.stack;
+    },
+    
     
     /**
      * @method

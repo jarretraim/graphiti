@@ -5,8 +5,10 @@
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
+   <link type="text/css" rel="stylesheet" href="./css/aristo/jquery-ui-1.8.16.custom.css" />
    <link type="text/css" rel="stylesheet" href="./css/jquery.layout.css" />
    <link type="text/css" rel="stylesheet" href="./css/application.css" />
+
 
   <!-- common, all times required, imports -->
 	<SCRIPT src="../../lib/raphael.js"></SCRIPT>
@@ -69,11 +71,15 @@
 	<SCRIPT src="./external_lib/jquery.layout.js"></SCRIPT>
 
 	<SCRIPT src="./MyGraphicalEditor.js"></SCRIPT>
-	<SCRIPT src="./MyGraphicalViewer.js"></SCRIPT>
 	<SCRIPT src="./MyGraphicalEditorFactory.js"></SCRIPT>
+	
+	<SCRIPT src="./gui/MyGraphicalViewer.js"></SCRIPT>
+	<SCRIPT src="./gui/Toolbar.js"></SCRIPT>
+
 	<SCRIPT src="./model/CircuitModel.js"></SCRIPT>
 	<SCRIPT src="./model/ConnectionModel.js"></SCRIPT>
 	<SCRIPT src="./model/NodeModel.js"></SCRIPT>
+	
 	<SCRIPT src="./presenter/NodeFigure.js"></SCRIPT>
 	<SCRIPT src="./presenter/ConnectionFigure.js"></SCRIPT>
 	<SCRIPT src="./presenter/InputPort.js"></SCRIPT>
@@ -82,6 +88,7 @@
 	<SCRIPT src="./command/CommandConnect.js"></SCRIPT>
 	<SCRIPT src="./command/CommandReconnect.js"></SCRIPT>
 	<SCRIPT src="./command/CommandDisconnect.js"></SCRIPT>
+	<SCRIPT src="./command/CommandAdd.js"></SCRIPT>
 	<SCRIPT src="./command/CommandDelete.js"></SCRIPT>
 	<SCRIPT src="./jsonToModel.js"></SCRIPT>
 
@@ -130,7 +137,11 @@ $(document).ready(function() {
     	<div class="palette_node_element">OR</div>
     	<div class="palette_node_element">NAND</div>
    </div>
-   <div id="canvas"     class="" style="width:1500px; height:1500px;-webkit-tap-highlight-color: rgba(0,0,0,0); "></div>
-
+   
+   <div id="content">
+   		<div id="toolbar"></div>
+   		<div id="canvas" class="" style="width:1500px; height:1500px;-webkit-tap-highlight-color: rgba(0,0,0,0); "></div>
+   </div>
+   
 </body>
 </html>

@@ -209,9 +209,11 @@ graphiti.command.CommandStack = Class.extend({
      * 
      * @param {graphiti.command.CommandStackListener} listener the listener to add.
      */
-    addCommandStackEventListener:function( listener)
+    addEventListener:function( listener)
     {
         if(listener instanceof graphiti.command.CommandStackEventListener)
+          this.eventListeners.add(listener);
+        else if(typeof listener.stackChanged ==="function")
           this.eventListeners.add(listener);
         else
           throw "Object doesn't implement required callback interface [graphiti.command.CommandStackListener]";
@@ -223,7 +225,7 @@ graphiti.command.CommandStack = Class.extend({
      * 
      * @param {graphiti.command.CommandStackListener} listener the listener to remove.
      */
-    removeCommandStackEventListener:function(listener)
+    removeEventListener:function(listener)
     {
        this.eventListeners.remove(listener);
     },
@@ -239,7 +241,7 @@ graphiti.command.CommandStack = Class.extend({
      **/
     notifyListeners:function(command,  state)
     {
-      var event = new graphiti.command.CommandStackEvent(command, state);
+      var event = new graphiti.command.CommandStackEvent(this, command, state);
       var size = this.eventListeners.getSize();
       for (var i = 0; i < size; i++)
          this.eventListeners.get(i).stackChanged(event);

@@ -11,16 +11,17 @@ example.mvc_simple.MyGraphicalViewer = graphiti.ui.parts.GraphicalViewer.extend(
         $('#canvas' ).droppable({
             accept: '.palette_node_element',
             drop:$.proxy(function(event, ui){
-            	console.log(ui.offset);
-         	    var pos = this.fromDocumentToCanvasCoordinate(ui.offset.left, ui.offset.top);
-console.log(pos);
+        	    var pos = this.fromDocumentToCanvasCoordinate(ui.offset.left, ui.offset.top);
          	    var newNode = new example.mvc_simple.NodeModel();
          	    newNode.setPosition(pos.getX(), pos.getY());
-         	    this.model.addNode(newNode);
+         	    
+         	    // create a command for the undo/redo support
+         	    var command = new example.mvc_simple.CommandAdd(this.model, newNode);
+         	    this.getCommandStack().execute(command);
        
             },this)
          });
-	},
-	
+	}
+
 
 });

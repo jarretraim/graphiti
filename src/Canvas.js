@@ -678,12 +678,42 @@ graphiti.Canvas = Class.extend(
       for(var i=0;i < this.selectionListeners.getSize();i++)
       {
         var w = this.selectionListeners.get(i);
-        if(typeof w.onSelectionChanged !== "undefined"){
+        if(typeof w.onSelectionChanged === "function"){
           w.onSelectionChanged(this.currentSelection);
         }
       }
 
     },
+    
+
+    /**
+     * @method
+     * Register a listener to the Canvas. The listener must provide a function "onSelectionChanged".
+     * 
+     * @param {Object} w an object which implements the 'onSelectionChanged' method
+     **/
+    addSelectionListener:function(/*:Object*/ w)
+    {
+      if(w!==null)
+      {
+        if(typeof w.onSelectionChanged==="function")
+          this.selectionListeners.add(w);
+        else
+          throw "Object doesn't implement required callback method [onSelectionChanged]";
+      }
+    },
+
+    /**
+     * @method
+     * unregister the listener from the canvas.
+     * 
+     * @param {Object} w The object which will be removed from the selection eventing
+     **/
+    removeSelectionListener:function(/*:Object*/ w )
+    {
+      this.selectionListeners.remove(w);
+    },
+
     
     /**
      * @method
@@ -1086,6 +1116,9 @@ graphiti.Canvas = Class.extend(
                     this.showResizeHandles(this.currentSelection);
                 }
             }
+        }
+        else if(figure === null){
+        	this.setCurrentSelection(null);
         }
 
     },

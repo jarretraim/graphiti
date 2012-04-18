@@ -7,7 +7,7 @@ example.mvc_simple.CommandDelete = graphiti.command.Command.extend({
 	 * @constructor
 	 * @param {graphiti.AbstractObjectModel} node
 	 */
-	init : function(/*:draw2d.AbstractCloudNodeModel*/node) {
+	init : function( node) {
 		this._super( "Delete Node Element");
 		this.node = node;
 		this.parent = this.node.getModelParent();

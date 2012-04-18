@@ -51,29 +51,49 @@ example.mvc_simple.MyGraphicalEditor = graphiti.ui.parts.GraphicalEditor.extend(
 	       
 	       
 	       // layout FIRST the body
-	       this.mainLayout = $('#container').layout({
+	       this.appLayout = $('#container').layout({
 	   	     west: {
 	              resizable:true,
 	              closable:true,
 	              resizeWhileDragging:true,
-	              paneSelector: "#navigation",
+	              paneSelector: "#navigation"
 	            },
 	            center: {
 	              resizable:true,
 	              closable:true,
 	              resizeWhileDragging:true,
-	              paneSelector: "#canvas"
+	              paneSelector: "#content"
 	            }
 	       });
 	       
+	       //
+	       this.contentLayout = $('#content').layout({
+	   	     north: {
+	              resizable:false,
+	              closable:false,
+                  spacing_open:0,
+                  spacing_closed:0,
+                  size:50,
+	              paneSelector: "#toolbar"
+	            },
+	            center: {
+	              resizable:false,
+	              closable:false,
+                  spacing_open:0,
+                  spacing_closed:0,
+	              paneSelector: "#canvas"
+	            }
+	       });
 	       
            $(".palette_node_element").draggable({
                appendTo:"#container",
                stack:"#container",
                zIndex: 27000,
                helper:"clone",
-            //   start: function(e, ui){$(ui.helper).addClass("ui-state-active ui-draggable-helper .ui-button.ui-state-focus");}
+               start: function(e, ui){$(ui.helper).addClass("shadow");}
           });
+           
+           this.toolbar = new example.mvc_simple.Toolbar("toolbar",  this.getGraphicalViewer() );
 
 	    }
 		catch(e)
