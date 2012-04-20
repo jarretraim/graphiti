@@ -1,5 +1,5 @@
 /**
- * declase the namespace object for this example
+ * declare the namespace object for this example
  */
 var example = {
 		mvc_simple: {}

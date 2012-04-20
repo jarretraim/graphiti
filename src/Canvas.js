@@ -30,7 +30,7 @@ graphiti.Canvas = Class.extend(
                 (navigator.platform.indexOf("iPad") != -1)
             );
 
-        this.scrollArea = this.setScrollArea(document.body);
+        this.setScrollArea(document.body);
         this.canvasId = canvasId;
         this.html = $("#"+canvasId);
         this.paper = Raphael(canvasId, this.getWidth(), this.getHeight());
@@ -38,7 +38,7 @@ graphiti.Canvas = Class.extend(
         this.zoomFactor = 1.0;
         this.enableSmoothFigureHandling=false;
         this.currentSelection = null;
-        
+        this.currentDropTarget=null;
         this.menu = null;
         
         this.snapToGridHelper = null;
@@ -747,13 +747,15 @@ graphiti.Canvas = Class.extend(
             }
         }
 
-        // Checking ports
+       // Checking ports
         //
         for ( var i = 0, len = this.commonPorts.getSize(); i < len; i++)
         {
             testFigure = this.commonPorts.get(i);
-            if (testFigure.hitTest(x, y) === true && testFigure !== figureToIgnore) { 
-                return testFigure; 
+            if(testFigure !== figureToIgnore){
+ 	            if (testFigure.hitTest(x, y) === true) { 
+	                return testFigure; 
+	            }
             }
         }
 
@@ -1086,7 +1088,7 @@ graphiti.Canvas = Class.extend(
 
         if(figure!==null && figure.isDraggable()){
             this.mouseDraggingElement = figure;
-            canDragStart = figure.onDragstart();
+            canDragStart = figure.onDragStart();
             // Element send a veto about the drag&drop operation
             if(canDragStart===false){
                 this.mouseDraggingElement = null;
@@ -1130,7 +1132,28 @@ graphiti.Canvas = Class.extend(
     {
         if (this.mouseDraggingElement !== null) {
             this.mouseDraggingElement.onDrag(dx, dy);
-        }
+            
+            var p = this.fromDocumentToCanvasCoordinate(this.mouseDownX + dx, this.mouseDownY + dy);
+            
+            var target = this.getBestFigure(p.x, p.y,this.mouseDraggingElement);
+            
+            // the hovering element has been changed
+            if (target !== this.currentDropTarget) {
+                if (this.currentDropTarget !== null) {
+                    this.currentDropTarget.onDragLeave(this.mouseDraggingElement);
+                    this.currentDropTarget = null;
+                }
+                if (target !== null) {
+                    var isDropTarget = target.onDragEnter(this.mouseDraggingElement);
+                    if(isDropTarget===true){
+                    	this.currentDropTarget = target;
+                    }
+                    else{
+                    	this.currentDropTarget = null;
+                    }
+                }
+            }
+       }
     },
 
 
@@ -1140,8 +1163,13 @@ graphiti.Canvas = Class.extend(
     onMouseUp : function()
     {
         if (this.mouseDraggingElement !== null) {
-            this.mouseDraggingElement.onDragend();
+            this.mouseDraggingElement.onDragEnd();
+            if(this.currentDropTarget!==null){
+               this.mouseDraggingElement.onDrop(this.currentDropTarget);
+               this.currentDropTarget.onDragLeave(this.mouseDraggingElement);
+            }
         }
+        this.currentDropTarget = null;
         this.mouseDraggingElement = null;
     }
 

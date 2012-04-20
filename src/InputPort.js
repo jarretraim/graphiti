@@ -23,48 +23,67 @@ graphiti.InputPort = graphiti.Port.extend({
 
     
     /**
-     *
+     * @method
+     * Called by the framework during drag drop operations.
+     * 
+     * @param {graphiti.Figure} figure The figure which is currently dragging
+     * 
+     * @return {Boolean} true if this figure accepts the dragging figure for a drop operation
      **/
-    onDragEnter : function(port)
+    onDragEnter : function(figure)
     {
-        var line = null;
+    	// Ports accepts only Ports as DropTarget
+    	//
+    	if(!(figure instanceof graphiti.Port)){
+    		return false;
+    	}
+ 
+    	var line = null;
 
         // User drag&drop a normal port
-        if (port instanceof graphiti.OutputPort) {
-            this._super(port);
+        if (figure instanceof graphiti.OutputPort) {
+            return this._super(figure);
         }
         // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
-        else if (port instanceof graphiti.LineStartResizeHandle) {
+        else if (figure instanceof graphiti.LineStartResizeHandle) {
             line = this.getCanvas().getCurrentSelection();
             if (line instanceof graphiti.Connection && line.getSource() instanceof graphiti.InputPort) {
-                this._super(line.getTarget());
+                return this._super(line.getTarget());
             }
         }
         // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
-        else if (port instanceof graphiti.LineEndResizeHandle) {
+        else if (figure instanceof graphiti.LineEndResizeHandle) {
             line = this.getCanvas().getCurrentSelection();
             if (line instanceof graphiti.Connection && line.getTarget() instanceof graphiti.InputPort) {
-                this._super(line.getSource());
+                return this._super(line.getSource());
             }
         }
+        
+        return false;
     },
     
-    onDragLeave:function( port)
+    onDragLeave:function( figure)
     {
-        var line = null;
-      if(port instanceof graphiti.OutputPort)
+  	  // Ports accepts only Ports as DropTarget
+  	  //
+  	  if(!(figure instanceof graphiti.Port)){
+  		 return;
+  	  }
+
+  	  var line = null;
+      if(figure instanceof graphiti.OutputPort)
       {
-        this._super( port);
+        this._super( figure);
       }
       // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
-      else if (port instanceof graphiti.LineStartResizeHandle)
+      else if (figure instanceof graphiti.LineStartResizeHandle)
       {
         line = this.getCanvas().getCurrentSelection();
         if(line instanceof graphiti.Connection && line.getSource() instanceof graphiti.InputPort){
            this._super(line.getTarget());
         }
       }
-      else if (port instanceof graphiti.LineEndResizeHandle)
+      else if (figure instanceof graphiti.LineEndResizeHandle)
       {
         line = this.getCanvas().getCurrentSelection();
         if(line instanceof graphiti.Connection && line.getTarget() instanceof graphiti.InputPort){

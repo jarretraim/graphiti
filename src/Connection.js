@@ -32,7 +32,12 @@ graphiti.Connection = graphiti.Line.extend({
       this.targetAnchor = new graphiti.ConnectionAnchor(this);
     
       this.router =this.DEFAULT_ROUTER;
-    
+      
+      // internal status handling for performance reasons
+      //
+      this.routingRequired = true;
+      this.svgPathString = null;
+      
       this.lineSegments = new graphiti.util.ArrayList();
     
       this.children = new graphiti.util.ArrayList();
@@ -72,7 +77,7 @@ graphiti.Connection = graphiti.Line.extend({
             this.targetPort.attachMoveListener(this);
             this.fireTargetPortRouteEvent();
         }
-
+        this.routingRequired =true;
         this.repaint();
     },
     
@@ -97,6 +102,7 @@ graphiti.Connection = graphiti.Line.extend({
     **/
     addFigure : function(/* :graphiti.Figure */figure, /* :graphiti.ConnectionLocator */locator)
     {
+        this.routingRequired =true;
         var entry = {};
         entry.figure = figure;
         entry.locator = locator;
@@ -129,6 +135,7 @@ graphiti.Connection = graphiti.Line.extend({
     setSourceDecorator:function(/*:graphiti.ConnectionDecorator*/ decorator)
     {
       this.sourceDecorator = decorator;
+      this.routingRequired =true;
       this.repaint();
     },
     
@@ -152,6 +159,7 @@ graphiti.Connection = graphiti.Line.extend({
     setTargetDecorator:function(/*:graphiti.ConnectionDecorator*/ decorator)
     {
       this.targetDecorator = decorator;
+      this.routingRequired =true;
       this.repaint();
     },
     
@@ -177,6 +185,7 @@ graphiti.Connection = graphiti.Line.extend({
     {
       this.sourceAnchor = anchor;
       this.sourceAnchor.setOwner(this.sourcePort);
+      this.routingRequired =true;
       this.repaint();
     },
     
@@ -190,6 +199,7 @@ graphiti.Connection = graphiti.Line.extend({
     {
       this.targetAnchor = anchor;
       this.targetAnchor.setOwner(this.targetPort);
+      this.routingRequired =true;
       this.repaint();
     },
     
@@ -207,6 +217,7 @@ graphiti.Connection = graphiti.Line.extend({
       else{
        this.router = new graphiti.layout.router.NullRouter();
       }
+      this.routingRequired =true;
     
       // repaint the connection with the new router
       this.repaint();
@@ -229,8 +240,6 @@ graphiti.Connection = graphiti.Line.extend({
      **/
     repaint:function()
     {
-      this._super();
-    
       if(this.shape===null){
           return;
       }
@@ -243,44 +252,52 @@ graphiti.Connection = graphiti.Line.extend({
             return;
          }
     
-        this.startStroke();
-    
-        // Use the internal router if any has been set....
-        //
-        this.router.route(this);
-    
-        // paint the decorator if any exists
-        //
-        if(this.getSource().getParent().isMoving===false && this.getTarget().getParent().isMoving===false )
-        {
-          if(this.targetDecorator!==null){
-            this.targetDecorator.paint(new graphiti.Graphics(this.graphics,this.getEndAngle(),this.getEndPoint()));
-          }
-    
-          if(this.sourceDecorator!==null){
-            this.sourceDecorator.paint(new graphiti.Graphics(this.graphics,this.getStartAngle(),this.getStartPoint()));
-          }
-        }
-        
-        if(this.shape!==null)
-        {
-          var ps = this.getPoints();
-          var p = ps.get(0);
-          var path = "M"+p.x+" "+p.y;
-          for( i=0;i<ps.getSize();i++)
-          {
-            p = ps.get(i);
-            path=path+"L"+p.x+" "+p.y;
-          }
-          this.shape.attr({path:path});
-        }
-        
-        this.finishStroke();
-    
-        for( i=0; i<this.children.getSize();i++)
-        {
-            var entry = this.children.get(i);
-            entry.locator.relocate(entry.figure);
+         // routing is only neccessary if any start or endpoint has ben changed....This is an expensive method
+         // avooid unneccessary usage
+         //
+         if(this.routingRequired ===true){
+        	
+	        this.startStroke();
+	    
+	        // Use the internal router if any has been set....
+	        //
+	        this.router.route(this);
+	    
+	        // paint the decorator if any exists
+	        //
+	        if(this.getSource().getParent().isMoving===false && this.getTarget().getParent().isMoving===false )
+	        {
+	          if(this.targetDecorator!==null){
+	            this.targetDecorator.paint(new graphiti.Graphics(this.graphics,this.getEndAngle(),this.getEndPoint()));
+	          }
+	    
+	          if(this.sourceDecorator!==null){
+	            this.sourceDecorator.paint(new graphiti.Graphics(this.graphics,this.getStartAngle(),this.getStartPoint()));
+	          }
+	        }
+	        
+	        if(this.shape!==null)
+	        {
+	          var ps = this.getPoints();
+	          var p = ps.get(0);
+	          var path = "M"+p.x+" "+p.y;
+	          for( i=0;i<ps.getSize();i++)
+	          {
+	            p = ps.get(i);
+	            path=path+"L"+p.x+" "+p.y;
+	          }
+	          this.svgPathString = path;
+	        }
+	        
+	        this.finishStroke();
+	    
+	        for( i=0; i<this.children.getSize();i++)
+	        {
+	            var entry = this.children.get(i);
+	            entry.locator.relocate(entry.figure);
+	        }
+	        this.routingRequired=false;
+
         }
       }
       catch(e)
@@ -288,8 +305,38 @@ graphiti.Connection = graphiti.Line.extend({
           alert(e);
           pushErrorStack(e,"repaint:function()");
       }
+      this._super({path:this.svgPathString});
     },
     
+
+    /**
+     * @method
+     * Called by the framework during drag&drop operations.
+     * 
+     * @param {graphiti.Figure} draggedFigure The figure which is currently dragging
+     * 
+     * @return {Boolean} true if this port accepts the dragging port for a drop operation
+     * @template
+     **/
+    onDragEnter : function( draggedFigure )
+    {
+    	this.setGlow(true);
+    	return true;
+    },
+ 
+    /**
+     * @method
+     * Called if the DragDrop object leaving the current hover figure.
+     * 
+     * @param {graphiti.Figure} draggedFigure The figure which is currently dragging
+     * @template
+     **/
+    onDragLeave:function( draggedFigure )
+    {
+    	this.setGlow(false);
+    },
+
+ 
     /**
      * Return the recalculated position of the start point if we have set an anchor.
      * 
@@ -513,6 +560,7 @@ graphiti.Connection = graphiti.Line.extend({
      **/
     onOtherFigureMoved:function(/*:graphiti.Figure*/ figure)
     {
+      this.routingRequired = true;
       if(figure===this.sourcePort){
         this.setStartPoint(this.sourcePort.getAbsoluteX(), this.sourcePort.getAbsoluteY());
       }

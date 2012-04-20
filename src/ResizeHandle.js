@@ -125,7 +125,7 @@ graphiti.ResizeHandle = graphiti.Rectangle.extend({
      * 
     * @return {boolean} true whenever the drag drop operation is allowed.
      **/
-    onDragstart : function()
+    onDragStart : function()
     {
         // This happens if the selected figure has set the "nonResizeable" flag
         // In this case the ResizeHandle can't be dragged. => no resize
@@ -214,7 +214,7 @@ graphiti.ResizeHandle = graphiti.Rectangle.extend({
      *
      * @private
      **/
-    onDragend : function()
+    onDragEnd : function()
     {
         if (!this.isDraggable()) {
             return;

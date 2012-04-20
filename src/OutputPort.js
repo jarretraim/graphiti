@@ -23,60 +23,11 @@ graphiti.OutputPort = graphiti.Port.extend({
         this.maxFanOut = 100; // the maximimum connections which goes out of this port
     },
 
-    onDragEnter : function(port)
-    {
-        var line = null;
-        if (this.getMaxFanOut() <= this.getFanOut()) {
-            return;
-        }
-
-        if (port instanceof graphiti.InputPort) {
-            this._super(port);
-        }
-        // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
-        else if (port instanceof graphiti.LineStartResizeHandle) {
-            line = this.getCanvas().getCurrentSelection();
-            if (line instanceof graphiti.Connection && line.getSource() instanceof graphiti.OutputPort) {
-                this._super(line.getTarget());
-            }
-        }
-        // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
-        else if (port instanceof graphiti.LineEndResizeHandle) {
-            line = this.getCanvas().getCurrentSelection();
-            if (line instanceof graphiti.Connection && line.getTarget() instanceof graphiti.OutputPort) {
-                this._super(line.getSource());
-            }
-        }
-    },
-    
-    onDragLeave:function( port)
-    {
-      var line = null;
-      if(port instanceof graphiti.InputPort)
-      {
-        this._super( port);
-      }
-      // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
-      else if (port instanceof graphiti.LineStartResizeHandle)
-      {
-        line = this.getCanvas().getCurrentSelection();
-        if(line instanceof graphiti.Connection && line.getSource() instanceof graphiti.OutputPort){
-           this._super( line.getTarget());
-        }
-      }
-      else if (port instanceof graphiti.LineEndResizeHandle)
-      {
-        line = this.getCanvas().getCurrentSelection();
-        if(line instanceof graphiti.Connection && line.getTarget() instanceof graphiti.OutputPort){
-           this._super( line.getSource());
-        }
-      }
-    },
     
     /**
      * @private
      **/
-    onDragstart:function()
+    onDragStart:function()
     {
    
       if(this.getMaxFanOut()===-1){
@@ -91,6 +42,77 @@ graphiti.OutputPort = graphiti.Port.extend({
     },
     
     
+    /**
+     * @method
+     * 
+     * @param {graphiti.Figure} figure The figure which is currently dragging
+     * 
+     * @return {Boolean} true if this figure accepts the dragging figure for a drop operation
+     * @param port
+     */
+    onDragEnter : function(figure)
+    {
+    	// Ports accepts only Ports as DropTarget
+    	//
+    	if(!(figure instanceof graphiti.Port)){
+    		return false;
+    	}
+ 
+    	var line = null;
+        if (this.getMaxFanOut() <= this.getFanOut()) {
+            return false;
+        }
+
+        if (figure instanceof graphiti.InputPort) {
+            return this._super(figure);
+        }
+        // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
+        else if (figure instanceof graphiti.LineStartResizeHandle) {
+            line = this.getCanvas().getCurrentSelection();
+            if (line instanceof graphiti.Connection && line.getSource() instanceof graphiti.OutputPort) {
+                return this._super(line.getTarget());
+            }
+        }
+        // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
+        else if (figure instanceof graphiti.LineEndResizeHandle) {
+            line = this.getCanvas().getCurrentSelection();
+            if (line instanceof graphiti.Connection && line.getTarget() instanceof graphiti.OutputPort) {
+                return this._super(line.getSource());
+            }
+        }
+        return false;
+    },
+    
+    onDragLeave:function( figure)
+    {
+	  // Ports accepts only Ports as DropTarget
+	  //
+	  if(!(figure instanceof graphiti.Port)){
+		 return;
+	  }
+
+	  var line = null;
+      if(figure instanceof graphiti.InputPort)
+      {
+        this._super( figure);
+      }
+      // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
+      else if (figure instanceof graphiti.LineStartResizeHandle)
+      {
+        line = this.getCanvas().getCurrentSelection();
+        if(line instanceof graphiti.Connection && line.getSource() instanceof graphiti.OutputPort){
+           this._super( line.getTarget());
+        }
+      }
+      else if (figure instanceof graphiti.LineEndResizeHandle)
+      {
+        line = this.getCanvas().getCurrentSelection();
+        if(line instanceof graphiti.Connection && line.getTarget() instanceof graphiti.OutputPort){
+           this._super( line.getSource());
+        }
+      }
+    },
+
     setMaxFanOut:function(count)
     {
       this.maxFanOut = count;

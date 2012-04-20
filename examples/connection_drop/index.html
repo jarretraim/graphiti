@@ -12,10 +12,6 @@
  	<SCRIPT src="../../lib/jquery-touch_punch.js"></SCRIPT>
 	<SCRIPT src="../../lib/Class.js"></SCRIPT>
     
-    
-  <!--REGEXP_START_REMOVE-->
-
-
 	<SCRIPT src="../../src/graphiti.js"></SCRIPT>
 	<SCRIPT src="../../src/util/Color.js"></SCRIPT>
 	<SCRIPT src="../../src/util/ArrayList.js"></SCRIPT>
@@ -59,8 +55,17 @@
 	<SCRIPT src="../../src/OutputPort.js"></SCRIPT>
 	<SCRIPT src="../../src/ConnectionAnchor.js"></SCRIPT>
 
+<script>
+/**
+ * declare the namespace object for this example
+ */
+var example = {
+		connection_drop: {}
+};
+</script>
 
 	<SCRIPT src="Start.js"></SCRIPT>
+	<SCRIPT src="BetweenFigure.js"></SCRIPT>
 	<SCRIPT src="End.js"></SCRIPT>
 
 	<style>
@@ -81,18 +86,24 @@ $(document).ready(function() {
     };
     
   var canvas = new graphiti.Canvas("gfx_holder");
-
-  var figure1 = new graphiti.Oval();
-  var figure2 = new graphiti.Rectangle();
-  canvas.addFigure(figure1,100,100);
-  canvas.addFigure(figure2,120,150);
-  figure2.setDimension(50,50);
   
-  canvas.addFigure( new example.Start(), 80,80);
-  canvas.addFigure( new example.Start(), 50,50);
+  var start  = new example.connection_drop.Start();
+  var end    = new example.connection_drop.End();
+  
+  canvas.addFigure(start, 80,80);
+  canvas.addFigure(end, 450,150);
 
-  canvas.addFigure( new example.End(), 150,150);
-  canvas.addFigure( new example.End(), 350,250);
+  // Add a connection via API calls between Start and Stop
+  // It is more confortable with the MVC pattern
+  //
+  var connection = new graphiti.Connection();
+  var output = start.getPort("output");
+  var input = end.getPort("input");
+  connection.setSource(output);
+  connection.setTarget(input);
+  canvas.addFigure(connection);
+  
+  canvas.addFigure( new example.connection_drop.BetweenFigure(), 250,240);
 
 });
 

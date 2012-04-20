@@ -253,6 +253,19 @@ graphiti.Figure = Class.extend({
          this.shape.attr(attributes);
      },
      
+     /**
+      * @method
+      * Highlight the element or remove the highlighting
+      * 
+      * @param {Boolean} flag indicates glow/noGlow
+      * @template
+      */
+     setGlow: function(flag){
+    	 // do nothing in the base class. 
+    	 // Subclasses must implement this method.
+     },
+     
+     
     /** 
      * @method
      * Create the draggable elements. Called by the framework of the element has been added to the 
@@ -268,7 +281,7 @@ graphiti.Figure = Class.extend({
 				this.canvas.setCurrentSelection(this);
 			}
 
-			this.isInDragDrop = this.onDragstart();
+			this.isInDragDrop = this.onDragStart();
 		},this);
 		
         this._moveDrag = $.proxy(function (dx, dy) 
@@ -286,7 +299,7 @@ graphiti.Figure = Class.extend({
                 return;
            }
 
-           this.onDragend();
+           this.onDragEnd();
         },this);
         this.shape.drag(this._moveDrag, this._startDrag, this._upDrag);
         
@@ -303,9 +316,9 @@ graphiti.Figure = Class.extend({
      * Will be called if the drag and drop action beginns. You can return [false] if you
      * want avoid that the figure can be move.
      * 
-     * @return {boolean}
+     * @return {boolean} true if the figure accepts dragging
      **/
-    onDragstart : function( )
+    onDragStart : function( )
     {
       this.isInDragDrop =false;
       this.isMoving = false;
@@ -359,7 +372,6 @@ graphiti.Figure = Class.extend({
        this.isMoving = true;
        this.setAlpha(this.originalAlpha*0.7);
       }
-      this.fireMoveEvent();
     },
 
     /**
@@ -370,7 +382,7 @@ graphiti.Figure = Class.extend({
      * 
      * @private
      **/
-    onDragend : function()
+    onDragEnd : function()
     {
         /*
        if(this.getWorkflow().getEnableSmoothFigureHandling()==true)
@@ -406,6 +418,44 @@ graphiti.Figure = Class.extend({
       this.isMoving = false;
       this.fireMoveEvent();
     },
+
+    /**
+     * @method
+     * Called by the framework during drag&drop operations.
+     * 
+     * @param {graphiti.Figure} figure The figure which is currently dragging
+     * 
+     * @return {Boolean} true if this port accepts the dragging port for a drop operation
+     * @template
+     **/
+    onDragEnter : function( draggedFigure )
+    {
+    	return false;
+    },
+ 
+    /**
+     * @method
+     * Called if the DragDrop object leaving the current hover figure.
+     * 
+     * @param {graphiti.Figure} figure The figure which is currently dragging
+     * @template
+     **/
+    onDragLeave:function(draggedFigure)
+    {
+    },
+
+    
+    /**
+     * @method
+     * Called if the user drop this element onto the dropTarget
+     * 
+     * @param {graphiti.Figure} dropTarget The drop target.
+     * @private
+     **/
+    onDrop:function(dropTarget)
+    {
+    },
+   
 
     /**
      * @method

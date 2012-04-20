@@ -28,6 +28,7 @@ graphiti.Line = graphiti.Figure.extend({
        
         // click area for the line hit test
         this.corona = 10;
+        this.isGlowing = false;
 
         // a figure can store additional, user defined, properties
         this.properties = {} ; /*:Map<name,value>*/
@@ -64,15 +65,56 @@ graphiti.Line = graphiti.Figure.extend({
     * Trigger the repaint of the element.
     * 
     */
-   repaint:function()
+   repaint:function(attributes)
    {
        if(this.shape===null){
            return;
        }
 
-       this._super({"stroke":"#"+this.lineColor.hex(),
-                  "stroke-width":this.stroke,
-                  "path":"M"+this.getStartX()+" "+this.getStartY()+"L"+this.getEndX()+" "+this.getEndY()});
+       // don't override existing values
+       //
+       if(typeof attributes === "undefined"){
+           attributes = {"stroke":"#"+this.lineColor.hex(),
+                         "stroke-width":this.stroke,
+                         "path":"M"+this.getStartX()+" "+this.getStartY()+"L"+this.getEndX()+" "+this.getEndY()};
+       }
+       else{
+    	   if(typeof attributes.path ==="undefined"){
+    		   attributes.path ="M"+this.getStartX()+" "+this.getStartY()+"L"+this.getEndX()+" "+this.getEndY();
+    	   }
+    	   attributes.stroke = "#"+this.lineColor.hex();
+    	   attributes["stroke-width"]=this.stroke;
+       }
+       
+        this._super(attributes);
+   },
+   
+   /**
+    * @method
+    * Highlight the element or remove the highlighting
+    * 
+    * @param {Boolean} flag indicates glow/noGlow
+    * @template
+    */
+   setGlow: function(flag){
+	   if(this.isGlowing===flag){
+		   return;
+	   }
+	   
+	   if(flag===true){
+		   // store old values for restore
+		   this._lineColor = this.lineColor;
+		   this._stroke = this.stroke;
+		   
+	       this.setColor(new graphiti.util.Color("#3f72bf"));
+	       this.setLineWidth(parseInt(this.stroke*4));
+	   }
+	   else{
+	       this.setColor(this._lineColor);
+	       this.setLineWidth(this._stroke);
+	   }
+	   
+	   this.isGlowing = flag;
    },
    
    /**

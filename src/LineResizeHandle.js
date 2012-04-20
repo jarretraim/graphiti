@@ -68,7 +68,7 @@ graphiti.LineResizeHandle = graphiti.Circle.extend({
      * @param {Number} y The y position where the mouse has been clicked in the figure
      * @type {boolean}
      **/
-    onDragstart : function()
+    onDragStart : function()
     {
         this.ox = this.x;
         this.oy = this.y;
@@ -92,7 +92,7 @@ graphiti.LineResizeHandle = graphiti.Circle.extend({
         this.setPosition(this.ox+dx,this.oy+dy );
         
         var port = this.getOppositeSidePort();
-
+        
         if (port !== null) {
             target = port.getDropTarget(this.getX(), this.getY(), null);
 
@@ -100,13 +100,16 @@ graphiti.LineResizeHandle = graphiti.Circle.extend({
             if (target !== this.currentTarget) {
                 if (this.currentTarget !== null) {
                     this.currentTarget.onDragLeave(port);
+                    this.getCanvas().getCurrentSelection().setGlow(false);
                 }
                 if (target !== null) {
-                    target.onDragEnter(port);
+                    var isDropTarget = target.onDragEnter(port);
+                    this.getCanvas().getCurrentSelection().setGlow(isDropTarget);
                 }
             }
             this.currentTarget = target;
         }
+        
         return true;
     },
     
@@ -118,7 +121,7 @@ graphiti.LineResizeHandle = graphiti.Circle.extend({
      * 
      * @return {Boolean}
      */
-    onDragend : function()
+    onDragEnd : function()
     {
         if (!this.isDraggable()) {
             return false;
@@ -130,6 +133,7 @@ graphiti.LineResizeHandle = graphiti.Circle.extend({
             if (target !== null) {
                 this.onDrop(target);
                 target.onDragLeave(port);
+                this.getCanvas().getCurrentSelection().setGlow(false);
             }
         }
 

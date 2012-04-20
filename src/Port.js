@@ -199,7 +199,7 @@ graphiti.Port = graphiti.Circle.extend({
      * 
      * @return {boolean}
      **/
-    onDragstart : function()
+    onDragStart : function()
     {
         this.originalSnapToGrid = this.parent.getCanvas().getSnapToGrid();
         this.originalSnapToGeometry = this.parent.getCanvas().getSnapToGeometry();
@@ -223,7 +223,10 @@ graphiti.Port = graphiti.Circle.extend({
      **/
     onDrag:function(dx, dy)
     {
+      this.isInDragDrop = true;
+
       this._super( dx, dy);
+      
       this.parent.getCanvas().showConnectionLine(this.ox+this.getParent().getAbsoluteX(), this.oy+this.getParent().getAbsoluteY(), 
                                                  this.getAbsoluteX(), this.getAbsoluteY());
 
@@ -237,7 +240,6 @@ graphiti.Port = graphiti.Circle.extend({
               target.onDragEnter(this);
           }
       }
-      this.isInDragDrop = true;
       this.currentTarget=target;         
     },
     
@@ -245,7 +247,7 @@ graphiti.Port = graphiti.Circle.extend({
     /**
      * @private
      **/
-    onDragend:function()
+    onDragEnd:function()
     {
       this.parent.getCanvas().setSnapToGrid(this.originalSnapToGrid );
       this.parent.getCanvas().setSnapToGeometry( this.originalSnapToGeometry );
@@ -253,7 +255,7 @@ graphiti.Port = graphiti.Circle.extend({
       // Don't call the parent implementation. This will create an CommandMove object
       // and store them o the CommandStack for the undo operation. This makes no sense for a
       // port.
-      // graphiti.Rectangle.prototype.onDragend.call(this); DON'T call the super implementation!!!
+      // graphiti.Rectangle.prototype.onDragEnd.call(this); DON'T call the super implementation!!!
     
       this.setAlpha(1.0);
     
@@ -264,74 +266,92 @@ graphiti.Port = graphiti.Circle.extend({
       // 2.) Remove the bounding line from the canvas
       //
       this.parent.getCanvas().hideConnectionLine();
-
-      if(this.currentTarget!==null)
-      {
-         this.onDrop(this.currentTarget);
-         this.currentTarget.onDragLeave(this);
-         this.currentTarget=null;
-      }
       this.isInDragDrop =false;
     },
     
     /**
-     * @param {graphiti.Port} port The port under the current drag object
+     * @param {graphiti.Figure} figure The figure which is currently dragging
+     * 
+     * @return {Boolean} true if this port accepts the dragging port for a drop operation
      * @private
      **/
-    onDragEnter : function(/* :graphiti.Port */port)
+    onDragEnter : function( draggedFigure )
     {
-      
+    	// Ports accepts only Ports as DropTarget
+    	//
+    	if(!(draggedFigure instanceof graphiti.Port)){
+    		return false;
+    	}
+    	
         // Create a CONNECT Command to determine if we can show a Corona. Only valid
         // dropTarget did have a corona
         var request = new graphiti.EditPolicy(graphiti.EditPolicy.CONNECT);
         request.canvas = this.parent.getCanvas();
-        request.source = port;
+        request.source = draggedFigure;
         request.target = this;
         var command = this.createCommand(request);
 
         if (command === null) {
-            return;
+            return false;
         }
 
-        this.parent.getCanvas().connectionLine.setColor(new graphiti.util.Color("#3f72bf"));
-        this.parent.getCanvas().connectionLine.setLineWidth(4);
-        this.showCorona(true);
+        this.parent.getCanvas().connectionLine.setGlow(true);
+        this.setGlow(true);
+        return true;
     },
     
     /**
-     * @param {graphiti.Port} port The port which we leave with the drag object.
+     * @method
+     * Called if the DragDrop object leaving the current hover figure.
+     * 
+     * @param {graphiti.Figure} figure The figure which is currently dragging
      * @private
      **/
-    onDragLeave:function(/*:graphiti.Port*/ port)
+    onDragLeave:function( figure )
     {
-      this.parent.getCanvas().connectionLine.setColor(new  graphiti.util.Color(0,0,0));
-      this.parent.getCanvas().connectionLine.setLineWidth(1);
-      this.showCorona(false);
+		// Ports accepts only Ports as DropTarget
+		//
+		if(!(figure instanceof graphiti.Port)){
+			return;
+		}
+		
+        this.parent.getCanvas().connectionLine.setGlow(false);
+        this.setGlow(false);
     },
     
     /**
-     * @param {graphiti.Port} port The drop target.
+     * @method
+     * Called if the user drop this element onto the dropTarget
+     * 
+     * @param {graphiti.Figure} dropTarget The drop target.
      * @private
      **/
-    onDrop:function(/*:graphiti.Port*/ port)
+    onDrop:function(dropTarget)
     {
-        var request = new graphiti.EditPolicy(graphiti.EditPolicy.CONNECT);
+    	// Ports accepts only Ports as DropTarget
+    	//
+    	if(!(dropTarget instanceof graphiti.Port)){
+    		return;
+    	}
+ 
+    	var request = new graphiti.EditPolicy(graphiti.EditPolicy.CONNECT);
         request.canvas = this.parent.getCanvas();
-        request.source = port;
+        request.source = dropTarget;
         request.target = this;
         var command = this.createCommand(request);
         
         if(command!==null){
            this.parent.getCanvas().getCommandStack().execute(command);
         }
-        this.showCorona(false);
+        this.setGlow(false);
     },
    
 
     
     /**
-     * Callback method of the movemoent of a figure
-     * @see graphiti.Figure#attachMoveListener
+     * @method
+     * Callback method of the movement of a figure
+     * 
      * @param {graphiti.Figure} figure The figure which has been moved
      **/
     onOtherFigureMoved:function(/*:graphiti.Figure*/ figure)
@@ -344,10 +364,11 @@ graphiti.Port = graphiti.Circle.extend({
     },
     
     /**
+     * @method
      * Return the name of this port.
      *
      * @see graphiti.Node#getPort
-     * @type String
+     * @return {String}
      **/
     getName:function()
     {
@@ -355,6 +376,7 @@ graphiti.Port = graphiti.Circle.extend({
     },
     
     /**
+     * @method
      * Set the name of this port.
      *
      * @see graphiti.Node#getPort
@@ -375,32 +397,34 @@ graphiti.Port = graphiti.Circle.extend({
     },
     
     /**
-     *
+     * @method
+     * Highlight this port
+     * 
      * @private
      */
-    showCorona:function (/*:boolean*/ flag)
+    setGlow:function (/*:boolean*/ flag)
     {
-      if(flag===true)
+      if(flag===true && this.corona===null)
       {
-       this.corona = new graphiti.Corona();
-       this.corona.setDimension(this.getWidth()+(this.getCoronaWidth()*2),this.getWidth()+(this.getCoronaWidth()*2));
-       this.parent.getCanvas().addFigure(this.corona,this.getAbsoluteX()-this.getCoronaWidth()-this.getWidth()/2, this.getAbsoluteY()-this.getCoronaWidth()-this.getHeight()/2);
+    	  this.corona = new graphiti.Corona();
+    	  this.corona.setDimension(this.getWidth()+(this.getCoronaWidth()*2),this.getWidth()+(this.getCoronaWidth()*2));
+    	  this.parent.getCanvas().addFigure(this.corona,this.getAbsoluteX()-this.getCoronaWidth()-this.getWidth()/2, this.getAbsoluteY()-this.getCoronaWidth()-this.getHeight()/2);
       }
       else if(flag===false && this.corona!==null)
       {
-       this.parent.getCanvas().removeFigure(this.corona);
-       this.corona = null;
+    	  this.parent.getCanvas().removeFigure(this.corona);
+    	  this.corona = null;
       }
     },
     
     /**
+     * @method
      * Returns the Command to perform the specified Request or null.<br>
      * Inherited figures can override this method to return their own implementation
      * of the request.<br>
      *
      * @param {graphiti.EditPolicy} request describes the Command being requested
-     * @return null or a graphiti.Command
-     * @type graphiti.Command 
+     * @return {graphiti.command.Command} null or a valid command
      **/
     createCommand:function(/*:graphiti.EditPolicy*/ request)
     {
@@ -442,6 +466,7 @@ graphiti.Port = graphiti.Circle.extend({
         if (this.isInDragDrop === true) {
             return;
         }
+    	console.log(this.isInDragDrop);
 
         this._super();
     },
