@@ -119,7 +119,6 @@ graphiti.layout.router.AbstractRouter = Class.extend({
        return this.getDirection(rect, p);
     },
     
-    
     /**
      * @method
      * Routes the Connection.
