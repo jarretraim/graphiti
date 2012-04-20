@@ -135,7 +135,7 @@ graphiti.Connection = graphiti.Line.extend({
     setSourceDecorator:function(/*:graphiti.ConnectionDecorator*/ decorator)
     {
       this.sourceDecorator = decorator;
-      this.routingRequired =true;
+      this.routingRequired = true;
       this.repaint();
     },
     
@@ -336,7 +336,7 @@ graphiti.Connection = graphiti.Line.extend({
     	this.setGlow(false);
     },
 
- 
+
     /**
      * Return the recalculated position of the start point if we have set an anchor.
      * 
@@ -503,7 +503,7 @@ graphiti.Connection = graphiti.Line.extend({
       if(this.sourcePort===null){
         return;
       }
-      
+      this.routingRequired = true;
       this.sourceAnchor.setOwner(this.sourcePort);
       this.fireSourcePortRouteEvent();
       this.sourcePort.attachMoveListener(this);
@@ -538,6 +538,7 @@ graphiti.Connection = graphiti.Line.extend({
         return;
       }
       
+      this.routingRequired = true;
       this.targetAnchor.setOwner(this.targetPort);
       this.fireTargetPortRouteEvent();
       this.targetPort.attachMoveListener(this);

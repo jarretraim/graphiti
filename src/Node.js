@@ -213,6 +213,7 @@ graphiti.Node = graphiti.Figure.extend({
             }
         }
     },
+    
 
     /**
      * @method

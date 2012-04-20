@@ -347,7 +347,6 @@ graphiti.Port = graphiti.Circle.extend({
     },
    
 
-    
     /**
      * @method
      * Callback method of the movement of a figure
@@ -466,7 +465,6 @@ graphiti.Port = graphiti.Circle.extend({
         if (this.isInDragDrop === true) {
             return;
         }
-    	console.log(this.isInDragDrop);
 
         this._super();
     },
