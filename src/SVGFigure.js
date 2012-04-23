@@ -20,7 +20,6 @@ graphiti.SVGFigure = graphiti.Rectangle.extend({
 
       this.setResizeable(false);
       this.setLineWidth(0);
-      this.setBackgroundColor(null);
       
       // collection of SVG DOM nodes
       this.svgNodes=null;
@@ -63,9 +62,8 @@ graphiti.SVGFigure = graphiti.Rectangle.extend({
             attributes = {};
         }
 
-        attributes.width = this.width;
-        attributes.height = this.height;
-
+        attributes.fill ="none";
+        
         if(this.svgNodes!==null){
             this.svgNodes.transform("t"+this.x+","+this.y);
         }
