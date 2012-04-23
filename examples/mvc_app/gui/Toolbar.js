@@ -49,7 +49,7 @@ example.mvc_simple.Toolbar = Class.extend({
 	 * @method
 	 * Called after a registion in the canvas if the current main selection has been changed.
 	 * 
-	 * @param {graphiti.Figure}
+	 * @param {graphiti.Figure} figure
 	 */
 	onSelectionChanged : function(figure){
 		this.deleteButton.button( "option", "disabled", figure===null );

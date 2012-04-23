@@ -74,6 +74,13 @@ example.mvc_simple.MyGraphicalEditor = graphiti.ui.parts.GraphicalEditor.extend(
                   size:50,
 	              paneSelector: "#toolbar"
 	            },
+             east: {
+                  resizable:true,
+                  closable:true,
+                  size:150,
+                  resizeWhileDragging:true,
+                  paneSelector: "#propertypane"
+                },
 	            center: {
 	              resizable:false,
 	              closable:false,
@@ -83,7 +90,8 @@ example.mvc_simple.MyGraphicalEditor = graphiti.ui.parts.GraphicalEditor.extend(
 	            }
 	       });
 	       
-           this.toolbar = new example.mvc_simple.Toolbar("toolbar",  this.getGraphicalViewer() );
+           this.toolbar      = new example.mvc_simple.Toolbar("toolbar",  this.getGraphicalViewer() );
+           this.propertypane = new example.mvc_simple.PropertyPane("propertypane",  this.getGraphicalViewer() );
 
 	    }
 		catch(e)

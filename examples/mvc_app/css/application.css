@@ -1,37 +1,76 @@
+// Global settings
+body{
+ font-family:Helvetica, Arial, Verdana, sans-serif;
+ color:#6b6b6b;
+}
+
+input{
+ background: none repeat scroll 0 0 #f8f8f8;
+ border-color: #C6C6C6 #DADADA #EAEAEA;
+ border-radius: 4px 4px 4px 4px;
+ -moz-box-sizing: border-box;
+ padding-left:7px;
+ border-style: solid ;
+ border-width: 1px;
+ vertical-align: middle;
+ height:25px;
+ font-size:14px;
+ line-height:25px;
+}
+
+
 #container{
-	padding:0px;
-	margin:0px;
+ padding:0px;
+ margin:0px;
 }
 
 
 #navigation{
-	padding:0px;
-	margin:0px;
-	background : transparent url(background_01.jpg);
-	text-align: center;
+ padding:0px;
+ margin:0px;
+ background : transparent url(background_01.jpg);
+ text-align: center;
 }
-
 
 #toolbar{
-	background: url("gradient.png") repeat-x scroll 0 -110px #7D7D7D;
-	padding:8px;
-	margin:0px;
-	height:50px;
+ background: url("gradient.png") repeat-x scroll 0 -110px #7D7D7D;
+ padding:8px;
+ margin:0px;
+ height:50px;
+ border:0px;
 }
 
-.toolbar_delimiter{
-	margin-left:40px;
+   
+/******************************************************************
+ * Einstellungen der PropertyViews im Editmodus der "Form".
+ ******************************************************************/
+#propertypane {
+ padding:0px;
+ margin:0px;
+ width:150px;
+ background-color:#7D7D7D;
+ border-top:0px;
 }
 
-#content{
-	padding:0px;
-	margin:0px;
+/*container of a single property entry*/
+.property_container {
+ padding:5px;
+ padding-bottom:15px;
 }
 
-#canvas{
-	padding:0px;
-	margin:0px;
-	background : transparent url(background_05.png);
+.toolbar_delimiter {
+  margin-left:40px;
+}
+
+#content {
+ padding:0px;
+ margin:0px;
+}
+
+#canvas {
+ padding:0px;
+ margin:0px;
+ background : transparent url(background_05.png);
 }
 
 
