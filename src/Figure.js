@@ -92,7 +92,7 @@ graphiti.Figure = Class.extend({
      */
     setCanvas: function( canvas )
     {
-      // remove the shape if we reset the canvas and the element
+     // remove the shape if we reset the canvas and the element
         // was already drawn
       if(canvas===null && this.shape!==null)
       {
@@ -249,6 +249,7 @@ graphiti.Figure = Class.extend({
          
          // enrich with common properties
          attributes.opacity = this.alpha;
+         attributes.id = this.id;
          
          this.shape.attr(attributes);
      },
@@ -440,7 +441,7 @@ graphiti.Figure = Class.extend({
      * @param {graphiti.Figure} figure The figure which is currently dragging
      * @template
      **/
-    onDragLeave:function(draggedFigure)
+    onDragLeave:function( draggedFigure )
     {
     },
 
@@ -757,28 +758,6 @@ graphiti.Figure = Class.extend({
         return (iX >= x && iX <= iX2 && iY >= y && iY <= iY2);
     },
 
-    /**
-     * @method
-     * Returns the z-index of the element.
-     * @return {Number} 
-     **/
-    getZOrder:function()
-    {
-    // TODO
-//        return this.html.style.zIndex;
-      return 1;
-    },
-
-    /**
-     * @method
-     * Change the z-order of the element.
-     * @param {Number} index Set the new z-index of the element
-     **/
-    setZOrder:function( index)
-    {
-    // TODO
-//        this.html.style.zIndex=index;
-    },
 
     /**
      * @method

@@ -9,7 +9,6 @@
    <link type="text/css" rel="stylesheet" href="./css/jquery.layout.css" />
    <link type="text/css" rel="stylesheet" href="./css/application.css" />
 
-
   <!-- common, all times required, imports -->
 	<SCRIPT src="../../lib/raphael.js"></SCRIPT>
 	<SCRIPT src="../../lib/jquery-1.6.4.js"></SCRIPT>
@@ -49,6 +48,7 @@
 	<SCRIPT src="../../src/Circle.js"></SCRIPT>
 	<SCRIPT src="../../src/CompartmentFigure.js"></SCRIPT>
 	<SCRIPT src="../../src/Line.js"></SCRIPT>
+	<SCRIPT src="../../src/PolyLine.js"></SCRIPT>
 	<SCRIPT src="../../src/Connection.js"></SCRIPT>
 	<SCRIPT src="../../src/VectorFigure.js"></SCRIPT>
 	<SCRIPT src="../../src/ResizeHandle.js"></SCRIPT>
@@ -85,12 +85,16 @@
 	<SCRIPT src="./presenter/ConnectionFigure.js"></SCRIPT>
 	<SCRIPT src="./presenter/InputPort.js"></SCRIPT>
 	<SCRIPT src="./presenter/OutputPort.js"></SCRIPT>
+	
 	<SCRIPT src="./command/CommandMove.js"></SCRIPT>
 	<SCRIPT src="./command/CommandConnect.js"></SCRIPT>
 	<SCRIPT src="./command/CommandReconnect.js"></SCRIPT>
 	<SCRIPT src="./command/CommandDisconnect.js"></SCRIPT>
 	<SCRIPT src="./command/CommandAdd.js"></SCRIPT>
+	<SCRIPT src="./command/CommandDrop.js"></SCRIPT>
+	<SCRIPT src="./command/CommandInfix.js"></SCRIPT>
 	<SCRIPT src="./command/CommandDelete.js"></SCRIPT>
+	
 	<SCRIPT src="./jsonToModel.js"></SCRIPT>
 
 	<style>
@@ -134,9 +138,9 @@ $(document).ready(function() {
 <body id="container">
 
    <div id="navigation" class="">
-    	<div class="palette_node_element">AND</div>
-    	<div class="palette_node_element">OR</div>
-    	<div class="palette_node_element">NAND</div>
+    	<div class="palette_node_element graphiti_droppable">AND</div>
+    	<div class="palette_node_element graphiti_droppable">OR</div>
+    	<div class="palette_node_element graphiti_droppable">NAND</div>
    </div>
    
    <div id="content">

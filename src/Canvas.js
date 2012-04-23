@@ -33,14 +33,57 @@ graphiti.Canvas = Class.extend(
         this.setScrollArea(document.body);
         this.canvasId = canvasId;
         this.html = $("#"+canvasId);
+        
+        // Create the droppable area for the css class "graphiti_droppable"
+        // This can be done by a palette of toolbar or something else.
+        // For more information see : http://jqueryui.com/demos/droppable/
+        //
+        this.html.droppable({
+            accept: '.graphiti_droppable',
+            over: $.proxy(function(event, ui) {
+                this.onDragEnter(ui.draggable);
+            },this),
+            out: $.proxy(function(event, ui) {
+                this.onDragLeave(ui.draggable);
+            },this),
+            drop:$.proxy(function(event, ui){
+                event = this._getEvent(event);
+                var pos = this.fromDocumentToCanvasCoordinate(event.clientX, event.clientY);
+                this.onDrop(ui.draggable, pos.getX(), pos.getY());
+            },this)
+        });
+        
+        // Create the jQuery-Draggable for the palette -> canvas drag&drop interaction
+        //
+        $(".graphiti_droppable").draggable({
+            appendTo:"body",
+            stack:"body",
+            zIndex: 27000,
+            helper:"clone",
+            drag: $.proxy(function(event, ui){
+                event = this._getEvent(event);
+                var pos = this.fromDocumentToCanvasCoordinate(event.clientX, event.clientY);
+                this.onDrag(ui.draggable, pos.getX(), pos.getY());
+            },this),
+            stop: function(e, ui){
+                this.isInExternalDragOperation=false;
+            },
+            start: function(e, ui){
+                this.isInExternalDragOperation=true;
+                $(ui.helper).addClass("shadow");
+            }
+       });
+
+        // painting stuff
+        //
         this.paper = Raphael(canvasId, this.getWidth(), this.getHeight());
             
         this.zoomFactor = 1.0;
         this.enableSmoothFigureHandling=false;
         this.currentSelection = null;
         this.currentDropTarget=null;
-        this.menu = null;
-        
+        this.isInExternalDragOperation=false;
+                
         this.snapToGridHelper = null;
         this.snapToGeometryHelper = null;
         
@@ -106,12 +149,15 @@ graphiti.Canvas = Class.extend(
             this.html.bind("mousemove touchmove", $.proxy(function(event)
             {
                 event = this._getEvent(event);
-                if (this.mouseDown === false)
-                    return;
-
-                var diffX = event.clientX - this.mouseDownX;
-                var diffY = event.clientY - this.mouseDownY;
-                this.onMouseMove(diffX, diffY);
+                if (this.mouseDown === false){
+                   var pos = this.fromDocumentToCanvasCoordinate(event.clientX, event.clientY);
+                   this.onMouseMove(pos.x, pos.y);
+                }
+                else{
+                   var diffX = event.clientX - this.mouseDownX;
+                   var diffY = event.clientY - this.mouseDownY;
+                   this.onMouseDrag(diffX, diffY);
+                }
             }, this));
         }
         this.html.bind("mousedown touchstart", $.proxy(function(event)
@@ -120,12 +166,9 @@ graphiti.Canvas = Class.extend(
 
             this.mouseDownX = event.clientX;
             this.mouseDownY = event.clientY;
-            var scrollLeft = this.getScrollLeft();
-            var scrollTop = this.getScrollTop();
-            var xOffset = this.getAbsoluteX();
-            var yOffset = this.getAbsoluteY();
+            var pos = this.fromDocumentToCanvasCoordinate(event.clientX, event.clientY);
             this.mouseDown =true;
-            this.onMouseDown(this.mouseDownX + scrollLeft - xOffset, this.mouseDownY + scrollTop - yOffset);
+            this.onMouseDown(pos.x, pos.y);
         }, this));
         
         $(document).bind("keydown",$.proxy(function(event)
@@ -316,11 +359,12 @@ graphiti.Canvas = Class.extend(
      **/
     removeFigure:function(figure)
     {
-        this.figures.remove(figure);
-        
         if(figure instanceof graphiti.Line){
-            this.lines.remove(figure);
+           this.lines.remove(figure);
          }
+        else {
+           this.figures.remove(figure);
+        }
 
         figure.setCanvas(null);
 
@@ -336,6 +380,7 @@ graphiti.Canvas = Class.extend(
           this.setCurrentSelection(null);
         }
 
+        figure.setModel(null);
         this.setDocumentDirty();
     },
     
@@ -776,10 +821,6 @@ graphiti.Canvas = Class.extend(
                 {
                     result = figure;
                 }
-                else if (result.getZOrder() < figure.getZOrder())
-                {
-                    result = figure;
-                }
             }
         }
         return result;
@@ -803,9 +844,7 @@ graphiti.Canvas = Class.extend(
         {
             if(result===null){
                result = figure;
-            }
-            else if(result.getZOrder() < figure.getZOrder()){
-               result = figure;
+               break;
             }
         }
       }
@@ -835,9 +874,8 @@ graphiti.Canvas = Class.extend(
         {
             if(result===null){
                result = line;
+               break;
             }
-         //   else if(result.getZOrder() < line.getZOrder())
-         //      result = line;
         }
       }
       return result;
@@ -1058,8 +1096,82 @@ graphiti.Canvas = Class.extend(
     onClick: function(){
     },
 
+    /**
+     * @method
+     * Called by the framework during drag&drop operations.<br>
+     * Droppable can be setup with:
+     * <pre>
+     *     $(".graphiti_droppable").draggable({
+     *          appendTo:"#container",
+     *          stack:"#container",
+     *          zIndex: 27000,
+     *          helper:"clone",
+     *          start: function(e, ui){$(ui.helper).addClass("shadow");}
+     *     });
+     * </pre>
+     * Graphiti use the jQuery draggable/droppable lib. Please inspect
+     * http://jqueryui.com/demos/droppable/ for further information.
+     * 
+     * @param {HTMLNode} draggedDomNode The DOM element which is currently dragging
+     * 
+    * @template
+     **/
+    onDragEnter : function( draggedDomNode )
+    {
+    },
+ 
+    
+    /**
+     * @method
+     * Called if the DragDrop object is moving around.<br>
+     * <br>
+     * Graphiti use the jQuery draggable/droppable lib. Please inspect
+     * http://jqueryui.com/demos/droppable/ for further information.
+     * 
+     * @param {HTMLElement} draggedDomNode The dragged DOM element.
+     * @param {Number} x the x coordinate of the drag
+     * @param {Number} y the y coordinate of the drag
+     * 
+     * @template
+     **/
+    onDrag:function(draggedDomNode, x, y )
+    {
+    },
 
+        
+    /**
+     * @method
+     * Called if the DragDrop object leaving the current hover figure.<br>
+     * <br>
+     * Graphiti use the jQuery draggable/droppable lib. Please inspect
+     * http://jqueryui.com/demos/droppable/ for further information.
+     * 
+     * @param {HTMLElement} draggedDomNode The figure which is currently dragging
+     * 
+     * @template
+     **/
+    onDragLeave:function( draggedDomNode )
+    {
+    },
 
+    
+    /**
+     * @method
+     * Called if the user drop the droppedDomNode onto the canvas.<br>
+     * <br>
+     * Graphiti use the jQuery draggable/droppable lib. Please inspect
+     * http://jqueryui.com/demos/droppable/ for further information.
+     * 
+     * @param {HTMLElement} droppedDomNode The dropped DOM element.
+     * @param {Number} x the x coordinate of the drop
+     * @param {Number} y the y coordinate of the drop
+     * 
+     * @template
+     **/
+    onDrop:function(droppedDomNode, x, y)
+    {
+    },
+    
     /**
      * @private
      **/
@@ -1130,6 +1242,18 @@ graphiti.Canvas = Class.extend(
      */
     onMouseMove : function(/* :int */dx,/* :int */dy)
     {
+        if(this.isInExternalDragOperation===true){
+        }
+    },
+    
+    /**
+     * @private
+     */
+    onMouseDrag : function(/* :int */dx,/* :int */dy)
+    {
+        if(this.isInExternalDragOperation===true){
+        }
+        
         if (this.mouseDraggingElement !== null) {
             this.mouseDraggingElement.onDrag(dx, dy);
             

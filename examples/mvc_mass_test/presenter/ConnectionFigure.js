@@ -13,24 +13,6 @@ example.mvc_simple.ConnectionFigure= graphiti.Connection.extend({
     },
     
 
-    propertyChange : function(event)
-    {
-        switch (event.property) {
-        case graphiti.mvc.Event.PROPERTY_CHANGED:
-            this.paint();
-            break;
-        case graphiti.mvc.Event.SOURCE_CHANGED:
-            this.refreshSourcePort();
-            break;
-        case graphiti.mvc.Event.TARGET_CHANGED:
-            this.refreshTargetPort();
-            break;
-        default:
-            break;
-        }
-    },
-
-
     
     /**
      * Returns the Command to perform the specified Request or null.

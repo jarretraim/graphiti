@@ -19,7 +19,7 @@ example.mvc_simple.CommandAdd = graphiti.command.Command.extend({
 	 * 
 	 **/
 	execute : function() {
-		this.redo();
+        this.parent.addNode(this.node);
 	},
 
 	/**
@@ -27,7 +27,7 @@ example.mvc_simple.CommandAdd = graphiti.command.Command.extend({
 	 *
 	 **/
 	redo : function() {
-		this.parent.addNode(this.node);
+        this.execute();
 	},
 
 	/** 

@@ -38,9 +38,18 @@ example.mvc_simple.CommandReconnect= graphiti.command.Command.extend({
      **/
     execute:function()
     {
-       this.redo();
+       this.con.setSourceModel(this.newSourceModel);
+       this.con.setTargetModel(this.newTargetModel);
     },
     
+    /**
+     * Redo the command after the user has undo this command.
+     *
+     **/
+    redo : function() {
+        this.execute();
+    },
+
     /**
      * Execute the command the first time
      * 
@@ -59,15 +68,6 @@ example.mvc_simple.CommandReconnect= graphiti.command.Command.extend({
     {
       this.con.setSourceModel(this.oldSourceModel);
       this.con.setTargetModel(this.oldTargetModel);
-    },
-    
-    /** 
-     * Redo the command after the user has undo this command
-     *
-     **/
-    redo:function()
-    {
-      this.con.setSourceModel(this.newSourceModel);
-      this.con.setTargetModel(this.newTargetModel);
     }
+    
 });

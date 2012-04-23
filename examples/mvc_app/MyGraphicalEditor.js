@@ -45,8 +45,6 @@ example.mvc_simple.MyGraphicalEditor = graphiti.ui.parts.GraphicalEditor.extend(
 		   // ...and the factory for the editparts/figures
 	       this.getGraphicalViewer().setEditPartFactory(new example.mvc_simple.MyGraphicalEditorFactory());
 	
-//	       this.getGraphicalViewer().setViewPort("scrollarea");
-//	       this.getGraphicalViewer().setPanning(true);
 	       this.getGraphicalViewer().setCurrentSelection(null);
 	       
 	       
@@ -85,14 +83,6 @@ example.mvc_simple.MyGraphicalEditor = graphiti.ui.parts.GraphicalEditor.extend(
 	            }
 	       });
 	       
-           $(".palette_node_element").draggable({
-               appendTo:"#container",
-               stack:"#container",
-               zIndex: 27000,
-               helper:"clone",
-               start: function(e, ui){$(ui.helper).addClass("shadow");}
-          });
-           
            this.toolbar = new example.mvc_simple.Toolbar("toolbar",  this.getGraphicalViewer() );
 
 	    }

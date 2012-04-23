@@ -235,7 +235,7 @@ graphiti.Line = graphiti.Figure.extend({
     * @param {Number} x the x coordinate of the end point
     * @param {Number} y the y coordinate of the end point
     **/
-   setEndPoint:function(/*:int*/x, /*:int*/ y)
+   setEndPoint:function(x, y)
    {
      if(this.endX===x && this.endY===y){
         return;

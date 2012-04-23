@@ -40,20 +40,20 @@ example.mvc_simple.CommandConnect = graphiti.command.Command.extend({
      **/
     execute:function()
     {
-       this.redo();
+        if(this.model===null){
+            this.model= new example.mvc_simple.ConnectionModel(this.source.getId(), this.target.getId());
+        }
+        this.source.addConnectionModel(this.model);
     },
     
     /**
      * Redo the command after the user has undo this command.
      *
      **/
-    redo:function()
-    {
-       if(this.model===null){
-          this.model= new example.mvc_simple.ConnectionModel(this.source.getId(), this.target.getId());
-       }
-       this.source.addConnectionModel(this.model);
+    redo : function() {
+        this.execute();
     },
+
     
     /** 
      * Undo the command.

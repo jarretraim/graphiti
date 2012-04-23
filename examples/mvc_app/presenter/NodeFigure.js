@@ -46,6 +46,23 @@ example.mvc_simple.NodeFigure = graphiti.Rectangle.extend({
 		// this.initPorts();
 	},
 
+    /**
+     * @method
+     * Called if the user drop this element onto the dropTarget. <br>
+     * In our case we split the connection and insert this element.
+     * 
+     * @param {graphiti.Figure} dropTarget The drop target.
+     * @private
+     **/
+    onDrop:function(dropTarget)
+    {
+        if(dropTarget instanceof graphiti.Connection){
+            var command = new example.mvc_simple.CommandInfix(dropTarget.getModel(), this.getModel());
+            this.getCanvas().getCommandStack().execute(command);
+        }
+    },
+    
+
 
     /**
 	 * Returns the List of the connection model objects for which this Figure's

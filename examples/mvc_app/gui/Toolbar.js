@@ -34,7 +34,13 @@ example.mvc_simple.Toolbar = Class.extend({
 		this.html.append(this.deleteButton);
 		this.deleteButton.button().click($.proxy(function(){
 			var node = this.view.getCurrentSelection().getModel();
-			var command = new example.mvc_simple.CommandDelete(node);
+			var command=null;
+			if(node instanceof example.mvc_simple.ConnectionModel){
+	            command = new example.mvc_simple.CommandDisconnect(node);
+			}
+			else {
+	            command = new example.mvc_simple.CommandDelete(node);
+			}
 			this.view.getCommandStack().execute(command);
 		},this)).button( "option", "disabled", true );
 	},

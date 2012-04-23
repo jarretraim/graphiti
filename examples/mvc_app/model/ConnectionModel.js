@@ -19,7 +19,12 @@ example.mvc_simple.ConnectionModel = graphiti.mvc.AbstractConnectionModel.extend
      **/
     setSourceModel:function( model)
     {
-       this.sourceNodeId = model.getId();
+        if(model !== null){
+            this.sourceNodeId = model.getId();
+        }
+        else{
+            this.sourceNodeId = null;
+        }
    
        // inform all listener, mainly the visual representation, about the changes.
        this.firePropertyChange(graphiti.mvc.Event.SOURCE_CHANGED,null, model);
@@ -41,7 +46,12 @@ example.mvc_simple.ConnectionModel = graphiti.mvc.AbstractConnectionModel.extend
     **/
     setTargetModel:function( model)
     {
-       this.targetNodeId = model.getId();
+       if(model!==null){
+           this.targetNodeId = model.getId();
+       }
+       else{
+           this.targetNodeId = null;
+       }
     
        // inform all listener, mainly the visual representation, about the changes.
        this.firePropertyChange(graphiti.mvc.Event.TARGET_CHANGED,null, model);

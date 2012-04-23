@@ -97,7 +97,6 @@ graphiti.CompartmentFigure = graphiti.Figure.extend({
     {
       // The child of a compartment is always above the compartment
       //
-      figure.setZOrder(this.getZOrder()+1);
       figure.setParent(this);
     
       // Add the element to the child array
@@ -119,25 +118,7 @@ graphiti.CompartmentFigure = graphiti.Figure.extend({
       this.children.remove(figure);
     },
     
-    
-    /**
-     * @method
-     * Set the z-order of the leemnt.
-     *
-     * @param {Number} index Set the new z-index of the element
-     **/
-    setZOrder:function( index)
-    {
-      /*:NAMESPACE*/Node.prototype.setZOrder.call(this,index);
-    
-      // The child of a compartment must be always above the compartment.
-      //
-      for(var i=0; i<this.children.getSize();i++)
-      {
-        this.children.get(i).setZOrder(index+1);
-      }
-    },
-    
+
     /**
      * @method
      * Set the new position of the object

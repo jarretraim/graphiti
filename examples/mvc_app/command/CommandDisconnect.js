@@ -3,8 +3,11 @@
  **/
 example.mvc_simple.CommandDisconnect=graphiti.command.Command.extend({
     
-
-    init : function(/* :draw2d.MountModel */connection)
+    /**
+     * 
+     * @param {example.mvc_simple.ConnectionModel} connection
+     */
+    init : function(connection)
     {
         this._super("Disconnect Storage");
 
@@ -17,15 +20,15 @@ example.mvc_simple.CommandDisconnect=graphiti.command.Command.extend({
      */
     execute : function()
     {
-        this.redo();
+        this.source.removeConnectionModel(this.connection);
     },
 
     /**
      * Redo the command after the user has undo this command.
-     */
-    redo : function()
-    {
-        this.source.removeConnectionModel(this.connection);
+     *
+     **/
+    redo : function() {
+        this.execute();
     },
 
     /**

@@ -22,7 +22,6 @@ graphiti.LineResizeHandle = graphiti.Circle.extend({
         }
 
         this.setBackgroundColor(new graphiti.util.Color(0, 255, 0));
-        this.setZOrder(10000);
         this.currentTarget = null;
 
         this.setSelectable(false);

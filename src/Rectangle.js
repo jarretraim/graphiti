@@ -20,6 +20,8 @@ graphiti.Rectangle = graphiti.VectorFigure.extend({
       this.setBackgroundColor( new graphiti.util.Color(0,0,0));
       this.setColor(new graphiti.util.Color(0,0,0));
 
+      // set some good defaults
+      //
       if(typeof width === "undefined"){
         this.setDimension(10, 10);
       }

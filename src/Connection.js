@@ -7,7 +7,7 @@
  * @author Andreas Herz
  * @extends graphiti.Line
  */
-graphiti.Connection = graphiti.Line.extend({
+graphiti.Connection = graphiti.PolyLine.extend({
     NAME : "graphiti.Connection", // only for debugging
 
 //    DEFAULT_ROUTER: new graphiti.layout.router.DirectRouter(),
@@ -33,17 +33,7 @@ graphiti.Connection = graphiti.Line.extend({
     
       this.router =this.DEFAULT_ROUTER;
       
-      // internal status handling for performance reasons
-      //
-      this.routingRequired = true;
-      this.svgPathString = null;
-      
-      this.lineSegments = new graphiti.util.ArrayList();
-    
       this.children = new graphiti.util.ArrayList();
-    
-      this.setColor(new  graphiti.util.Color(0,0,115));
-      this.setLineWidth(1);
     },
     
     
@@ -80,7 +70,6 @@ graphiti.Connection = graphiti.Line.extend({
         this.routingRequired =true;
         this.repaint();
     },
-    
     
     /**
      * You can't drag&drop the resize handles of a connector.
@@ -238,74 +227,17 @@ graphiti.Connection = graphiti.Line.extend({
     /**
      * @private
      **/
-    repaint:function()
+    repaint:function(attributes)
     {
       if(this.shape===null){
           return;
       }
       
-      var i=0;
+      if(this.sourcePort===null || this.targetPort===null){
+          return;
+      }
       
-       try
-       {
-         if(this.sourcePort===null || this.targetPort===null){
-            return;
-         }
-    
-         // routing is only neccessary if any start or endpoint has ben changed....This is an expensive method
-         // avooid unneccessary usage
-         //
-         if(this.routingRequired ===true){
-        	
-	        this.startStroke();
-	    
-	        // Use the internal router if any has been set....
-	        //
-	        this.router.route(this);
-	    
-	        // paint the decorator if any exists
-	        //
-	        if(this.getSource().getParent().isMoving===false && this.getTarget().getParent().isMoving===false )
-	        {
-	          if(this.targetDecorator!==null){
-	            this.targetDecorator.paint(new graphiti.Graphics(this.graphics,this.getEndAngle(),this.getEndPoint()));
-	          }
-	    
-	          if(this.sourceDecorator!==null){
-	            this.sourceDecorator.paint(new graphiti.Graphics(this.graphics,this.getStartAngle(),this.getStartPoint()));
-	          }
-	        }
-	        
-	        if(this.shape!==null)
-	        {
-	          var ps = this.getPoints();
-	          var p = ps.get(0);
-	          var path = "M"+p.x+" "+p.y;
-	          for( i=0;i<ps.getSize();i++)
-	          {
-	            p = ps.get(i);
-	            path=path+"L"+p.x+" "+p.y;
-	          }
-	          this.svgPathString = path;
-	        }
-	        
-	        this.finishStroke();
-	    
-	        for( i=0; i<this.children.getSize();i++)
-	        {
-	            var entry = this.children.get(i);
-	            entry.locator.relocate(entry.figure);
-	        }
-	        this.routingRequired=false;
-
-        }
-      }
-      catch(e)
-      {
-          alert(e);
-          pushErrorStack(e,"repaint:function()");
-      }
-      this._super({path:this.svgPathString});
+      this._super(attributes);
     },
     
 
@@ -368,72 +300,29 @@ graphiti.Connection = graphiti.Line.extend({
       }
      },
     
-    
-    /**
-     * @private
-     *
-     **/
-    startStroke:function()
-    {
-     this.oldPoint=null;
-     this.lineSegments = new graphiti.util.ArrayList();
-    },
-    
-    /**
-     * @private
-     *
-     **/
-    finishStroke:function()
-    {
-      this.oldPoint=null;
-    },
-    
-    /**
-     * Returns the fulcrums of the connection
-     *
-     * @return an graphiti.util.ArrayList of type graphiti.Point
-     * @type graphiti.util.ArrayList 
-     **/
-    getPoints:function()
-    {
-      var result = new graphiti.util.ArrayList();
-      var line=null;
-      for(var i = 0; i< this.lineSegments.getSize();i++)
-      {
-         line = this.lineSegments.get(i);
-         result.add(line.start);
-      }
-      // add the last point
-      if(line!==null){
-        result.add(line.end);
-      }
-      return result;
-    },
-    
-    /*
-     * @private
-     *
-     **/
-    addPoint:function(/*:graphiti.Point*/ p)
-    {
-      p = new graphiti.geo.Point(p.x, p.y);
-      if(this.oldPoint!==null)
-      {
-        // store the painted line segment for the "mouse selection test"
-        // (required for user interaction)
-        var line = {};
-        line.start = this.oldPoint;
-        line.end   = p;
-        this.lineSegments.add(line);
-      }
-    
-      this.oldPoint = {};
-      this.oldPoint.x = p.x;
-      this.oldPoint.y = p.y;
-    },
-    
-    
-    
+     /**
+      * 
+      * @param event
+      */
+     propertyChange : function(event)
+     {
+         switch (event.property) {
+         case graphiti.mvc.Event.PROPERTY_CHANGED:
+             this.paint();
+             break;
+         case graphiti.mvc.Event.SOURCE_CHANGED:
+             this.refreshSourcePort();
+             break;
+         case graphiti.mvc.Event.TARGET_CHANGED:
+             this.refreshTargetPort();
+             break;
+         default:
+             this._super(event);
+             break;
+         }
+     },
+
+
     /**
      * @method
      * Called by the inherit class if the source port model of the connections has been changed.<br>
@@ -561,37 +450,16 @@ graphiti.Connection = graphiti.Line.extend({
      **/
     onOtherFigureMoved:function(/*:graphiti.Figure*/ figure)
     {
-      this.routingRequired = true;
       if(figure===this.sourcePort){
         this.setStartPoint(this.sourcePort.getAbsoluteX(), this.sourcePort.getAbsoluteY());
       }
       else{
         this.setEndPoint(this.targetPort.getAbsoluteX(), this.targetPort.getAbsoluteY());
       }
+      this._super(figure);
     },
     
-    /**
-     * @method
-    * Checks if the hands over coordinate close to the line. The 'corona' is considered
-    * for this test. This means the point isn't direct on the line. Is it only close to the
-    * line!
-    *
-    * @param {Number} px the x coordinate of the test point
-    * @param {Number} py the y coordinate of the test point
-    * @return {boolean}
-     **/
-    hitTest:function( px, py)
-    {
-      for(var i = 0; i< this.lineSegments.getSize();i++)
-      {
-         var line = this.lineSegments.get(i);
-         if(graphiti.Line.hit(this.corona, line.start.x,line.start.y,line.end.x, line.end.y, px,py)){
-           return true;
-         }
-      }
-      return false;
-    },
-    
+
     /**
      * Returns the angle of the connection at the output port (source)
      *
@@ -706,13 +574,7 @@ graphiti.Connection = graphiti.Line.extend({
         return new graphiti.command.CommandReconnect(this);
       }
  
-      if(request.getPolicy() === graphiti.EditPolicy.DELETE)
-      {
-        if(this.isDeleteable()===true){
-          return new graphiti.command.CommandDelete(this);
-        }
-      }
-    
-      return null;
+
+      return this._super(request);
     }
 });

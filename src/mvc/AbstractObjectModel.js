@@ -79,14 +79,7 @@ graphiti.mvc.AbstractObjectModel = Class.extend({
 	   var event = new graphiti.mvc.Event(this, propertyName, oldValue, newValue);
 	   for(var i=0; i<count;i++)
 	   {
-	       try
-	       {
-	         this.listeners.get(i).propertyChange(event);
-	       }
-	       catch(e)
-	       {
-	          alert("Method: AbstractObjectModel.firePropertyChange\n"+e+ "\nProperty: "+propertyName+"\nListener Class:"+this.listeners.get(i).NAME);
-	       }
+         this.listeners.get(i).propertyChange(event);
 	   }
 	},
 	

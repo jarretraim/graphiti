@@ -51,9 +51,17 @@ example.mvc_simple.CommandMove= graphiti.command.Command.extend({
 	 **/
 	execute:function()
 	{
-	   this.redo();
+      this.model.setPosition(this.newX, this.newY);
 	},
 	
+    /**
+     * Redo the command after the user has undo this command.
+     *
+     **/
+    redo : function() {
+        this.execute();
+    },
+
 	/**
 	 * @method
 	 * Undo the command
@@ -62,15 +70,6 @@ example.mvc_simple.CommandMove= graphiti.command.Command.extend({
 	undo:function()
 	{
 	   this.model.setPosition(this.oldX, this.oldY);
-	},
-	
-	/** 
-	 * @method
-	 * Redo the command after the user has undo this command
-	 *
-	 **/
-	redo:function()
-	{
-	   this.model.setPosition(this.newX, this.newY);
 	}
+	
 });

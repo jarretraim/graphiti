@@ -80,7 +80,6 @@ graphiti.ResizeHandle = graphiti.Rectangle.extend({
       }
       
       this.setBackgroundColor(new  graphiti.util.Color(151,255,250));
-      this.setZOrder(10000);
       this.setLineWidth(0.5);
       this.setSelectable(false);
     },

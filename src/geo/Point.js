@@ -12,8 +12,8 @@ graphiti.geo.Point = Class.extend({
      */
     init : function(x, y)
     {
-        this.x = x;
-        this.y = y;
+        this.x = parseInt(x);
+        this.y = parseInt(y);
     },
 
     /**
