@@ -16,8 +16,10 @@ var graphiti =
     },
 
     layout: {
-        router :{
-        }
+        connection :{
+        },
+	    mesh :{
+	    }
     },
     
     mvc:{

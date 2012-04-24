@@ -10,8 +10,8 @@
 graphiti.Connection = graphiti.PolyLine.extend({
     NAME : "graphiti.Connection", // only for debugging
 
-//    DEFAULT_ROUTER: new graphiti.layout.router.DirectRouter(),
-    DEFAULT_ROUTER: new graphiti.layout.router.ManhattanConnectionRouter(),
+//    DEFAULT_ROUTER: new graphiti.layout.connection.DirectRouter(),
+    DEFAULT_ROUTER: new graphiti.layout.connection.ManhattanConnectionRouter(),
     
     /**
      * @constructor
@@ -204,7 +204,7 @@ graphiti.Connection = graphiti.PolyLine.extend({
        this.router = router;
       }
       else{
-       this.router = new graphiti.layout.router.NullRouter();
+       this.router = new graphiti.layout.connection.NullRouter();
       }
       this.routingRequired =true;
     
@@ -501,7 +501,7 @@ graphiti.Connection = graphiti.PolyLine.extend({
     
       var p1 = this.lineSegments.get(this.lineSegments.getSize()-1).end;
       var p2 = this.lineSegments.get(this.lineSegments.getSize()-1).start;
-      if(this.router instanceof graphiti.layout.router.BezierRouter)
+      if(this.router instanceof graphiti.layout.connection.BezierRouter)
       {
        p2 = this.lineSegments.get(this.lineSegments.getSize()-5).end;
       }

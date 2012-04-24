@@ -1,14 +1,14 @@
 
 /**
- * @class graphiti.layout.router.DirectRouter
+ * @class graphiti.layout.connection.DirectRouter
  * Router for direct connections between two ports. Beeline
  * 
  * @inheritable
  * @author Andreas Herz
  * 
- * @extends  graphiti.layout.router.AbstractRouter
+ * @extends  graphiti.layout.connection.ConnectionRouter
  */
-graphiti.layout.router.DirectRouter = graphiti.layout.router.AbstractRouter.extend({
+graphiti.layout.connection.DirectRouter = graphiti.layout.connection.ConnectionRouter.extend({
 
 	/**
 	 * @constructor 

@@ -89,7 +89,7 @@ example.mvc_simple.NodeFigure = graphiti.Rectangle.extend({
 		switch (request.getPolicy()) {
 
 		case graphiti.EditPolicy.MOVE:
-			return new example.mvc_simple.CommandMove(this.model);
+			return new example.mvc_simple.CommandMove(this.canvas, this.model);
 		case graphiti.EditPolicy.DELETE:
 			return new example.mvc_simple.CommandDelete(this.model);
 		}

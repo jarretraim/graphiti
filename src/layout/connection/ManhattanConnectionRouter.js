@@ -1,15 +1,15 @@
 
 /**
- * @class graphiti.layout.router.DirectRouter
+ * @class graphiti.layout.connection.DirectRouter
  * Provides a {@link graphiti.Connection} with an orthogonal route between the Connection's source 
  * and target anchors.
  * 
  * @inheritable
  * @author Andreas Herz
  * 
- * @extends  graphiti.layout.router.AbstractRouter
+ * @extends  graphiti.layout.connection.ConnectionRouter
  */
-graphiti.layout.router.ManhattanConnectionRouter = graphiti.layout.router.AbstractRouter.extend({
+graphiti.layout.connection.ManhattanConnectionRouter = graphiti.layout.connection.ConnectionRouter.extend({
  
 	MINDIST : 20,
 	TOL     : 0.1,

@@ -1,11 +1,11 @@
 
 /**
- * @class 
+ * @class graphiti.layout.connection.ConnectionRouter
  * Routes a {@link graphiti.Connection}, possibly using a constraint.
  *
  * @author Andreas Herz
  */
-graphiti.layout.router.AbstractRouter = Class.extend({
+graphiti.layout.connection.ConnectionRouter = Class.extend({
 
 	/**
 	 * @constructor 
@@ -128,6 +128,6 @@ graphiti.layout.router.AbstractRouter = Class.extend({
      */
     route:function( connection)
     {
-    	throw "subclasses must implement the method [AbstractRouter.route]";
+    	throw "subclasses must implement the method [ConnectionRouter.route]";
     }
 });

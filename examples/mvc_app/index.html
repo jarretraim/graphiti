@@ -10,6 +10,7 @@
    <link type="text/css" rel="stylesheet" href="./css/application.css" />
 
   <!-- common, all times required, imports -->
+	<SCRIPT src="../../lib/shifty.js"></SCRIPT>
 	<SCRIPT src="../../lib/raphael.js"></SCRIPT>
 	<SCRIPT src="../../lib/jquery-1.6.4.js"></SCRIPT>
 	<SCRIPT src="../../lib/jquery-ui-1.8.16.custom.min.js"></SCRIPT>
@@ -35,9 +36,13 @@
 	<SCRIPT src="../../src/command/CommandReconnect.js"></SCRIPT>
 	<SCRIPT src="../../src/command/CommandDelete.js"></SCRIPT>
 	
-	<SCRIPT src="../../src/layout/router/AbstractRouter.js"></SCRIPT>
-	<SCRIPT src="../../src/layout/router/DirectRouter.js"></SCRIPT>
-	<SCRIPT src="../../src/layout/router/ManhattanConnectionRouter.js"></SCRIPT>
+	<SCRIPT src="../../src/layout/connection/ConnectionRouter.js"></SCRIPT>
+	<SCRIPT src="../../src/layout/connection/DirectRouter.js"></SCRIPT>
+	<SCRIPT src="../../src/layout/connection/ManhattanConnectionRouter.js"></SCRIPT>
+
+	<SCRIPT src="../../src/layout/mesh/MeshLayouter.js"></SCRIPT>
+	<SCRIPT src="../../src/layout/mesh/ExplodeLayouter.js"></SCRIPT>
+	<SCRIPT src="../../src/layout/mesh/ProposedMeshChange.js"></SCRIPT>
 
 	<SCRIPT src="../../src/Canvas.js"></SCRIPT>
 	<SCRIPT src="../../src/Figure.js"></SCRIPT>
@@ -109,6 +114,7 @@
 }
 </style>
 <script type="text/javascript">
+
 $(document).ready(function() {
 
     document.ontouchmove = function(e) {

@@ -156,6 +156,28 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 	
 	/**
 	 * @method
+	 * The top right corner of the dimension object.
+	 * 
+	 * @return {graphiti.geo.Point} a new point objects which holds the coordinates
+	 **/
+	getTopRight:function()
+	{
+	  return new graphiti.geo.Point(this.x+this.w,this.y);
+	},
+		
+	/**
+	 * @method
+	 * The bottom left corner of the dimension object.
+	 * 
+	 * @return {graphiti.geo.Point} a new point objects which holds the coordinates
+	 **/
+	getBottomLeft:function()
+	{
+	  return new graphiti.geo.Point(this.x,this.y+this.h);
+	},
+	
+	/**
+	 * @method
 	 * The center of the dimension object
 	 * 
 	 * @return {graphiti.geo.Point} a new point which holds the center of the object
@@ -177,6 +199,102 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 	  return new graphiti.geo.Point(this.x+this.w,this.y+this.h);
 	},
 	
+	/**
+	 * @method
+	 * Return the minimum distance of this rectangle to the given {#link graphiti.geo.Point} or 
+	 * {link graphiti.geo.Rectangle}.
+	 * 
+	 * @param {graphiti.geo.Point} pointOrRectangle the reference point/rectangle for the distance calculation
+	 */
+	getDistance: function (pointOrRectangle){
+		var cx = this.x;
+		var cy = this.y;
+		var cw = this.w;
+		var ch = this.h;
+		
+		var ox = pointOrRectangle.getX();
+		var oy = pointOrRectangle.getY();
+		var ow = 1;
+		var oh = 1;
+		
+		if(pointOrRectangle instanceof graphiti.geo.Rectangle){
+			ow = pointOrRectangle.getWidth();
+			oh = pointOrRectangle.getHeight();
+		}
+		var oct=9;
+
+		// Determin Octant
+		//
+		// 0 | 1 | 2
+		// __|___|__
+		// 7 | 9 | 3
+		// __|___|__
+		// 6 | 5 | 4
+
+		if(cx + cw <= ox){
+			if((cy + ch) <= oy){
+				oct = 0;
+			}
+			else if(cy >= (oy + oh)){
+				oct = 6;
+			}
+			else{
+				oct = 7;
+			}
+	    }
+		else if(cx >= ox + ow){
+			if(cy + ch <= oy){
+				oct = 2;
+			}
+			else if(cy >= oy + oh){
+				oct = 4;
+			}
+			else{
+				oct = 3;
+			}
+		}
+		else if(cy + ch <= oy){
+			oct = 1;
+		}
+		else if(cy >= oy + oh){
+			oct = 5;
+		}
+		else{
+			return 0;
+		}
+
+
+		// Determin Distance based on Quad
+		//
+		switch( oct){
+			case 0:
+				cx = (cx + cw) - ox;
+				cy = (cy + ch) - oy;
+				return -(cx + cy) ;
+			case 1:
+				return -((cy + ch) - oy);
+			case 2:
+				cx = (ox + ow) - cx;
+				cy = (cy + ch) - oy;
+				return -(cx + cy);
+			case 3:
+				return -((ox + ow) - cx);
+			case 4:
+				cx = (ox + ow) - cx;
+				cy = (oy + oh) - cy;
+				return -(cx + cy);
+			case 5:
+				return -((oy + oh) - cy);
+			case 6:
+				cx = (cx + cw) - ox;
+				cy = (oy + oh) - cy;
+				return -(cx + cy);
+			case 7:
+				return -((cx + cw) - ox);
+		}
+
+		throw "Unknown data type of parameter for distance calculation in graphiti.geo.Rectangle.getDistnace(..)";
+	},
 	
 	/**
 	 * @method

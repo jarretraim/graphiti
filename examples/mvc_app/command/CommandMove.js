@@ -8,12 +8,14 @@ example.mvc_simple.CommandMove= graphiti.command.Command.extend({
 	 * 
 	 * @param {graphiti.mvc.AbstractObjectModel} model
 	 */
-	init: function(model){
+	init: function(canvas,model){
 		this._super("Move Element");
 		
 		this.oldX  = model.getPosition().getX();
 		this.oldY  = model.getPosition().getY();
 		this.model = model;
+		
+		this.canvas = canvas;
 	},
 
 	/**
@@ -51,7 +53,11 @@ example.mvc_simple.CommandMove= graphiti.command.Command.extend({
 	 **/
 	execute:function()
 	{
-      this.model.setPosition(this.newX, this.newY);
+	    var addedFigure = this.canvas.getFigure(this.model.getId());
+	    var layouter = new graphiti.layout.mesh.ExplodeLayouter();
+	    layouter.add(this.canvas, addedFigure, this.newX, this.newY);
+
+	    this.model.setPosition(this.newX, this.newY);
 	},
 	
     /**

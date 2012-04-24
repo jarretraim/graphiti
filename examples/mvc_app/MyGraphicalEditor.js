@@ -91,7 +91,7 @@ example.mvc_simple.MyGraphicalEditor = graphiti.ui.parts.GraphicalEditor.extend(
 	       });
 	       
            this.toolbar      = new example.mvc_simple.Toolbar("toolbar",  this.getGraphicalViewer() );
-           this.propertypane = new example.mvc_simple.PropertyPane("propertypane",  this.getGraphicalViewer() );
+   //        this.propertypane = new example.mvc_simple.PropertyPane("propertypane",  this.getGraphicalViewer() );
 
 	    }
 		catch(e)

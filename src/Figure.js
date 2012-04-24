@@ -708,6 +708,19 @@ graphiti.Figure = Class.extend({
     
     /**
      * @method
+     * Translate the figure with the given x/y offset.
+     *
+     * @param {Number} dx The new x translate offset
+     * @param {Number} dy The new y translate offset
+     **/
+    translate:function(dx , dy )
+    {
+    	this.setPosition(this.x+dx,this.y+dy);
+    },
+    
+    
+    /**
+     * @method
      * Set the new width and height of the figure. 
      *
      * @param {Number} w The new width of the figure
