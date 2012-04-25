@@ -10,6 +10,7 @@ graphiti.layout.locator.Locator= Class.extend({
     
     /**
      * @constructor
+     * Initial Constructor
      * 
      */
     init:function( )
@@ -19,12 +20,13 @@ graphiti.layout.locator.Locator= Class.extend({
     
     /**
      * @method
-     * Controls the location of an IFigure. 
+     * Controls the location of an I{#link graphiti.Figure} 
      *
-     * @param {graphiti.Figure} figure
+     * @param {graphiti.Figure} figure the figure to control
      * @template
      **/
     relocate:function(figure)
     {
+    	// 
     }
 });

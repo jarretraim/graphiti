@@ -12,11 +12,19 @@ example.locator_connection.LabelConnection= graphiti.Connection.extend({
     
       // Create any Draw2D figure as decoration for the connection
       //
-      var label = new graphiti.Label("Message");
+      this.label = new graphiti.Label("Message");
     
   
       // add the new decoration to the connection with a position locator.
       //
-      this.addFigure(label, new graphiti.layout.locator.ManhattanMidpointLocator(this));
+      this.addFigure(this.label, new graphiti.layout.locator.ManhattanMidpointLocator(this));
+    },
+    
+    getLabel:function(){
+    	return this.label.getText();
+    },
+    
+    setLabel: function(text){
+    	this.label.setText(text);
     }
 });

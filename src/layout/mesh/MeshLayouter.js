@@ -21,13 +21,11 @@ graphiti.layout.mesh.MeshLayouter = Class.extend({
      * 
      * @param {graphiti.Canvas} canvas the canvas to use for the analytic
      * @param {graphiti.Figure} figure The figure to add to the exising canvas
-     * @param {Number} x requested x-position for the figure
-     * @param {Number} y requested y-position for the figure
      * 
      * 
      * @return {graphiti.util.ArrayList} a list of changes to apply if the user want to insert he figure.
      */
-    add:function( canvas, figure, x, y)
+    add:function( canvas, figure)
     {
     	return new graphiti.util.ArrayList();
     }

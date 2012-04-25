@@ -4,6 +4,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   
+    <link type="text/css" rel="stylesheet" href="example.css" />
 
 	<SCRIPT src="../../lib/shifty.js"></SCRIPT>
 	<SCRIPT src="../../lib/raphael.js"></SCRIPT>
@@ -83,6 +85,7 @@
 	<SCRIPT src="Start.js"></SCRIPT>
 	<SCRIPT src="End.js"></SCRIPT>
 	<SCRIPT src="LabelConnection.js"></SCRIPT>
+	<SCRIPT src="LabelEditor.js"></SCRIPT>
 
 	<style>
 #gfx_holder {
@@ -116,9 +119,7 @@ $(document).ready(function() {
   c.setTarget(end.getPort("input"));
   canvas.addFigure(c);
  
-  canvas.addSelectionListener(function(e){
-      console.log("s:"+e);
-  });
+  var editor = new example.locator_connection.LabelEditor(canvas);
 });
 
 </script>
@@ -129,7 +130,6 @@ $(document).ready(function() {
 <div id="gfx_holder" style="width:1500px; height:1500px;-webkit-tap-highlight-color: rgba(0,0,0,0); ">
 
 </div>
-<div style="position:absolute; top:10px; left:10px">Input Div</div>
 
 </body>
 </html>

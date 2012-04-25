@@ -30,7 +30,7 @@ graphiti.layout.mesh.ExplodeLayouter = graphiti.layout.mesh.MeshLayouter.extend(
      * 
      * @return {graphiti.util.ArrayList} a list of changes to apply if the user want to insert he figure.
      */
-    add:function( canvas, figureToAdd, x, y)
+    add:function( canvas, figureToAdd)
     {
     	// changes for the differenct octant areas
     	var changes = [];
