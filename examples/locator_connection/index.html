@@ -5,14 +5,6 @@
 <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-  <!-- common, all times required, imports -->
-	<SCRIPT src="../../lib/raphael.js"></SCRIPT>
-	<SCRIPT src="../../lib/jquery-1.6.4.js"></SCRIPT>
-	<SCRIPT src="../../lib/jquery-ui-1.8.16.custom.min.js"></SCRIPT>
- 	<SCRIPT src="../../lib/jquery-touch_punch.js"></SCRIPT>
-	<SCRIPT src="../../lib/Class.js"></SCRIPT>
-    
-    
 	<SCRIPT src="../../lib/shifty.js"></SCRIPT>
 	<SCRIPT src="../../lib/raphael.js"></SCRIPT>
 	<SCRIPT src="../../lib/jquery-1.6.4.js"></SCRIPT>
@@ -80,11 +72,17 @@
 	<SCRIPT src="../../src/mvc/AbstractObjectModel.js"></SCRIPT>
 	<SCRIPT src="../../src/mvc/AbstractConnectionModel.js"></SCRIPT>
 	<SCRIPT src="../../src/mvc/Event.js"></SCRIPT>
-
-
+	
+	<script>
+	/** declare the namespace object for this example */
+	var example = {
+			locator_connection: {}
+	};
+	</script>
 
 	<SCRIPT src="Start.js"></SCRIPT>
 	<SCRIPT src="End.js"></SCRIPT>
+	<SCRIPT src="LabelConnection.js"></SCRIPT>
 
 	<style>
 #gfx_holder {
@@ -105,18 +103,22 @@ $(document).ready(function() {
     
   var canvas = new graphiti.Canvas("gfx_holder");
 
-  var figure1 = new graphiti.Oval();
-  var figure2 = new graphiti.Rectangle();
-  canvas.addFigure(figure1,100,100);
-  canvas.addFigure(figure2,120,150);
-  figure2.setDimension(50,50);
-  
-  canvas.addFigure( new example.Start(), 80,80);
-  canvas.addFigure( new example.Start(), 50,50);
+  var start = new example.locator_connection.Start();
+  var end   = new example.locator_connection.End();
 
-  canvas.addFigure( new example.End(), 150,150);
-  canvas.addFigure( new example.End(), 350,250);
+  canvas.addFigure( start, 150,150);
+  canvas.addFigure( end, 350,250);
 
+ 
+  // Create a Connection
+  var c = new example.locator_connection.LabelConnection();
+  c.setSource(start.getPort("output"));
+  c.setTarget(end.getPort("input"));
+  canvas.addFigure(c);
+ 
+  canvas.addSelectionListener(function(e){
+      console.log("s:"+e);
+  });
 });
 
 </script>
@@ -125,8 +127,9 @@ $(document).ready(function() {
 
 <body>
 <div id="gfx_holder" style="width:1500px; height:1500px;-webkit-tap-highlight-color: rgba(0,0,0,0); ">
-</div>
 
+</div>
+<div style="position:absolute; top:10px; left:10px">Input Div</div>
 
 </body>
 </html>

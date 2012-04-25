@@ -33,6 +33,7 @@ graphiti.Connection = graphiti.PolyLine.extend({
     
       this.router =this.DEFAULT_ROUTER;
       
+      // possible decorations ( e.g. a Label) of the Connection
       this.children = new graphiti.util.ArrayList();
     },
     
@@ -84,35 +85,26 @@ graphiti.Connection = graphiti.PolyLine.extend({
     /**
      * Add a child figure to the Connection. The hands over figure doesn't support drag&drop 
      * operations. It's only a decorator for the connection.<br>
-     * Main for labels or other fancy decorations :-)
+     * Mainly for labels or other fancy decorations :-)
      *
      * @param {graphiti.Figure} figure the figure to add as decoration to the connection.
      * @param {graphiti.ConnectionLocator} locator the locator for the child. 
     **/
     addFigure : function(/* :graphiti.Figure */figure, /* :graphiti.ConnectionLocator */locator)
     {
-        this.routingRequired =true;
         var entry = {};
         entry.figure = figure;
         entry.locator = locator;
 
         this.children.add(entry);
         this.repaint();
-
-        var oThis = this;
-        var mouseDown = function()
-        {
-            var oEvent = arguments[0] || window.event;
-            oEvent.returnValue = false;
-            oThis.getCanvas().setCurrentSelection(oThis);
-            oThis.getCanvas().showLineResizeHandles(oThis);
-        };
-
-        if (figure.getHTMLElement().addEventListener) {
-            figure.getHTMLElement().addEventListener("mousedown", mouseDown, false);
-        }
-        else if (figure.getHTMLElement().attachEvent) {
-            figure.getHTMLElement().attachEvent("onmousedown", mouseDown);
+    },
+    
+    setCanvas: function(canvas){
+        this._super(canvas);
+        for(var i=0; i<this.children.getSize();i++){
+            var entry = this.children.get(i);
+            entry.figure.setCanvas(canvas);
         }
     },
     

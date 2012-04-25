@@ -19,6 +19,8 @@ var graphiti =
         connection :{
         },
 	    mesh :{
+	    },
+	    locator: {
 	    }
     },
     
