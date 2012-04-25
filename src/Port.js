@@ -39,7 +39,7 @@ graphiti.Port = graphiti.Circle.extend({
         this.currentTarget = null; // Port
 
         this.setBackgroundColor(new graphiti.util.Color(100, 180, 100));
-        this.setLineWidth(1);
+        this.setStroke(1);
         this.setColor(this.DEFAULT_BORDER_COLOR);
         this.setSelectable(false);
         
@@ -104,7 +104,7 @@ graphiti.Port = graphiti.Circle.extend({
      **/
     onMouseEnter:function()
     {
-        this.setLineWidth(2);
+        this.setStroke(2);
     },
     
     
@@ -116,7 +116,7 @@ graphiti.Port = graphiti.Circle.extend({
      **/
     onMouseLeave:function()
     {
-        this.setLineWidth(1);
+        this.setStroke(1);
     },
 
 

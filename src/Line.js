@@ -10,6 +10,8 @@
 graphiti.Line = graphiti.Figure.extend({
     NAME : "graphiti.Line", // only for debugging
 
+    DEFAULT_COLOR : new graphiti.util.Color(0,0,0),
+    
     /**
      * @constructor
      * Creates a new figure element which are not assigned to any canvas.
@@ -17,7 +19,7 @@ graphiti.Line = graphiti.Figure.extend({
     init: function( ) {
         this._super();
         
-        this.lineColor = new graphiti.util.Color(0,0,0);
+        this.lineColor = this.DEFAULT_COLOR;
         this.stroke=1;
         
         this.startX = 30;
@@ -107,11 +109,11 @@ graphiti.Line = graphiti.Figure.extend({
 		   this._stroke = this.stroke;
 		   
 	       this.setColor(new graphiti.util.Color("#3f72bf"));
-	       this.setLineWidth(parseInt(this.stroke*4));
+	       this.setStroke(parseInt(this.stroke*4));
 	   }
 	   else{
 	       this.setColor(this._lineColor);
-	       this.setLineWidth(this._stroke);
+	       this.setStroke(this._stroke);
 	   }
 	   
 	   this.isGlowing = flag;
@@ -173,7 +175,7 @@ graphiti.Line = graphiti.Figure.extend({
     *
     * @param {Number} w The new line width of the figure.
     **/
-   setLineWidth:function(/*:int*/ w)
+   setStroke:function(/*:int*/ w)
    {
      this.stroke=w;
      this.setDocumentDirty();
@@ -191,9 +193,16 @@ graphiti.Line = graphiti.Figure.extend({
     **/
    setColor:function( color)
    {
-     this.lineColor = color;
-     this.setDocumentDirty();
-
+     if(color instanceof graphiti.util.Color){
+         this.lineColor = color;
+     }
+     else if(typeof color === "string"){
+         this.lineColor = new graphiti.util.Color(color);
+     }
+     else{
+         // set good default
+         this.lineColor = this.DEFAULT_COLOR;
+     }
      this.repaint();
    },
 

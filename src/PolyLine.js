@@ -27,7 +27,7 @@ graphiti.PolyLine = graphiti.Line.extend({
       this.lineSegments = new graphiti.util.ArrayList();
     
       this.setColor(new  graphiti.util.Color(0,0,115));
-      this.setLineWidth(1);
+      this.setStroke(1);
     },
     
     /**

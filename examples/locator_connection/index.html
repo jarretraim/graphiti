@@ -2,10 +2,10 @@
 <head>
 <title></title>
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, , maximum-scale=1.0" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
    
-    <link type="text/css" rel="stylesheet" href="example.css" />
+    <link type="text/css" rel="stylesheet" href="./css/example.css" />
 
 	<SCRIPT src="../../lib/shifty.js"></SCRIPT>
 	<SCRIPT src="../../lib/raphael.js"></SCRIPT>
@@ -50,6 +50,7 @@
 	<SCRIPT src="../../src/Node.js"></SCRIPT>
 	<SCRIPT src="../../src/VectorFigure.js"></SCRIPT>
 	<SCRIPT src="../../src/Rectangle.js"></SCRIPT>
+	<SCRIPT src="../../src/SVGFigure.js"></SCRIPT>
 	<SCRIPT src="../../src/Oval.js"></SCRIPT>
 	<SCRIPT src="../../src/Circle.js"></SCRIPT>
 	<SCRIPT src="../../src/CompartmentFigure.js"></SCRIPT>
@@ -66,6 +67,9 @@
 	<SCRIPT src="../../src/InputPort.js"></SCRIPT>
 	<SCRIPT src="../../src/OutputPort.js"></SCRIPT>
 	<SCRIPT src="../../src/ConnectionAnchor.js"></SCRIPT>
+
+	<SCRIPT src="../../src/shape/arrow/CalligrapherArrowLeft.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/arrow/CalligrapherArrowDownLeft.js"></SCRIPT>
 
 	<SCRIPT src="../../src/ui/parts/GraphicalEditor.js"></SCRIPT>
 	<SCRIPT src="../../src/ui/parts/GraphicalViewer.js"></SCRIPT>
@@ -104,22 +108,42 @@ $(document).ready(function() {
         e.preventDefault();
     };
     
-  var canvas = new graphiti.Canvas("gfx_holder");
-
-  var start = new example.locator_connection.Start();
-  var end   = new example.locator_connection.End();
-
-  canvas.addFigure( start, 150,150);
-  canvas.addFigure( end, 350,250);
-
- 
-  // Create a Connection
-  var c = new example.locator_connection.LabelConnection();
-  c.setSource(start.getPort("output"));
-  c.setTarget(end.getPort("input"));
-  canvas.addFigure(c);
- 
-  var editor = new example.locator_connection.LabelEditor(canvas);
+     // create the paint area. The id in the constructor must be
+     // an existing DIV 
+	 var canvas = new graphiti.Canvas("gfx_holder");
+	
+     // create and add two Node which contains Ports (In and OUT)
+	 var start = new example.locator_connection.Start();
+	 var end   = new example.locator_connection.End();
+	
+	 canvas.addFigure( start, 150,150);
+	 canvas.addFigure( end, 330,440);
+		
+	 // Create a Connection and connect he Start and End node
+	 //
+	 var c = new example.locator_connection.LabelConnection();
+	 c.setSource(start.getPort("output"));
+	 c.setTarget(end.getPort("input"));
+	 canvas.addFigure(c);
+	
+	
+	 // Create a generic Editor for Connection labels
+	 //
+	 var editor = new example.locator_connection.LabelEditor(canvas);
+	 
+	 ///////////////////////////////////////////////////////////////////// 
+	 // Part below are only for the arrows, documentation,.. on the screen 
+	 ///////////////////////////////////////////////////////////////////// 
+	 var arrowLeft = new graphiti.shape.arrow.CalligrapherArrowLeft();
+	 arrowLeft.setColor("#f0f0f0");
+	 canvas.addFigure(arrowLeft, 290,180);
+	 
+	 var msg = new graphiti.Label("These is a Message\non the Screen");
+	 canvas.addFigure(msg, 300,300);
+	 
+	 $("body").scrollTop(0)
+	          .scrollLeft(0);
+	 
 });
 
 </script>
@@ -127,9 +151,9 @@ $(document).ready(function() {
 </head>
 
 <body>
-<div id="gfx_holder" style="width:1500px; height:1500px;-webkit-tap-highlight-color: rgba(0,0,0,0); ">
-
-</div>
+   <div id="gfx_holder" style="width:1500px; height:1500px; ">
+ 
+   </div>
 
 </body>
 </html>

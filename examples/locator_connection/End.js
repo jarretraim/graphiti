@@ -7,7 +7,8 @@ example.locator_connection.End = graphiti.Rectangle.extend({
         this.inputPort = null;
         this.setDimension(50, 50);
         this.setResizeable(false);
-        this.setAlpha(0.5);
+        this.setBackgroundColor("#4D90FE");
+        this.setColor("#ffffff");
     },
     
     setCanvas : function(canvas)

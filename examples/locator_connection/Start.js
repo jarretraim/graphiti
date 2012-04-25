@@ -7,10 +7,11 @@ example.locator_connection.Start = graphiti.Rectangle.extend({
         this.outputPort = null;
         this.setDimension(50, 50);
         this.setResizeable(false);
-        this.setAlpha(0.5);
+        this.setBackgroundColor("#4D90FE");
+        this.setColor("#ffffff");
     },
     
-    setCanvas : function(/* :@NAMESPACE@Workflow */canvas)
+    setCanvas : function(canvas)
     {
         this._super(canvas);
 

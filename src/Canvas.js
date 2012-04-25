@@ -34,6 +34,11 @@ graphiti.Canvas = Class.extend(
         this.canvasId = canvasId;
         this.html = $("#"+canvasId);
         
+        // avoid the "highlighting" in iPad, iPhone if the user tab/touch on the canvas.
+        // iOS highlight per default all elements which register an "onClick, onMouseDown" event.
+        // .... I don't like these.
+        this.html.css({"-webkit-tap-highlight-color": "rgba(0,0,0,0)"});
+        
         // Create the droppable area for the css class "graphiti_droppable"
         // This can be done by a palette of toolbar or something else.
         // For more information see : http://jqueryui.com/demos/droppable/
@@ -78,6 +83,8 @@ graphiti.Canvas = Class.extend(
         //
         this.paper = Raphael(canvasId, this.getWidth(), this.getHeight());
             
+        // Status handling
+        //
         this.zoomFactor = 1.0;
         this.enableSmoothFigureHandling=false;
         this.currentSelection = null;
@@ -116,15 +123,16 @@ graphiti.Canvas = Class.extend(
 
         this.resizeHandleHalfWidth = this.resizeHandle2.getWidth()/2;
        
-        // @type 
-        this.verticalSnapToHelperLine = null; /*graphiti.Line*/
-        this.horizontalSnapToHelperLine = null; /*:graphiti.Line*/
+
+        this.verticalSnapToHelperLine = null;
+        this.horizontalSnapToHelperLine = null;
 
         this.figures = new graphiti.util.ArrayList();
         this.lines = new graphiti.util.ArrayList();
         this.commonPorts = new graphiti.util.ArrayList();
         this.dropTargets = new graphiti.util.ArrayList();
        
+        
         this.selectionListeners = new graphiti.util.ArrayList();
 
         this.commandStack = new graphiti.command.CommandStack();
@@ -171,6 +179,8 @@ graphiti.Canvas = Class.extend(
             this.onMouseDown(pos.x, pos.y);
         }, this));
         
+        // Catch the keyDown and CTRL-key and route them to the Canvas hook.
+        //
         $(document).bind("keydown",$.proxy(function(event)
         {
           var ctrl = event.ctrlKey;

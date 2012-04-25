@@ -19,7 +19,7 @@ graphiti.SVGFigure = graphiti.Rectangle.extend({
       this._super();
 
       this.setResizeable(false);
-      this.setLineWidth(0);
+      this.setStroke(0);
       
       // collection of SVG DOM nodes
       this.svgNodes=null;

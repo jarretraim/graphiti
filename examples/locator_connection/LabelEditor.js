@@ -9,12 +9,11 @@ example.locator_connection.LabelEditor = Class.extend({
                          '   <input class="dialog_input" id="dialog_label_text" style="width:100%">'+
                          '</div>'
                );
-	
+		this.html.hide();
 		$("body").append(this.html);
 		
 	    var label ="-disabled-";
 		$("#dialog_label_text").val(label);
-     	$("#dialog_label_text").prop("disabled",true);
 		$("#dialog_label_text").bind("keyup",$.proxy(function(e){
 		      if (e.which == 13) {
 		           $("#dialog_label_text").blur();
@@ -29,11 +28,10 @@ example.locator_connection.LabelEditor = Class.extend({
 	    	this.currentFigure = e;
      		if(e instanceof example.locator_connection.LabelConnection){
 	     		$("#dialog_label_text").val(e.getLabel());
-		     	$("#dialog_label_text").prop("disabled",false);
+		     	this.html.fadeIn();
 	     	}
 	     	else{
-	     	    $("#dialog_label_text").val("-disabled-");
-		     	$("#dialog_label_text").prop("disabled",true);
+                this.html.fadeOut();
 	     	}
 	    },this));
 		  

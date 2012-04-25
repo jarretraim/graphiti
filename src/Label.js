@@ -16,7 +16,7 @@ graphiti.Label= graphiti.Figure.extend({
         this.text = text;
         this.bgColor = null;
         this.color = new graphiti.util.Color(0, 0, 0);
-        this.fontSize = 10;
+        this.fontSize = 12;
         this._super();
     },
     
@@ -52,8 +52,44 @@ graphiti.Label= graphiti.Figure.extend({
         attributes.x = this.x;
         attributes.y = this.y+(this.getHeight()/2);
         attributes["text-anchor"] = "start";
+        attributes["font-size"] = this.fontSize;
+        attributes.fill = "#" + this.color.hex();
   
         this._super(attributes);
+    },
+    
+
+    /**
+     * @mehod
+     * Set the color of the line.
+     * This method fires a <i>document dirty</i> event.
+     * 
+     * @param {graphiti.util.Color} color The new color of the line.
+     **/
+    setColor:function( color)
+    {
+      if(color instanceof graphiti.util.Color){
+          this.color = color;
+      }
+      else if(typeof color === "string"){
+          this.color = new graphiti.util.Color(color);
+      }
+      else{
+          // set good default
+          this.color = this.DEFAULT_COLOR;
+      }
+      this.repaint();
+    },
+
+    /**
+     * @method
+     * Return the current paint color.
+     * 
+     * @return {graphiti.util.Color} The paint color of the line.
+     **/
+    getColor:function()
+    {
+      return this.color;
     },
     
     /**

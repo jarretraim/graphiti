@@ -18,7 +18,7 @@ graphiti.VectorFigure = graphiti.Node.extend({
     init : function()
     {
         this.bgColor =  new graphiti.util.Color(100, 100, 100);
-        this.lineColor = new graphiti.util.Color(0, 0, 0);
+        this.color = new graphiti.util.Color(0, 0, 0);
         this.stroke = 1;
 
         this._super();
@@ -41,7 +41,7 @@ graphiti.VectorFigure = graphiti.Node.extend({
 
         attributes.x= this.getAbsoluteX();
         attributes.y = this.getAbsoluteY();
-        attributes.stroke = "#" + this.lineColor.hex();
+        attributes.stroke = "#" + this.color.hex();
         attributes["stroke-width"] = this.stroke;
         
         if(typeof attributes.fill === "undefined"){
@@ -61,17 +61,20 @@ graphiti.VectorFigure = graphiti.Node.extend({
     *
     * @param {graphiti.util.Color} color The new background color of the figure
     **/
-   setBackgroundColor: function( color)
-   {
-     if(color === null){
-       this.bgColor = new graphiti.util.Color(255,255,255,0.1);
-     }
-     else{
-       this.bgColor = color;
-     }
-       
-     this.repaint();
-   },
+    setBackgroundColor : function(color)
+    {
+        if (color instanceof graphiti.util.Color) {
+            this.bgColor = color;
+        }
+        else if (typeof color === "string") {
+            this.bgColor = new graphiti.util.Color(color);
+        }
+        else {
+            this.bgColor = new graphiti.util.Color(255, 255, 255, 0.1);
+        }
+
+        this.repaint();
+    },
 
    /**
     * @method
@@ -90,7 +93,7 @@ graphiti.VectorFigure = graphiti.Node.extend({
     * 
     * @param {Number} w The new line width of the figure
     **/
-   setLineWidth:function( w )
+   setStroke:function( w )
    {
      this.stroke=w;
      this.repaint();
@@ -108,20 +111,24 @@ graphiti.VectorFigure = graphiti.Node.extend({
    },
 
    /**
-    * @method
-    * Set the foreground color to use
+    * @mehod
+    * Set the color of the line.
+    * This method fires a <i>document dirty</i> event.
     * 
-    * @param {graphiti.util.Color} color The new line / border color of the figure.
+    * @param {graphiti.util.Color} color The new color of the line.
     **/
-   setColor: function(  color)
+   setColor:function( color)
    {
-     if(color === null){
-       this.lineColor = new graphiti.util.Color(255,255,255,0);
+     if(color instanceof graphiti.util.Color){
+         this.color = color;
+     }
+     else if(typeof color === "string"){
+         this.color = new graphiti.util.Color(color);
      }
      else{
-       this.lineColor = color;
+         // set good default
+         this.color = new graphiti.util.Color(0,0,0);
      }
-       
      this.repaint();
    },
 
@@ -133,7 +140,7 @@ graphiti.VectorFigure = graphiti.Node.extend({
     */
    getColor:function()
    {
-     return this.lineColor;
+     return this.color;
    }
 
 });

@@ -12,6 +12,12 @@ var graphiti =
     util : {
     },
 
+    shape : {
+        arrow:{
+            
+        }
+    },
+    
     command : {
     },
 
