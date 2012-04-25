@@ -28,22 +28,27 @@ example.mvc_simple.CommandDrop = graphiti.command.Command.extend({
 	 * 
 	 **/
 	execute : function() {
-		   
 
 	    // add the new node to the model
 	    //
 	    this.node.setPosition(this.x,this.y);
 	    this.parent.addNode(this.node);
-	    
-	    var dropTarget = this.canvas.getBestLine(this.x, this.y);
+
+	    // adjust the figure with the width/2 and height/2
+        // In this case we have droped the figure centerd
+        var addedFigure = this.canvas.getFigure(this.node.getId());
+
+        var layouter = new graphiti.layout.mesh.ExplodeLayouter();
+        this.proposedChanges = layouter.add(this.canvas, addedFigure);
+
+        var nx = this.x-addedFigure.getWidth()/2;
+        var ny = this.y-addedFigure.getHeight()/2;
+        this.node.setPosition(nx,ny);
 
 	    // check if the user has dropped the node onto a connection -> infix
 	    // this node into the existing connection
 	    //
-	    var addedFigure = this.canvas.getFigure(this.node.getId());
-	    var layouter = new graphiti.layout.mesh.ExplodeLayouter();
-	    
-	    this.proposedChanges = layouter.add(this.canvas, addedFigure);
+        var dropTarget = this.canvas.getBestLine(this.x, this.y);
 
 	    if(dropTarget instanceof graphiti.Connection){
 	        this.oldConnectionModel = dropTarget.getModel();
@@ -64,18 +69,17 @@ example.mvc_simple.CommandDrop = graphiti.command.Command.extend({
 		    var myTweenable = new Tweenable();
 		    myTweenable.figure = f;
 		    myTweenable.tween({
-		    	  from:       {x:f.getX() , y: f.getY() },            // Object.  Contains the properties to tween.  Must all be `Number`s.  Note: This object's properties are modified by the tween.
-		    	  to:         {x:f.getX()+c.getX() , y: f.getY()+c.getY()  },            // Object.  The "destination" `Number`s that the properties in `from` will tween to.
-		    	  duration:   300,            // Number.  How long the tween lasts for, in milliseconds.
-		    	  easing:     'swingFromTo',        // String or Object.  Easing equation(s) to use.  You can specify any easing method that was attached to `Tweenable.prototype.formula`.
-		    	  start:      function () {},  // Function.  Runs as soon as the tween begins.  Handy when used with the `queue` extension.
-		    	  step:       $.proxy(function (s) {
-		    		 // console.log(this);
+		    	  from:       {x:f.getX()          , y: f.getY() }, 
+		    	  to:         {x:f.getX()+c.getX() , y: f.getY()+c.getY()  },
+		    	  duration:   300,
+		    	  easing:     'easeInOutExpo', 
+		    	  step: $.proxy(function (s) {
 		    		  this.figure.setPosition(s.x,s.y);
-		    	  }, myTweenable),  // Function.  Runs each "frame" that the tween is updated.
-		    	  callback:   function () {}   // Function.  Runs when the tween completes.
+		    	  }, myTweenable)
 		    	});
+		    	
 	    }
+	    this.canvas.setCurrentSelection(null);
 
 
 	},

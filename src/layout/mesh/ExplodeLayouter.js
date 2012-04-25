@@ -110,13 +110,13 @@ graphiti.layout.mesh.ExplodeLayouter = graphiti.layout.mesh.MeshLayouter.extend(
         				changes[5].y =  Math.max(changes[5].y,this.MIN_MARGIN+dis);
         				changes[6].y =  Math.max(changes[6].y,this.MIN_MARGIN+dis);
         				changes[8].x =  Math.max(changes[8].x,this.MIN_MARGIN+dis);
-        				changes[8].y =  Math.max(changes[8].y,this.MIN_MARGIN+dis);
+//        				changes[8].y =  Math.max(changes[8].y,this.MIN_MARGIN+dis);
         			}
     			}
     		}
     		// Falls die minimale Distance zu den Objecten kleiner 80 ist, muss ein layout erfolgen
     	}
-    	
+
     	// calculate the adjustment for each figure
     	//
     	var result = new graphiti.util.ArrayList();
@@ -125,7 +125,7 @@ graphiti.layout.mesh.ExplodeLayouter = graphiti.layout.mesh.MeshLayouter.extend(
     		if(figure !== figureToAdd ){
 				oct = this.determineOctant(boundingBox, figure.getBoundingBox());
 				currentOctChanges = changes[oct];
-				if(currentOctChanges.x!==0 && currentOctChanges.y!==0){
+				if(currentOctChanges.x!==0 || currentOctChanges.y!==0){
 					result.add(new graphiti.layout.mesh.ProposedMeshChange(figure, currentOctChanges.x,currentOctChanges.y));
 				}
     		}

@@ -735,16 +735,23 @@ graphiti.Canvas = Class.extend(
      * @method
      * Register a listener to the Canvas. The listener must provide a function "onSelectionChanged".
      * 
-     * @param {Object} w an object which implements the 'onSelectionChanged' method
+     * @param {Object/function} w an object which implements the 'onSelectionChanged' method or a callback function
      **/
-    addSelectionListener:function(/*:Object*/ w)
+    addSelectionListener:function(w)
     {
       if(w!==null)
       {
-        if(typeof w.onSelectionChanged==="function")
+        if(typeof w ==="function"){
+            var obj = {};
+            obj.onSelectionChanged = w;
+            this.selectionListeners.add(obj);
+        } 
+        else if(typeof w.onSelectionChanged==="function"){
           this.selectionListeners.add(w);
-        else
+        }
+        else{
           throw "Object doesn't implement required callback method [onSelectionChanged]";
+        }
       }
     },
 
@@ -1251,9 +1258,6 @@ graphiti.Canvas = Class.extend(
      */
     onMouseDrag : function(/* :int */dx,/* :int */dy)
     {
-        if(this.isInExternalDragOperation===true){
-        }
-        
         if (this.mouseDraggingElement !== null) {
             this.mouseDraggingElement.onDrag(dx, dy);
             
@@ -1291,10 +1295,10 @@ graphiti.Canvas = Class.extend(
             if(this.currentDropTarget!==null){
                this.mouseDraggingElement.onDrop(this.currentDropTarget);
                this.currentDropTarget.onDragLeave(this.mouseDraggingElement);
+               this.currentDropTarget = null;
             }
+            this.mouseDraggingElement = null;
         }
-        this.currentDropTarget = null;
-        this.mouseDraggingElement = null;
     }
 
 });
