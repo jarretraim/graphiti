@@ -1,6 +1,7 @@
 
 /**
- * @class A Connection is the line between two {@link @NAMESPACE@Port}s.
+ * @class 
+ * A Connection is the line between two {@link @NAMESPACE@Port}s.
  *
  * @version @VERSION@
  * @author Andreas Herz

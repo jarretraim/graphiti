@@ -118,7 +118,7 @@ graphiti.LineResizeHandle = graphiti.Circle.extend({
      * Sub classes can override this method to implement additional stuff. 
      * Don't forget to call the super implementation via <code>this._super();</code>
      * 
-     * @return {Boolean}
+     * @return {boolean}
      */
     onDragEnd : function()
     {
@@ -166,7 +166,7 @@ graphiti.LineResizeHandle = graphiti.Circle.extend({
      * corresponding object is an Connection. A Connection is always bounded to
      * Port. In this case it makes no sense to use a Grid or Geometry for snapping.
      *
-     * @return {Boolean] return false fi the corresponding object didn't support snapTo###
+     * @return {boolean} return false if the corresponding object didn't support snapTo
      **/
     supportsSnapToHelper:function()
     {

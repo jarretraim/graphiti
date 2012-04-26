@@ -16,9 +16,10 @@ graphiti.mvc.AbstractObjectModel = Class.extend({
 	},
 
 	/**
+	 * @method
 	 * Return all model children of this model object.
 	 *
-	 * @type  graphiti.util.ArrayList
+	 * @return {graphiti.util.ArrayList}
 	 **/
 	getModelChildren:function()
 	{
@@ -39,7 +40,7 @@ graphiti.mvc.AbstractObjectModel = Class.extend({
 	
 	/**
 	 * @method
-	 * Set the parent of this mopdel object
+	 * Set the parent of this model object
 	 * 
 	 * @param {graphiti.mvc.AbstractObjectModel} parent
 	 */
@@ -52,8 +53,8 @@ graphiti.mvc.AbstractObjectModel = Class.extend({
 	 * @method
 	 * Return the unique id of this model element.
 	 *
-	 * @return {String
-	 * @template}
+	 * @return {String}
+	 * @template
 	 **/
 	getId:function()
 	{
@@ -84,15 +85,24 @@ graphiti.mvc.AbstractObjectModel = Class.extend({
 	},
 	
 	/**
-	 *
+	 * @method
 	 * Adds a PropertyChangeListener to the listener list. The listener is registered for all properties of this class,
 	 * If listener is null, no exception is thrown and no action is performed.
 	 *
+	 * @param {Object/function} the callback object which must have a method propertyChange or a function.
 	 **/
 	addPropertyChangeListener:function( listener)
 	{
-	   if(listener!==null){
+	   if(typeof listener === "function"){
+	       var obj = {};
+	       obj.propertyChange= listener;
+           this.listeners.add(listener);
+	   }
+	   else if(typeof listener.propertyChange ==="function"){
 	     this.listeners.add(listener);
+	   }
+	   else {
+	       throw "Unable to register listner. Listerner must be a function or an object with a callbakc function named 'propertyChange'";
 	   }
 	},
 	

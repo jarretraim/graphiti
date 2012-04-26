@@ -1,5 +1,4 @@
 
-
 /**
  * @class graphiti.command.CommandResize
  * Resize command for figures. Can be execute/undo/redo via a CommandStack.

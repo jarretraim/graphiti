@@ -30,7 +30,7 @@ graphiti.Label= graphiti.SetFigure.extend({
     	
         this.fontSize = 12;
         this.fontColor = new graphiti.util.Color("#080808");
-        this.padding = 10;
+        this.padding = 4;
         
         this.setStroke(1);
     },
@@ -67,7 +67,7 @@ graphiti.Label= graphiti.SetFigure.extend({
         var lattr = {};
         lattr.text = this.text;
         lattr.x = this.padding;
-        lattr.y = this.getHeight()/2+this.padding;
+        lattr.y = this.getHeight()/2;
         lattr["text-anchor"] = "start";
         lattr["font-size"] = this.fontSize;
         lattr.fill = "#" + this.fontColor.hex();

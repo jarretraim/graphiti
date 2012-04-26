@@ -1,6 +1,10 @@
 
 /**
-  * @author Andreas Herz
+ * @class graphiti.shape.note.PostIt
+ * Simple Post-it like figure with text.
+ * 
+ * @author Andreas Herz
+ * @extends graphiti.Label
  */
 graphiti.shape.note.PostIt= graphiti.Label.extend({
 
@@ -21,7 +25,7 @@ graphiti.shape.note.PostIt= graphiti.Label.extend({
         this.setColor("#000000");
         this.setFontSize(18);
         this.setPadding(5);
-        this.
+       
     }
 });
 

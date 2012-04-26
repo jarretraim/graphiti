@@ -30,7 +30,7 @@ graphiti.layout.connection.DirectRouter = graphiti.layout.connection.ConnectionR
      * @method
      * Routes the Connection in air line (beeline).
      * 
-     * @param {graphiti.Connection] connection The Connection to route
+     * @param {graphiti.Connection} connection The Connection to route
      */
     route:function( connection)
     {

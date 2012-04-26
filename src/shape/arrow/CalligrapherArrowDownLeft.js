@@ -1,7 +1,16 @@
 
-
+/**
+ * @class graphiti.shape.arrow.CalligrapherArrowDownLeft
+ * Hand drawn arrow which points down left
+ * 
+ * @extends graphiti.SVGFigure
+ */
 graphiti.shape.arrow.CalligrapherArrowDownLeft = graphiti.SVGFigure.extend({
    
+    /**
+     * @constructor
+     * Create a new instance
+     */
     init:function(){
         this._super();
     },

@@ -1,10 +1,12 @@
 /**
- * A simple Connection with a label.
+ * @class example.connection_labeledit.LabelConnection
+ * 
+ * A simple Connection with a label wehich sticks in the middle of the connection..
  *
- * @version @VERSION@
  * @author Andreas Herz
+ * @extend graphiti.Connection
  */
-example.locator_connection.LabelConnection= graphiti.Connection.extend({
+example.connection_labeledit.LabelConnection= graphiti.Connection.extend({
     
     init:function()
     {
@@ -15,8 +17,9 @@ example.locator_connection.LabelConnection= graphiti.Connection.extend({
       
       // Create any Draw2D figure as decoration for the connection
       //
-      this.label = new graphiti.Label("Message");
+      this.label = new graphiti.Label("I'm a Label");
       this.label.setColor("#ffffff");
+      this.label.setFontColor("#ffffff");
       
       // add the new decoration to the connection with a position locator.
       //

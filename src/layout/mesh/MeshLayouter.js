@@ -1,7 +1,7 @@
 
 /**
- * @class graphiti.layout.connection.ConnectionRouter
- * Routes a {@link graphiti.Connection}, possibly using a constraint.
+ * @class graphiti.layout.mesh.MeshLayouter
+ * Layouter for a mesh or grid. 
  *
  * @author Andreas Herz
  */

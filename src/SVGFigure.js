@@ -1,7 +1,8 @@
 
 /**
  * @class graphiti.SVGFigure
- *
+ * Abstract class which can handle plain SVG content. Inherit class must override the method
+ * <code>getSVG()</code>.
  * 
  * @author Andreas Herz
  * @extends graphiti.Rectangle
@@ -20,12 +21,17 @@ graphiti.SVGFigure = graphiti.SetFigure.extend({
 
     },
 
-    
+    /**
+     * @private
+     * @returns
+     */
     createSet : function() {
 		return this.importSVG(this.canvas, this.getSVG());
 	},
     
+	
     /**
+     * @private
      */
     importSVG : function (canvas, rawSVG) {
       

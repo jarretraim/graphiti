@@ -1,7 +1,9 @@
 
 /**
  * @class graphiti.Oval
- * The base class for all visible elements inside a canvas.
+ * Oval figure.
+ * 
+ * {@img Oval.png Oval Figure}
  * 
  * @inheritable
  * @author Andreas Herz
@@ -23,8 +25,7 @@ graphiti.Oval = graphiti.VectorFigure.extend({
       
 
    /** 
-    * @method
-    * Creates the shape object for a oval.
+    * @inheritdoc
     * 
     * @template
     **/
@@ -36,9 +37,7 @@ graphiti.Oval = graphiti.VectorFigure.extend({
    },
 
    /**
-    * @method
-    * Trigger the repaint of the element and transport all style properties to the visual representation.<br>
-    * Called by the framework.
+    * @inheritdoc
     * 
     * @template
     **/

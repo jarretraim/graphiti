@@ -1,8 +1,19 @@
 
-
+/**
+ * @class graphiti.command.CommandDelete
+ * Commoand which deletes a figure. Supports the CommandStack.
+ * 
+ * @extends graphiti.command.Command
+ */
 graphiti.command.CommandDelete = graphiti.command.Command.extend({
     
-    init: function(/*:graphiti.Figure*/ figure)
+    /**
+     * @constructor
+     * Create a delete command for the given figure.
+     * 
+     * @param {graphiti.Figure} figure
+     */
+    init: function( figure)
     {
        this._super("Delete Figure");
        this.parent   = figure.getParent();
@@ -13,6 +24,7 @@ graphiti.command.CommandDelete = graphiti.command.Command.extend({
     },
     
     /**
+     * @method
      * Execute the command the first time
      * 
      **/
@@ -22,6 +34,7 @@ graphiti.command.CommandDelete = graphiti.command.Command.extend({
     },
     
     /**
+     * @method
      * Undo the command
      *
      **/
@@ -52,7 +65,9 @@ graphiti.command.CommandDelete = graphiti.command.Command.extend({
         }
     },
     
-    /** Redo the command after the user has undo this command
+    /** 
+     * @method
+     * Redo the command after the user has undo this command
      *
      **/
     redo:function()

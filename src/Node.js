@@ -2,8 +2,8 @@
 /**
  * @class graphiti.Node
  * 
- * A Node is the base class for all figures which can have {@link @NAMESPACE@Port}s. A {@link @NAMESPACE@Port} is the
- * anchor for a {@link graphiti.Connection} line.<br><br><b>Hint:</b> A {@link graphiti.Port} is a green dot which can 
+ * A Node is the base class for all figures which can have {@link graphiti.Port}s. A {@link graphiti.Port} is the
+ * anchor for a {@link graphiti.Connection} line.<br><br>A {@link graphiti.Port} is a green dot which can 
  * be dragged and dropped over another port.<br>
  * 
  * @inheritable
@@ -30,7 +30,7 @@ graphiti.Node = graphiti.Figure.extend({
      * @method
      * Return all ports of the node.
      *
-     * @return  graphiti.util.ArrayList
+     * @return  {graphiti.util.ArrayList}
      **/
     getPorts: function()
     {
@@ -42,7 +42,7 @@ graphiti.Node = graphiti.Figure.extend({
      * @method
      * Return all input ports of the node.
      *
-     * @type  graphiti.util.ArrayList
+     * @return {graphiti.util.ArrayList}
      **/
     getInputPorts: function()
     {
@@ -61,7 +61,7 @@ graphiti.Node = graphiti.Figure.extend({
      * @method
      * Return all output ports of the node.
      *
-     * @return  graphiti.util.ArrayList
+     * @return {graphiti.util.ArrayList}
      **/
     getOutputPorts: function()
     {
@@ -80,8 +80,6 @@ graphiti.Node = graphiti.Figure.extend({
      * @method
      * Return the port with the corresponding name.
      *
-     * @see graphiti.Port#getName
-     * @see graphiti.Port#setName
      * 
      * @param {String} portName The name of the port to return.
      * @return {graphiti.Port} Returns the port with the hands over name or null.
@@ -103,8 +101,6 @@ graphiti.Node = graphiti.Figure.extend({
      * @method
      * Return the input port with the corresponding name.
      *
-     * @see graphiti.Port#getName
-     * @see graphiti.Port#setName
      * 
      * @param {String} portName The name of the port to return.
      * @return {graphiti.InputPort} Returns the port with the hands over name or null.
@@ -126,10 +122,8 @@ graphiti.Node = graphiti.Figure.extend({
      * @method
      * Return the output port with the corresponding name.
      *
-     * @see graphiti.Port#getName
-     * @see graphitiPort#setName
      * @param {String} portName The name of the port to return.
-     * @return {graphitiOutputPort} Returns the port with the hands over name or null.
+     * @return {graphiti.OutputPort} Returns the port with the hands over name or null.
      **/
     getOutputPort: function( portName)
     {
@@ -149,8 +143,8 @@ graphiti.Node = graphiti.Figure.extend({
      * Add a port to this node at the given position.<br>
      *
      * @param {graphiti.Port} port The new port to add.
-     * @param {Number}  x The x position.
-     * @param {Number}  y The y position.
+     * @param {Number} x The x position.
+     * @param {Number} y The y position.
      **/
     addPort: function(port, x, y)
     {
@@ -174,7 +168,6 @@ graphiti.Node = graphiti.Figure.extend({
      * Removes a port and all related connections from this node.<br>
      *
      * @param {graphiti.Port} port The port to remove.
-     *
      **/
     removePort : function(port)
     {

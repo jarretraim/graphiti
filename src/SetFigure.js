@@ -28,11 +28,6 @@ graphiti.SetFigure = graphiti.Rectangle.extend({
     
     /**
      * @method
-     * Return the 
-     */
-    
-    /**
-     * @method
      * Set/Reset the cnavas for the element.
      * 
      * @param {graphiti.Canvas} canvas the canvas to use
@@ -97,8 +92,7 @@ graphiti.SetFigure = graphiti.Rectangle.extend({
      * @method
      * Return the calculate width of the set. This calculates the bounding box of all elements.
      * 
-     * @returns the calculated width of the label
-     * @return {Number}
+     * @return {Number} the calculated width of the label
      **/
 	getWidth : function() {
 		if (this.shape === null) {
@@ -111,8 +105,7 @@ graphiti.SetFigure = graphiti.Rectangle.extend({
      * @method
      * Return the calculated height of the set. This calculates the bounding box of all elements.
      * 
-	 * @returns the calculated height of the label
-	 * @return {Number}
+	 * @return {Number} the calculated height of the label
 	 */
     getHeight:function()
     {

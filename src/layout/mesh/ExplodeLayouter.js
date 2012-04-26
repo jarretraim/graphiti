@@ -4,7 +4,7 @@
  * Routes a {@link graphiti.Connection}, possibly using a constraint.
  *
  * @author Andreas Herz
- * @extend graphiti.layout.mesh.MeshLayout
+ * @extend graphiti.layout.mesh.MeshLayouter
  */
 graphiti.layout.mesh.ExplodeLayouter = graphiti.layout.mesh.MeshLayouter.extend({
 

@@ -1,11 +1,12 @@
 
 /**
  * @class graphiti.VectorFigure
- * The base class for all visible elements inside a canvas.
+ * The base class for all vector based figures like {#link graphiti.Rectangle}  or {#link graphiti.Oval} 
+ * inside a canvas.
  * 
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.Node
+ * @extends {graphiti.Node}
  */
 graphiti.VectorFigure = graphiti.Node.extend({
     NAME : "graphiti.VectorFigure", // only for debugging
@@ -41,7 +42,12 @@ graphiti.VectorFigure = graphiti.Node.extend({
 
         attributes.x= this.getAbsoluteX();
         attributes.y = this.getAbsoluteY();
-        attributes.stroke = "#" + this.color.hex();
+        if(this.color === null || this.stroke ===0){
+            attributes.stroke = "none";
+        }
+        else {
+            attributes.stroke = "#" + this.color.hex();
+        }
         attributes["stroke-width"] = this.stroke;
         
         if(typeof attributes.fill === "undefined"){

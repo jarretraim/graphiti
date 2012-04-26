@@ -32,20 +32,18 @@ graphiti.Line = graphiti.Figure.extend({
         this.corona = 10;
         this.isGlowing = false;
 
-        // a figure can store additional, user defined, properties
-        this.properties = {} ; /*:Map<name,value>*/
-
         this.setSelectable(true);
         this.setDeleteable(true);
    },
       
 
    /**
+    * @method
     * Set the width for the click hit test of this line.
     *
     * @param {Number} width the width of the line hit test.
     **/
-   setCoronaWidth:function(/*:int*/ width)
+   setCoronaWidth:function( width)
    {
       this.corona = width;
    },
@@ -118,45 +116,6 @@ graphiti.Line = graphiti.Figure.extend({
 	   
 	   this.isGlowing = flag;
    },
-   
-   /**
-    * A figure can store user defined attributes. This method returns all properties stored in this figure.<br>
-    *
-    * @see #setProperty
-    * @returns All user defined properties of the figure
-    * @type Map
-    **/
-   getProperties:function()
-   {
-     return this.properties;
-   },
-
-   /**
-    * A figure can store user defined attributes. This method returns the requested property.<br>
-    *
-    * @see #setProperty
-    * @returns The user defined property of this figure.
-    * @type String
-    **/
-   getProperty:function(/*:String*/ key)
-   {
-     return this.properties[key];
-   },
-
-
-   /**
-    * A figure can store any type of information. You can use this to attach any String or Object to this
-    * figure.
-    *
-    * @see #getProperty
-    * @param {String} key The key of the property.
-    * @param {String} value The value of the property.
-    **/
-   setProperty:function(/*:String*/ key,/*:String*/ value)
-   {
-     this.properties[key]=value;
-     this.setDocumentDirty();
-   },
 
 
    /**
@@ -222,7 +181,7 @@ graphiti.Line = graphiti.Figure.extend({
     * Set the start point of the line.
     * This method fires a <i>document dirty</i> event.
     *
-    * @param {Numer} x the x coordinate of the start point
+    * @param {Number} x the x coordinate of the start point
     * @param {Number} y the y coordinate of the start point
     **/
    setStartPoint:function( x, y)

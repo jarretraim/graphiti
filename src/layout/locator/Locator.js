@@ -4,7 +4,6 @@
  * Controls the location of an IFigure. 
  *
  * @author Andreas Herz
- * @extend graphiti.layout.locator.Locator
  */
 graphiti.layout.locator.Locator= Class.extend({
     

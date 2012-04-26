@@ -1,7 +1,8 @@
 
 /**
- * @class graphiti.Connection
- *  A Connection is the line between two {@link graphiti.Port}s.
+ * @class graphiti.PolyLine
+ * 
+ * A PolyLine is a line with more than 2 points.
  *
  * @inheritable
  * @author Andreas Herz
@@ -35,7 +36,7 @@ graphiti.PolyLine = graphiti.Line.extend({
      * Set the start point of the line.
      * This method fires a <i>document dirty</i> event.
      *
-     * @param {Numer} x the x coordinate of the start point
+     * @param {Number} x the x coordinate of the start point
      * @param {Number} y the y coordinate of the start point
      **/
     setStartPoint:function( x, y)
@@ -168,10 +169,10 @@ graphiti.PolyLine = graphiti.Line.extend({
     },
     
     /**
+     * @method
      * Returns the fulcrums of the connection
      *
-     * @return an graphiti.util.ArrayList of type graphiti.Point
-     * @type graphiti.util.ArrayList 
+     * @return {graphiti.util.ArrayList} an graphiti.util.ArrayList of type graphiti.Point
      **/
     getPoints:function()
     {
@@ -244,13 +245,13 @@ graphiti.PolyLine = graphiti.Line.extend({
     
    
     /**
+     * @method
      * Returns the Command to perform the specified Request or null.
       *
      * @param {graphiti.EditPolicy} request describes the Command being requested
-     * @return null or a Command
-     * @type graphiti.Command
+     * @return {graphiti.command.Command}
      **/
-    createCommand:function(/*:graphiti.EditPolicy*/ request)
+    createCommand:function(request)
     {
  
       if(request.getPolicy() === graphiti.EditPolicy.DELETE)

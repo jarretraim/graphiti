@@ -118,13 +118,17 @@ graphiti.OutputPort = graphiti.Port.extend({
       this.maxFanOut = count;
     },
     
+    /**
+     * @method 
+     * @returns {Number}
+     */
     getMaxFanOut:function()
     {
       return this.maxFanOut;
     },
     
     /**
-     * @type int
+     * @return {Number}
      **/
     getFanOut:function()
     {

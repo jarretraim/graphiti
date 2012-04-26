@@ -1,6 +1,6 @@
 
 /**
- * @class
+ * @class graphiti.ConnectionAnchor
  *  An object to which a {@link graphiti.Connection} will be anchored.
  *  
  * @inheritable

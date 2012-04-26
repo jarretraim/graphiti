@@ -14,6 +14,7 @@ graphiti.Port = graphiti.Circle.extend({
     /**
      * @constructor
      * Creates a new Node element which are not assigned to any canvas.
+     * 
      * @param {graphiti.Canvas} canvas
      * @param {String} [name] the name of the port. required for MVC
      */
@@ -27,12 +28,6 @@ graphiti.Port = graphiti.Circle.extend({
         else {
             this.setDimension(10, 10);
         }
-
-        // Inner Class for the port corona. Why?! The runtime increment the alpha value from 0-1 if you add
-        // an element to the canvas if you have set workflow.setSmoothFigureHandling(true). But the corona should have max. alpha=0.3.
-        //
-
-        this.hideIfConnected = false;
 
         this.coronaWidth = 5; // the corona width for the hitTest method. Usefull during drag&drop of ports. Better SnapTo behaviour.
         this.corona = null; // Circle
@@ -59,10 +54,8 @@ graphiti.Port = graphiti.Circle.extend({
     },
 
      /**
-      * @method
-      * Init the repaint of the element
+      * @inheritdoc
       * 
-      * @template
       * @param attributes
       */
      repaint:function(attributes){
@@ -85,22 +78,10 @@ graphiti.Port = graphiti.Circle.extend({
          this._super(attributes);
      },
      
-    /**
-     * Hide the port if a connector has been attach to this.
-     * The port doesn't change the functonality. You can drag&drop the port. 
-     * It hide's only the UI Representation!
-     **/
-    setHideIfConnected:function(/*:boolean*/ flag)
-    {
-      this.hideIfConnected = flag;
-    },
     
     /**
-     * @method
-     * Callback method for the mouse enter event. Usefull for mouse hover-effects.
-     * Override this method for yourown effects. Don't call them manually.
+     * @inheritdoc
      *
-     * @private
      **/
     onMouseEnter:function()
     {
@@ -109,10 +90,8 @@ graphiti.Port = graphiti.Circle.extend({
     
     
     /**
-     * @method
-     * Callback method for the mouse leave event. Usefull for mouse hover-effects.
+     * @inheritdoc
      * 
-     * @private
      **/
     onMouseLeave:function()
     {
@@ -122,9 +101,9 @@ graphiti.Port = graphiti.Circle.extend({
 
     /**
      * @method
-     * Returns a array of <code>graphiti.Connection</code> of all related connections to this port.
+     * Returns a {#link graphiti.util.ArrayList} of {#link graphiti.Connection}s of all related connections to this port.
      *
-     * @type graphiti.util.ArrayList
+     * @type {graphiti.util.ArrayList}
      **/
     getConnections:function()
     {
@@ -148,7 +127,7 @@ graphiti.Port = graphiti.Circle.extend({
     /**
      * @method
      * Set the parent of this port.
-     * Call {@link graphiti.Node.addPort} if you want to a port to node. Don't call this method directly.
+     * Call {@link graphiti.Node#addPort} if you want to a port to node. Don't call this method directly.
      *
      * @private
      */
@@ -193,9 +172,7 @@ graphiti.Port = graphiti.Circle.extend({
     },
     
     /**
-     * @method
-     * Will be called if the drag and drop action begins. You can return [false] if you
-     * want avoid that the figure can be move.
+     * @inheritdoc
      * 
      * @return {boolean}
      **/
@@ -215,8 +192,7 @@ graphiti.Port = graphiti.Circle.extend({
     },
     
     /**
-     * @method
-     * Called from the framework during a drag&drop operation
+     * @inheritdoc
      * 
      * @param {Number} dx the x difference between the start of the drag drop operation and now
      * @param {Number} dy the y difference between the start of the drag drop operation and now
@@ -245,7 +221,7 @@ graphiti.Port = graphiti.Circle.extend({
     
     
     /**
-     * @private
+     * @inheritdoc
      **/
     onDragEnd:function()
     {
@@ -270,6 +246,8 @@ graphiti.Port = graphiti.Circle.extend({
     },
     
     /**
+     * @inheritdoc
+     * 
      * @param {graphiti.Figure} figure The figure which is currently dragging
      * 
      * @return {Boolean} true if this port accepts the dragging port for a drop operation
@@ -301,8 +279,7 @@ graphiti.Port = graphiti.Circle.extend({
     },
     
     /**
-     * @method
-     * Called if the DragDrop object leaving the current hover figure.
+     * @inheritdoc
      * 
      * @param {graphiti.Figure} figure The figure which is currently dragging
      * @private
@@ -399,9 +376,9 @@ graphiti.Port = graphiti.Circle.extend({
      * @method
      * Highlight this port
      * 
-     * @private
+     * @param {boolean} flag indicator if the figure should glow.
      */
-    setGlow:function (/*:boolean*/ flag)
+    setGlow:function ( flag)
     {
       if(flag===true && this.corona===null)
       {
@@ -417,10 +394,7 @@ graphiti.Port = graphiti.Circle.extend({
     },
     
     /**
-     * @method
-     * Returns the Command to perform the specified Request or null.<br>
-     * Inherited figures can override this method to return their own implementation
-     * of the request.<br>
+     * @inheritdoc
      *
      * @param {graphiti.EditPolicy} request describes the Command being requested
      * @return {graphiti.command.Command} null or a valid command
@@ -470,12 +444,13 @@ graphiti.Port = graphiti.Circle.extend({
     },
  
     /**
-     * @method Return a possible drop target which is under the hands over coordinate
-     * @param {Number}
-     *            x
-     * @param {Number}
-     *            y
-     * @returns
+     * @method 
+     * Return a possible drop target which is under the hands over coordinate.
+     * 
+     * @param {Number} x
+     * @param {Number} y
+     * 
+     * @return {graphiti.Figure}
      */
     getDropTarget: function (x , y, portToIgnore)
     {
@@ -492,6 +467,12 @@ graphiti.Port = graphiti.Circle.extend({
 });
 
 
+/**
+ * @class graphiti.Corona
+ * Glow effect for ports. Just for internal use.
+ * 
+ * @extend graphiti.Circle
+ */
 graphiti.Corona = graphiti.Circle.extend({
 
     /**
@@ -507,6 +488,12 @@ graphiti.Corona = graphiti.Circle.extend({
         this.setColor(new graphiti.util.Color(102,182,252));
     },
     
+    /**
+     * @method
+     * the the opacity of the element.
+     * 
+     * @param {Number} percent
+     */
     setAlpha : function(percent)
     {
         this._super(Math.min(0.3, percent));

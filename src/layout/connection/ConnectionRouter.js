@@ -29,7 +29,7 @@ graphiti.layout.connection.ConnectionRouter = Class.extend({
      * </ul>
      * <p>
      * 
-     * @param {graphiti.geo.Dimesion} r the rectangle
+     * @param {graphiti.geo.Dimension} r the rectangle
      * @param {graphiti.geo.Point} p the point in relation to the given rectangle
      * 
      * @return {Number} the direction from <i>r</i> to <i>p</i>

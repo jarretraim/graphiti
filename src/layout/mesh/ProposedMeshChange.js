@@ -1,7 +1,7 @@
 
 /**
- * @class graphiti.layout.connection.ConnectionRouter
- * Routes a {@link graphiti.Connection}, possibly using a constraint.
+ * @class graphiti.layout.mesh.ProposedMeshChange
+ * Change proposal for grid/mesh layout changes.
  *
  * @author Andreas Herz
  */
@@ -19,7 +19,7 @@ graphiti.layout.mesh.ProposedMeshChange = Class.extend({
     
     /**
      * @method
-     * Return the related figure
+     * Return the related figure.
      * 
      * @return {graphiti.Figure} the figure to the related change proposal
      */
@@ -28,10 +28,22 @@ graphiti.layout.mesh.ProposedMeshChange = Class.extend({
     	return this.figure;
     },
     
+    /**
+     * @method
+     * The proposed x-coordinate.
+     * 
+     * @return {Number}
+     */
     getX: function(){
     	return this.x;
     },
     
+    /**
+     * @method
+     * The proposed y-coordinate
+     * 
+     * @return {Number}
+     */
     getY: function(){
     	return this.y;
     }

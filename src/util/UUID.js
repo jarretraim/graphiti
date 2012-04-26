@@ -1,5 +1,7 @@
 
 /**
+ * @class graphiti.util.UUID
+ * Generates UUID's
  * 
  * @author Andreas Herz
  * @constructor
@@ -10,6 +12,7 @@ graphiti.util.UUID=function()
 
 
 /**
+ * @method
  * Generates a unique id.
  * But just for the correctness: this is no Global Unique Identifier, it is just a random generator 
  * with the output that looks like a GUID. But may be also useful.

@@ -1,6 +1,6 @@
 
 
-example.locator_connection.LabelEditor = Class.extend({
+example.connection_labeledit.LabelEditor = Class.extend({
 	
 	init:function(canvas){
 		
@@ -26,7 +26,7 @@ example.locator_connection.LabelEditor = Class.extend({
 		//
 	    canvas.addSelectionListener($.proxy(function(e){
 	    	this.currentFigure = e;
-     		if(e instanceof example.locator_connection.LabelConnection){
+     		if(e instanceof example.connection_labeledit.LabelConnection){
 	     		$("#dialog_label_text").val(e.getLabel());
 		     	this.html.fadeIn();
 	     	}

@@ -1,6 +1,6 @@
 
 /**
- * @class graphiti.layout.connection.DirectRouter
+ * @class graphiti.layout.connection.ManhattanConnectionRouter
  * Provides a {@link graphiti.Connection} with an orthogonal route between the Connection's source 
  * and target anchors.
  * 
@@ -17,7 +17,7 @@ graphiti.layout.connection.ManhattanConnectionRouter = graphiti.layout.connectio
 
 	/**
 	 * @constructor 
-	 * Creates a new Router object
+	 * Creates a new Router object.
 	 * 
 	 */
     init: function(){
@@ -27,7 +27,7 @@ graphiti.layout.connection.ManhattanConnectionRouter = graphiti.layout.connectio
 	 * @method
 	 * Layout the hands over connection in a manhattan like layout
 	 * 
-	 * @param {graphiti.Connection}
+	 * @param {graphiti.Connection} conn
 	 */
 	route:function( conn)
 	{
@@ -42,11 +42,14 @@ graphiti.layout.connection.ManhattanConnectionRouter = graphiti.layout.connectio
 	},
 	
 	/**
+	 * @method
+	 * Internal routing algorithm.
+	 * 
 	 * @private
 	 * @param {graphiti.Connection} conn
-	 * @param { graphiti.geo.Point} fromPt
+	 * @param {graphiti.geo.Point} fromPt
 	 * @param {Number} fromDir
-	 * @param { graphiti.geo.Point} toPt
+	 * @param {graphiti.geo.Point} toPt
 	 * @param {Number} toDir
 	 */
 	_route:function( conn, fromPt, fromDir, toPt, toDir)

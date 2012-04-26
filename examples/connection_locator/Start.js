@@ -1,5 +1,5 @@
 
-example.locator_connection.Start = graphiti.Rectangle.extend({
+example.connection_locator.Start = graphiti.Rectangle.extend({
 
     init : function()
     {

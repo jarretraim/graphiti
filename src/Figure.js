@@ -1,11 +1,10 @@
 
 /**
  * @class graphiti.Figure
- * A lightweight graphical object. Figures are rendered to a {#link graphiti.Canvas} object.
+ * A lightweight graphical object. Figures are rendered to a {graphiti.Canvas} object.
  * 
  * @inheritable
  * @author Andreas Herz
- * @since 2.1
  */
 graphiti.Figure = Class.extend({
     NAME : "graphiti.Figure", // only for debugging
@@ -151,16 +150,6 @@ graphiti.Figure = Class.extend({
        return this.model;
     },
 
-    /**
-     * @method
-     * Method will be called if the MVC pattern is used.
-     * Override this method to synch. the model into the figure/view
-     * 
-     * @template
-     */
-    updateViewFromModel:function()
-    {
-    },
 
     /**
      * @method

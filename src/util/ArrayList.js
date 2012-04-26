@@ -114,7 +114,8 @@ graphiti.util.ArrayList = Class.extend({
       * @method
       * returns an element at a specified index
       *
-      * @return {Number} i
+      * @param {Number} i
+      * @return {Object}
       */
      get:function(i)
      {
@@ -158,6 +159,7 @@ graphiti.util.ArrayList = Class.extend({
       * Remove the element from the list
       *
       * @param {Object} obj the object to remove
+      * @return {Object} the removed object or null
       */
      remove:function( obj)
      {

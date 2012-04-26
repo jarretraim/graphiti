@@ -1,7 +1,8 @@
 
 
 /**
- * @class
+ * @class graphiti.EditPolicy
+ * 
  * EditPolicies should determine an Figures editing capabilities. 
  * It is possible to implement an Figure such that it handles all editing 
  * responsibility.<br> 
@@ -9,6 +10,8 @@
  * EditPolicies. Using policies, you can pick and choose the editing behavior for 
  * an Figure without being bound to its class hierarchy. Code reuse is increased, 
  * and code management is easier. 
+ * 
+ * @author Andreas Herz
  */
 graphiti.EditPolicy = Class.extend({
     NAME : "graphiti.EditPolicy", // only for debugging

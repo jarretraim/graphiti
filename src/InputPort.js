@@ -3,7 +3,7 @@
  * A OutputPort is the end anchor for a {@link graphiti.Connection}.
  * 
  * @author Andreas Herz
- * @extends graphiti.Port
+ * @extend graphiti.Port
  */ 
 graphiti.InputPort = graphiti.Port.extend({
 
@@ -23,12 +23,7 @@ graphiti.InputPort = graphiti.Port.extend({
 
     
     /**
-     * @method
-     * Called by the framework during drag drop operations.
-     * 
-     * @param {graphiti.Figure} figure The figure which is currently dragging
-     * 
-     * @return {Boolean} true if this figure accepts the dragging figure for a drop operation
+     * @inheritdoc
      **/
     onDragEnter : function(figure)
     {
@@ -62,6 +57,11 @@ graphiti.InputPort = graphiti.Port.extend({
         return false;
     },
     
+    /**
+     * @inheritdoc
+     * 
+     * @param {graphiti.Figure} figure
+     */
     onDragLeave:function( figure)
     {
   	  // Ports accepts only Ports as DropTarget

@@ -79,7 +79,8 @@ graphiti.ResizeHandle = graphiti.Rectangle.extend({
           break;
       }
       
-      this.setBackgroundColor(new  graphiti.util.Color(151,255,250));
+      this.setBackgroundColor(new  graphiti.util.Color(151,255,150));
+      this.setColor(new  graphiti.util.Color(151,255,150));
       this.setStroke(0.5);
       this.setSelectable(false);
     },
@@ -146,11 +147,12 @@ graphiti.ResizeHandle = graphiti.Rectangle.extend({
     
     
     /**
-     * @method Called by the framework if the figure is moved by user interaction.
-     * @param {Number}
-     *            dx the move x offset
-     * @param {Number}
-     *            dy the move y offset
+     * @method 
+     * Called by the framework if the figure is moved by user interaction.
+     * @param {Number} dx the move x offset
+     * @param {Number} dy the move y offset
+     * 
+     * @return {boolean}
      */
     onDrag : function(dx, dy)
     {

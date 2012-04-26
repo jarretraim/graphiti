@@ -17,6 +17,9 @@ graphiti.Rectangle = graphiti.VectorFigure.extend({
     init: function( width, height) {
       this._super();
 
+      // corner radius
+      this.radius = 2;
+      
       this.setBackgroundColor( new graphiti.util.Color(0,0,0));
       this.setColor(new graphiti.util.Color(50,50,50));
 
@@ -31,8 +34,7 @@ graphiti.Rectangle = graphiti.VectorFigure.extend({
     },
     
     /**
-     * @method
-     * propagate all attributes like color, stroke,... to the shape element
+     * @inheritdoc
      **/
     repaint : function(attributes)
     {
@@ -46,17 +48,36 @@ graphiti.Rectangle = graphiti.VectorFigure.extend({
 
         attributes.width = this.getWidth();
         attributes.height = this.getHeight();
-
+        attributes.r = this.radius;
         this._super(attributes);
     },
 
     /**
-     * @private
+     * @inheritdoc
      */
     createShapeElement : function()
     {
        return this.canvas.paper.rect(this.getX(),this.getY(),this.getWidth(), this.getHeight());
+    },
+
+    /**
+     * @method
+     * Sets the corner radius for rectangles with round corners. 
+     * 
+     * @param {Number} radius
+     */
+     setRadius: function(radius){
+        this.radius = radius;
+        this.repaint();
+    },
+    
+    /**
+     * @method
+     * Indicates the corner radius for rectangles with round corners. The default is 2. 
+     * 
+     * @return {Number}
+     */
+    getRadius:function(){
+        return this.radius;
     }
-
-
 });

@@ -2,7 +2,27 @@
 /**
  * @class graphiti.Canvas
  * Interactive paint area of the graphiti library.
- * 
+ * <br>
+ * <strong>Usage</strong>
+ * <pre>
+
+$(document).ready(function() {
+
+    document.ontouchmove = function(e) {
+        e.preventDefault();
+    };
+    
+    var canvas = new graphiti.Canvas("gfx_holder");
+
+    var figure1 = new graphiti.Oval();
+    var figure2 = new graphiti.Rectangle();
+    canvas.addFigure(figure1,100,100);
+    canvas.addFigure(figure2,120,150);
+
+});
+
+
+ * </pre>
  * @inheritable
  * @author Andreas Herz
  */
@@ -194,11 +214,11 @@ graphiti.Canvas = Class.extend(
 
     /**
      * @method
-     * Transforms a document coordinate to canvas coordinate
+     * Transforms a document coordinate to canvas coordinate.
      * 
      * @param {Number} x the x coordinate relative to the window 
      * @param {Number} y the y coordinate relative to the window
-     * @returns {graphiti.util.Point}
+     * @returns {graphiti.geo.Point}
      */
 	fromDocumentToCanvasCoordinate : function(x,y) {
 		
@@ -234,7 +254,7 @@ graphiti.Canvas = Class.extend(
     /**
      * @method
      * 
-     * Set the area which are scrolling the cnavas
+     * Set the area which are scrolling the canvas.
      * 
      * @return {Number} 
      **/
@@ -247,7 +267,7 @@ graphiti.Canvas = Class.extend(
      * @method
      * The left scroll position.
      * 
-     * @return {Number} 
+     * @return {Number} the left scroll offset of the canvas
      **/
     getScrollLeft:function()
     {
@@ -258,7 +278,7 @@ graphiti.Canvas = Class.extend(
      * @method
      * The top scroll position
      * 
-     * @return {Number} The X coordinate in relation to the canvas
+     * @return {Number} the top scroll offset of the cnavas.
      **/
     getScrollTop:function()
     {

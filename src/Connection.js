@@ -83,14 +83,15 @@ graphiti.Connection = graphiti.PolyLine.extend({
     
    
     /**
+     * @method
      * Add a child figure to the Connection. The hands over figure doesn't support drag&drop 
      * operations. It's only a decorator for the connection.<br>
      * Mainly for labels or other fancy decorations :-)
      *
      * @param {graphiti.Figure} figure the figure to add as decoration to the connection.
-     * @param {graphiti.ConnectionLocator} locator the locator for the child. 
+     * @param {graphiti.layout.locator.ConnectionLocator} locator the locator for the child. 
     **/
-    addFigure : function(/* :graphiti.Figure */figure, /* :graphiti.ConnectionLocator */locator)
+    addFigure : function(figure, locator)
     {
         var entry = {};
         entry.figure = figure;
@@ -100,6 +101,10 @@ graphiti.Connection = graphiti.PolyLine.extend({
         this.repaint();
     },
     
+    /**
+     * @private
+     * @param canvas
+     */
     setCanvas: function(canvas){
         this._super(canvas);
         for(var i=0; i<this.children.getSize();i++){
@@ -109,6 +114,7 @@ graphiti.Connection = graphiti.PolyLine.extend({
     },
     
     /**
+     * @method
      * Set the ConnectionDecorator for this object.
      *
      * @param {graphiti.ConnectionDecorator} the new source decorator for the connection
@@ -293,8 +299,10 @@ graphiti.Connection = graphiti.PolyLine.extend({
      },
     
      /**
-      * 
-      * @param event
+      * @method
+      * Fired if any property of the related model has been changed
+      *  
+      * @param {graphiti.mvc.Event} event
       */
      propertyChange : function(event)
      {
@@ -551,11 +559,11 @@ graphiti.Connection = graphiti.PolyLine.extend({
     
     
     /**
+     * @method
      * Returns the Command to perform the specified Request or null.
       *
      * @param {graphiti.EditPolicy} request describes the Command being requested
-     * @return null or a Command
-     * @type graphiti.Command
+     * @return {graphiti.command.Command} null or a Command
      **/
     createCommand:function(/*:graphiti.EditPolicy*/ request)
     {
