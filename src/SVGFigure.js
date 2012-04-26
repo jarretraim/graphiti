@@ -6,7 +6,7 @@
  * @author Andreas Herz
  * @extends graphiti.Rectangle
  */
-graphiti.SVGFigure = graphiti.Rectangle.extend({
+graphiti.SVGFigure = graphiti.SetFigure.extend({
     
     NAME : "graphiti.SVGFigure", // only for debugging
 
@@ -18,68 +18,12 @@ graphiti.SVGFigure = graphiti.Rectangle.extend({
     init: function() {
       this._super();
 
-      this.setResizeable(false);
-      this.setStroke(0);
-      
-      // collection of SVG DOM nodes
-      this.svgNodes=null;
     },
+
     
-    /**
-     * @method
-     * Return the 
-     */
-    
-    /**
-     * @method
-     * Set/Reset the cnavas for the element.
-     * 
-     * @param {graphiti.Canvas} canvas the canvas to use
-     */
-    setCanvas: function( canvas )
-    {
-      // remove the shape if we reset the canvas and the element
-        // was already drawn
-      if(canvas===null && this.svgNodes!==null)
-      {
-         this.svgNodes.remove();
-         this.svgNodes=null;
-      }
-      this._super(canvas);
-     },
- 
-    /**
-     * @method
-     * propagate all attributes like color, stroke,... to the shape element
-     **/
-    repaint : function(attributes)
-    {
-        if(this.shape===null){
-            return;
-        }
-        
-        if (typeof attributes === "undefined") {
-            attributes = {};
-        }
-
-        attributes.fill ="none";
-        
-        if(this.svgNodes!==null){
-            this.svgNodes.transform("t"+this.x+","+this.y);
-        }
-        
-        this._super(attributes);
-    },
-
-    /**
-     * @private
-     */
-    createShapeElement : function()
-    {
-       this.svgNodes = this.importSVG(this.canvas,this.getSVG());//this.canvas.paper.add(mySVG);
-       return this.canvas.paper.rect(this.getX(),this.getY(),this.getWidth(), this.getHeight());;
-    },
-
+    createSet : function() {
+		return this.importSVG(this.canvas, this.getSVG());
+	},
     
     /**
      */

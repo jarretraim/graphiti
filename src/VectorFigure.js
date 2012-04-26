@@ -45,11 +45,14 @@ graphiti.VectorFigure = graphiti.Node.extend({
         attributes["stroke-width"] = this.stroke;
         
         if(typeof attributes.fill === "undefined"){
-           attributes.fill = "#" + this.bgColor.hex();
+           if(this.bgColor!==null){
+        	   attributes.fill = "#" + this.bgColor.hex();
+           }
+           else{
+               attributes.fill ="none";
+           }
         }
-        
-  //      this.shape.node.style.cursor = 'pointer';  
-        
+     
         this._super(attributes);
     },
 
@@ -70,7 +73,7 @@ graphiti.VectorFigure = graphiti.Node.extend({
             this.bgColor = new graphiti.util.Color(color);
         }
         else {
-            this.bgColor = new graphiti.util.Color(255, 255, 255, 0.1);
+            this.bgColor = null;
         }
 
         this.repaint();

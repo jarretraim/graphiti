@@ -13,9 +13,8 @@ var graphiti =
     },
 
     shape : {
-        arrow:{
-            
-        }
+        arrow:{},
+        note:{}
     },
     
     command : {

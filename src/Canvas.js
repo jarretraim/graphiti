@@ -69,6 +69,8 @@ graphiti.Canvas = Class.extend(
                 event = this._getEvent(event);
                 var pos = this.fromDocumentToCanvasCoordinate(event.clientX, event.clientY);
                 this.onDrag(ui.draggable, pos.getX(), pos.getY());
+                event.preventDefault();
+                event.stopPropagation();
             },this),
             stop: function(e, ui){
                 this.isInExternalDragOperation=false;
@@ -123,7 +125,6 @@ graphiti.Canvas = Class.extend(
 
         this.resizeHandleHalfWidth = this.resizeHandle2.getWidth()/2;
        
-
         this.verticalSnapToHelperLine = null;
         this.horizontalSnapToHelperLine = null;
 
@@ -132,7 +133,6 @@ graphiti.Canvas = Class.extend(
         this.commonPorts = new graphiti.util.ArrayList();
         this.dropTargets = new graphiti.util.ArrayList();
        
-        
         this.selectionListeners = new graphiti.util.ArrayList();
 
         this.commandStack = new graphiti.command.CommandStack();
@@ -165,7 +165,9 @@ graphiti.Canvas = Class.extend(
                    var diffX = event.clientX - this.mouseDownX;
                    var diffY = event.clientY - this.mouseDownY;
                    this.onMouseDrag(diffX, diffY);
-                }
+                   event.preventDefault();
+                   event.stopPropagation();
+               }
             }, this));
         }
         this.html.bind("mousedown touchstart", $.proxy(function(event)
@@ -175,7 +177,7 @@ graphiti.Canvas = Class.extend(
             this.mouseDownX = event.clientX;
             this.mouseDownY = event.clientY;
             var pos = this.fromDocumentToCanvasCoordinate(event.clientX, event.clientY);
-            this.mouseDown =true;
+            this.mouseDown = true;
             this.onMouseDown(pos.x, pos.y);
         }, this));
         

@@ -31,6 +31,6 @@ graphiti.shape.arrow.CalligrapherArrowDownLeft = graphiti.SVGFigure.extend({
         }
         
         this._super(attributes);
-    },
+    }
 
 });

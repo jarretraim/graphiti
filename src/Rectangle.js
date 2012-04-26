@@ -18,7 +18,7 @@ graphiti.Rectangle = graphiti.VectorFigure.extend({
       this._super();
 
       this.setBackgroundColor( new graphiti.util.Color(0,0,0));
-      this.setColor(new graphiti.util.Color(0,0,0));
+      this.setColor(new graphiti.util.Color(50,50,50));
 
       // set some good defaults
       //
@@ -44,8 +44,8 @@ graphiti.Rectangle = graphiti.VectorFigure.extend({
             attributes = {};
         }
 
-        attributes.width = this.width;
-        attributes.height = this.height;
+        attributes.width = this.getWidth();
+        attributes.height = this.getHeight();
 
         this._super(attributes);
     },

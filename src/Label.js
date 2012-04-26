@@ -1,34 +1,49 @@
 
 /**
-  * @author Andreas Herz
+ * @class graphiti.Label
+ * Implements a simple text label.
+ * 
+ * @author Andreas Herz
+ * 
+ * @class graphiti.SetFigure
  */
-graphiti.Label= graphiti.Figure.extend({
-    NAME : "graphiti.Label", // only for debugging
+graphiti.Label= graphiti.SetFigure.extend({
+
+	NAME : "graphiti.Label", // only for debugging
 
     /**
      * @constructor
-     * Creates a new figure element which are not assigned to any canvas.
+     * Creates a new text element.
      * 
-     * @param {String} text the text to display
+     * @param {String} [text] the text to display
      */
     init : function(text)
     {
-        this.text = text;
-        this.bgColor = null;
-        this.color = new graphiti.util.Color(0, 0, 0);
-        this.fontSize = 12;
         this._super();
+        
+        if(typeof text === "string"){
+    		this.text = text;
+    	}
+    	else{
+    		this.text = "";
+    	}
+    	
+        this.fontSize = 12;
+        this.fontColor = new graphiti.util.Color("#080808");
+        this.padding = 10;
+        
+        this.setStroke(1);
     },
     
     /** 
      * @method
-     * Creates the shape object for a oval.
+     * Creates the shape object for a text node.
      * 
      * @template
      **/
-    createShapeElement : function()
+    createSet : function()
     {
-      return this.canvas.paper.text(this.getAbsoluteX(), this.getAbsoluteY(), this.text);
+    	return this.canvas.paper.text(0, 0, this.text);
     },
 
     /**
@@ -48,52 +63,26 @@ graphiti.Label= graphiti.Figure.extend({
             attributes = {};
         }
         
-        attributes.text = this.text;
-        attributes.x = this.x;
-        attributes.y = this.y+(this.getHeight()/2);
-        attributes["text-anchor"] = "start";
-        attributes["font-size"] = this.fontSize;
-        attributes.fill = "#" + this.color.hex();
-  
+        // style the label
+        var lattr = {};
+        lattr.text = this.text;
+        lattr.x = this.padding;
+        lattr.y = this.getHeight()/2+this.padding;
+        lattr["text-anchor"] = "start";
+        lattr["font-size"] = this.fontSize;
+        lattr.fill = "#" + this.fontColor.hex();
+        this.svgNodes.attr(lattr);
+
+   
         this._super(attributes);
     },
     
 
-    /**
-     * @mehod
-     * Set the color of the line.
-     * This method fires a <i>document dirty</i> event.
-     * 
-     * @param {graphiti.util.Color} color The new color of the line.
-     **/
-    setColor:function( color)
-    {
-      if(color instanceof graphiti.util.Color){
-          this.color = color;
-      }
-      else if(typeof color === "string"){
-          this.color = new graphiti.util.Color(color);
-      }
-      else{
-          // set good default
-          this.color = this.DEFAULT_COLOR;
-      }
-      this.repaint();
-    },
-
-    /**
-     * @method
-     * Return the current paint color.
-     * 
-     * @return {graphiti.util.Color} The paint color of the line.
-     **/
-    getColor:function()
-    {
-      return this.color;
-    },
     
     /**
+     * @method
      * A Label is not resizeable. In this case this method returns always <b>false</b>.
+     * 
      * @returns Returns always false in the case of a Label.
      * @type boolean
      **/
@@ -103,17 +92,64 @@ graphiti.Label= graphiti.Figure.extend({
     },
         
     /**
+     * @method
      * Set the new font size in [pt].
      *
-     * @param {int} size The new font size in <code>pt</code>
+     * @param {Number} size The new font size in <code>pt</code>
      **/
-    setFontSize: function(/*:int*/ size)
+    setFontSize: function( size)
     {
       this.fontSize = size;
       this.repaint();
     },
     
+    
     /**
+     * @mehod
+     * Set the color of the font.
+     * 
+     * @param {graphiti.util.Color/String} color The new color of the line.
+     **/
+    setFontColor:function( color)
+    {
+      if(color instanceof graphiti.util.Color){
+          this.fontColor = color;
+      }
+      else if(typeof color === "string"){
+          this.fontColor = new graphiti.util.Color(color);
+      }
+      else{
+          // set good default
+          this.fontColor = new graphiti.util.Color(0,0,0);
+      }
+      this.repaint();
+    },
+
+    /**
+     * @method
+     * The current used font color
+     * 
+     * @returns {graphiti.util.Color}
+     */
+    getFontColor:function()
+    {
+      return this.fontColor;
+    },
+    
+    /**
+     * @method
+     * Set the padding of the element
+     *
+     * @param {Number} padding The new padding
+     **/
+    setPadding: function( padding)
+    {
+      this.padding = padding;
+      this.repaint();
+    },
+    
+    /**
+     * @method
      * A Label did have "autosize". Do nothing at all.
      *
      **/
@@ -122,31 +158,9 @@ graphiti.Label= graphiti.Figure.extend({
         // Dimension of a Label is autocalculated. "set" is not possible
     },
     
-    /**
-     * @returns the calculated width of the label
-     * @type int
-     **/
-    getWidth : function()
-    {
-        if (this.shape === null) {
-            return 0;
-        }
-        return this.shape.getBBox().width;
-    },
     
     /**
-     * @returns the calculated height of the label
-     * @type int
-     **/
-    getHeight:function()
-    {
-        if (this.shape === null) {
-            return 0;
-        }
-        return this.shape.getBBox().height;
-    },
-    
-    /**
+     * @method
      * Returns the current text of the label.
      *
      * @returns the current display text of the label
@@ -158,12 +172,48 @@ graphiti.Label= graphiti.Figure.extend({
     },
     
     /**
+     * @method
+     * Set the text for the label. Use \n for multiline text.
+     * 
      * @param {String} text The new text for the label.
      **/
     setText:function(/*:String*/ text )
     {
       this.text = text;
+      
       this.repaint();
+    },
+    
+    /**
+     * @method
+     * Return the calculate width of the set. This calculates the bounding box of all elements.
+     * 
+     * @returns the calculated width of the label
+     * @return {Number}
+     **/
+	getWidth : function() {
+		if (this.shape === null) {
+			return 0;
+		}
+		return this.svgNodes.getBBox().width+2*this.padding;
+	},
+    
+    /**
+     * @method
+     * Return the calculated height of the set. This calculates the bounding box of all elements.
+     * 
+	 * @returns the calculated height of the label
+	 * @return {Number}
+	 */
+    getHeight:function()
+    {
+        if (this.shape === null) {
+            return 0;
+        }
+        return this.svgNodes.getBBox().height+2*this.padding;
     }
 
 });
+
+
+
