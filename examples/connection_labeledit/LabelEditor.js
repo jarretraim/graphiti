@@ -5,7 +5,7 @@ example.connection_labeledit.LabelEditor = Class.extend({
 	init:function(canvas){
 		
 		this.html = $('<div id="inputbox" class="shadow">'+
-                         '   <div class="dialog_label">Label</div>'+
+                         '   <div class="dialog_label">Edit me</div>'+
                          '   <input class="dialog_input" id="dialog_label_text" style="width:100%">'+
                          '</div>'
                );

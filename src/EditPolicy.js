@@ -14,11 +14,12 @@
  * @author Andreas Herz
  */
 graphiti.EditPolicy = Class.extend({
+	
     NAME : "graphiti.EditPolicy", // only for debugging
 
     /**
      * @constructor
-     * Create a new Color object
+     * Create a new edit policy object
      * 
      * @param {String} policy 
      */
@@ -29,6 +30,7 @@ graphiti.EditPolicy = Class.extend({
     /**
      * @method
      * Return the String representation of the policy
+     * 
      * @return {String}
      **/
     getPolicy:function()
@@ -37,10 +39,10 @@ graphiti.EditPolicy = Class.extend({
     }
 });
  
-graphiti.EditPolicy.DELETE    = "DELETE";
-graphiti.EditPolicy.MOVE      = "MOVE";
-graphiti.EditPolicy.CONNECT   = "CONNECT";
+graphiti.EditPolicy.DELETE         = "DELETE";
+graphiti.EditPolicy.MOVE           = "MOVE";
+graphiti.EditPolicy.CONNECT        = "CONNECT";
 graphiti.EditPolicy.MOVE_BASEPOINT = "MOVE_BASEPOINT";
-graphiti.EditPolicy.RESIZE    = "RESIZE";
+graphiti.EditPolicy.RESIZE         = "RESIZE";
 
 

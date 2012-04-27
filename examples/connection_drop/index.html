@@ -116,8 +116,10 @@ $(document).ready(function() {
   // It is more confortable with the MVC pattern
   //
   var connection = new graphiti.Connection();
+  
   var output = start.getPort("output");
   var input = end.getPort("input");
+  
   connection.setSource(output);
   connection.setTarget(input);
   canvas.addFigure(connection);

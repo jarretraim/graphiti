@@ -17,7 +17,7 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
      * @constructor
      * Creates a new figure element which are not assigned to any canvas.
      */
-    init: function( ) {
+    init: function() {
       this._super();
       
       this.sourcePort = null;
@@ -35,6 +35,9 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
       
       // possible decorations ( e.g. a Label) of the Connection
       this.children = new graphiti.util.ArrayList();
+
+      this.setColor("#4cbf2f");
+      this.setStroke(2);
     },
     
     
@@ -54,6 +57,7 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
         }
     },
     
+    
     /**
      * @private
      **/
@@ -71,6 +75,7 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
         this.routingRequired =true;
         this.repaint();
     },
+    
     
     /**
      * You can't drag&drop the resize handles of a connector.
@@ -573,7 +578,6 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
         // the onDrop method
         return new graphiti.command.CommandReconnect(this);
       }
- 
 
       return this._super(request);
     }

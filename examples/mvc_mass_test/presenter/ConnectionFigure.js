@@ -8,8 +8,6 @@ example.mvc_simple.ConnectionFigure= graphiti.Connection.extend({
     init : function()
     {
         this._super();
-    //    this.setRouter(new draw2d.FanConnectionRouter());
-    //    this.setColor(draw2d.MountFigure.DEFAULT_COLOR);
     },
     
 

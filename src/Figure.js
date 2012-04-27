@@ -767,7 +767,7 @@ graphiti.Figure = Class.extend({
      *
      * @param {Boolean} flag The new drag drop indicator
      **/
-    setDraggable:function(/*:boolean*/flag)
+    setDraggable:function(flag)
     {
       this.draggable= flag;
     },
@@ -802,7 +802,7 @@ graphiti.Figure = Class.extend({
      *
      * @param {boolean} flag The resizeable flag.
      **/
-    setResizeable:function(/*:boolean*/ flag)
+    setResizeable:function(flag)
     {
       this.resizeable=flag;
     },
@@ -826,7 +826,7 @@ graphiti.Figure = Class.extend({
      *
      * @param {boolean} flag The selectable flag.
      **/
-    setSelectable:function(/*:boolean*/ flag)
+    setSelectable:function(flag)
     {
       this.selectable=flag;
     },
@@ -892,22 +892,21 @@ graphiti.Figure = Class.extend({
 
     /**
      * @method
-     * Register the handsover figure as a moveListener of this figure.<br>
+     * Register the hands over object as a moveListener of this figure.<br>
      * All position changes will be broadcast to all move listener. This is
-     * usefull for Connectors and Layouter for router handling.
+     * useful for Connectors and Layouter for router handling.
      *
-     * @param {graphiti.Figure} figure The figure to monitor
+     * @param {Object} listener the listener to call
      *
      **/
-    attachMoveListener : function( figure)
-    {
-      if(figure===null){
-        return;
-      }
+     attachMoveListener:function(listener) {
+		if (listener === null) {
+			return;
+		}
 
-      this.moveListener.add(figure);
-    },
-
+		this.moveListener.add(listener);
+ 	 },
+ 
 
     /**
      * @method
@@ -916,7 +915,7 @@ graphiti.Figure = Class.extend({
      * @param {graphiti.Figure} figure The figure to remove the monitor
      *
      **/
-    detachMoveListener : function(figure) 
+    detachMoveListener:function(figure) 
     {
       if(figure===null || this.moveListener===null){
         return;
@@ -927,8 +926,8 @@ graphiti.Figure = Class.extend({
 
     /**
      * @method
-     * Called from the figure itself when any positin changes happens. All listenter
-     * will be informed
+     * Called from the figure itself when any position changes happens. All listener
+     * will be informed.
      * 
      * @private
      **/

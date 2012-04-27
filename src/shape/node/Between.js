@@ -5,11 +5,12 @@ graphiti.shape.node.Between = graphiti.shape.basic.Rectangle.extend({
 
 	init : function()
     {
-        this._super();
         this.outputPort = null;
         this.inputPort = null;
+
+        this._super();
+        
         this.setDimension(50, 50);
-        this.setResizeable(false);
         this.setBackgroundColor(this.DEFAULT_COLOR);
         this.setColor(this.DEFAULT_COLOR.darker());
     },
@@ -39,7 +40,25 @@ graphiti.shape.node.Between = graphiti.shape.basic.Rectangle.extend({
             this.outputPort.setCanvas(null);
             this.inputPort.setCanvas(null);
         }
-    }
+    },
     
+    /**
+     * @inheritdoc
+     *
+     * @param {Number} w The new width of the figure
+     * @param {Number} h The new height of the figure
+     **/
+    setDimension:function(w, h)
+    {
+    	this._super(w,h);
+    	
+    	if(this.inputPort !==null){
+            this.inputPort.setPosition(0, this.height / 2);
+    	}
+
+    	if(this.outputPort !==null){
+            this.outputPort.setPosition(this.width,this.height/2);
+    	}
+   }
 
 });

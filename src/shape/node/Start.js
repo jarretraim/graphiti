@@ -5,10 +5,11 @@ graphiti.shape.node.Start = graphiti.shape.basic.Rectangle.extend({
 
 	init : function()
     {
-        this._super();
         this.outputPort = null;
+
+        this._super();
+        
         this.setDimension(50, 50);
-        this.setResizeable(false);
         this.setBackgroundColor(this.DEFAULT_COLOR);
         this.setColor(this.DEFAULT_COLOR.darker());
     },
@@ -21,8 +22,24 @@ graphiti.shape.node.Start = graphiti.shape.basic.Rectangle.extend({
         {
             this.outputPort = new graphiti.OutputPort(canvas,"output");
             this.outputPort.setCanvas(canvas);
-            this.addPort(this.outputPort, this.width,this.height/2);
+            this.addPort(this.outputPort,this.width,this.height/2);
         }
+    },
+    
+    
+    /**
+     * @inheritdoc
+     *
+     * @param {Number} w The new width of the figure
+     * @param {Number} h The new height of the figure
+     **/
+    setDimension:function(w, h)
+    {
+    	this._super(w,h);
+    	if(this.outputPort !==null){
+            this.outputPort.setPosition(this.width,this.height/2);
+    	}
     }
+
 
 });

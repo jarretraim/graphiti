@@ -11,17 +11,19 @@
  * @extends graphiti.Figure 
  */
 graphiti.Node = graphiti.Figure.extend({
-    NAME : "graphiti.Node", // only for debugging
+ 
+	NAME : "graphiti.Node", // only for debugging
 
     /**
      * @constructor
      * Creates a new Node element which are not assigned to any canvas.
      */
     init: function( ) {
-      this.bgColor = new  graphiti.util.Color(255,255,255);
+      this.bgColor   = new  graphiti.util.Color(255,255,255);
       this.lineColor = new  graphiti.util.Color(128,128,255);
       this.lineStroke=1;
       this.ports = new graphiti.util.ArrayList();
+      
       this._super();
     },
     
@@ -47,13 +49,14 @@ graphiti.Node = graphiti.Figure.extend({
     getInputPorts: function()
     {
       var result = new graphiti.util.ArrayList();
-      for(var i=0;i<this.ports.getSize();i++)
-      {
+      
+      for(var i=0;i<this.ports.getSize();i++) {
        var port = this.ports.get(i);
        if(port instanceof graphiti.util.InputPort){
           result.add(port);
        }
       }
+      
       return result;
     },
     
@@ -66,13 +69,14 @@ graphiti.Node = graphiti.Figure.extend({
     getOutputPorts: function()
     {
       var result = new graphiti.util.ArrayList();
-      for(var i=0;i<this.ports.getSize();i++)
-      {
+      
+      for(var i=0;i<this.ports.getSize();i++) {
        var port = this.ports.get(i);
        if(port instanceof graphiti.OutputPort){
           result.add(port);
        }
       }
+      
       return result;
     },
     
@@ -86,8 +90,7 @@ graphiti.Node = graphiti.Figure.extend({
      **/
     getPort: function( portName)
     {
-      for(var i=0;i<this.ports.getSize();i++)
-      {
+      for(var i=0;i<this.ports.getSize();i++) {
        var port = this.ports.get(i);
        if(port.getName() === portName){
           return port;
@@ -107,8 +110,7 @@ graphiti.Node = graphiti.Figure.extend({
      **/
     getInputPort: function( portName)
     {
-      for(var i=0;i<this.ports.getSize();i++)
-      {
+      for(var i=0;i<this.ports.getSize();i++){
        var port = this.ports.get(i);
        if(port.getName() === portName && port instanceof graphiti.InputPort){
           return port;
@@ -127,8 +129,7 @@ graphiti.Node = graphiti.Figure.extend({
      **/
     getOutputPort: function( portName)
     {
-      for(var i=0;i<this.ports.getSize();i++)
-      {
+      for(var i=0;i<this.ports.getSize();i++) {
        var port = this.ports.get(i);
        if(port.getName() === portName && port instanceof graphiti.OutputPort){
           return port;
@@ -152,7 +153,7 @@ graphiti.Node = graphiti.Figure.extend({
       port.setPosition(x,y);
       port.setParent(this);
       port.setCanvas(this.canvas);
-      
+
       // You can't delete a port with the [DEL] key if a port is a child of a node
       port.setDeleteable(false);
     
