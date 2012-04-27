@@ -87,8 +87,6 @@ graphiti.Canvas = Class.extend(
                 event = this._getEvent(event);
                 var pos = this.fromDocumentToCanvasCoordinate(event.clientX, event.clientY);
                 this.onDrag(ui.draggable, pos.getX(), pos.getY());
-                event.preventDefault();
-                event.stopPropagation();
             },this),
             stop: function(e, ui){
                 this.isInExternalDragOperation=false;

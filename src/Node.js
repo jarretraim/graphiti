@@ -187,6 +187,27 @@ graphiti.Node = graphiti.Figure.extend({
     },
     
     /**
+     * @method
+     * Create a standard InputPort for this element. Inherited class can override this
+     * method to create its own type of ports.
+     * 
+     * @param {grpahiti.Canvas} canvas the canvas to use
+     * @param {String} type the type of the requested port. possible ["input", "output"]
+     * @param {String} [name] name of the port
+     * @template
+     */
+    createPort: function(canvas, type, name){
+    	switch(type){
+    	case "input":
+    		return new graphiti.InputPort(canvas,name);
+    	case "output":
+    		return new graphiti.OutputPort(canvas,name);
+    	}
+    	
+    	throw "Unknown type ["+type+"] of port requested";
+    },
+    
+    /**
      * @private
      **/
     setCanvas : function(canvas)

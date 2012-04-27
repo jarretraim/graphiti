@@ -20,7 +20,7 @@ graphiti.shape.node.End = graphiti.shape.basic.Rectangle.extend({
 
         if (canvas !== null && this.inputPort === null)
         {
-            this.inputPort = new graphiti.InputPort(canvas,"input");
+            this.inputPort = this.createPort(canvas,"input","input");
             this.inputPort.setCanvas(canvas);
             this.addPort(this.inputPort,0, this.height / 2);
         }

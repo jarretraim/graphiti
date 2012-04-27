@@ -29,11 +29,11 @@ graphiti.shape.node.Between = graphiti.shape.basic.Rectangle.extend({
         if (canvas !== null)
         {
             if(this.outputPort===null)
-                this.outputPort = new graphiti.OutputPort(canvas);
+                this.outputPort = this.createPort(canvas,"output","output");
             this.addPort(this.outputPort, this.width,this.height/2);
 
             if(this.inputPort===null)
-            	this.inputPort = new graphiti.InputPort(canvas);
+                this.inputPort = this.createPort(canvas,"input","input");
             this.addPort(this.inputPort, 0,this.height/2);
         }
         else if(this.outputPort!==null){

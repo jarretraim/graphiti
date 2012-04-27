@@ -1,49 +1,41 @@
 
-example.mvc_simple.NodeFigure = graphiti.shape.basic.Rectangle.extend({
+example.mvc_simple.NodeFigure = graphiti.shape.node.Between.extend({
 
     init : function()
     {
         this._super();
-        this.outputPort = null;
-        this.inputPort = null;
-        this.setDimension(50, 50);
-        this.setResizeable(false);
-        this.setAlpha(0.5);
-    },
 
+        this.setResizeable(false);
+    },
 
     /**
      * @method
-     * Set the canvas for this figure. This is the best point to ad some Ports
+     * Create a standard InputPort for this element. Inherited class can override this
+     * method to create its own type of ports.
      * 
-     * @param {graphiti.Canvas} canvas
+     * @param {grpahiti.Canvas} canvas the canvas to use
+     * @param {String} type the type of the requested port. possible ["input", "output"]
+     * @param {String} [name] name of the port
+     * @template
      */
-    setCanvas : function(canvas)
-    {
-        this._super(canvas);
-
-        if (canvas !== null)
-        {
-            if(this.outputPort===null)
-                this.outputPort = new example.mvc_simple.OutputPort(canvas);
-            this.addPort(this.outputPort, this.width,this.height/2);
-
-            if(this.inputPort===null)
-            	this.inputPort = new example.mvc_simple.InputPort(canvas);
-            this.addPort(this.inputPort, 0,this.height/2);
-        }
-        else if(this.outputPort!==null){
-            this.outputPort.setCanvas(null);
-            this.inputPort.setCanvas(null);
-        }
+    createPort: function(canvas, type, name){
+    	switch(type){
+    	case "input":
+    		return new example.mvc_simple.InputPort(canvas);
+    	case "output":
+    		return new example.mvc_simple.OutputPort(canvas);
+    	}
+    	
+    	throw "Unknown type ["+type+"] of port requested";
     },
-
-
+ 
+    /**
+     * 
+     */
     updateViewFromModel : function() {
 		this._super();
 		var pos = this.getModel().getPosition();
 		this.setPosition(pos.getX(), pos.getY());
-		// this.initPorts();
 	},
 
     /**

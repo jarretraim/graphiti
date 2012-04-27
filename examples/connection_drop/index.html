@@ -99,32 +99,53 @@ var example = {
 
 <script type="text/javascript">
 $(document).ready(function() {
-
-    document.ontouchmove = function(e) {
-        e.preventDefault();
-    };
+	
+	   document.ontouchmove = function(e) {
+	       e.preventDefault();
+	   };
     
-  var canvas = new graphiti.Canvas("gfx_holder");
-  
-  var start  = new graphiti.shape.node.Start();
-  var end    = new graphiti.shape.node.End();
-  
-  canvas.addFigure(start, 80,80);
-  canvas.addFigure(end, 450,150);
+	  var canvas = new graphiti.Canvas("gfx_holder");
+	  
+	  // Create two standard nodes for "start" and "end" and link
+	  // this figures with a standard Connecotr
+	  //
+	  var start  = new graphiti.shape.node.Start();
+	  var end    = new graphiti.shape.node.End();
+	  
+	  canvas.addFigure(start, 80,80);
+	  canvas.addFigure(end, 450,150);
+	
+	  // Add a connection via API calls between Start and Stop
+	  // It is more confortable with the MVC pattern
+	  //
+	  var connection = new graphiti.Connection();
+	  
+	  var output = start.getPort("output");
+	  var input = end.getPort("input");
+	  
+	  connection.setSource(output);
+	  connection.setTarget(input);
+	  canvas.addFigure(connection);
+	  
+	  // Add my implemention of a "Between" figure for the smart insert feature
+	  // inspect the "Between.onDrop" method for more details
+	  //
+	  canvas.addFigure( new example.connection_drop.BetweenFigure(), 250,240);
 
-  // Add a connection via API calls between Start and Stop
-  // It is more confortable with the MVC pattern
-  //
-  var connection = new graphiti.Connection();
   
-  var output = start.getPort("output");
-  var input = end.getPort("input");
-  
-  connection.setSource(output);
-  connection.setTarget(input);
-  canvas.addFigure(connection);
-  
-  canvas.addFigure( new example.connection_drop.BetweenFigure(), 250,240);
+	 
+	 ///////////////////////////////////////////////////////////////////// 
+	 // JUST ADD SOME DOCU ELEMENTS ON THE SCREEN
+	 ///////////////////////////////////////////////////////////////////// 
+	 var arrowLeft = new graphiti.shape.arrow.CalligrapherArrowLeft();
+	 arrowLeft.setColor("#3d3d3d");
+	 canvas.addFigure(arrowLeft, 330,235);
+	 
+	 var msg = new graphiti.shape.note.PostIt("Drag&Drop the orange box onto the green connector.\nThe orange box will be inserted into the Connection.\n \nSmart - right?");
+	 canvas.addFigure(msg, 570,220);
+	 
+	 $("body").scrollTop(0)
+	          .scrollLeft(0);
 
 });
 
