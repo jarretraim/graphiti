@@ -14,8 +14,8 @@ $(document).ready(function() {
     
     var canvas = new graphiti.Canvas("gfx_holder");
 
-    var figure1 = new graphiti.Oval();
-    var figure2 = new graphiti.Rectangle();
+    var figure1 = new graphiti.shape.basic.Oval();
+    var figure2 = new graphiti.shape.basic.Rectangle();
     canvas.addFigure(figure1,100,100);
     canvas.addFigure(figure2,120,150);
 
@@ -29,8 +29,6 @@ $(document).ready(function() {
 graphiti.Canvas = Class.extend(
 {
     NAME : "graphiti.Canvas", // only for debugging
-
-    COLOR_GREEN : new  graphiti.util.Color(0,255,0),
 
     /**
      * @constructor
@@ -117,7 +115,7 @@ graphiti.Canvas = Class.extend(
         this.snapToGeometryHelper = null;
         
         // the line between the dragging port and its origin position
-        this.connectionLine    = new graphiti.Line();
+        this.connectionLine    = new graphiti.shape.basic.Line();
       
         this.resizeHandle1 = new graphiti.ResizeHandle(this,1); // 1 = LEFT TOP
         this.resizeHandle2 = new graphiti.ResizeHandle(this,2); // 2 = CENTER_TOP
@@ -128,8 +126,8 @@ graphiti.Canvas = Class.extend(
         this.resizeHandle7 = new graphiti.ResizeHandle(this,7); // 7 = LEFT_BOTTOM
         this.resizeHandle8 = new graphiti.ResizeHandle(this,8); // 8 = LEFT_MIDDLE
 
-        this.resizeHandleStart = new graphiti.LineStartResizeHandle(this);
-        this.resizeHandleEnd   = new graphiti.LineEndResizeHandle(this);
+        this.resizeHandleStart = new graphiti.shape.basic.LineStartResizeHandle(this);
+        this.resizeHandleEnd   = new graphiti.shape.basic.LineEndResizeHandle(this);
         
         this.resizeHandles = new graphiti.util.ArrayList();
         this.resizeHandles.add(this.resizeHandle1);
@@ -351,7 +349,7 @@ graphiti.Canvas = Class.extend(
       figure.getShapeElement();
       
      
-      if(figure instanceof graphiti.Line)
+      if(figure instanceof graphiti.shape.basic.Line)
       {
         this.lines.add(figure);
       }
@@ -391,7 +389,7 @@ graphiti.Canvas = Class.extend(
      **/
     removeFigure:function(figure)
     {
-        if(figure instanceof graphiti.Line){
+        if(figure instanceof graphiti.shape.basic.Line){
            this.lines.remove(figure);
          }
         else {
@@ -739,7 +737,7 @@ graphiti.Canvas = Class.extend(
       }
 
       
-      if(figure instanceof graphiti.Line)
+      if(figure instanceof graphiti.shape.basic.Line)
       {
           this.showLineResizeHandles(figure);
       }
@@ -896,10 +894,10 @@ graphiti.Canvas = Class.extend(
      *
      * @param {Number} x the x-coordinate for the hit test
      * @param {Number} y the x-coordinate for the hit test
-     * @param {graphiti.Line} lineToIgnore a possible line which should be ignored for the hit test
+     * @param {graphiti.shape.basic.Line} lineToIgnore a possible line which should be ignored for the hit test
      *
      * @private
-     * @return {graphiti.Line}
+     * @return {graphiti.shape.basic.Line}
      **/
     getBestLine:function( x,  y,  lineToIgnore)
     {
@@ -923,7 +921,7 @@ graphiti.Canvas = Class.extend(
    
 
     /**
-     * @param {graphiti.Line} line The line for the resize handles.
+     * @param {graphiti.shape.basic.Line} line The line for the resize handles.
      * @private
      **/
     showLineResizeHandles:function( line )
@@ -963,28 +961,13 @@ graphiti.Canvas = Class.extend(
         this.hideResizeHandles();
       }
 
-      // We must reset the alpha blending of the resizeHandles if the last selected object != figure
-      // Reason: We would fadeIn the ResizeHandles at the new selected object but the fast toggle from oldSeleciton => newSelection
-      //         doesn't reset the alpha to 0.0. So, we do it manually.
-      //
-      if(this.getEnableSmoothFigureHandling()===true && this.getCurrentSelection()!==figure)
-      {
-         this.resizeHandle1.setAlpha(0.01);
-         this.resizeHandle2.setAlpha(0.01);
-         this.resizeHandle3.setAlpha(0.01);
-         this.resizeHandle4.setAlpha(0.01);
-         this.resizeHandle5.setAlpha(0.01);
-         this.resizeHandle6.setAlpha(0.01);
-         this.resizeHandle7.setAlpha(0.01);
-         this.resizeHandle8.setAlpha(0.01);
-      }
-
       var resizeWidth = this.resizeHandle1.getWidth();
       var resizeHeight= this.resizeHandle1.getHeight();
       var objHeight   = figure.getHeight();
       var objWidth    = figure.getWidth();
       var xPos = figure.getX();
       var yPos = figure.getY();
+
       this.resizeHandle1.show(this,xPos-resizeWidth,yPos-resizeHeight);
       this.resizeHandle3.show(this,xPos+objWidth,yPos-resizeHeight);
       this.resizeHandle5.show(this,xPos+objWidth,yPos+objHeight);
@@ -997,11 +980,10 @@ graphiti.Canvas = Class.extend(
 
       if(figure.isResizeable()===true)
       {
-        var green = new graphiti.util.Color(0,255,0);
-        this.resizeHandle1.setBackgroundColor(green);
-        this.resizeHandle3.setBackgroundColor(green);
-        this.resizeHandle5.setBackgroundColor(green);
-        this.resizeHandle7.setBackgroundColor(green);
+        this.resizeHandle1.setBackgroundColor(this.resizeHandle1.DEFAULT_COLOR);
+        this.resizeHandle3.setBackgroundColor(this.resizeHandle3.DEFAULT_COLOR);
+        this.resizeHandle5.setBackgroundColor(this.resizeHandle5.DEFAULT_COLOR);
+        this.resizeHandle7.setBackgroundColor(this.resizeHandle7.DEFAULT_COLOR);
       }
       else
       {
@@ -1252,7 +1234,7 @@ graphiti.Canvas = Class.extend(
             this.setCurrentSelection(figure);
 
             // its a line
-            if (figure instanceof graphiti.Line) {
+            if (figure instanceof graphiti.shape.basic.Line) {
                 this.showLineResizeHandles(this.currentSelection);
                 // you can move a line with Drag&Drop...but not a connection.
                 // A Connection is fixed linked with the corresponding ports.

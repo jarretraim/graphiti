@@ -5,7 +5,7 @@
  * <code>getSVG()</code>.
  * 
  * @author Andreas Herz
- * @extends graphiti.Rectangle
+ * @extends graphiti.shape.basic.Rectangle
  */
 graphiti.SVGFigure = graphiti.SetFigure.extend({
     

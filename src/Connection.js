@@ -5,9 +5,9 @@
  *
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.Line
+ * @extends graphiti.shape.basic.Line
  */
-graphiti.Connection = graphiti.PolyLine.extend({
+graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
     NAME : "graphiti.Connection", // only for debugging
 
 //    DEFAULT_ROUTER: new graphiti.layout.connection.DirectRouter(),

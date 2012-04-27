@@ -1,14 +1,14 @@
 
 /**
- * @class graphiti.Line
+ * @class graphiti.shape.basic.Line
  * The base class for all visible elements inside a canvas.
  * 
  * @inheritable
  * @author Andreas Herz
  * @extends graphiti.Figure
  */
-graphiti.Line = graphiti.Figure.extend({
-    NAME : "graphiti.Line", // only for debugging
+graphiti.shape.basic.Line = graphiti.Figure.extend({
+    NAME : "graphiti.shape.basic.Line", // only for debugging
 
     DEFAULT_COLOR : new graphiti.util.Color(0,0,0),
     
@@ -381,7 +381,7 @@ graphiti.Line = graphiti.Figure.extend({
     **/
    hitTest: function( px, py)
    {
-     return graphiti.Line.hit(this.corona, this.startX,this.startY, this.endX, this.endY, px,py);
+     return graphiti.shape.basic.Line.hit(this.corona, this.startX,this.startY, this.endX, this.endY, px,py);
    }
 
 });
@@ -401,7 +401,7 @@ graphiti.Line = graphiti.Figure.extend({
  * @param {Number} px x coordinate of the point to test
  * @param {Number} py y coordinate of the point to test
  **/
-graphiti.Line.hit= function( coronaWidth, X1, Y1,  X2,  Y2, px, py)
+graphiti.shape.basic.Line.hit= function( coronaWidth, X1, Y1,  X2,  Y2, px, py)
 {
   // Adjust vectors relative to X1,Y1
   // X2,Y2 becomes relative vector from X1,Y1 to end of segment

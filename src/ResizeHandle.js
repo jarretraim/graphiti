@@ -18,11 +18,13 @@
  * </pre>
  * 
  * @author Andreas Herz
- * @extends graphiti.Rectangle
+ * @extends graphiti.shape.basic.Rectangle
  */
-graphiti.ResizeHandle = graphiti.Rectangle.extend({
+graphiti.ResizeHandle = graphiti.shape.basic.Rectangle.extend({
     NAME : "graphiti.ResizeHandle", // only for debugging
 
+    DEFAULT_COLOR : "#99ccff",
+    
     /**
      * @constructor
      * Creates a new figure element which are not assigned to any canvas.
@@ -79,10 +81,11 @@ graphiti.ResizeHandle = graphiti.Rectangle.extend({
           break;
       }
       
-      this.setBackgroundColor(new  graphiti.util.Color(151,255,150));
-      this.setColor(new  graphiti.util.Color(151,255,150));
+      this.setBackgroundColor(this.DEFAULT_COLOR);
+      this.setColor("#000000");
       this.setStroke(0.5);
       this.setSelectable(false);
+      this.setRadius(0);
     },
     
 
@@ -259,20 +262,6 @@ graphiti.ResizeHandle = graphiti.Rectangle.extend({
       this.repaint();
     },
     
-    
-    repaint:function(attributes){
-        if(this.shape===null){
-            return;
-        }
-
-        if(typeof attributes === "undefined"){
-            attributes ={};
-        }
-        
-        attributes.fill="r(.4,.3)#499bea-#207ce5:60-#207ce5";
-        
-        this._super(attributes);
-    },
     
     /**
      * @method

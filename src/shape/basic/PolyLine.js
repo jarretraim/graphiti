@@ -1,14 +1,14 @@
 
 /**
- * @class graphiti.PolyLine
+ * @class graphiti.shape.basic.PolyLine
  * 
  * A PolyLine is a line with more than 2 points.
  *
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.Line
+ * @extends graphiti.shape.basic.Line
  */
-graphiti.PolyLine = graphiti.Line.extend({
+graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
     NAME : "graphiti.Connection", // only for debugging
 
    
@@ -236,7 +236,7 @@ graphiti.PolyLine = graphiti.Line.extend({
       for(var i = 0; i< this.lineSegments.getSize();i++)
       {
          var line = this.lineSegments.get(i);
-         if(graphiti.Line.hit(this.corona, line.start.x,line.start.y,line.end.x, line.end.y, px,py)){
+         if(graphiti.shape.basic.Line.hit(this.corona, line.start.x,line.start.y,line.end.x, line.end.y, px,py)){
            return true;
          }
       }

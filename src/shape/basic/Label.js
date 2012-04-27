@@ -1,15 +1,15 @@
 
 /**
- * @class graphiti.Label
+ * @class graphiti.shape.basic.Label
  * Implements a simple text label.
  * 
  * @author Andreas Herz
  * 
  * @class graphiti.SetFigure
  */
-graphiti.Label= graphiti.SetFigure.extend({
+graphiti.shape.basic.Label= graphiti.SetFigure.extend({
 
-	NAME : "graphiti.Label", // only for debugging
+	NAME : "graphiti.shape.basic.Label", // only for debugging
 
     /**
      * @constructor

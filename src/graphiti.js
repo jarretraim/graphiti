@@ -13,8 +13,10 @@ var graphiti =
     },
 
     shape : {
+    	basic:{},
         arrow:{},
-        note:{}
+        node: {},
+        note: {}
     },
     
     command : {

@@ -43,12 +43,10 @@ graphiti.OutputPort = graphiti.Port.extend({
     
     
     /**
-     * @method
+     * @inheritdoc
      * 
      * @param {graphiti.Figure} figure The figure which is currently dragging
-     * 
      * @return {Boolean} true if this figure accepts the dragging figure for a drop operation
-     * @param port
      */
     onDragEnter : function(figure)
     {
@@ -67,14 +65,14 @@ graphiti.OutputPort = graphiti.Port.extend({
             return this._super(figure);
         }
         // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
-        else if (figure instanceof graphiti.LineStartResizeHandle) {
+        else if (figure instanceof graphiti.shape.basic.LineStartResizeHandle) {
             line = this.getCanvas().getCurrentSelection();
             if (line instanceof graphiti.Connection && line.getSource() instanceof graphiti.OutputPort) {
                 return this._super(line.getTarget());
             }
         }
         // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
-        else if (figure instanceof graphiti.LineEndResizeHandle) {
+        else if (figure instanceof graphiti.shape.basic.LineEndResizeHandle) {
             line = this.getCanvas().getCurrentSelection();
             if (line instanceof graphiti.Connection && line.getTarget() instanceof graphiti.OutputPort) {
                 return this._super(line.getSource());
@@ -83,6 +81,10 @@ graphiti.OutputPort = graphiti.Port.extend({
         return false;
     },
     
+    /**
+     * @inheritdoc
+     * 
+     */
     onDragLeave:function( figure)
     {
 	  // Ports accepts only Ports as DropTarget
@@ -97,14 +99,14 @@ graphiti.OutputPort = graphiti.Port.extend({
         this._super( figure);
       }
       // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
-      else if (figure instanceof graphiti.LineStartResizeHandle)
+      else if (figure instanceof graphiti.shape.basic.LineStartResizeHandle)
       {
         line = this.getCanvas().getCurrentSelection();
         if(line instanceof graphiti.Connection && line.getSource() instanceof graphiti.OutputPort){
            this._super( line.getTarget());
         }
       }
-      else if (figure instanceof graphiti.LineEndResizeHandle)
+      else if (figure instanceof graphiti.shape.basic.LineEndResizeHandle)
       {
         line = this.getCanvas().getCurrentSelection();
         if(line instanceof graphiti.Connection && line.getTarget() instanceof graphiti.OutputPort){
@@ -156,9 +158,7 @@ graphiti.OutputPort = graphiti.Port.extend({
     },
     
     /**
-     * Returns the Command to perform the specified Request or null.<br>
-     * Inherited figures can override this method to return the own implementation
-     * of the request.<br>
+     * @inheritdoc
      *
      * @param {graphiti.EditPolicy} request describes the Command being requested
      * @return {graphiti.command.Command} null or a valid command

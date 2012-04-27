@@ -1,17 +1,17 @@
 
 
 /**
- * @class graphiti.Circle
+ * @class graphiti.shape.basic.Circle
  * A circle figure with basic background and stroke API. A circle can not be streched. The aspect ration
  * is always 1:1
  * 
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.Oval
+ * @extends graphiti.shape.basic.Oval
  */
-graphiti.Circle = graphiti.Oval.extend({
+graphiti.shape.basic.Circle = graphiti.shape.basic.Oval.extend({
     
-    NAME : "graphiti.Circle", // only for debug
+    NAME : "graphiti.shape.basic.Circle", // only for debug
     
     /**
      * @constructor

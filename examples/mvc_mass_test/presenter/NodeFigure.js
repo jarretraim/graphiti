@@ -1,5 +1,5 @@
 
-example.mvc_simple.NodeFigure = graphiti.Rectangle.extend({
+example.mvc_simple.NodeFigure = graphiti.shape.basic.Rectangle.extend({
 
     init : function()
     {
@@ -8,7 +8,7 @@ example.mvc_simple.NodeFigure = graphiti.Rectangle.extend({
         this.inputPort = null;
         this.setDimension(50, 50);
         this.setResizeable(false);
-        this.setAlpha(0.5);
+        this.setColor("#ffffff");
     },
 
 

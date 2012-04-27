@@ -40,14 +40,14 @@ graphiti.InputPort = graphiti.Port.extend({
             return this._super(figure);
         }
         // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
-        else if (figure instanceof graphiti.LineStartResizeHandle) {
+        else if (figure instanceof graphiti.shape.basic.LineStartResizeHandle) {
             line = this.getCanvas().getCurrentSelection();
             if (line instanceof graphiti.Connection && line.getSource() instanceof graphiti.InputPort) {
                 return this._super(line.getTarget());
             }
         }
         // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
-        else if (figure instanceof graphiti.LineEndResizeHandle) {
+        else if (figure instanceof graphiti.shape.basic.LineEndResizeHandle) {
             line = this.getCanvas().getCurrentSelection();
             if (line instanceof graphiti.Connection && line.getTarget() instanceof graphiti.InputPort) {
                 return this._super(line.getSource());
@@ -76,14 +76,14 @@ graphiti.InputPort = graphiti.Port.extend({
         this._super( figure);
       }
       // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
-      else if (figure instanceof graphiti.LineStartResizeHandle)
+      else if (figure instanceof graphiti.shape.basic.LineStartResizeHandle)
       {
         line = this.getCanvas().getCurrentSelection();
         if(line instanceof graphiti.Connection && line.getSource() instanceof graphiti.InputPort){
            this._super(line.getTarget());
         }
       }
-      else if (figure instanceof graphiti.LineEndResizeHandle)
+      else if (figure instanceof graphiti.shape.basic.LineEndResizeHandle)
       {
         line = this.getCanvas().getCurrentSelection();
         if(line instanceof graphiti.Connection && line.getTarget() instanceof graphiti.InputPort){

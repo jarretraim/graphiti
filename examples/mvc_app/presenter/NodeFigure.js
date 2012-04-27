@@ -1,5 +1,5 @@
 
-example.mvc_simple.NodeFigure = graphiti.Rectangle.extend({
+example.mvc_simple.NodeFigure = graphiti.shape.basic.Rectangle.extend({
 
     init : function()
     {

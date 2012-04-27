@@ -1,15 +1,16 @@
 
-if(typeof example==="undefined")var example = {};
+graphiti.shape.node.End = graphiti.shape.basic.Rectangle.extend({
 
-example.End = graphiti.Rectangle.extend({
-
+	DEFAULT_COLOR : new graphiti.util.Color("#4D90FE"),
+	
     init : function()
     {
         this._super();
         this.inputPort = null;
         this.setDimension(50, 50);
         this.setResizeable(false);
-        this.setAlpha(0.5);
+        this.setBackgroundColor(this.DEFAULT_COLOR);
+        this.setColor(this.DEFAULT_COLOR.darker());
     },
     
     setCanvas : function(canvas)
@@ -18,7 +19,7 @@ example.End = graphiti.Rectangle.extend({
 
         if (canvas !== null && this.inputPort === null)
         {
-            this.inputPort = new graphiti.InputPort(canvas);
+            this.inputPort = new graphiti.InputPort(canvas,"input");
             this.inputPort.setCanvas(canvas);
             this.addPort(this.inputPort, 0, this.height / 2);
         }

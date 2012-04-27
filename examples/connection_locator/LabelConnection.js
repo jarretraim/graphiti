@@ -17,7 +17,7 @@ example.connection_locator.LabelConnection= graphiti.Connection.extend({
       
       // Create any Draw2D figure as decoration for the connection
       //
-      this.label = new graphiti.Label("I'm a Label");
+      this.label = new graphiti.shape.basic.Label("I'm a Label");
       this.label.setColor("#ffffff");
       this.label.setFontColor("#ffffff");
       

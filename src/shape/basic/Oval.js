@@ -1,6 +1,6 @@
 
 /**
- * @class graphiti.Oval
+ * @class graphiti.shape.basic.Oval
  * Oval figure.
  * 
  * {@img Oval.png Oval Figure}
@@ -9,8 +9,8 @@
  * @author Andreas Herz
  * @extends graphiti.VectorFigure
  */
-graphiti.Oval = graphiti.VectorFigure.extend({
-    NAME : "graphiti.Oval", // only for debugging
+graphiti.shape.basic.Oval = graphiti.VectorFigure.extend({
+    NAME : "graphiti.shape.basic.Oval", // only for debugging
 
     /**
      * @constructor

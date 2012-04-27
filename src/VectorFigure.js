@@ -1,7 +1,7 @@
 
 /**
  * @class graphiti.VectorFigure
- * The base class for all vector based figures like {#link graphiti.Rectangle}  or {#link graphiti.Oval} 
+ * The base class for all vector based figures like {#link graphiti.shape.basic.Rectangle}  or {#link graphiti.shape.basic.Oval} 
  * inside a canvas.
  * 
  * @inheritable
@@ -40,8 +40,9 @@ graphiti.VectorFigure = graphiti.Node.extend({
             attributes = {};
         }
 
-        attributes.x= this.getAbsoluteX();
+        attributes.x = this.getAbsoluteX();
         attributes.y = this.getAbsoluteY();
+        
         if(this.color === null || this.stroke ===0){
             attributes.stroke = "none";
         }

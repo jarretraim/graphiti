@@ -4,9 +4,9 @@
  * A Port is the anchor for a {@link graphiti.Connection}. A {@link graphiti.Connection} must have a start and a end Port.
  * 
  * @author Andreas Herz
- * @extends graphiti.Circle
+ * @extends graphiti.shape.basic.Circle
  */ 
-graphiti.Port = graphiti.Circle.extend({
+graphiti.Port = graphiti.shape.basic.Circle.extend({
     NAME : "graphiti.Port", // only for debugging
 
     DEFAULT_BORDER_COLOR:new graphiti.util.Color(44, 83, 158),
@@ -231,7 +231,7 @@ graphiti.Port = graphiti.Circle.extend({
       // Don't call the parent implementation. This will create an CommandMove object
       // and store them o the CommandStack for the undo operation. This makes no sense for a
       // port.
-      // graphiti.Rectangle.prototype.onDragEnd.call(this); DON'T call the super implementation!!!
+      // graphiti.shape.basic.Rectangle.prototype.onDragEnd.call(this); DON'T call the super implementation!!!
     
       this.setAlpha(1.0);
     
@@ -471,9 +471,9 @@ graphiti.Port = graphiti.Circle.extend({
  * @class graphiti.Corona
  * Glow effect for ports. Just for internal use.
  * 
- * @extend graphiti.Circle
+ * @extend graphiti.shape.basic.Circle
  */
-graphiti.Corona = graphiti.Circle.extend({
+graphiti.Corona = graphiti.shape.basic.Circle.extend({
 
     /**
      * @constructor

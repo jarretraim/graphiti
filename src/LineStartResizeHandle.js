@@ -1,15 +1,15 @@
 /**
- * @class graphiti.LineStartResizeHandle
+ * @class graphiti.shape.basic.LineStartResizeHandle
  * Selection handle for connections and normal lines.
  * 
  * TODO: Split the LineEndResizeHandle to ConnectionEndResizeHandle and LineEndResizeHandle!!!!
  *
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.LineResizeHandle 
+ * @extends graphiti.shape.basic.LineResizeHandle 
  */
-graphiti.LineStartResizeHandle = graphiti.LineResizeHandle.extend({
-    NAME : "graphiti.LineStartResizeHandle", // only for debugging
+graphiti.shape.basic.LineStartResizeHandle = graphiti.shape.basic.LineResizeHandle.extend({
+    NAME : "graphiti.shape.basic.LineStartResizeHandle", // only for debugging
 
     init: function( canvas) {
         this._super(canvas);

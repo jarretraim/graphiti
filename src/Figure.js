@@ -7,7 +7,8 @@
  * @author Andreas Herz
  */
 graphiti.Figure = Class.extend({
-    NAME : "graphiti.Figure", // only for debugging
+    
+	NAME : "graphiti.Figure", // only for debugging
 
     /**
      * @constructor
@@ -235,12 +236,11 @@ graphiti.Figure = Class.extend({
          if(typeof attributes === "undefined" ){
              attributes = {};
          }
-         
+
          // enrich with common properties
          attributes.opacity = this.alpha;
-         attributes.id = this.id;
          
-         this.shape.attr(attributes);
+        this.shape.attr(attributes);
      },
      
      /**

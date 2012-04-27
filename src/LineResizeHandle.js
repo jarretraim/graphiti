@@ -1,14 +1,14 @@
 /**
- * @class graphiti.LineResizeHandle
+ * @class graphiti.shape.basic.LineResizeHandle
  * Base class for selection handle for connections and normal lines.
  * 
  *
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.Circle
+ * @extends graphiti.shape.basic.Circle
  */
-graphiti.LineResizeHandle = graphiti.Circle.extend({
-    NAME : "graphiti.LineResizeHandle", // only for debugging
+graphiti.shape.basic.LineResizeHandle = graphiti.shape.basic.Circle.extend({
+    NAME : "graphiti.shape.basic.LineResizeHandle", // only for debugging
 
     init : function(canvas, type)
     {

@@ -5,9 +5,9 @@
  * A SetFigure is a composition of different SVG elements.
  * 
  * @author Andreas Herz
- * @extends graphiti.Rectangle
+ * @extends graphiti.shape.basic.Rectangle
  */
-graphiti.SetFigure = graphiti.Rectangle.extend({
+graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
     
     NAME : "graphiti.SetFigure", // only for debugging
 
@@ -80,7 +80,7 @@ graphiti.SetFigure = graphiti.Rectangle.extend({
     
     /**
      * @method
-     * Override this method to add your own SVG elements. Ssee {#link graphiti.Label} as example.
+     * Override this method to add your own SVG elements. Ssee {#link graphiti.shape.basic.Label} as example.
      * 
      * @template
      */

@@ -11,6 +11,7 @@
 	<SCRIPT src="../../lib/raphael.js"></SCRIPT>
 	<SCRIPT src="../../lib/jquery-1.6.4.js"></SCRIPT>
 	<SCRIPT src="../../lib/jquery-ui-1.8.16.custom.min.js"></SCRIPT>
+	<SCRIPT src="../../lib/jquery.layout.js"></SCRIPT>
 	<SCRIPT src="../../lib/jquery-touch_punch.js"></SCRIPT>
 	<SCRIPT src="../../lib/Class.js"></SCRIPT>
     
@@ -49,15 +50,15 @@
 	<SCRIPT src="../../src/Figure.js"></SCRIPT>
 	<SCRIPT src="../../src/Node.js"></SCRIPT>
 	<SCRIPT src="../../src/VectorFigure.js"></SCRIPT>
-	<SCRIPT src="../../src/Rectangle.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/basic/Rectangle.js"></SCRIPT>
 	<SCRIPT src="../../src/SetFigure.js"></SCRIPT>
 	<SCRIPT src="../../src/SVGFigure.js"></SCRIPT>
-	<SCRIPT src="../../src/Oval.js"></SCRIPT>
-	<SCRIPT src="../../src/Circle.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/basic/Oval.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/basic/Circle.js"></SCRIPT>
 	<SCRIPT src="../../src/CompartmentFigure.js"></SCRIPT>
-	<SCRIPT src="../../src/Label.js"></SCRIPT>
-	<SCRIPT src="../../src/Line.js"></SCRIPT>
-	<SCRIPT src="../../src/PolyLine.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/basic/Label.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/basic/Line.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/basic/PolyLine.js"></SCRIPT>
 	<SCRIPT src="../../src/Connection.js"></SCRIPT>
 	<SCRIPT src="../../src/VectorFigure.js"></SCRIPT>
 	<SCRIPT src="../../src/ResizeHandle.js"></SCRIPT>
@@ -71,6 +72,9 @@
 
 	<SCRIPT src="../../src/shape/arrow/CalligrapherArrowLeft.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/arrow/CalligrapherArrowDownLeft.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/node/Start.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/node/End.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/node/Between.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/note/PostIt.js"></SCRIPT>
 
 	<SCRIPT src="../../src/ui/parts/GraphicalEditor.js"></SCRIPT>
@@ -88,21 +92,9 @@
 	};
 	</script>
 
-	<SCRIPT src="Start.js"></SCRIPT>
-	<SCRIPT src="End.js"></SCRIPT>
 	<SCRIPT src="LabelConnection.js"></SCRIPT>
 	<SCRIPT src="LabelEditor.js"></SCRIPT>
 
-	<style>
-body {
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-</style>
 <script type="text/javascript">
 $(document).ready(function() {
 
@@ -115,8 +107,8 @@ $(document).ready(function() {
 	 var canvas = new graphiti.Canvas("gfx_holder");
 	
      // create and add two Node which contains Ports (In and OUT)
-	 var start = new example.connection_labeledit.Start();
-	 var end   = new example.connection_labeledit.End();
+	 var start = new graphiti.shape.node.Start();
+	 var end   = new graphiti.shape.node.End();
 	
 	 canvas.addFigure( start, 50,450);
 	 canvas.addFigure( end, 230,150);

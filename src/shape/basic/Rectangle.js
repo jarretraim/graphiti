@@ -1,13 +1,13 @@
 
 /**
- * @class graphiti.Rectangle
+ * @class graphiti.shape.basic.Rectangle
  * A Rectangle Figure.
  * 
  * @author Andreas Herz
  * @extends graphiti.VectorFigure
  */
-graphiti.Rectangle = graphiti.VectorFigure.extend({
-    NAME : "graphiti.Rectangle", // only for debugging
+graphiti.shape.basic.Rectangle = graphiti.VectorFigure.extend({
+    NAME : "graphiti.shape.basic.Rectangle", // only for debugging
 
     /**
      * @constructor
@@ -26,7 +26,7 @@ graphiti.Rectangle = graphiti.VectorFigure.extend({
       // set some good defaults
       //
       if(typeof width === "undefined"){
-        this.setDimension(10, 10);
+        this.setDimension(50, 90);
       }
       else{
         this.setDimension(width, height);

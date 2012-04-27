@@ -4,9 +4,9 @@
  * Simple Post-it like figure with text.
  * 
  * @author Andreas Herz
- * @extends graphiti.Label
+ * @extends graphiti.shape.basic.Label
  */
-graphiti.shape.note.PostIt= graphiti.Label.extend({
+graphiti.shape.note.PostIt= graphiti.shape.basic.Label.extend({
 
 	NAME : "graphiti.shape.note.PostIt", // only for debugging
 
@@ -21,10 +21,12 @@ graphiti.shape.note.PostIt= graphiti.Label.extend({
         this._super(text);
          
         this.setStroke(1);
-        this.setBackgroundColor("#d3d3d3");
-        this.setColor("#000000");
+        this.setBackgroundColor("#3d3d3d");
+        this.setColor("#FFFFFF");
+        this.setFontColor("#f0f0f0");
         this.setFontSize(18);
         this.setPadding(5);
+        this.setRadius(5);
        
     }
 });
