@@ -1,0 +1,20 @@
+{
+ "name": "Complete MVC Application",
+ "purpose":"Show how to inject a node into an existing connector during a drag drop operation",
+ "tags": [
+         "Connector",
+         "Node"
+       ],
+ "categories": 
+       [
+         "Connector",
+         "MVC",
+         "Complete App",
+         "JSON"
+       ],
+ "search": 
+       [
+         "blubber",
+         "hook"
+       ]
+}

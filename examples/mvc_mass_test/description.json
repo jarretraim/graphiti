@@ -1,0 +1,19 @@
+{
+ "name": "Mass Test With objects",
+ "purpose":"Show how to inject a node into an existing connector during a drag drop operation",
+ "tags": [
+         "Connector",
+         "Node"
+       ],
+ "categories": 
+       [
+         "Connector",
+         "JSON",
+         "Layout"
+       ],
+ "search": 
+       [
+         "blubber",
+         "hook"
+       ]
+}

@@ -1,0 +1,19 @@
+{
+ "name": "Connection Locator",
+ "purpose":"Show how to inject a node into an existing connector during a drag drop operation",
+ "tags": [
+         "Connector",
+         "Node"
+       ],
+ "categories": 
+       [
+         "Connector",
+         "Locator",
+         "Label"
+       ],
+ "search": 
+       [
+         "blubber",
+         "hook"
+       ]
+}

@@ -1,0 +1,19 @@
+{
+ "name": "Simple MVC",
+ "purpose":"Show how to inject a node into an existing connector during a drag drop operation",
+ "tags": [
+         "Connector",
+         "Node"
+       ],
+ "categories": 
+       [
+         "Connector",
+         "JSON",
+         "MVC"
+       ],
+ "search": 
+       [
+         "blubber",
+         "hook"
+       ]
+}

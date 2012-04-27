@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/Strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
+<head>
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"/>
+  <title>graphiti Demo Browser</title>
+
+   <link type="text/css" rel="stylesheet" href="menu.css" />
+  <script src="../lib/jquery-1.6.4.js"></script>
+  <script src="../lib/jquery-ui-1.8.16.custom.min.js"></script>
+  
+    <script>
+    var examples = ["connection_drop",
+                    "connection_labeledit",
+                    "connection_locator",
+                    "mvc_app",
+                    "mvc_mass_test",
+                    "mvc_simple",
+                    "test"
+                    ];
+    $(document).ready(function($) {
+    	
+    	$.each(examples,function(i, directory){
+
+	       	 $.getJSON( directory+"/description.json" ,function(data) { 
+		 	     renderUI(directory, data);
+		 	 });
+    	});
+    });
+    
+    function renderUI(directory, data){
+    	$.each(data.categories, function(i, category){
+        	var groups = $("#accordion .category");
+        	var categoryDiv = $("<div class='category' data-name='"+category+"'>"+category+"<ul></ul></div>");
+        	if(groups.size()===0){
+        		$("#accordion").append(categoryDiv);
+        	}
+        	else{
+        		var found = null;
+                groups.each(function(){
+                	$this = $(this);
+                    if ($this.data("name") > category) {
+                    	categoryDiv.insertBefore($this);
+                        found=categoryDiv;
+                        return false;
+                    }
+                    else if($this.data("name")===category){
+                    	found=$this;
+                    	return false;
+                    }
+            	});
+                if(found===null){
+                	$("#accordion").append(categoryDiv);
+                	found = categoryDiv;
+                }
+                
+                var ul = found.find("ul");
+                var li = ul.find("li");
+            	var liDiv = $("<li data-dir='"+directory+"' >"+data.name+"</li>");
+            	liDiv.bind("click",function(){
+            		loadDemo($(this).data("dir"));
+            	});
+                if(li.size()===0){
+                	ul.append(liDiv);
+                }
+                else{
+                	found = false;
+                    li.each(function(i, currentLi){
+                        if ($(currentLi).text() > data.name) {
+                        	liDiv.insertBefore(currentLi);
+                            found=true;
+                            return false;
+                        }
+                	});
+                    if(found===false){
+                    	ul.append(liDiv);
+                    }
+                }
+        	}
+        });
+    };
+   
+    function loadDemo(name){
+    	window.parent.demo.location.href="./"+name+"/index.html";
+    };
+  </script>
+
+</head>
+<body>
+
+
+	<div id="accordion">
+	</div>
+
+
+</body>
+</html>
