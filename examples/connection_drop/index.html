@@ -48,7 +48,7 @@
 
 	<SCRIPT src="../../src/Canvas.js"></SCRIPT>
 	<SCRIPT src="../../src/Figure.js"></SCRIPT>
-	<SCRIPT src="../../src/Node.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/node/Node.js"></SCRIPT>
 	<SCRIPT src="../../src/VectorFigure.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/basic/Rectangle.js"></SCRIPT>
 	<SCRIPT src="../../src/SetFigure.js"></SCRIPT>
@@ -138,7 +138,7 @@ $(document).ready(function() {
 	 // JUST ADD SOME DOCU ELEMENTS ON THE SCREEN
 	 ///////////////////////////////////////////////////////////////////// 
 	 var arrowLeft = new graphiti.shape.arrow.CalligrapherArrowLeft();
-	 arrowLeft.setColor("#3d3d3d");
+	 arrowLeft.setColor("#0d0d0d");
 	 canvas.addFigure(arrowLeft, 330,235);
 	 
 	 var msg = new graphiti.shape.note.PostIt("Drag&Drop the orange box onto the green connector.\nThe orange box will be inserted into the Connection.\n \nSmart - right?");

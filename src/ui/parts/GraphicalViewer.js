@@ -128,7 +128,7 @@ graphiti.ui.parts.GraphicalViewer = graphiti.Canvas.extend(
 	        for(var i=0;i<count;i++)
 	        {
 	          var figure = figures.get(i);
-	          if(figure instanceof graphiti.Node)
+	          if(figure instanceof graphiti.shape.node.Node)
 	          {
 	            this.refreshConnections(figure);
 	          }
@@ -145,7 +145,7 @@ graphiti.ui.parts.GraphicalViewer = graphiti.Canvas.extend(
 	 * @method
 	 * Refresh all connections related to the node within the current model/view
 	 * 
-	 * @param {graphiti.Node} node the node which are source or target of any connections
+	 * @param {graphiti.shape.node.Node} node the node which are source or target of any connections
 	 * @private
 	 **/
 	refreshConnections:function( node )

@@ -127,7 +127,7 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
     /**
      * @method
      * Set the parent of this port.
-     * Call {@link graphiti.Node#addPort} if you want to a port to node. Don't call this method directly.
+     * Call {@link graphiti.shape.node.Node#addPort} if you want to a port to node. Don't call this method directly.
      *
      * @private
      */
@@ -343,7 +343,7 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
      * @method
      * Return the name of this port.
      *
-     * @see graphiti.Node#getPort
+     * @see graphiti.shape.node.Node#getPort
      * @return {String}
      **/
     getName:function()
@@ -355,7 +355,7 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
      * @method
      * Set the name of this port.
      *
-     * @see graphiti.Node#getPort
+     * @see graphiti.shape.node.Node#getPort
      * @param {String} name The new name of this port.
      **/
     setName:function( name)

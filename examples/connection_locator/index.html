@@ -48,7 +48,7 @@
 
 	<SCRIPT src="../../src/Canvas.js"></SCRIPT>
 	<SCRIPT src="../../src/Figure.js"></SCRIPT>
-	<SCRIPT src="../../src/Node.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/node/Node.js"></SCRIPT>
 	<SCRIPT src="../../src/VectorFigure.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/basic/Rectangle.js"></SCRIPT>
 	<SCRIPT src="../../src/SetFigure.js"></SCRIPT>
@@ -131,7 +131,7 @@ $(document).ready(function() {
 	 // THIS IS ONLY FOR THE ARROW AND THE POST-IT
 	 ///////////////////////////////////////////////////////////////////// 
 	 var arrowLeft = new graphiti.shape.arrow.CalligrapherArrowLeft();
-	 arrowLeft.setColor("#f0f0f0");
+	 arrowLeft.setColor("#0d0d0d");
 	 canvas.addFigure(arrowLeft, 320,155);
 	 
 	 var msg = new graphiti.shape.note.PostIt("Drag&Drop the blue box and notice the label.\nIt sticks always in the middle of the connector.");

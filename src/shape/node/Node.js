@@ -1,6 +1,6 @@
 
 /**
- * @class graphiti.Node
+ * @class graphiti.shape.node.Node
  * 
  * A Node is the base class for all figures which can have {@link graphiti.Port}s. A {@link graphiti.Port} is the
  * anchor for a {@link graphiti.Connection} line.<br><br>A {@link graphiti.Port} is a green dot which can 
@@ -10,9 +10,9 @@
  * @author Andreas Herz
  * @extends graphiti.Figure 
  */
-graphiti.Node = graphiti.Figure.extend({
+graphiti.shape.node.Node = graphiti.Figure.extend({
  
-	NAME : "graphiti.Node", // only for debugging
+	NAME : "graphiti.shape.node.Node", // only for debugging
 
     /**
      * @constructor

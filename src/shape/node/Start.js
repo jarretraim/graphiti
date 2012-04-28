@@ -1,4 +1,11 @@
 
+/**
+ * @class graphiti.shape.node.Start
+ * 
+ * A simple Node which has an OutputPort.
+ * 
+ * @extends graphiti.shape.basic.Rectangle
+ */
 graphiti.shape.node.Start = graphiti.shape.basic.Rectangle.extend({
 
 	DEFAULT_COLOR : new graphiti.util.Color("#4D90FE"),
@@ -14,7 +21,11 @@ graphiti.shape.node.Start = graphiti.shape.basic.Rectangle.extend({
         this.setColor(this.DEFAULT_COLOR.darker());
     },
     
-    setCanvas : function(canvas)
+    /**
+     * @inheritdoc
+     *
+     **/
+     setCanvas : function(canvas)
     {
         this._super(canvas);
 

@@ -48,7 +48,7 @@
 
 	<SCRIPT src="../../src/Canvas.js"></SCRIPT>
 	<SCRIPT src="../../src/Figure.js"></SCRIPT>
-	<SCRIPT src="../../src/Node.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/node/Node.js"></SCRIPT>
 	<SCRIPT src="../../src/VectorFigure.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/basic/Rectangle.js"></SCRIPT>
 	<SCRIPT src="../../src/SetFigure.js"></SCRIPT>
@@ -101,16 +101,6 @@
 	<SCRIPT src="./command/CommandDisconnect.js"></SCRIPT>
 	<SCRIPT src="./jsonToModel.js"></SCRIPT>
 
-	<style>
-#gfx_holder {
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-</style>
 <script type="text/javascript">
 $(document).ready(function() {
 
@@ -132,7 +122,12 @@ $(document).ready(function() {
     var editor  = new example.mvc_simple.MyGraphicalEditor("gfx_holder",false);
 
     editor.setModel(circuitModel);
-    
+
+    // Documentation stuff 
+    // 
+    var jsonString = "Loaded JSON Data:\n\n"+JSON.stringify(circuit, null, "  ");
+    var div = $("<pre style='padding:20px;background-color:#f0f0f0;border:1px solid white;position:absolute;top:20px;right:20px;width:250; overflow:visible'>"+jsonString+"</pre>");
+    $("body").append(div);
 });
 
 </script>

@@ -1,4 +1,10 @@
 
+/**
+ * @class graphiti.shape.node.End
+ * A simple Node which has a InputPort.
+ * 
+ * @extends graphiti.shape.basic.Rectangle
+ */
 graphiti.shape.node.End = graphiti.shape.basic.Rectangle.extend({
 
 	DEFAULT_COLOR : new graphiti.util.Color("#4D90FE"),

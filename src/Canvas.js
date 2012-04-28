@@ -105,8 +105,8 @@ graphiti.Canvas = Class.extend(
         //
         this.zoomFactor = 1.0;
         this.enableSmoothFigureHandling=false;
-        this.currentSelection = null;
-        this.currentDropTarget=null;
+        this.currentSelection  = null;
+        this.currentDropTarget = null;
         this.isInExternalDragOperation=false;
                 
         this.snapToGridHelper = null;
@@ -159,6 +159,7 @@ graphiti.Canvas = Class.extend(
         this.mouseDownX = 0;
         this.mouseDownY = 0;
         this.mouseDraggingElement = null;
+        
         if (this.dragDropHandlingByCanvas === true) {
             this.html.bind("mouseup touchend", $.proxy(function(event)
             {
@@ -181,8 +182,8 @@ graphiti.Canvas = Class.extend(
                    var diffX = event.clientX - this.mouseDownX;
                    var diffY = event.clientY - this.mouseDownY;
                    this.onMouseDrag(diffX, diffY);
-                   event.preventDefault();
-                   event.stopPropagation();
+//                   event.preventDefault();
+//                   event.stopPropagation();
                }
             }, this));
         }
@@ -1196,7 +1197,7 @@ graphiti.Canvas = Class.extend(
      **/
     onKeyDown:function( /*:int*/ keyCode, /*:boolean*/ ctrl)
     {
-      // Figure lï¿½scht sich selbst, da dies den KeyDown Event empfangen
+      // Figure lšscht sich selbst, da dies den KeyDown Event empfangen
       // kann. Bei einer Linie geht dies leider nicht, und muss hier abgehandelt werden.
       //
       if(keyCode==46 && this.currentSelection!==null)
@@ -1261,8 +1262,6 @@ graphiti.Canvas = Class.extend(
      */
     onMouseMove : function(/* :int */dx,/* :int */dy)
     {
-        if(this.isInExternalDragOperation===true){
-        }
     },
     
     /**
@@ -1270,9 +1269,9 @@ graphiti.Canvas = Class.extend(
      */
     onMouseDrag : function(/* :int */dx,/* :int */dy)
     {
-        if (this.mouseDraggingElement !== null) {
+        
+               if (this.mouseDraggingElement !== null) {
             this.mouseDraggingElement.onDrag(dx, dy);
-            
             var p = this.fromDocumentToCanvasCoordinate(this.mouseDownX + dx, this.mouseDownY + dy);
             
             var target = this.getBestFigure(p.x, p.y,this.mouseDraggingElement);
@@ -1294,6 +1293,8 @@ graphiti.Canvas = Class.extend(
                 }
             }
        }
+       
+      
     },
 
 

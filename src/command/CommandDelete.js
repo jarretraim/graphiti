@@ -100,7 +100,7 @@ graphiti.command.CommandDelete = graphiti.command.Command.extend({
         }
     
         this.canvas.setCurrentSelection(null);
-        if(this.figure instanceof graphiti.Node && this.connections===null)
+        if(this.figure instanceof graphiti.shape.node.Node && this.connections===null)
         {
           this.connections = new graphiti.util.ArrayList();
           var ports = this.figure.getPorts();

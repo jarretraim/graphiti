@@ -1,4 +1,9 @@
-
+/**
+ * @class graphiti.shape.node.Between
+ * A simple Node which has a  InputPort and OutputPort.
+ * 
+ * @extends graphiti.shape.basic.Rectangle
+ */
 graphiti.shape.node.Between = graphiti.shape.basic.Rectangle.extend({
 
 	DEFAULT_COLOR : new graphiti.util.Color("#4D90FE"),
