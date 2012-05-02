@@ -28,9 +28,9 @@ graphiti.ConnectionAnchor = Class.extend({
      * The anchor may use the given reference Point to calculate this location.
      * 
      * @param
-     * @return {Number] reference The reference Point in absolute coordinates
+     * @return {Number} reference The reference Point in absolute coordinates
      */
-    getLocation:function(/*:@NAMESPACE@Point*/ reference)
+    getLocation:function(reference)
     {
        // return the center of the owner.
        return this.getReferencePoint();

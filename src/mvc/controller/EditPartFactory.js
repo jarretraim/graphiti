@@ -22,12 +22,11 @@ graphiti.mvc.controller.EditPartFactory= Class.extend({
 	 * @method
 	 * Create a new EditPart related to the given model.
 	 * 
-	 * @param {draw2d.EditPart} context - The context in which the EditPart is being created, such as its parent.
-	 * @param {Object} mode - the model of the EditPart being created
+	 * @param {Object} model the model of the EditPart being created
 	 *
-	 * @type draw2d.Figure
+	 * @return {graphiti.Figure}
 	 **/
-	createEditPart:function( /*:draw2d.AbstractObjectModel*/ model)
+	createEditPart:function( model)
 	{
 	}
 
