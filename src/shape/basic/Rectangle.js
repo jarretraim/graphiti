@@ -15,6 +15,10 @@
  *     
  *     rect2.setBackgroundColor("#f0f000");
  *     rect2.setAlpha(0.7);
+ *     rect2.setDimension(100,60);
+ *     rect2.setRadius(10);
+ *     
+ *     canvas.setCurrentSelection(rect2);
  *     
  * @author Andreas Herz
  * @extends graphiti.VectorFigure

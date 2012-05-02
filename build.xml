@@ -10,7 +10,7 @@
 	  </classpath>
 	</taskdef>
 
-	<target name="local" >
+	<target name="local" depends="doc">
 		<delete includeemptydirs="true">
 		    <fileset dir="${localweb.dir}" includes="**/*"/>
 		</delete>
@@ -28,9 +28,14 @@
 	</target>
 
 	<target name="doc"> 
-		<exec executable="cmd">
+		<exec executable="cmd" os="windows">
 		  <arg line='/c jsduck --config ./jsduck.conf'/>
 		</exec>
+		
+		<exec executable="jsduck" >
+		  <arg line='--config ./jsduck.conf'/>
+		</exec>
+		
 		<mkdir dir="./target/jsdoc/grapihit"/>
 		<mkdir dir="./jsdoc/graphiti/lib"/>
 		<copy todir="./jsdoc/graphiti/lib">
@@ -39,8 +44,7 @@
 		<copy todir="./jsdoc/graphiti/src">
 		    <fileset dir="./src"/>
 		</copy>
-	</target> 
-	
+	</target> 	
 	
     <!-- This is the default target - it generates the JsDoc documents -->
     <target name="all" depends="" description="Generate JsDoc.">

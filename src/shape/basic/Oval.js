@@ -9,7 +9,8 @@
  *     @example preview small frame
  *     
  *     var oval =  new graphiti.shape.basic.Oval();
- *     canvas.addFigure(oval,10,10);
+ *     oval.setDimension(150,100);
+ *     canvas.addFigure(oval,50,10);
  *     
  * @inheritable
  * @author Andreas Herz

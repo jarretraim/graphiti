@@ -2,9 +2,20 @@
 
 /**
  * @class graphiti.shape.basic.Circle
- * A circle figure with basic background and stroke API. A circle can not be streched. The aspect ration
- * is always 1:1
+ * A circle figure with basic background and stroke API. <br>
+ * A circle can not be streched. <strong>The aspect ration is always 1:1</strong>â.
  * 
+ * See the example:
+ *
+ *     @example preview small frame
+ *     
+ *     var shape =  new graphiti.shape.basic.Circle();
+ *     shape.setStroke(3);
+ *     shape.setColor("#3d3d3d");
+ *     shape.setBackgroundColor("#3dff3d");
+ *     
+ *     canvas.addFigure(shape,40,10);
+ *     
  * @inheritable
  * @author Andreas Herz
  * @extends graphiti.shape.basic.Oval

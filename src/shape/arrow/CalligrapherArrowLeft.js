@@ -3,6 +3,15 @@
  * @class graphiti.shape.arrow.CalligrapherArrowLeft
  * Hand drawn arrow to the left.
  * 
+ * See the example:
+ *
+ *     @example preview small frame
+ *     
+ *     var figure =  new graphiti.shape.arrow.CalligrapherArrowLeft();
+ *     figure.setColor("#3d3d3d");
+ *     
+ *     canvas.addFigure(figure,10,10);
+ *     
  * @extends graphiti.SVGFigure
  */
 graphiti.shape.arrow.CalligrapherArrowLeft = graphiti.SVGFigure.extend({

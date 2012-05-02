@@ -3,6 +3,14 @@
  * @class graphiti.shape.basic.Label
  * Implements a simple text label.
  * 
+ * See the example:
+ *
+ *     @example preview small frame
+ *     
+ *     var shape =  new graphiti.shape.basic.Label("This is a simple label");
+ *          
+ *     canvas.addFigure(shape,40,10);
+ *     
  * @author Andreas Herz
  * 
  * @class graphiti.SetFigure

@@ -3,6 +3,21 @@
  * @class graphiti.shape.basic.Line
  * The base class for all visible elements inside a canvas.
  * 
+ * See the example:
+ *
+ *     @example preview small frame
+ *     
+ *     var line1 =  new graphiti.shape.basic.Line();
+ *     line1.setStartPoint(30,30);
+ *     line1.setEndPoint(100,80);
+ *       
+ *     canvas.addFigure(line1);
+ *     
+ *     var line2 = new graphiti.shape.basic.Line(20,80,200,150);
+ *     line2.setStroke(3);
+ *     line2.setColor("#1d1dff");
+ *     canvas.addFigure(line2);
+ *     
  * @inheritable
  * @author Andreas Herz
  * @extends graphiti.Figure
@@ -15,19 +30,33 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
     /**
      * @constructor
      * Creates a new figure element which are not assigned to any canvas.
+     * 
+     * @param {Number} startX the x-coordinate of the start
+     * @param {Number} startY the y-coordinate of the start
+     * @param {Number} endX   the x-coordinate of the end
+     * @param {Number} endY   the y-coordinate of the end
+     * 
      */
-    init: function( ) {
+    init: function(startX, startY, endX, endY ) {
         this._super();
         
         this.lineColor = this.DEFAULT_COLOR;
         this.stroke=1;
         
-        this.startX = 30;
-        this.startY = 30;
-        
-        this.endX   = 100;
-        this.endY   = 100;
-       
+        if(typeof endY ==="number"){
+            this.startX = startX;
+            this.startY = startY;
+            
+            this.endX   = endX;
+            this.endY   = endY;
+        }
+        else{
+            this.startX = 30;
+            this.startY = 30;
+            
+            this.endX   = 100;
+            this.endY   = 100;
+        }
         // click area for the line hit test
         this.corona = 10;
         this.isGlowing = false;
