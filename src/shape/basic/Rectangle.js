@@ -3,6 +3,19 @@
  * @class graphiti.shape.basic.Rectangle
  * A Rectangle Figure.
  * 
+ * See the example:
+ *
+ *     @example preview small frame
+ *     
+ *     var rect1 =  new graphiti.shape.basic.Rectangle();
+ *     var rect2 =  new graphiti.shape.basic.Rectangle();
+ *     
+ *     canvas.addFigure(rect1,10,10);
+ *     canvas.addFigure(rect2,100,10);
+ *     
+ *     rect2.setBackgroundColor("#f0f000");
+ *     rect2.setAlpha(0.7);
+ *     
  * @author Andreas Herz
  * @extends graphiti.VectorFigure
  */

@@ -27,6 +27,21 @@
 	  </jslint>
 	</target>
 
+	<target name="doc"> 
+		<exec executable="cmd">
+		  <arg line='/c jsduck --config ./jsduck.conf'/>
+		</exec>
+		<mkdir dir="./target/jsdoc/grapihit"/>
+		<mkdir dir="./jsdoc/graphiti/lib"/>
+		<copy todir="./jsdoc/graphiti/lib">
+		    <fileset dir="./lib"/>
+		</copy>
+		<copy todir="./jsdoc/graphiti/src">
+		    <fileset dir="./src"/>
+		</copy>
+	</target> 
+	
+	
     <!-- This is the default target - it generates the JsDoc documents -->
     <target name="all" depends="" description="Generate JsDoc.">
     </target>

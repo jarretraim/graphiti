@@ -3,8 +3,14 @@
  * @class graphiti.shape.basic.Oval
  * Oval figure.
  * 
- * {@img Oval.png Oval Figure}
  * 
+ * See the example:
+ *
+ *     @example preview small frame
+ *     
+ *     var oval =  new graphiti.shape.basic.Oval();
+ *     canvas.addFigure(oval,10,10);
+ *     
  * @inheritable
  * @author Andreas Herz
  * @extends graphiti.VectorFigure
@@ -13,9 +19,9 @@ graphiti.shape.basic.Oval = graphiti.VectorFigure.extend({
     NAME : "graphiti.shape.basic.Oval", // only for debugging
 
     /**
+     * 
      * @constructor
      * Creates a new figure element which are not assigned to any canvas.
-     * 
      */
     init: function( ) {
         this._super( );
@@ -25,8 +31,6 @@ graphiti.shape.basic.Oval = graphiti.VectorFigure.extend({
       
 
    /** 
-    * @inheritdoc
-    * 
     * @template
     **/
    createShapeElement : function()

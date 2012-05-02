@@ -1,4 +1,4 @@
-
+﻿
 /**
  * @class graphiti.Canvas
  * Interactive paint area of the graphiti library.
@@ -425,7 +425,6 @@ graphiti.Canvas = Class.extend(
       return this.lines;
     },
 
-
     /**
      * @method
      * Returns the internal figures container.<br>
@@ -457,8 +456,6 @@ graphiti.Canvas = Class.extend(
       return null;
     },
 
-    
-
     /**
      * @method
      * Returns the figure with the given id. 
@@ -477,7 +474,6 @@ graphiti.Canvas = Class.extend(
       return null;;
     },
 
-
     /**
      * Enable/disable the snap to grid behavior of the canvas. All figures will snap to the grid during the
      * the drag and drop operation.
@@ -493,7 +489,6 @@ graphiti.Canvas = Class.extend(
        this.snapToGridHelper = null;
       }
     },
-
 
     /**
      * @method
@@ -524,7 +519,6 @@ graphiti.Canvas = Class.extend(
       }
     },
 
-
     /**
      * @method
      * <b>true</b> if snap to the grid enabled.
@@ -535,7 +529,6 @@ graphiti.Canvas = Class.extend(
     {
       return this.snapToGeometryHelper !== null;
     },
-
 
     /** 
      * @method
@@ -720,7 +713,6 @@ graphiti.Canvas = Class.extend(
       return this.currentSelection;
     },
 
-
     /**
      * @method
      * Set the current selected figure in the workflow Canvas.
@@ -758,7 +750,6 @@ graphiti.Canvas = Class.extend(
       }
 
     },
-    
 
     /**
      * @method
@@ -915,9 +906,7 @@ graphiti.Canvas = Class.extend(
         }
       }
       return result;
-    },
-
-   
+    }, 
 
     /**
      * @param {graphiti.shape.basic.Line} line The line for the resize handles.
@@ -1048,7 +1037,6 @@ graphiti.Canvas = Class.extend(
         this.resizeHandle8.setPosition(xPos-resizeWidth,yPos+(objHeight/2)-(resizeHeight/2));
       }
     },
-
 
     /**
      * @private
@@ -1197,7 +1185,7 @@ graphiti.Canvas = Class.extend(
      **/
     onKeyDown:function( /*:int*/ keyCode, /*:boolean*/ ctrl)
     {
-      // Figure l�scht sich selbst, da dies den KeyDown Event empfangen
+      // Figure löscht sich selbst, da dies den KeyDown Event empfangen
       // kann. Bei einer Linie geht dies leider nicht, und muss hier abgehandelt werden.
       //
       if(keyCode==46 && this.currentSelection!==null)

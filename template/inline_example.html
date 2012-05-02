@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <title>Graphiti Examples</title>
+   
+	<SCRIPT src="./graphiti/lib/shifty.js"></SCRIPT>
+	<SCRIPT src="./graphiti/lib/raphael.js"></SCRIPT>
+	<SCRIPT src="./graphiti/lib/jquery-1.6.4.js"></SCRIPT>
+	<SCRIPT src="./graphiti/lib/jquery-ui-1.8.16.custom.min.js"></SCRIPT>
+	<SCRIPT src="./graphiti/lib/jquery.layout.js"></SCRIPT>
+	<SCRIPT src="./graphiti/lib/jquery-touch_punch.js"></SCRIPT>
+	<SCRIPT src="./graphiti/lib/Class.js"></SCRIPT>
+    
+	<SCRIPT src="./graphiti/src/graphiti.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/util/Color.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/util/ArrayList.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/util/UUID.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/geo/PositionConstants.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/geo/Point.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/geo/Rectangle.js"></SCRIPT>
+
+	<SCRIPT src="./graphiti/src/EditPolicy.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/command/Command.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/command/CommandStack.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/command/CommandStackEvent.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/command/CommandStackEventListener.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/command/CommandMove.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/command/CommandResize.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/command/CommandConnect.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/command/CommandReconnect.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/command/CommandDelete.js"></SCRIPT>
+	
+	<SCRIPT src="./graphiti/src/layout/connection/ConnectionRouter.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/layout/connection/DirectRouter.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/layout/connection/ManhattanConnectionRouter.js"></SCRIPT>
+
+	<SCRIPT src="./graphiti/src/layout/mesh/MeshLayouter.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/layout/mesh/ExplodeLayouter.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/layout/mesh/ProposedMeshChange.js"></SCRIPT>
+
+	<SCRIPT src="./graphiti/src/layout/locator/Locator.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/layout/locator/ConnectionLocator.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/layout/locator/ManhattanMidpointLocator.js"></SCRIPT>
+
+	<SCRIPT src="./graphiti/src/Canvas.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/Figure.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/shape/node/Node.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/VectorFigure.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/shape/basic/Rectangle.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/SetFigure.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/SVGFigure.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/shape/basic/Oval.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/shape/basic/Circle.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/CompartmentFigure.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/shape/basic/Label.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/shape/basic/Line.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/shape/basic/PolyLine.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/Connection.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/VectorFigure.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/ResizeHandle.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/LineResizeHandle.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/LineStartResizeHandle.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/LineEndResizeHandle.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/Port.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/InputPort.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/OutputPort.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/ConnectionAnchor.js"></SCRIPT>
+
+	<SCRIPT src="./graphiti/src/shape/arrow/CalligrapherArrowLeft.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/shape/arrow/CalligrapherArrowDownLeft.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/shape/node/Start.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/shape/node/End.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/shape/node/Between.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/shape/note/PostIt.js"></SCRIPT>
+
+	<SCRIPT src="./graphiti/src/ui/parts/GraphicalEditor.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/ui/parts/GraphicalViewer.js"></SCRIPT>
+
+	<SCRIPT src="./graphiti/src/mvc/controller/EditPartFactory.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/mvc/AbstractObjectModel.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/mvc/AbstractConnectionModel.js"></SCRIPT>
+	<SCRIPT src="./graphiti/src/mvc/Event.js"></SCRIPT>
+  
+      <script type="text/javascript">
+          function loadInlineExample(code, options) {
+        	  console.log(code);
+              try {
+                  eval(code);
+              } catch (e) {
+                  document.body.innerHTML = e;
+              }
+          }
+      </script>
+  </head>
+  <body>
+  <div id="gfx_holder" style="width:500px; height:250px;-webkit-tap-highlight-color: rgba(0,0,0,0); ">
+ </div>
+  
+  </body>
+  <script>
+  var canvas = new graphiti.Canvas("gfx_holder");
+  </script>
+  </html>
+  
+  
