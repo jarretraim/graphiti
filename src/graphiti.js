@@ -9,6 +9,10 @@ var graphiti =
     geo: {
     },
 
+    io:{
+      json:{}  
+    },
+    
     util : {
     },
 

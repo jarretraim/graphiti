@@ -1012,6 +1012,26 @@ graphiti.Figure = Class.extend({
      */
     onClick: function(){
         
+    },
+    
+    
+    /**
+     * @method 
+     * Return an objects with all important attributes for XML or JSON serialization
+     * 
+     * @returns {Object}
+     */
+    getPersistentAttributes : function()
+    {
+        return {
+            type  : this.NAME,
+            id    : this.id,
+            x     : this.x,
+            y     : this.y,
+            width : this.width,
+            height: this.height           
+        };
     }
+
 });
 

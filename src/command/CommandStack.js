@@ -6,21 +6,6 @@
 graphiti.command.CommandStack = Class.extend({
     NAME : "graphiti.command.CommandStack", // only for debug
 
-	/** Constant indicating notification prior to executing a command (value is 1).*/
-	PRE_EXECUTE:1,
-	/** Constant indicating notification prior to redoing a command (value is 2).*/
-	PRE_REDO:2,
-	/** Constant indicating notification prior to undoing a command (value is 4).*/
-	PRE_UNDO:4,
-	/**  Constant indicating notification after a command has been executed (value is 8).*/
-	POST_EXECUTE:8,
-	/** Constant indicating notification after a command has been redone (value is 16).*/
-	POST_REDO:16,
-	/** Constant indicating notification after a command has been undone (value is 32).*/
-	POST_UNDO:32,
-
-	POST_MASK : this.POST_EXECUTE | this.POST_UNDO | this.POST_REDO,
-	PRE_MASK  : this.PRE_EXECUTE  | this.PRE_UNDO  |this. PRE_REDO,
 
     /**
      * @constructor
@@ -211,12 +196,18 @@ graphiti.command.CommandStack = Class.extend({
      */
     addEventListener:function( listener)
     {
-        if(listener instanceof graphiti.command.CommandStackEventListener)
+        if(listener instanceof graphiti.command.CommandStackEventListener){
           this.eventListeners.add(listener);
-        else if(typeof listener.stackChanged ==="function")
+        }
+        else if(typeof listener.stackChanged ==="function"){
           this.eventListeners.add(listener);
-        else
+        }
+        else if(typeof listener === "function"){
+          this.eventListeners.add( {  stackChanged : listener });
+        }
+        else{
           throw "Object doesn't implement required callback interface [graphiti.command.CommandStackListener]";
+        }
     },
     
     /**
@@ -227,9 +218,15 @@ graphiti.command.CommandStack = Class.extend({
      */
     removeEventListener:function(listener)
     {
-       this.eventListeners.remove(listener);
+        for (var i = 0; i < size; i++){
+            var entry = this.eventListeners.get(i);
+            if(entry ===listener || entry.stackChanged === listener){
+                this.eventListeners.remove(entry);
+                return;
+            }
+         }
     },
-    
+        
     /**
      * @method
      * Notifies command stack event listeners that the command stack has changed to the
@@ -247,5 +244,22 @@ graphiti.command.CommandStack = Class.extend({
          this.eventListeners.get(i).stackChanged(event);
     }
 });
+
+
+/** Constant indicating notification prior to executing a command (value is 1).*/
+graphiti.command.CommandStack.PRE_EXECUTE=1;
+/** Constant indicating notification prior to redoing a command (value is 2).*/
+graphiti.command.CommandStack.PRE_REDO=2;
+/** Constant indicating notification prior to undoing a command (value is 4).*/
+graphiti.command.CommandStack.PRE_UNDO=4;
+/**  Constant indicating notification after a command has been executed (value is 8).*/
+graphiti.command.CommandStack.POST_EXECUTE=8;
+/** Constant indicating notification after a command has been redone (value is 16).*/
+graphiti.command.CommandStack.POST_REDO=16;
+/** Constant indicating notification after a command has been undone (value is 32).*/
+graphiti.command.CommandStack.POST_UNDO=32;
+
+graphiti.command.CommandStack.POST_MASK = graphiti.command.CommandStack.POST_EXECUTE | graphiti.command.CommandStack.POST_UNDO | graphiti.command.CommandStack.POST_REDO;
+graphiti.command.CommandStack.PRE_MASK  = graphiti.command.CommandStack.PRE_EXECUTE  | graphiti.command.CommandStack.PRE_UNDO  |graphiti.command.CommandStack.PRE_REDO;
 
 

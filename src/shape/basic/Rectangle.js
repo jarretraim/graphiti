@@ -96,5 +96,22 @@ graphiti.shape.basic.Rectangle = graphiti.VectorFigure.extend({
      */
     getRadius:function(){
         return this.radius;
+    },
+    
+    
+    
+    /**
+     * @method 
+     * Return an objects with all important attributes for XML or JSON serialization
+     * 
+     * @returns {Object}
+     */
+    getPersistentAttributes : function()
+    {
+        var memento = this._super();
+        
+        memento.radius = this.radius;
+        
+        return memento;
     }
 });

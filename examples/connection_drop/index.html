@@ -112,8 +112,8 @@ $(document).ready(function() {
 	  var start  = new graphiti.shape.node.Start();
 	  var end    = new graphiti.shape.node.End();
 	  
-	  canvas.addFigure(start, 80,80);
-	  canvas.addFigure(end, 450,150);
+	  canvas.addFigure(start, 80,180);
+	  canvas.addFigure(end, 450,250);
 	
 	  // Add a connection via API calls between Start and Stop
 	  // It is more confortable with the MVC pattern
@@ -130,7 +130,7 @@ $(document).ready(function() {
 	  // Add my implemention of a "Between" figure for the smart insert feature
 	  // inspect the "Between.onDrop" method for more details
 	  //
-	  canvas.addFigure( new example.connection_drop.BetweenFigure(), 250,240);
+	  canvas.addFigure( new example.connection_drop.BetweenFigure(), 250,340);
 
   
 	 
@@ -139,10 +139,10 @@ $(document).ready(function() {
 	 ///////////////////////////////////////////////////////////////////// 
 	 var arrowLeft = new graphiti.shape.arrow.CalligrapherArrowLeft();
 	 arrowLeft.setColor("#0d0d0d");
-	 canvas.addFigure(arrowLeft, 330,235);
+	 canvas.addFigure(arrowLeft, 330,335);
 	 
-	 var msg = new graphiti.shape.note.PostIt("Drag&Drop the orange box onto the green connector.\nThe orange box will be inserted into the Connection.\n \nSmart - right?");
-	 canvas.addFigure(msg, 570,220);
+	 var msg = new graphiti.shape.note.PostIt("Drag&Drop the orange box onto the green connector.\nThe orange box will be injected into the Connection.\n \nSmart - right?");
+	 canvas.addFigure(msg, 20,20);
 	 
 	 $("body").scrollTop(0)
 	          .scrollLeft(0);

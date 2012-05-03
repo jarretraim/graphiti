@@ -7,12 +7,16 @@
  *
  *     @example preview small frame
  *     
+ *     // Create the line and modify the start/end after inserting them into 
+ *     // the canvas
  *     var line1 =  new graphiti.shape.basic.Line();
  *     line1.setStartPoint(30,30);
  *     line1.setEndPoint(100,80);
  *       
  *     canvas.addFigure(line1);
  *     
+ *     // Create the line with a given start/end coordinate in the constructor
+ *     //
  *     var line2 = new graphiti.shape.basic.Line(20,80,200,150);
  *     line2.setStroke(3);
  *     line2.setColor("#1d1dff");

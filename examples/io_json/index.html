@@ -2,9 +2,9 @@
 <head>
 <title></title>
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="viewport" content="width=device-width, minimum-scale=1.0, , maximum-scale=1.0" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-   
+
     <link type="text/css" rel="stylesheet" href="./css/example.css" />
 
 	<SCRIPT src="../../lib/shifty.js"></SCRIPT>
@@ -85,61 +85,68 @@
 	<SCRIPT src="../../src/mvc/AbstractConnectionModel.js"></SCRIPT>
 	<SCRIPT src="../../src/mvc/Event.js"></SCRIPT>
 
-	
-	<script>
-	/** declare the namespace object for this example */
-	var example = {
-			connection_locator: {}
-	};
-	</script>
-
-	<SCRIPT src="LabelConnection.js"></SCRIPT>
-
+	<SCRIPT src="../../src/io/Reader.js"></SCRIPT>
+	<SCRIPT src="../../src/io/Writer.js"></SCRIPT>
+	<SCRIPT src="../../src/io/json/Writer.js"></SCRIPT>
+	<SCRIPT src="../../src/io/json/Reader.js"></SCRIPT>
 
 <script type="text/javascript">
+
+// the document to load....in this case a simple JSON Object
+var jsonDocument = 
+    [
+      {
+        "type": "graphiti.shape.basic.Oval",
+        "id": "5b4c74b0-96d1-1aa3-7eca-bbeaed5fffd7",
+        "x": 237,
+        "y": 236,
+        "width": 93,
+        "height": 38
+      },
+      {
+        "type": "graphiti.shape.basic.Rectangle",
+        "id": "354fa3b9-a834-0221-2009-abc2d6bd852a",
+        "x": 225,
+        "y": 97,
+        "width": 201,
+        "height": 82,
+        "radius": 2
+      },
+      {
+        "type": "graphiti.shape.basic.Rectangle",
+        "id": "ebfb35bb-5767-8155-c804-14bda7759dc2",
+        "x": 72,
+        "y": 45,
+        "width": 50,
+        "height": 50,
+        "radius": 2
+      }
+    ];
+                
 $(document).ready(function() {
 
-    document.ontouchmove = function(e) {
-        e.preventDefault();
-    };
+  document.ontouchmove = function(e) {
+      e.preventDefault();
+  };
     
-     // Create the paint area. The id in the constructor must be
-     // an existing DIV 
-	 var canvas = new graphiti.Canvas("gfx_holder");
-	
-     // create and add two nodes which contains Ports (In and OUT)
-     //
-	 var start = new graphiti.shape.node.Start();
-	 var end   = new graphiti.shape.node.End();
-	
-	 // ...add it to the canvas 
-	 canvas.addFigure( start, 50,450);
-	 canvas.addFigure( end, 230,150);
-		
-	 // Create a Connection and connect the Start and End node
-	 //
-	 var c = new example.connection_locator.LabelConnection();
-	 c.setSource(start.getPort("output"));
-	 c.setTarget(end.getPort("input"));
-	 // add the connection to the canvas as well
-	 canvas.addFigure(c);
-	
-	 
-	 
-	 
-	 ///////////////////////////////////////////////////////////////////// 
-	 // THIS IS ONLY FOR THE ARROW AND THE POST-IT
-	 ///////////////////////////////////////////////////////////////////// 
-	 var arrowLeft = new graphiti.shape.arrow.CalligrapherArrowLeft();
-	 arrowLeft.setColor("#0d0d0d");
-	 canvas.addFigure(arrowLeft, 320,155);
-	 
-	 var msg = new graphiti.shape.note.PostIt("Drag&Drop the blue box and notice the label.\nIt sticks always in the middle of the connector.");
-	 canvas.addFigure(msg, 20,20);
-	 
-	 $("body").scrollTop(0)
-	          .scrollLeft(0);
-	 
+  // create the canvas for the user interaction
+  //
+  var canvas = new graphiti.Canvas("gfx_holder");
+  
+  // unmarshal the JSON document into the canvas
+  // (load)
+  var reader = new graphiti.io.json.Reader();
+  reader.unmarshal(canvas, jsonDocument);
+  
+  // add an event listener to the Canvas for change notifications.
+  // We just dump the current canvas document into the DIV
+  //
+  canvas.getCommandStack().addEventListener(function(e){
+      if(e.isPostChangeEvent()){
+         var writer = new graphiti.io.json.Writer();
+         $("#json").text(JSON.stringify(writer.marshal(canvas),null,2));
+      }
+  });
 });
 
 </script>
@@ -147,9 +154,10 @@ $(document).ready(function() {
 </head>
 
 <body>
+<div id="gfx_holder" style="width:1500px; height:1500px;-webkit-tap-highlight-color: rgba(0,0,0,0); ">
+</div>
 
-   <div id="gfx_holder" style="width:1500px; height:1500px; ">
-   </div>
-
+<pre id="json" style="overflow:auto;position:absolute; top:10px; right:10px; width:350; height:500;background:white;border:1px solid gray">
+</pre>
 </body>
 </html>

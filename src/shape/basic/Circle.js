@@ -3,7 +3,7 @@
 /**
  * @class graphiti.shape.basic.Circle
  * A circle figure with basic background and stroke API. <br>
- * A circle can not be streched. <strong>The aspect ration is always 1:1</strong>â.
+ * A circle can not be streched. <strong>The aspect ration is always 1:1</strong>.
  * 
  * See the example:
  *

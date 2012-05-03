@@ -36,14 +36,21 @@
 		  <arg line='--config ./jsduck.conf'/>
 		</exec>
 		
-		<mkdir dir="./target/jsdoc/grapihit"/>
+		<mkdir dir="./jsdoc/grapihit"/>
 		<mkdir dir="./jsdoc/graphiti/lib"/>
+		
 		<copy todir="./jsdoc/graphiti/lib">
 		    <fileset dir="./lib"/>
 		</copy>
+		
 		<copy todir="./jsdoc/graphiti/src">
 		    <fileset dir="./src"/>
 		</copy>
+		
+		<copy todir="./jsdoc/graphiti/examples">
+		    <fileset dir="./examples"/>
+		</copy>
+		
 	</target> 	
 	
     <!-- This is the default target - it generates the JsDoc documents -->
