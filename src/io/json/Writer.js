@@ -1,5 +1,13 @@
 
 
+/**
+ * @class graphiti.io.json.Writer
+ * Serialize the canvas document into a JSON object which can be read from the corresponding
+ * {#link graphiti.io.json.Reader}.
+ * 
+ * @author Andreas Herz
+ * @extends graphiti.io.Writer
+ */
 graphiti.io.json.Writer = graphiti.io.Writer.extend({
     
     init:function(){
@@ -21,14 +29,15 @@ graphiti.io.json.Writer = graphiti.io.Writer.extend({
         var figures = canvas.getFigures();
         var i =0;
         var f= null;
-        // conventionel iteration over an array
+        
+        // conventional iteration over an array
         //
         for(i=0; i< figures.getSize(); i++){
             f = figures.get(i);
              result.push(f.getPersistentAttributes());
         }
         
-        // closure/jQuery style to iterate
+        // jQuery style to iterate
         //
         var lines = canvas.getLines();
         lines.each(function(i, element){

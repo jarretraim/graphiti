@@ -10,7 +10,8 @@ var graphiti =
     },
 
     io:{
-      json:{}  
+        json:{},
+        png:{}  
     },
     
     util : {

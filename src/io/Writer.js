@@ -1,5 +1,11 @@
 
-
+/**
+ * @class graphiti.io.Writer
+ * Serialize the canvas to an external format. This is only a template/interface class.
+ * Inherit classes must implement the export format.
+ * 
+ * @author Andreas Herz
+ */
 graphiti.io.Writer = Class.extend({
     
     init:function(){
@@ -13,7 +19,7 @@ graphiti.io.Writer = Class.extend({
      * 
      * @template
      * @param {graphiti.Canvas} canvas
-     * @returns {String}
+     * @returns {Object}
      */
     marshal: function(canvas){
         

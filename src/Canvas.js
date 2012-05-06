@@ -242,6 +242,11 @@ graphiti.Canvas = Class.extend(
         return this.isIOS;
     },
 
+    getHtmlContainer: function(){
+       return this.html; 
+    },
+    
+    
     /**
      * @private
      * @param event

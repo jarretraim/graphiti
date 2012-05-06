@@ -147,16 +147,27 @@ $(document).ready(function() {
   var reader = new graphiti.io.json.Reader();
   reader.unmarshal(canvas, jsonDocument);
   
+  updatePreview(canvas);
+
   // add an event listener to the Canvas for change notifications.
-  // We just dump the current canvas document into the DIV
+  // We just dump the current canvas document into the IMG 
   //
   canvas.getCommandStack().addEventListener(function(e){
       if(e.isPostChangeEvent()){
-         var writer = new graphiti.io.json.Writer();
-         $("#json").text(JSON.stringify(writer.marshal(canvas),null,2));
-      }
+          updatePreview(canvas);
+       }
   });
+  
+  
 });
+
+function updatePreview(canvas){
+    // convert the canvas into a PNG image source string 
+    // 
+    var writer = new graphiti.io.png.Writer();
+    var png = writer.marshal(canvas);
+    $("#preview").attr("src",png);
+};
 
 </script>
 
@@ -166,7 +177,6 @@ $(document).ready(function() {
 <div id="gfx_holder" style="width:1500px; height:1500px;-webkit-tap-highlight-color: rgba(0,0,0,0); ">
 </div>
 
-<pre id="json" style="overflow:auto;position:absolute; top:10px; right:10px; width:350; height:500;background:white;border:1px solid gray">
-</pre>
+<img class="shadow" id="preview" style="border-radius:5px;overflow:auto;position:absolute; top:10px; right:10px; width:150; height:150;border:3px solid gray;"/>
 </body>
 </html>

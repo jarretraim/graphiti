@@ -1,4 +1,10 @@
 
+/**
+ * @class graphiti.io.Reader
+ * Template class for general import of a document into the canvas.
+ * 
+ * @author andreas Herz
+ */
 
 graphiti.io.Reader = Class.extend({
     
@@ -12,7 +18,7 @@ graphiti.io.Reader = Class.extend({
      * Restore the canvas from a given String.
      * 
      * @param {graphiti.Canvas} canvas the canvas to restore
-     * @param {String} document the document to read
+     * @param {Object} document the document to read
      * @template
      */
     unmarshal: function(canvas, document){

@@ -1,5 +1,11 @@
 
-
+/**
+ * @class graphiti.io.json.Reader
+ * Read a JSON data and import them into the canvas. The JSON must be genrated with the
+ * {#link graphiti.io.json.Writer}
+ * 
+ * @extends graphiti.io.Reader
+ */
 graphiti.io.json.Reader = graphiti.io.Reader.extend({
     
     init: function(){
@@ -17,7 +23,6 @@ graphiti.io.json.Reader = graphiti.io.Reader.extend({
      */
     unmarshal: function(canvas, json){
         var node=null;
-        var port=null;
         $.each(json, function(i, element){
             var o = eval("new "+element.type+"()");
             var source= null;
