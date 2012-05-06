@@ -384,10 +384,21 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
       {
     	  this.corona = new graphiti.Corona();
     	  this.corona.setDimension(this.getWidth()+(this.getCoronaWidth()*2),this.getWidth()+(this.getCoronaWidth()*2));
-    	  this.parent.getCanvas().addFigure(this.corona,this.getAbsoluteX()-this.getCoronaWidth()-this.getWidth()/2, this.getAbsoluteY()-this.getCoronaWidth()-this.getHeight()/2);
+          this.corona.setPosition(this.getAbsoluteX()-this.getCoronaWidth()-this.getWidth()/2, this.getAbsoluteY()-this.getCoronaWidth()-this.getHeight()/2);
+          
+          this.corona.setCanvas(this.getCanvas());
+
+          // important inital 
+          this.corona.getShapeElement();
+          this.corona.repaint();
+          
+          // DONT'T add them to the document. The corona is just a visual feedback and not part
+          // of the canvas document.
+         // this.parent.getCanvas().addFigure(this.corona,this.getAbsoluteX()-this.getCoronaWidth()-this.getWidth()/2, this.getAbsoluteY()-this.getCoronaWidth()-this.getHeight()/2);
       }
       else if(flag===false && this.corona!==null)
       {
+          this.corona.setCanvas(null);
     	  this.parent.getCanvas().removeFigure(this.corona);
     	  this.corona = null;
       }
