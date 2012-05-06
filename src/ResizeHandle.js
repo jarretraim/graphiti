@@ -278,9 +278,6 @@ graphiti.ResizeHandle = graphiti.shape.basic.Rectangle.extend({
       // and a resize handle can't be deleted.
       if(this.shape===null) {
          this.setCanvas(canvas);
-         if(this.dragDropHandlingByCanvas===false){
-             this.createDraggable();
-         }
       }
      
       this.setPosition(x,y);

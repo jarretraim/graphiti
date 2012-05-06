@@ -471,6 +471,16 @@ graphiti.Figure = Class.extend({
 
     /**
      * @method
+     * Called when a user dbl clicks on the element
+     * 
+     * @template
+     */
+    onDoubleClick: function(){
+    },
+    
+    
+    /**
+     * @method
      * Set the alpha blending of this figure. 
      *
      * @template
@@ -1003,15 +1013,6 @@ graphiti.Figure = Class.extend({
       }
       
       return null;
-    },
-    
-    /**
-     * @method
-     * Called when a user clicks on the element
-     * @template
-     */
-    onClick: function(){
-        
     },
     
     

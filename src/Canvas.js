@@ -153,40 +153,35 @@ graphiti.Canvas = Class.extend(
 
         this.commandStack = new graphiti.command.CommandStack();
 
-        this.dragDropHandlingByCanvas = true;
-        
         this.mouseDown  = false;
         this.mouseDownX = 0;
         this.mouseDownY = 0;
         this.mouseDraggingElement = null;
         
-        if (this.dragDropHandlingByCanvas === true) {
-            this.html.bind("mouseup touchend", $.proxy(function(event)
-            {
-                event = this._getEvent(event);
-                if (this.mouseDown === false)
-                    return;
+        this.html.bind("mouseup touchend", $.proxy(function(event)
+        {
+            event = this._getEvent(event);
+            if (this.mouseDown === false)
+                return;
 
-                this.mouseDown = false;
-                this.onMouseUp();
-            }, this));
+            this.mouseDown = false;
+            this.onMouseUp();
+        }, this));
 
-            this.html.bind("mousemove touchmove", $.proxy(function(event)
-            {
-                event = this._getEvent(event);
-                if (this.mouseDown === false){
-                   var pos = this.fromDocumentToCanvasCoordinate(event.clientX, event.clientY);
-                   this.onMouseMove(pos.x, pos.y);
-                }
-                else{
-                   var diffX = event.clientX - this.mouseDownX;
-                   var diffY = event.clientY - this.mouseDownY;
-                   this.onMouseDrag(diffX, diffY);
-//                   event.preventDefault();
-//                   event.stopPropagation();
-               }
-            }, this));
-        }
+        this.html.bind("mousemove touchmove", $.proxy(function(event)
+        {
+            event = this._getEvent(event);
+            if (this.mouseDown === false){
+               var pos = this.fromDocumentToCanvasCoordinate(event.clientX, event.clientY);
+               this.onMouseMove(pos.x, pos.y);
+            }
+            else{
+               var diffX = event.clientX - this.mouseDownX;
+               var diffY = event.clientY - this.mouseDownY;
+               this.onMouseDrag(diffX, diffY);
+           }
+        }, this));
+        
         this.html.bind("mousedown touchstart", $.proxy(function(event)
         {
             event = this._getEvent(event);
@@ -198,6 +193,19 @@ graphiti.Canvas = Class.extend(
             this.onMouseDown(pos.x, pos.y);
         }, this));
         
+        
+        // Catch the keyDown and CTRL-key and route them to the Canvas hook.
+        //
+        $(document).bind("dblclick",$.proxy(function(event)
+        {
+            event = this._getEvent(event);
+
+            this.mouseDownX = event.clientX;
+            this.mouseDownY = event.clientY;
+            var pos = this.fromDocumentToCanvasCoordinate(event.clientX, event.clientY);
+            this.onDoubleClick(pos.x, pos.y);
+        },this));
+
         // Catch the keyDown and CTRL-key and route them to the Canvas hook.
         //
         $(document).bind("keydown",$.proxy(function(event)
@@ -355,9 +363,6 @@ graphiti.Canvas = Class.extend(
       else
       {
         this.figures.add(figure);
-        if(this.dragDropHandlingByCanvas===false){
-            figure.createDraggable();
-        }
 
         // Compartments must be stored in an additional structure
         //
@@ -667,9 +672,6 @@ graphiti.Canvas = Class.extend(
       // All elements have the same drop targets.
       //
       port.targets= this.dropTargets;
-      if(this.dragDropHandlingByCanvas===false){
-          port.createDraggable();
-      }
       
       this.commonPorts.add(port);
       this.dropTargets.add(port);
@@ -1095,14 +1097,6 @@ graphiti.Canvas = Class.extend(
         this.enableSmoothFigureHandling=flag;
     },
 
-    /**
-     * @method
-     * Called when a user clicks on the element.
-     *
-     * @template
-     */
-    onClick: function(){
-    },
 
     /**
      * @method
@@ -1199,6 +1193,21 @@ graphiti.Canvas = Class.extend(
     /**
      * @private
      **/
+    onDoubleClick : function(/* :int */x, /* :int */y)
+    {
+        // check if a line has been hit
+        //
+        var figure = this.getBestFigure(x, y);
+
+        if(figure!==null){
+        	figure.onDoubleClick();
+        }
+
+    },
+
+    /**
+     * @private
+     **/
     onMouseDown : function(/* :int */x, /* :int */y)
     {
         var canDragStart = true;
@@ -1234,9 +1243,7 @@ graphiti.Canvas = Class.extend(
                 }
             }
             else {
-                if (this.dragDropHandlingByCanvas === true) {
-                    this.showResizeHandles(this.currentSelection);
-                }
+                this.showResizeHandles(this.currentSelection);
             }
         }
         else if(figure === null){
