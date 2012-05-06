@@ -9,7 +9,7 @@
  * @extends graphiti.shape.basic.Line
  */
 graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
-    NAME : "graphiti.Connection", // only for debugging
+    NAME : "graphiti.Connection",
 
    
     /**

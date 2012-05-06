@@ -4,7 +4,7 @@
  * Stack for undo/redo operations
  */
 graphiti.command.CommandStack = Class.extend({
-    NAME : "graphiti.command.CommandStack", // only for debug
+    NAME : "graphiti.command.CommandStack", 
 
 
     /**

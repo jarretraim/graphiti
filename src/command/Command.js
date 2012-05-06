@@ -10,7 +10,7 @@
  */
 graphiti.command.Command = Class.extend({
 
-    NAME : "graphiti.command.Command", // only for debug
+    NAME : "graphiti.command.Command", 
 
     /**
      * @constructor

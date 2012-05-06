@@ -15,7 +15,7 @@
  */
 graphiti.EditPolicy = Class.extend({
 	
-    NAME : "graphiti.EditPolicy", // only for debugging
+    NAME : "graphiti.EditPolicy",
 
     /**
      * @constructor

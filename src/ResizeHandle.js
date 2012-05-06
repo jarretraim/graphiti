@@ -21,7 +21,7 @@
  * @extends graphiti.shape.basic.Rectangle
  */
 graphiti.ResizeHandle = graphiti.shape.basic.Rectangle.extend({
-    NAME : "graphiti.ResizeHandle", // only for debugging
+    NAME : "graphiti.ResizeHandle",
 
     DEFAULT_COLOR : "#99ccff",
     

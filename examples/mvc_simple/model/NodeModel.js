@@ -2,7 +2,7 @@
 
 example.mvc_simple.NodeModel= graphiti.mvc.AbstractObjectModel.extend({
 	
-	NAME : "example.mvc_simple.NodeModel", // just for debugging
+	NAME : "example.mvc_simple.NodeModel", 
 	
 	/**
 	 * @constructor

@@ -9,7 +9,7 @@
  */
 graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
     
-    NAME : "graphiti.SetFigure", // only for debugging
+    NAME : "graphiti.SetFigure",
 
     /**
      * @constructor

@@ -1,7 +1,7 @@
 
 example.mvc_simple.CommandAdd = graphiti.command.Command.extend({
 
-	NAME : "examples.mvc_simple.CommandAdd", // only for debugging
+	NAME : "examples.mvc_simple.CommandAdd", 
 	
 	/**
 	 * @constructor

@@ -87,7 +87,7 @@ graphiti.util.Color = Class.extend({
     {
        var nThreshold = 105;
        var bgDelta = (this.red * 0.299) + (this.green * 0.587) + (this.blue * 0.114);
-       return (255 - bgDelta < nThreshold) ? new  /*:NAMESPACE*/Color(0,0,0) : new  /*:NAMESPACE*/Color(255,255,255);
+       return (255 - bgDelta < nThreshold) ? new  graphiti.util.Color(0,0,0) : new  graphiti.util.Color(255,255,255);
     },
     
     
@@ -159,6 +159,6 @@ graphiti.util.Color = Class.extend({
         if (green < 0) green = 0; else if (green > 255) green = 255;
         if (blue  < 0) blue  = 0; else if (blue  > 255) blue  = 255;
     
-        return new /*:NAMESPACE*/Color(red, green, blue);
+        return new graphiti.util.Color(red, green, blue);
     }
 });

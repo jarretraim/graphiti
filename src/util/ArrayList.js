@@ -340,6 +340,26 @@ graphiti.util.ArrayList = Class.extend({
         return newVector;
      },
     
+     
+     /**
+      * @method
+      * Iterate over the array and call the callback method with the given index and element
+      *
+      * @param {Function} the callback function to call for each element
+      * @return {boolean}
+      */
+      each:function(func) 
+      {
+         if(typeof func !== "function"){
+             throw "parameter must type of 'function'";
+         }
+         
+         for (var i=0; i<this.getSize(); i++) 
+         {
+            func(i, this.data[i]);
+         }
+      },
+     
      // overwriteElementAt() - overwrites the element with an object at the specific index.
      overwriteElementAt:function(obj, index) 
      {

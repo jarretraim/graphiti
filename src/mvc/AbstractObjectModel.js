@@ -8,7 +8,7 @@
  * @author Andreas Herz
  */
 graphiti.mvc.AbstractObjectModel = Class.extend({
-    NAME : "graphiti.mvc.AbstractObjectModel", // only for debugging
+    NAME : "graphiti.mvc.AbstractObjectModel",
 
 	init:function(){
 		this.listeners = new graphiti.util.ArrayList();

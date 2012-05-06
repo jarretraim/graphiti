@@ -9,7 +9,7 @@
  */
 graphiti.SVGFigure = graphiti.SetFigure.extend({
     
-    NAME : "graphiti.SVGFigure", // only for debugging
+    NAME : "graphiti.SVGFigure",
 
     /**
      * @constructor

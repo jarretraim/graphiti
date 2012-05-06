@@ -24,7 +24,7 @@
  * @extends graphiti.VectorFigure
  */
 graphiti.shape.basic.Rectangle = graphiti.VectorFigure.extend({
-    NAME : "graphiti.shape.basic.Rectangle", // only for debugging
+    NAME : "graphiti.shape.basic.Rectangle",
 
     /**
      * @constructor

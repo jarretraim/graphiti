@@ -27,7 +27,7 @@
  * @extends graphiti.Figure
  */
 graphiti.shape.basic.Line = graphiti.Figure.extend({
-    NAME : "graphiti.shape.basic.Line", // only for debugging
+    NAME : "graphiti.shape.basic.Line",
 
     DEFAULT_COLOR : new graphiti.util.Color(0,0,0),
     

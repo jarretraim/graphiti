@@ -10,7 +10,7 @@
  * @extends graphiti.command.Command
  */
 graphiti.command.CommandMove = graphiti.command.Command.extend({
-    NAME : "graphiti.command.CommandMove", // only for debug
+    NAME : "graphiti.command.CommandMove", 
   
     /**
      * @constructor

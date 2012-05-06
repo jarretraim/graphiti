@@ -15,7 +15,7 @@ var example = {
  */
 example.mvc_simple.MyGraphicalEditor = graphiti.ui.parts.GraphicalEditor.extend(
 {
-    NAME : "example.mvc_simple.MyGraphicalEditor", // only for debugging
+    NAME : "example.mvc_simple.MyGraphicalEditor", 
 
     /**
      * @constructor

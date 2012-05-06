@@ -7,7 +7,7 @@
  * @extends graphiti.shape.basic.Circle
  */ 
 graphiti.Port = graphiti.shape.basic.Circle.extend({
-    NAME : "graphiti.Port", // only for debugging
+    NAME : "graphiti.Port",
 
     DEFAULT_BORDER_COLOR:new graphiti.util.Color(44, 83, 158),
     
@@ -392,7 +392,7 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
           this.corona.getShapeElement();
           this.corona.repaint();
           
-          // DONT'T add them to the document. The corona is just a visual feedback and not part
+          // DON'T add them to the document. The corona is just a visual feedback and not part
           // of the canvas document.
          // this.parent.getCanvas().addFigure(this.corona,this.getAbsoluteX()-this.getCoronaWidth()-this.getWidth()/2, this.getAbsoluteY()-this.getCoronaWidth()-this.getHeight()/2);
       }

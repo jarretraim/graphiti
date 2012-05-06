@@ -8,7 +8,7 @@
  * @extends graphiti.shape.basic.Circle
  */
 graphiti.shape.basic.LineResizeHandle = graphiti.shape.basic.Circle.extend({
-    NAME : "graphiti.shape.basic.LineResizeHandle", // only for debugging
+    NAME : "graphiti.shape.basic.LineResizeHandle",
 
     init : function(canvas, type)
     {

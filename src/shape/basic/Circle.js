@@ -22,7 +22,7 @@
  */
 graphiti.shape.basic.Circle = graphiti.shape.basic.Oval.extend({
     
-    NAME : "graphiti.shape.basic.Circle", // only for debug
+    NAME : "graphiti.shape.basic.Circle", 
     
     /**
      * @constructor

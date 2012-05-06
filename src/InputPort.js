@@ -7,7 +7,7 @@
  */ 
 graphiti.InputPort = graphiti.Port.extend({
 
-    NAME : "graphiti.InputPort", // only for debugging
+    NAME : "graphiti.InputPort",
 
     /**
      * @constructor

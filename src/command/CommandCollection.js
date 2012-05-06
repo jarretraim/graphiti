@@ -12,7 +12,7 @@
  * @extends graphiti.command.Command
  */
 graphiti.command.CommandCollection = graphiti.command.Command.extend({
-    NAME : "graphiti.command.CommandCollection", // only for debug
+    NAME : "graphiti.command.CommandCollection", 
     
     /**
      * @constructor

@@ -8,7 +8,7 @@
  * @extends graphiti.command.Command
  */
 graphiti.command.CommandResize = graphiti.command.Command.extend({
-    NAME : "graphiti.command.CommandResize", // only for debug
+    NAME : "graphiti.command.CommandResize", 
 
     /**
      * @constructor

@@ -11,7 +11,7 @@
  */
 graphiti.ui.parts.GraphicalViewer = graphiti.Canvas.extend(
 {
-    NAME : "graphiti.ui.parts.GraphicalViewer", // only for debugging
+    NAME : "graphiti.ui.parts.GraphicalViewer",
 
 
     /**

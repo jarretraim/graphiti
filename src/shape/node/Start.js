@@ -17,6 +17,8 @@
  */
 graphiti.shape.node.Start = graphiti.shape.basic.Rectangle.extend({
 
+    NAME : "graphiti.shape.node.Start",
+
 	DEFAULT_COLOR : new graphiti.util.Color("#4D90FE"),
 
 	init : function()

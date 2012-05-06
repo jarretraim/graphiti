@@ -8,7 +8,7 @@
  * @extends graphiti.shape.basic.Line
  */
 graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
-    NAME : "graphiti.Connection", // only for debugging
+    NAME : "graphiti.Connection",
 
 //    DEFAULT_ROUTER: new graphiti.layout.connection.DirectRouter(),
     DEFAULT_ROUTER: new graphiti.layout.connection.ManhattanConnectionRouter(),
@@ -580,5 +580,34 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
       }
 
       return this._super(request);
+    },
+    
+    
+    /**
+     * @method 
+     * Return an objects with all important attributes for XML or JSON serialization
+     * 
+     * @returns {Object}
+     */
+    getPersistentAttributes : function()
+    {
+        var memento = this._super();
+        delete memento.x;
+        delete memento.y;
+        delete memento.width;
+        delete memento.height;
+
+        memento.source = {
+                  node:this.getSource().getParent().getId(),
+                  port: this.getSource().getName()
+                };
+        
+        memento.target = {
+                  node:this.getTarget().getParent().getId(),
+                  port:this.getTarget().getName()
+                };
+               
+        return memento;
     }
+
 });

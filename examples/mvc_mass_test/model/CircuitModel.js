@@ -8,7 +8,7 @@
  */
 example.mvc_simple.CircuitModel= graphiti.mvc.AbstractObjectModel.extend({
 
-	NAME : "example.mvc_simple.CircuitModel", // just for debugging
+	NAME : "example.mvc_simple.CircuitModel", 
 
 	/**
 	 * @constructor

@@ -10,7 +10,7 @@
  * @extends graphiti.command.Command
  */
 graphiti.command.CommandConnect = graphiti.command.Command.extend({
-    NAME : "graphiti.command.CommandConnect", // only for debug
+    NAME : "graphiti.command.CommandConnect", 
     
     /**
      * @constructor

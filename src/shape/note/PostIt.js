@@ -19,7 +19,7 @@
  */
 graphiti.shape.note.PostIt= graphiti.shape.basic.Label.extend({
 
-	NAME : "graphiti.shape.note.PostIt", // only for debugging
+	NAME : "graphiti.shape.note.PostIt",
 
     /**
      * @constructor

@@ -1,7 +1,7 @@
 
 example.mvc_simple.CommandDelete = graphiti.command.Command.extend({
 
-	NAME : "examples.mvc_simple.CommandDelete", // only for debugging
+	NAME : "examples.mvc_simple.CommandDelete", 
 	
 	/**
 	 * @constructor

@@ -21,10 +21,19 @@ graphiti.io.json.Writer = graphiti.io.Writer.extend({
         var figures = canvas.getFigures();
         var i =0;
         var f= null;
+        // conventionel iteration over an array
+        //
         for(i=0; i< figures.getSize(); i++){
             f = figures.get(i);
              result.push(f.getPersistentAttributes());
         }
+        
+        // closure/jQuery style to iterate
+        //
+        var lines = canvas.getLines();
+        lines.each(function(i, element){
+            result.push(element.getPersistentAttributes());
+        });
         
         return result;
     }

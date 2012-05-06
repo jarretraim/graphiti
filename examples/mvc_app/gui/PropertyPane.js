@@ -1,6 +1,7 @@
 
 example.mvc_simple.PropertyPane = Class.extend({
-	NAME : "example.mvc_simple.PropertyPane", // just for debugging
+	
+    NAME : "example.mvc_simple.PropertyPane", 
 	
 	init:function(elementId, view){
 		this.html = $("#"+elementId);

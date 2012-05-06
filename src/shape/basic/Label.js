@@ -17,7 +17,7 @@
  */
 graphiti.shape.basic.Label= graphiti.SetFigure.extend({
 
-	NAME : "graphiti.shape.basic.Label", // only for debugging
+	NAME : "graphiti.shape.basic.Label",
 
     /**
      * @constructor

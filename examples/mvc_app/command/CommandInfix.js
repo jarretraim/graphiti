@@ -1,7 +1,7 @@
 
 example.mvc_simple.CommandInfix = graphiti.command.Command.extend({
 
-	NAME : "examples.mvc_simple.CommandInfix", // only for debugging
+	NAME : "examples.mvc_simple.CommandInfix", 
 	
 	/**
 	 * @constructor

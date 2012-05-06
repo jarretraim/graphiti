@@ -28,7 +28,7 @@ $(document).ready(function() {
  */
 graphiti.Canvas = Class.extend(
 {
-    NAME : "graphiti.Canvas", // only for debugging
+    NAME : "graphiti.Canvas",
 
     /**
      * @constructor

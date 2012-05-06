@@ -12,7 +12,7 @@
  */
 graphiti.shape.node.Node = graphiti.Figure.extend({
  
-	NAME : "graphiti.shape.node.Node", // only for debugging
+	NAME : "graphiti.shape.node.Node",
 
     /**
      * @constructor

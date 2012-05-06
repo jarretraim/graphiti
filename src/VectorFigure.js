@@ -9,7 +9,7 @@
  * @extends {graphiti.shape.node.Node}
  */
 graphiti.VectorFigure = graphiti.shape.node.Node.extend({
-    NAME : "graphiti.VectorFigure", // only for debugging
+    NAME : "graphiti.VectorFigure",
 
     /**
      * @constructor

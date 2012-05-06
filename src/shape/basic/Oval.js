@@ -17,7 +17,7 @@
  * @extends graphiti.VectorFigure
  */
 graphiti.shape.basic.Oval = graphiti.VectorFigure.extend({
-    NAME : "graphiti.shape.basic.Oval", // only for debugging
+    NAME : "graphiti.shape.basic.Oval",
 
     /**
      * 

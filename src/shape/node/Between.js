@@ -15,7 +15,9 @@
  */
 graphiti.shape.node.Between = graphiti.shape.basic.Rectangle.extend({
 
-	DEFAULT_COLOR : new graphiti.util.Color("#4D90FE"),
+    NAME : "graphiti.shape.node.Between",
+
+    DEFAULT_COLOR : new graphiti.util.Color("#4D90FE"),
 
 	init : function()
     {

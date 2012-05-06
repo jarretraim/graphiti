@@ -12,7 +12,7 @@
  */
 graphiti.ui.parts.GraphicalEditor = Class.extend(
 {
-    NAME : "graphiti.ui.parts.GraphicalEditor", // only for debugging
+    NAME : "graphiti.ui.parts.GraphicalEditor",
 
     /**
      * @constructor

@@ -7,7 +7,7 @@
  * @author Andreas Herz
  */
 graphiti.ConnectionAnchor = Class.extend({
-    NAME : "graphiti.ConnectionAnchor", // only for debugging
+    NAME : "graphiti.ConnectionAnchor",
 
     /**
      * @constructor

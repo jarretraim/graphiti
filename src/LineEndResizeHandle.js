@@ -10,7 +10,7 @@
  * @extends graphiti.shape.basic.LineResizeHandle 
  */
 graphiti.shape.basic.LineEndResizeHandle = graphiti.shape.basic.LineResizeHandle.extend({
-    NAME : "graphiti.shape.basic.LineEndResizeHandle", // only for debugging
+    NAME : "graphiti.shape.basic.LineEndResizeHandle",
 
     init: function( canvas) {
         this._super(canvas);

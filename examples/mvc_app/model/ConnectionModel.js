@@ -1,7 +1,7 @@
 
 example.mvc_simple.ConnectionModel = graphiti.mvc.AbstractConnectionModel.extend({
 
-    NAME : "example.mvc_simple.ConnectionModel", // just for debugging
+    NAME : "example.mvc_simple.ConnectionModel", 
    
     init: function( /*:String*/ sourceNodeId, /*:String*/ targetNodeId)
     {

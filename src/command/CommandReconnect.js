@@ -10,7 +10,7 @@
  * @extends graphiti.command.Command
  */
 graphiti.command.CommandReconnect = graphiti.command.Command.extend({
-    NAME : "graphiti.command.CommandReconnect", // only for debug
+    NAME : "graphiti.command.CommandReconnect", 
 
 
     /**

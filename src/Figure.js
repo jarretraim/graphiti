@@ -8,7 +8,7 @@
  */
 graphiti.Figure = Class.extend({
     
-	NAME : "graphiti.Figure", // only for debugging
+	NAME : "graphiti.Figure",
 
     /**
      * @constructor
