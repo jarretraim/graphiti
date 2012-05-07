@@ -11,7 +11,8 @@ var graphiti =
 
     io:{
         json:{},
-        png:{}  
+        png:{},
+        svg:{}  
     },
     
     util : {
