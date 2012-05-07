@@ -147,16 +147,24 @@ $(document).ready(function() {
   var reader = new graphiti.io.json.Reader();
   reader.unmarshal(canvas, jsonDocument);
   
+  // display the JSON document in the preview DIV
+  //
+  displayJSON(canvas);
+
   // add an event listener to the Canvas for change notifications.
   // We just dump the current canvas document into the DIV
   //
   canvas.getCommandStack().addEventListener(function(e){
       if(e.isPostChangeEvent()){
-         var writer = new graphiti.io.json.Writer();
-         $("#json").text(JSON.stringify(writer.marshal(canvas),null,2));
+          displayJSON(canvas);
       }
   });
 });
+
+function displayJSON(canvas){
+    var writer = new graphiti.io.json.Writer();
+    $("#json").text(JSON.stringify(writer.marshal(canvas),null,2));
+}
 
 </script>
 
