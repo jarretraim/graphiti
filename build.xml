@@ -36,6 +36,10 @@
 		  <arg line='--config ./jsduck.conf'/>
 		</exec>
 		
+		<copy todir="./jsdoc/">
+		    <fileset dir="./template/" includes="*.css"/>
+		</copy>
+				
 		<mkdir dir="./jsdoc/grapihit"/>
 		<mkdir dir="./jsdoc/graphiti/lib"/>
 		
