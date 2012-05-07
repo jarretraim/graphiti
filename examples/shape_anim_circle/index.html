@@ -97,13 +97,13 @@ $(document).ready(function() {
   var canvas = new graphiti.Canvas("gfx_holder");
 
   var figure = new TimerFigure();
-  canvas.addFigure( figure,100,100);
+  canvas.addFigure( figure,150,150);
 
  
 	 ///////////////////////////////////////////////////////////////////// 
 	 // JUST ADD SOME DOCU ELEMENTS ON THE SCREEN
 	 ///////////////////////////////////////////////////////////////////// 
-	 var msg = new graphiti.shape.note.PostIt("A custom label with an internal timer/counter.\nDrag&Drop me around.");
+	 var msg = new graphiti.shape.note.PostIt("SetFigure with internal timer and a minimum of sin/cos math.\nYou can drag&drop the rectangle as well.");
 	 canvas.addFigure(msg, 20,20);
 
 });
