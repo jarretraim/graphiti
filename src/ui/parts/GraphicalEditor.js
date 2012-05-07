@@ -39,7 +39,7 @@ graphiti.ui.parts.GraphicalEditor = Class.extend(
 	
 	/**
 	 * @method
-	 * Provides the {#link graphiti.command.CommandStack} of the Editor.
+	 * Provides the {@link graphiti.command.CommandStack} of the Editor.
 	 * 
 	 * @return {graphiti.command.CommandStack}
 	 */

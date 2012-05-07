@@ -47,7 +47,7 @@ graphiti.command.CommandStackEvent = Class.extend({
     /**
      * @method
      * Returns an integer identifying the type of event which has occurred.
-     * Defined by {#link graphiti.command.CommandStack}.
+     * Defined by {@link graphiti.command.CommandStack}.
      * 
      * @return {Number}
      **/

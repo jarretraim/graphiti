@@ -201,7 +201,7 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 	
 	/**
 	 * @method
-	 * Return the minimum distance of this rectangle to the given {#link graphiti.geo.Point} or 
+	 * Return the minimum distance of this rectangle to the given {@link graphiti.geo.Point} or 
 	 * {link graphiti.geo.Rectangle}.
 	 * 
 	 * @param {graphiti.geo.Point} pointOrRectangle the reference point/rectangle for the distance calculation

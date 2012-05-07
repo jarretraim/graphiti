@@ -1,8 +1,21 @@
 
 /**
  * @class
- * Util class to handle colors in the graphiti enviroment
+ * Util class to handle colors in the graphiti enviroment.
  * 
+ *      // Create a new Color with RGB values
+ *      var color = new graphiti.util.Color(127,0,0);
+ * 
+ *      // of from a hex string
+ *      var color2 = new graphiti.util.Color("#f00000");
+ *     
+ *      // Create a little bit darker color 
+ *      var darkerColor = color.darker(0.2); // 20% darker
+ *     
+ *      // create a optimal text color if 'color' the background color
+ *      // (best in meaning of contrast and readability)
+ *      var fontColor = color.getIdealTextColor();
+ *     
  */
 graphiti.util.Color = Class.extend({
 

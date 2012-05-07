@@ -101,7 +101,7 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
 
     /**
      * @method
-     * Returns a {#link graphiti.util.ArrayList} of {#link graphiti.Connection}s of all related connections to this port.
+     * Returns a {@link graphiti.util.ArrayList} of {@link graphiti.Connection}s of all related connections to this port.
      *
      * @type {graphiti.util.ArrayList}
      **/

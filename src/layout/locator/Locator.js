@@ -19,7 +19,7 @@ graphiti.layout.locator.Locator= Class.extend({
     
     /**
      * @method
-     * Controls the location of an I{#link graphiti.Figure} 
+     * Controls the location of an I{@link graphiti.Figure} 
      *
      * @param {graphiti.Figure} figure the figure to control
      * @template

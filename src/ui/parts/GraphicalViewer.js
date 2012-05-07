@@ -2,7 +2,7 @@
  * @class graphiti.ui.parts.GraphicalViewer
  * 
  * The viewer is responsible for the editpart lifecycle. 
- * Editparts have visuals, such as {#link graphiti.Figures}, which are hosted 
+ * Editparts have visuals, such as {@link graphiti.Figures}, which are hosted 
  * by the viewer and its control. The viewer provides targeting of editparts via their visuals. 
  * 
  * @author Andreas Herz

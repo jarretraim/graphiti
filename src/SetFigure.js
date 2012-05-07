@@ -80,7 +80,7 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
     
     /**
      * @method
-     * Override this method to add your own SVG elements. Ssee {#link graphiti.shape.basic.Label} as example.
+     * Override this method to add your own SVG elements. Ssee {@link graphiti.shape.basic.Label} as example.
      * 
      * @template
      */

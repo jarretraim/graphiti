@@ -4,6 +4,13 @@
  * @class graphiti.io.png.Writer
  * Convert the canvas document into a PNG Image.
  * 
+ *     // example how to create a PNG image and set an 
+ *     // image src attribute.
+ *     //
+ *     var writer = new graphiti.io.png.Writer();
+ *     var png = writer.marshal(canvas);
+ *     $("#preview").attr("src",png);
+ *
  * @author Andreas Herz
  * @extends graphiti.io.Writer
  */
@@ -18,9 +25,8 @@ graphiti.io.png.Writer = graphiti.io.Writer.extend({
      * Export the content to the implemented data format. Inherit class implements
      * content specific writer.
      * 
-     * @template
      * @param {graphiti.Canvas} canvas
-     * @returns {Object}
+     * @returns {String} base64 formated image in the format <strong><code>data:image/png;base64,iVBORw0KGg...</code></strong>
      */
     marshal: function(canvas){
         

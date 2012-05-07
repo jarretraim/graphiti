@@ -13,7 +13,7 @@ graphiti.layout.locator.ConnectionLocator= graphiti.layout.locator.Locator.exten
     /**
      * @constructor
      * Default constructor for a Locator which can layout a figure in context of a 
-     * {#link grapiti.Connector}
+     * {@link grapiti.Connector}
      * 
      * @param {graphiti.Connection} connection
      */

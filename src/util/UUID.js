@@ -1,10 +1,15 @@
 
 /**
  * @class graphiti.util.UUID
- * Generates UUID's
+ * Generates a (pseudo) UUID's
+ * 
+ *      // a UUID in the format 
+ *      // xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (8-4-4-4-12) 
+ *      var id = graphiti.util.UUID.create();
  * 
  * @author Andreas Herz
  * @constructor
+ * @private
  */
 graphiti.util.UUID=function()
 {
@@ -13,12 +18,12 @@ graphiti.util.UUID=function()
 
 /**
  * @method
- * Generates a unique id.
- * But just for the correctness: this is no Global Unique Identifier, it is just a random generator 
- * with the output that looks like a GUID. But may be also useful.
+ * Generates a unique id.<br>
+ * But just for the correctness: <strong>this is no Global Unique Identifier</strong>, it is just a random generator 
+ * with the output that looks like a GUID. <br>
+ * But may be also useful.
  *
- * @private
- * @returns String
+ * @returns {String} the  UUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (8-4-4-4-12) 
  **/
 graphiti.util.UUID.create=function()
 {

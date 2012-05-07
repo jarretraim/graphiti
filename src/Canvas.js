@@ -160,9 +160,10 @@ graphiti.Canvas = Class.extend(
         
         this.html.bind("mouseup touchend", $.proxy(function(event)
         {
-            event = this._getEvent(event);
             if (this.mouseDown === false)
                 return;
+
+            event = this._getEvent(event);
 
             this.mouseDown = false;
             this.onMouseUp();
@@ -184,6 +185,7 @@ graphiti.Canvas = Class.extend(
         
         this.html.bind("mousedown touchstart", $.proxy(function(event)
         {
+            event.preventDefault();
             event = this._getEvent(event);
 
             this.mouseDownX = event.clientX;
@@ -1215,17 +1217,19 @@ graphiti.Canvas = Class.extend(
      **/
     onMouseDown : function(/* :int */x, /* :int */y)
     {
-        var canDragStart = true;
+       var canDragStart = true;
         // check if a line has been hit
         //
         var figure = this.getBestFigure(x, y);
 
         if(figure!==null && figure.isDraggable()){
-            this.mouseDraggingElement = figure;
             canDragStart = figure.onDragStart();
             // Element send a veto about the drag&drop operation
             if(canDragStart===false){
-                this.mouseDraggingElement = null;
+               this.mouseDraggingElement = null;
+            }
+            else{
+               this.mouseDraggingElement = figure;
             }
         }
 
@@ -1254,7 +1258,6 @@ graphiti.Canvas = Class.extend(
         else if(figure === null){
         	this.setCurrentSelection(null);
         }
-
     },
     
     /**
@@ -1269,8 +1272,7 @@ graphiti.Canvas = Class.extend(
      */
     onMouseDrag : function(/* :int */dx,/* :int */dy)
     {
-        
-               if (this.mouseDraggingElement !== null) {
+       if (this.mouseDraggingElement !== null) {
             this.mouseDraggingElement.onDrag(dx, dy);
             var p = this.fromDocumentToCanvasCoordinate(this.mouseDownX + dx, this.mouseDownY + dy);
             
@@ -1293,8 +1295,6 @@ graphiti.Canvas = Class.extend(
                 }
             }
        }
-       
-      
     },
 
 

@@ -3,7 +3,20 @@
 /**
  * @class graphiti.io.json.Writer
  * Serialize the canvas document into a JSON object which can be read from the corresponding
- * {#link graphiti.io.json.Reader}.
+ * {@link graphiti.io.json.Reader}.
+ * 
+ *      // Create a JSON writer and convert it into a JSON-String representation.
+ *      //
+ *      var writer = new graphiti.io.json.Writer();
+ *      var json = writer.marshal(canvas);
+ *      
+ *      // convert the json object into string repesentation
+ *      var jsonTxt = JSON.stringify(json,null,2);
+ *      
+ *      // insert the json string into a DIV for preview or post
+ *      // it via ajax to the server....
+ *      $("#json").text(jsonTxt);
+ *
  * 
  * @author Andreas Herz
  * @extends graphiti.io.Writer
@@ -19,8 +32,7 @@ graphiti.io.json.Writer = graphiti.io.Writer.extend({
      * Export the content to the implemented data format. Inherit class implements
      * content specific writer.
      * 
-     * @template
-     * @param {graphiti.Canvas} canvas
+      * @param {graphiti.Canvas} canvas
      * @returns {Object}
      */
     marshal: function(canvas){

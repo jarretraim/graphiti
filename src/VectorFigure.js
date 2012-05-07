@@ -1,7 +1,7 @@
 
 /**
  * @class graphiti.VectorFigure
- * The base class for all vector based figures like {#link graphiti.shape.basic.Rectangle}  or {#link graphiti.shape.basic.Oval} 
+ * The base class for all vector based figures like {@link graphiti.shape.basic.Rectangle}  or {@link graphiti.shape.basic.Oval} 
  * inside a canvas.
  * 
  * @inheritable

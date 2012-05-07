@@ -1,8 +1,36 @@
 
 /**
  * @class graphiti.io.json.Reader
- * Read a JSON data and import them into the canvas. The JSON must be genrated with the
- * {#link graphiti.io.json.Writer}
+ * Read a JSON data and import them into the canvas. The JSON must be generated with the
+ * {@link graphiti.io.json.Writer}.
+ * 
+ *      // Load a standard graphiti JSON object into the canvas
+ *      //
+ *      var jsonDocument = 
+ *          [
+  *           {
+ *              "type": "graphiti.shape.basic.Oval",
+ *              "id": "5b4c74b0-96d1-1aa3-7eca-bbeaed5fffd7",
+ *              "x": 237,
+ *              "y": 236,
+ *              "width": 93,
+ *              "height": 38
+ *            },
+ *            {
+ *              "type": "graphiti.shape.basic.Rectangle",
+ *              "id": "354fa3b9-a834-0221-2009-abc2d6bd852a",
+ *              "x": 225,
+ *              "y": 97,
+ *              "width": 201,
+ *              "height": 82,
+ *              "radius": 2
+ *            }
+ *          ];
+ *      // unmarshal the JSON document into the canvas
+ *      // (load)
+ *      var reader = new graphiti.io.json.Reader();
+ *      reader.unmarshal(canvas, jsonDocument);
+ *      
  * 
  * @extends graphiti.io.Reader
  */
@@ -15,11 +43,10 @@ graphiti.io.json.Reader = graphiti.io.Reader.extend({
     /**
      * @method
      * 
-     * Restore the canvas from a given String.
+     * Restore the canvas from a given JSON object.
      * 
      * @param {graphiti.Canvas} canvas the canvas to restore
-     * @param {Object} document the document to read
-     * @template
+     * @param {Object} document the json object to load.
      */
     unmarshal: function(canvas, json){
         var node=null;
