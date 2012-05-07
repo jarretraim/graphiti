@@ -8,6 +8,10 @@
  */
 graphiti.io.Writer = Class.extend({
     
+    /**
+     * @constructor
+     * @private
+     */
     init:function(){
         
     },

@@ -8,6 +8,10 @@
 
 graphiti.io.Reader = Class.extend({
     
+    /**
+     * @constructor
+     * @private
+     */
     init: function(){
         
     },
