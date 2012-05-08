@@ -32,9 +32,6 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
       this.targetAnchor = new graphiti.ConnectionAnchor(this);
     
       this.router =this.DEFAULT_ROUTER;
-      
-      // possible decorations ( e.g. a Label) of the Connection
-      this.children = new graphiti.util.ArrayList();
 
       this.setColor("#4cbf2f");
       this.setStroke(2);

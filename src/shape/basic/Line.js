@@ -167,10 +167,9 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
     *
     * @param {Number} w The new line width of the figure.
     **/
-   setStroke:function(/*:int*/ w)
+   setStroke:function(w)
    {
      this.stroke=w;
-     this.setDocumentDirty();
      
      this.repaint();
    },
@@ -226,7 +225,6 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
      this.startX = x;
      this.startY = y;
      this.repaint();
-     this.setDocumentDirty();
    },
 
    /**
@@ -245,7 +243,6 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
      this.endX = x;
      this.endY = y;
      this.repaint();
-     this.setDocumentDirty();
    },
 
    /**

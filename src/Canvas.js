@@ -388,7 +388,6 @@ graphiti.Canvas = Class.extend(
       figure.repaint();
  
       figure.fireMoveEvent();
-      this.setDocumentDirty();
     },
 
 
@@ -422,7 +421,6 @@ graphiti.Canvas = Class.extend(
         }
 
         figure.setModel(null);
-        this.setDocumentDirty();
     },
     
     /**
@@ -795,15 +793,6 @@ graphiti.Canvas = Class.extend(
       this.selectionListeners.remove(w);
     },
 
-    
-    /**
-     * @method
-     * Mark the current document as dirty. Any unsaved changes are present.
-     * 
-     */
-    setDocumentDirty:function()  {
-     
-    },
 
     /**
      * @method

@@ -995,7 +995,6 @@ graphiti.Figure = Class.extend({
      **/
     fireMoveEvent: function()
     {
-      this.setDocumentDirty();
       var size= this.moveListener.getSize();
       for(var i=0;i<size;i++)
       {
@@ -1013,19 +1012,6 @@ graphiti.Figure = Class.extend({
      */
     onOtherFigureMoved:function(figure)
     {
-    },
-
-    /**
-     * @method
-     * This method will be called if the figure has changed any position, color, dimension or something else.
-     *
-     * @private
-     **/
-    setDocumentDirty:function()
-    {
-      if(this.canvas!==null){
-        this.canvas.setDocumentDirty();
-      }
     },
 
     /**

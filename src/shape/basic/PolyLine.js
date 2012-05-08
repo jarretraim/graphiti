@@ -29,6 +29,10 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
     
       this.setColor(new  graphiti.util.Color(0,0,115));
       this.setStroke(1);
+      
+      // possible decorations ( e.g. a Label) of the Connection
+      this.children = new graphiti.util.ArrayList();
+
     },
     
     /**
