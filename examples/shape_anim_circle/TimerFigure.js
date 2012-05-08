@@ -5,33 +5,10 @@ TimerFigure = graphiti.SetFigure.extend({
     {
         this._super();
 
-        this.timerId = -1;
+        this.startTimer(100);
         this.degree = 0;
     },
 
-    /**
-     * @method
-     * 
-     * The setCanvas method is a good place to start/stop the timer.<br>
-     * Don't forget to stop the counter if the framework remove the figure from the
-     * canvas (setCanvas(null)).
-     * 
-     * @param {graphiti.Canvas} canvas
-     */
-    setCanvas: function(canvas){
-        this._super(canvas);
-        if(canvas===null){
-            window.clearInterval(this.timerId);
-            this.timerId=-1;
-        }
-        else{
-            // Consult the jQuery $.proxy documentation for more information
-            // about binding a function to a dedicated object scope (this).
-            //
-            this.timerId = window.setInterval($.proxy(this.animate,this), 50);
-        }
-    },
-    
     /**
      * @method
      * Create the additional elements for the figure
@@ -59,7 +36,7 @@ TimerFigure = graphiti.SetFigure.extend({
      * 
      * @private
      */
-    animate:function(){
+    onTimer:function(){
         this.degree = (this.degree-3) % 360;
         
         // Keep in mind: This is far from good programming

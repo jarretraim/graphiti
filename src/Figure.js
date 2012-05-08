@@ -9,7 +9,9 @@
 graphiti.Figure = Class.extend({
     
 	NAME : "graphiti.Figure",
-
+    
+	MIN_TIMER_INTERVAL: 50, // minimum timer intervall in milli seconds
+	
     /**
      * @constructor
      * Creates a new figure element which are not assigned to any canvas.
@@ -33,11 +35,14 @@ graphiti.Figure = Class.extend({
         this.canSnapToHelper = true;
         this.snapToGridAnchor = new graphiti.geo.Point(0,0);   // hot spot for snap to grid  
         
+        // time for animation or automatic update
+        this.timerId = -1;
+        this.timerInterval = 0;
+        
         // model for the MVC pattern
         //
         this.model = null; 
  
-        
         // possible parent of the figure. Can be a ComparmentFigure or, in a case of a Port,
         // a normal Figure.
         //
@@ -92,8 +97,8 @@ graphiti.Figure = Class.extend({
      */
     setCanvas: function( canvas )
     {
-     // remove the shape if we reset the canvas and the element
-        // was already drawn
+      // remove the shape if we reset the canvas and the element
+      // was already drawn
       if(canvas===null && this.shape!==null)
       {
          this.shape.remove();
@@ -105,8 +110,55 @@ graphiti.Figure = Class.extend({
       if(this.canvas!==null){
           this.getShapeElement();
       }
+
+      if(canvas === null){
+    	  this.stopTimer();
+      }
+      else{
+    	  if(this.timerInterval>0){
+              this.startTimer(this.timerInterval);
+    	  }
+      }
      },
     
+     /**
+      * @method
+      * Start a timer which calles the onTimer method in the given interval.
+      * 
+      * @param {Number} milliSeconds
+      */
+     startTimer: function(milliSeconds){
+    	 this.stopTimer();
+    	 this.timerInterval = Math.max(this.MIN_TIMER_INTERVAL, milliSeconds);
+    	 
+    	 if(this.canvas!==null){
+    		 this.timerId = window.setInterval($.proxy(this.onTimer,this), this.timerInterval);
+    	 }
+     },
+
+     /**
+      * @method
+      * Stop the internal timer.
+      * 
+      */
+     stopTimer: function(){
+    	if(this.timerId>=0){
+  		  window.clearInterval(this.timerId);
+		  this.timerId=-1;
+    	} 
+     },
+
+     /**
+      * @method
+      * Callback method for the internal timer handling<br>
+      * Inherit classes must override this method if they want use the timer feature.
+      * 
+      * @template
+      */
+     onTimer: function(){
+    	
+     },
+     
     /**
      * @method
      * Return the current assigned canvas container.

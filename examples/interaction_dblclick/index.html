@@ -1,0 +1,124 @@
+﻿<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+<title></title>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <link type="text/css" rel="stylesheet" href="./css/example.css" />
+
+	<SCRIPT src="../../lib/shifty.js"></SCRIPT>
+	<SCRIPT src="../../lib/raphael.js"></SCRIPT>
+	<SCRIPT src="../../lib/jquery-1.6.4.js"></SCRIPT>
+	<SCRIPT src="../../lib/jquery-ui-1.8.16.custom.min.js"></SCRIPT>
+	<SCRIPT src="../../lib/jquery.layout.js"></SCRIPT>
+	<SCRIPT src="../../lib/jquery-touch_punch.js"></SCRIPT>
+	<SCRIPT src="../../lib/Class.js"></SCRIPT>
+    
+	<SCRIPT src="../../src/graphiti.js"></SCRIPT>
+	<SCRIPT src="../../src/util/Color.js"></SCRIPT>
+	<SCRIPT src="../../src/util/ArrayList.js"></SCRIPT>
+	<SCRIPT src="../../src/util/UUID.js"></SCRIPT>
+	<SCRIPT src="../../src/geo/PositionConstants.js"></SCRIPT>
+	<SCRIPT src="../../src/geo/Point.js"></SCRIPT>
+	<SCRIPT src="../../src/geo/Rectangle.js"></SCRIPT>
+	
+	<SCRIPT src="../../src/EditPolicy.js"></SCRIPT>
+	<SCRIPT src="../../src/command/Command.js"></SCRIPT>
+	<SCRIPT src="../../src/command/CommandStack.js"></SCRIPT>
+	<SCRIPT src="../../src/command/CommandStackEvent.js"></SCRIPT>
+	<SCRIPT src="../../src/command/CommandStackEventListener.js"></SCRIPT>
+	<SCRIPT src="../../src/command/CommandMove.js"></SCRIPT>
+	<SCRIPT src="../../src/command/CommandResize.js"></SCRIPT>
+	<SCRIPT src="../../src/command/CommandConnect.js"></SCRIPT>
+	<SCRIPT src="../../src/command/CommandReconnect.js"></SCRIPT>
+	<SCRIPT src="../../src/command/CommandDelete.js"></SCRIPT>
+	
+	<SCRIPT src="../../src/layout/connection/ConnectionRouter.js"></SCRIPT>
+	<SCRIPT src="../../src/layout/connection/DirectRouter.js"></SCRIPT>
+	<SCRIPT src="../../src/layout/connection/ManhattanConnectionRouter.js"></SCRIPT>
+
+	<SCRIPT src="../../src/layout/mesh/MeshLayouter.js"></SCRIPT>
+	<SCRIPT src="../../src/layout/mesh/ExplodeLayouter.js"></SCRIPT>
+	<SCRIPT src="../../src/layout/mesh/ProposedMeshChange.js"></SCRIPT>
+
+	<SCRIPT src="../../src/layout/locator/Locator.js"></SCRIPT>
+	<SCRIPT src="../../src/layout/locator/ConnectionLocator.js"></SCRIPT>
+	<SCRIPT src="../../src/layout/locator/ManhattanMidpointLocator.js"></SCRIPT>
+
+	<SCRIPT src="../../src/Canvas.js"></SCRIPT>
+	<SCRIPT src="../../src/Figure.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/node/Node.js"></SCRIPT>
+	<SCRIPT src="../../src/VectorFigure.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/basic/Rectangle.js"></SCRIPT>
+	<SCRIPT src="../../src/SetFigure.js"></SCRIPT>
+	<SCRIPT src="../../src/SVGFigure.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/basic/Oval.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/basic/Circle.js"></SCRIPT>
+	<SCRIPT src="../../src/CompartmentFigure.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/basic/Label.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/basic/Line.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/basic/PolyLine.js"></SCRIPT>
+	<SCRIPT src="../../src/Connection.js"></SCRIPT>
+	<SCRIPT src="../../src/VectorFigure.js"></SCRIPT>
+	<SCRIPT src="../../src/ResizeHandle.js"></SCRIPT>
+	<SCRIPT src="../../src/LineResizeHandle.js"></SCRIPT>
+	<SCRIPT src="../../src/LineStartResizeHandle.js"></SCRIPT>
+	<SCRIPT src="../../src/LineEndResizeHandle.js"></SCRIPT>
+	<SCRIPT src="../../src/Port.js"></SCRIPT>
+	<SCRIPT src="../../src/InputPort.js"></SCRIPT>
+	<SCRIPT src="../../src/OutputPort.js"></SCRIPT>
+	<SCRIPT src="../../src/ConnectionAnchor.js"></SCRIPT>
+
+	<SCRIPT src="../../src/shape/arrow/CalligrapherArrowLeft.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/arrow/CalligrapherArrowDownLeft.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/node/Start.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/node/End.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/node/Between.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/note/PostIt.js"></SCRIPT>
+
+	<SCRIPT src="../../src/ui/parts/GraphicalEditor.js"></SCRIPT>
+	<SCRIPT src="../../src/ui/parts/GraphicalViewer.js"></SCRIPT>
+
+	<SCRIPT src="../../src/mvc/controller/EditPartFactory.js"></SCRIPT>
+	<SCRIPT src="../../src/mvc/AbstractObjectModel.js"></SCRIPT>
+	<SCRIPT src="../../src/mvc/AbstractConnectionModel.js"></SCRIPT>
+	<SCRIPT src="../../src/mvc/Event.js"></SCRIPT>
+
+	<SCRIPT src="MyFigure.js"></SCRIPT>
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+     document.ontouchmove = function(e) {
+        e.preventDefault();
+     };
+    
+     var canvas = new graphiti.Canvas("gfx_holder");
+
+     var figure = new MyFigure();
+     canvas.addFigure( figure,150,150);
+
+ 
+	 ///////////////////////////////////////////////////////////////////// 
+	 // JUST ADD SOME DOCU ELEMENTS ON THE SCREEN
+	 ///////////////////////////////////////////////////////////////////// 
+	 var arrowLeft = new graphiti.shape.arrow.CalligrapherArrowLeft();
+	 arrowLeft.setColor("#0d0d0d");
+	 canvas.addFigure(arrowLeft, 250,160);
+
+	 var msg = new graphiti.shape.note.PostIt("Double click on the box to change the corner raduis.");
+	 canvas.addFigure(msg, 20,20);
+});
+
+</script>
+
+</head>
+
+<body>
+<div id="gfx_holder" style="width:1500px; height:1500px;-webkit-tap-highlight-color: rgba(0,0,0,0); ">
+</div>
+
+
+</body>
+</html>
