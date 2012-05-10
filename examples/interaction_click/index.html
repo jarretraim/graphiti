@@ -76,6 +76,8 @@
 	<SCRIPT src="../../src/shape/node/End.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/node/Between.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/note/PostIt.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/diagram/Diagram.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/diagram/Sparkline.js"></SCRIPT>
 
 	<SCRIPT src="../../src/ui/parts/GraphicalEditor.js"></SCRIPT>
 	<SCRIPT src="../../src/ui/parts/GraphicalViewer.js"></SCRIPT>
@@ -85,9 +87,54 @@
 	<SCRIPT src="../../src/mvc/AbstractConnectionModel.js"></SCRIPT>
 	<SCRIPT src="../../src/mvc/Event.js"></SCRIPT>
 
+	<SCRIPT src="../../src/io/Reader.js"></SCRIPT>
+	<SCRIPT src="../../src/io/Writer.js"></SCRIPT>
+	<SCRIPT src="../../src/io/json/Writer.js"></SCRIPT>
+	<SCRIPT src="../../src/io/json/Reader.js"></SCRIPT>
+	<SCRIPT src="../../src/io/png/Writer.js"></SCRIPT>
+
 	<SCRIPT src="MyFigure.js"></SCRIPT>
+	<SCRIPT src="MySparkline.js"></SCRIPT>
 
 <script type="text/javascript">
+
+//the document to load....in this case a simple JSON Object
+var jsonDocument = 
+
+
+    [
+      {
+        "type": "MyFigure",
+        "id": "354fa3b9-a834-0221-2009-abc2d6bd852a",
+        "x": 150,
+        "y": 150
+      },
+      {
+        "type": "MySparkline",
+        "id": "ebfb35bb-5767-8155-c804-14bda7759dc2",
+        "x": 350,
+        "y": 350
+      },
+      {
+          "type": "MySparkline",
+          "id": "ebfb35bb-5767-8155-c804-14bda7759dc3",
+          "x": 350,
+          "y": 150
+      },
+      {
+        "type": "graphiti.Connection",
+        "id": "74ce9e7e-5f0e-8642-6bec-4ff9c54b3f0a",
+        "source": {
+          "node": "354fa3b9-a834-0221-2009-abc2d6bd852a",
+          "port": "output0"
+        },
+        "target": {
+          "node": "ebfb35bb-5767-8155-c804-14bda7759dc2",
+          "port": "input0"
+        }
+      }
+    ];
+         
 $(document).ready(function() {
 
      document.ontouchmove = function(e) {
@@ -96,18 +143,15 @@ $(document).ready(function() {
     
      var canvas = new graphiti.Canvas("gfx_holder");
 
-     var figure = new MyFigure();
-     canvas.addFigure( figure,150,150);
-
- 
+     // unmarshal the JSON document into the canvas
+     // (load)
+     var reader = new graphiti.io.json.Reader();
+     reader.unmarshal(canvas, jsonDocument);
+     
 	 ///////////////////////////////////////////////////////////////////// 
 	 // JUST ADD SOME DOCU ELEMENTS ON THE SCREEN
 	 ///////////////////////////////////////////////////////////////////// 
-	 var arrowLeft = new graphiti.shape.arrow.CalligrapherArrowLeft();
-	 arrowLeft.setColor("#0d0d0d");
-	 canvas.addFigure(arrowLeft, 250,160);
-
-	 var msg = new graphiti.shape.note.PostIt("Double click on the box to change the corner radius.\nNo magic, just to show the usage for a click event.");
+	 var msg = new graphiti.shape.note.PostIt("Click on the red box to change the value of the\nelement and propagate this to the Sparkline");
 	 canvas.addFigure(msg, 20,20);
 });
 

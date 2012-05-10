@@ -8,10 +8,10 @@ example.mvc_simple.ConnectionModel = graphiti.mvc.AbstractConnectionModel.extend
       this._super();
     
       this.sourceNodeId = sourceNodeId;
-      this.sourcePort = "output";
+      this.sourcePort = "output0";
     
       this.targetNodeId = targetNodeId;
-      this.targetPort = "input";
+      this.targetPort = "input0";
     },
      
     /**

@@ -33,8 +33,11 @@ graphiti.shape.basic.Circle = graphiti.shape.basic.Oval.extend({
     init:function( radius)
     {
       this._super();
-      if(typeof radius !== "undefined"){
+      if(typeof radius === "number"){
         this.setDimension(radius,radius);
+      }
+      else {
+         this.setDimension(40,40);
       }
     },
     

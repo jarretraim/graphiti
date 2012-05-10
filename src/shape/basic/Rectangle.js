@@ -37,7 +37,7 @@ graphiti.shape.basic.Rectangle = graphiti.VectorFigure.extend({
       // corner radius
       this.radius = 2;
       
-      this.setBackgroundColor( new graphiti.util.Color(0,0,0));
+      this.setBackgroundColor( new graphiti.util.Color(100,100,100));
       this.setColor(new graphiti.util.Color(50,50,50));
 
       // set some good defaults

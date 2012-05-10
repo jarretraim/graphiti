@@ -198,6 +198,19 @@ graphiti.Canvas = Class.extend(
             this.onDoubleClick(pos.x, pos.y);
         },this));
 
+        
+        // Catch the keyDown and CTRL-key and route them to the Canvas hook.
+        //
+        $(document).bind("click",$.proxy(function(event)
+        {
+            event = this._getEvent(event);
+
+            if(this.mouseDownX === event.clientX ||  this.mouseDownY === event.clientY){
+                var pos = this.fromDocumentToCanvasCoordinate(event.clientX, event.clientY);
+                this.onClick(pos.x, pos.y);
+            }
+        },this));
+
         // Catch the keyDown and CTRL-key and route them to the Canvas hook.
         //
         $(document).bind("keydown",$.proxy(function(event)
@@ -1179,6 +1192,20 @@ graphiti.Canvas = Class.extend(
         	figure.onDoubleClick();
         }
 
+    },
+
+    /**
+     * @private
+     **/
+    onClick : function(/* :int */x, /* :int */y)
+    {
+        // check if a line has been hit
+        //
+        var figure = this.getBestFigure(x, y);
+
+        if(figure!==null){
+            figure.onClick();
+        }
     },
 
     /**

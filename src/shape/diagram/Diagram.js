@@ -28,6 +28,9 @@ graphiti.shape.diagram.Diagram = graphiti.SetFigure.extend({
         this.data = data;
         this.min = Math.min.apply(Math, this.data);
         this.max = Math.max.apply(Math, this.data);
+        if(this.max==this.min){
+            this.max = this.min+1;
+        }
         this.cache={};
         this.repaint();
     },

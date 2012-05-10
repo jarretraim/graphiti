@@ -150,6 +150,10 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      **/
     addPort: function(port, x, y)
     {
+        if(!(port instanceof graphiti.Port)){
+            throw "Argument is not typeof 'graphiti.Port'. \nFunction: graphiti.shape.node.Node#addPort";
+        }
+        
         if(typeof y === "undefined"){
             x=10;
             y=10;
@@ -292,6 +296,16 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
         });
     },
 
+    /**
+     * @method
+     * Called if the value of any port has been changed
+     * 
+     * @param {graphiti.Port} relatedPort
+     * @template
+     */
+    onPortValueChanged: function(relatedPort){
+    },
+    
     /**
      * @method
      * Returns the List of the connection model objects for which this Figure's model is the source. 

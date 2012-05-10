@@ -23,11 +23,19 @@ graphiti.shape.basic.Oval = graphiti.VectorFigure.extend({
      * 
      * @constructor
      * Creates a new figure element which are not assigned to any canvas.
+     * @param {Number} [width] the width of the Oval
+     * @param {Number} [height] the height of the Oval
      */
-    init: function( ) {
+    init: function(width,height ) {
         this._super( );
         this.setBackgroundColor(new graphiti.util.Color(200,255,120));
-        this.setDimension(50,50);
+        
+        if((typeof height ==="number") &&(typeof width === "number")){
+            this.setDimension(width,height);
+        }
+        else{
+            this.setDimension(50,50);
+        }
     },
       
 

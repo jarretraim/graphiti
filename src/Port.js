@@ -28,21 +28,23 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
             this.setDimension(10, 10);
         }
 
+        // status var for user interaction
+        //
+        this.ox = this.x;
+        this.oy = this.y;
+        this.originalSnapToGrid = false;
+        this.originalSnapToGrid = false;
         this.coronaWidth = 5; // the corona width for the hitTest method. Usefull during drag&drop of ports. Better SnapTo behaviour.
         this.corona = null; // Circle
         this.currentTarget = null; // Port
 
+        // visible representation
+        //
         this.setBackgroundColor(new graphiti.util.Color(100, 180, 100));
         this.setStroke(1);
         this.setColor(this.DEFAULT_BORDER_COLOR);
         this.setSelectable(false);
-        
-        this.originalSnapToGrid = false;
-        this.originalSnapToGrid = false;
-        
-        this.ox = this.x;
-        this.oy = this.y;
-        
+    
         // avoid "undefined" values. This breaks the code on iOS.
         if(typeof name ==="undefined"){
             this.name = null;
@@ -50,9 +52,35 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
         else{
             this.name = name;
         }
-            
+        
+        // for dynamic diagrams. A Port can have a value which is set by a connector
+        //
+        this.value = null; 
     },
 
+    /**
+     * @method
+     * Set a value for the port. This is usefull for interactive/dynamic diagrams like circuits, simulator,...
+     *  
+     * @param {Object} value the new value for the port 
+     */
+    setValue:function(value){
+        this.value = value;
+        if(this.getParent()!==null){
+           this.getParent().onPortValueChanged(this);
+        }
+    },
+    
+    /**
+     * @method
+     * Return the user defined value of the port.
+     * 
+     * @returns {Object}
+     */
+    getValue:function(){
+        return this.value;
+    },
+    
      /**
       * @inheritdoc
       * 

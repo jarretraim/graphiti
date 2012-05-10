@@ -37,7 +37,7 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
       this.setStroke(2);
     },
     
-    
+
     /**
      * @private
      **/
