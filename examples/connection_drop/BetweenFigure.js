@@ -24,15 +24,13 @@ example.connection_drop.BetweenFigure = graphiti.shape.node.Between.extend({
     	//
     	if(dropTarget instanceof graphiti.Connection){
     		var oldSource = dropTarget.getSource();
-    		dropTarget.setSource(this.outputPort);
+    		dropTarget.setSource(this.getOutputPort(0));
    		
     		var additionalConnection = new graphiti.Connection();
     		this.getCanvas().addFigure(additionalConnection);
     		additionalConnection.setSource(oldSource);
-    		additionalConnection.setTarget(this.inputPort);
+    		additionalConnection.setTarget(this.getInputPort(0));
     	}
     }
-    
-
 
 });

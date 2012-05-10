@@ -13,12 +13,11 @@ graphiti.OutputPort = graphiti.Port.extend({
      * @constructor
      * Create a new OutputPort element
      * 
-     * @param {graphiti.Canvas} canvas
      * @param {String} [name] the name for the Port. Required for MVC
      */
-    init : function(canvas, name)
+    init : function(name)
     {
-        this._super(canvas, name);
+        this._super(name);
       
         this.maxFanOut = 100; // the maximimum connections which goes out of this port
     },

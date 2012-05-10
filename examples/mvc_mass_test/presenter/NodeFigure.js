@@ -25,11 +25,11 @@ example.mvc_simple.NodeFigure = graphiti.shape.basic.Rectangle.extend({
         if (canvas !== null)
         {
             if(this.outputPort===null)
-                this.outputPort = new example.mvc_simple.OutputPort(canvas);
+                this.outputPort = new example.mvc_simple.OutputPort();
             this.addPort(this.outputPort, this.width,this.height/2);
 
             if(this.inputPort===null)
-            	this.inputPort = new example.mvc_simple.InputPort(canvas);
+            	this.inputPort = new example.mvc_simple.InputPort();
             this.addPort(this.inputPort, 0,this.height/2);
         }
         else if(this.outputPort!==null){

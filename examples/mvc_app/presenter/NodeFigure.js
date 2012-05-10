@@ -18,12 +18,12 @@ example.mvc_simple.NodeFigure = graphiti.shape.node.Between.extend({
      * @param {String} [name] name of the port
      * @template
      */
-    createPort: function(canvas, type, name){
+    createPort: function( type, name){
     	switch(type){
     	case "input":
-    		return new example.mvc_simple.InputPort(canvas);
+    		return new example.mvc_simple.InputPort();
     	case "output":
-    		return new example.mvc_simple.OutputPort(canvas);
+    		return new example.mvc_simple.OutputPort();
     	}
     	
     	throw "Unknown type ["+type+"] of port requested";

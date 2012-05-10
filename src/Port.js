@@ -15,14 +15,13 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
      * @constructor
      * Creates a new Node element which are not assigned to any canvas.
      * 
-     * @param {graphiti.Canvas} canvas
      * @param {String} [name] the name of the port. required for MVC
      */
-    init : function(canvas, name)
+    init : function( name)
     {
         this._super();
         
-        if (canvas.isTouchDevice()) {
+        if (graphiti.isTouchDevice) {
             this.setDimension(25, 25);
         }
         else {
@@ -39,11 +38,12 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
         this.setSelectable(false);
         
         this.originalSnapToGrid = false;
-        this.originalSnapToGrid=false;
+        this.originalSnapToGrid = false;
         
         this.ox = this.x;
         this.oy = this.y;
         
+        // avoid "undefined" values. This breaks the code on iOS.
         if(typeof name ==="undefined"){
             this.name = null;
         }

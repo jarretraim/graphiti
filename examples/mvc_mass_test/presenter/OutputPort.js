@@ -4,9 +4,9 @@
  **/
 example.mvc_simple.OutputPort= graphiti.OutputPort.extend({
 
-    init : function(canvas)
+    init : function()
     {
-      this._super(canvas, "output");
+      this._super("output");
 
     },
     

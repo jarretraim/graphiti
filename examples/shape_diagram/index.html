@@ -2,9 +2,9 @@
 <head>
 <title></title>
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="viewport" content="width=device-width, minimum-scale=1.0, , maximum-scale=1.0" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-   
+
     <link type="text/css" rel="stylesheet" href="./css/example.css" />
 
 	<SCRIPT src="../../lib/shifty.js"></SCRIPT>
@@ -76,6 +76,9 @@
 	<SCRIPT src="../../src/shape/node/End.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/node/Between.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/note/PostIt.js"></SCRIPT>
+	
+	<SCRIPT src="../../src/shape/diagram/Diagram.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/diagram/Sparkline.js"></SCRIPT>
 
 	<SCRIPT src="../../src/ui/parts/GraphicalEditor.js"></SCRIPT>
 	<SCRIPT src="../../src/ui/parts/GraphicalViewer.js"></SCRIPT>
@@ -84,16 +87,7 @@
 	<SCRIPT src="../../src/mvc/AbstractObjectModel.js"></SCRIPT>
 	<SCRIPT src="../../src/mvc/AbstractConnectionModel.js"></SCRIPT>
 	<SCRIPT src="../../src/mvc/Event.js"></SCRIPT>
-	
-	<script>
-	/** declare the namespace object for this example */
-	var example = {
-			connection_labeledit: {}
-	};
-	</script>
 
-	<SCRIPT src="LabelConnection.js"></SCRIPT>
-	<SCRIPT src="LabelEditor.js"></SCRIPT>
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -102,44 +96,17 @@ $(document).ready(function() {
         e.preventDefault();
     };
     
-     // create the paint area. The id in the constructor must be
-     // an existing DIV 
-	 var canvas = new graphiti.Canvas("gfx_holder");
-	
-     // create and add two Node which contains Ports (In and OUT)
-	 var start = new graphiti.shape.node.Start();
-	 var end   = new graphiti.shape.node.End();
-	
-	 canvas.addFigure( start, 50,450);
-	 canvas.addFigure( end, 230,150);
-		
-	 // Create a Connection and connect he Start and End node
-	 //
-	 var c = new example.connection_labeledit.LabelConnection();
-	 c.setSource(start.getOutputPort(0));
-	 c.setTarget(end.getInputPort(0));
-	 canvas.addFigure(c);
-	
-	
-	 // Create a generic Editor for the new Connection label
-	 // The editor register a "SelectionListener" at the canvas
-	 // to show/hide the corresponding editor.
-	 //
-	 var editor = new example.connection_labeledit.LabelEditor(canvas);
-	 
-	 ///////////////////////////////////////////////////////////////////// 
-	 // JUST ADD SOME DOCU ELEMENTS ON THE SCREEN
-	 ///////////////////////////////////////////////////////////////////// 
-	 var arrowLeft = new graphiti.shape.arrow.CalligrapherArrowLeft();
-	 arrowLeft.setColor("#0d0d0d");
-	 canvas.addFigure(arrowLeft, 180,235);
-	 
-	 var msg = new graphiti.shape.note.PostIt("Click/Tap on the green connection and a label editor\napear. Just done with a little snippet of jQuery code.");
-	 canvas.addFigure(msg, 20,20);
-	 
-	 $("body").scrollTop(0)
-	          .scrollLeft(0);
-	 
+    var testData = [];
+    for(var i=0;i<100;i++) {
+        testData.push(Math.floor(Math.random() * 100));
+    }
+    
+    var canvas = new graphiti.Canvas("gfx_holder");
+
+    var sparkline = new graphiti.shape.diagram.Sparkline();
+    sparkline.setData(testData);
+    
+    canvas.addFigure( sparkline,100,100);
 });
 
 </script>
@@ -147,9 +114,9 @@ $(document).ready(function() {
 </head>
 
 <body>
-   <div id="gfx_holder" style="width:1500px; height:1500px; ">
- 
-   </div>
+<div id="gfx_holder" style="width:1500px; height:1500px;-webkit-tap-highlight-color: rgba(0,0,0,0); ">
+</div>
+
 
 </body>
 </html>

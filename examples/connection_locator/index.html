@@ -119,8 +119,8 @@ $(document).ready(function() {
 	 // Create a Connection and connect the Start and End node
 	 //
 	 var c = new example.connection_locator.LabelConnection();
-	 c.setSource(start.getPort("output"));
-	 c.setTarget(end.getPort("input"));
+	 c.setSource(start.getOutputPort(0));
+	 c.setTarget(end.getInputPort(0));
 	 // add the connection to the canvas as well
 	 canvas.addFigure(c);
 	

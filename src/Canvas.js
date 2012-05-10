@@ -38,16 +38,6 @@ graphiti.Canvas = Class.extend(
      */
     init : function(canvasId)
     {
-
-        this.isIOS = (
-                //Detect iPhone
-                (navigator.platform.indexOf("iPhone") != -1) ||
-                //Detect iPod
-                (navigator.platform.indexOf("iPod") != -1)||
-                //Detect iPad
-                (navigator.platform.indexOf("iPad") != -1)
-            );
-
         this.setScrollArea(document.body);
         this.canvasId = canvasId;
         this.html = $("#"+canvasId);
@@ -234,16 +224,6 @@ graphiti.Canvas = Class.extend(
 				y - this.getAbsoluteY() + this.getScrollTop());
 	},
 	
-    /**
-     * @method
-     * Indicate whenever the device can handle touch events.
-     * 
-     * @return {Boolean}
-     */
-    isTouchDevice:function(){
-        return this.isIOS;
-    },
-
     getHtmlContainer: function(){
        return this.html; 
     },

@@ -22,40 +22,13 @@ graphiti.shape.node.End = graphiti.shape.basic.Rectangle.extend({
 	
     init : function()
     {
-        this.inputPort = null;
-
         this._super();
+
+        this.createPort("input");
 
         this.setDimension(50, 50);
         this.setBackgroundColor(this.DEFAULT_COLOR);
         this.setColor(this.DEFAULT_COLOR.darker());
     },
-    
-    setCanvas : function(canvas)
-    {
-        this._super(canvas);
-
-        if (canvas !== null && this.inputPort === null)
-        {
-            this.inputPort = this.createPort(canvas,"input","input");
-            this.inputPort.setCanvas(canvas);
-            this.addPort(this.inputPort,0, this.height / 2);
-        }
-    },
-    
-    /**
-     * @inheritdoc
-     *
-     * @param {Number} w The new width of the figure
-     * @param {Number} h The new height of the figure
-     **/
-    setDimension:function(w, h)
-    {
-    	this._super(w,h);
-    	
-    	if(this.inputPort !==null){
-            this.inputPort.setPosition(0, this.height / 2);
-    	}
-    }
 
 });

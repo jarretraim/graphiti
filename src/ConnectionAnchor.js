@@ -56,7 +56,7 @@ graphiti.ConnectionAnchor = Class.extend({
     setOwner:function( owner)
     {
     	if(typeof owner ==="undefined"){
-    		throw "Missing parameter for 'owner' in ConnectionAncho.setOwnerr";
+    		throw "Missing parameter for 'owner' in ConnectionAnchor.setOwner";
     	}
         this.owner=owner;
     },

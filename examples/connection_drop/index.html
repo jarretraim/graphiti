@@ -120,8 +120,8 @@ $(document).ready(function() {
 	  //
 	  var connection = new graphiti.Connection();
 	  
-	  var output = start.getPort("output");
-	  var input = end.getPort("input");
+	  var output = start.getOutputPort(0);
+	  var input = end.getInputPort(0);
 	  
 	  connection.setSource(output);
 	  connection.setTarget(input);

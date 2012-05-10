@@ -22,7 +22,8 @@ var graphiti =
     	basic:{},
         arrow:{},
         node: {},
-        note: {}
+        note: {},
+        diagram:{}
     },
     
     command : {
@@ -49,8 +50,16 @@ var graphiti =
     	parts:{
     		
     	}
-    }
+    },
     
+    isTouchDevice : (
+            //Detect iPhone
+            (navigator.platform.indexOf("iPhone") != -1) ||
+            //Detect iPod
+            (navigator.platform.indexOf("iPod") != -1)||
+            //Detect iPad
+            (navigator.platform.indexOf("iPad") != -1)
+        )
     
 };
 

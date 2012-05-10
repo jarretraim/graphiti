@@ -22,7 +22,9 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
       this.bgColor   = new  graphiti.util.Color(255,255,255);
       this.lineColor = new  graphiti.util.Color(128,128,255);
       this.lineStroke=1;
-      this.ports = new graphiti.util.ArrayList();
+      
+      this.inputPorts = new graphiti.util.ArrayList();
+      this.outputPorts= new graphiti.util.ArrayList();
       
       this._super();
     },
@@ -36,7 +38,9 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      **/
     getPorts: function()
     {
-      return this.ports;
+      // TODO: expensive! Find another solution.
+      var result = this.inputPorts.clone();
+      return result.addAll(this.outputPorts);
     },
     
     
@@ -48,16 +52,7 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      **/
     getInputPorts: function()
     {
-      var result = new graphiti.util.ArrayList();
-      
-      for(var i=0;i<this.ports.getSize();i++) {
-       var port = this.ports.get(i);
-       if(port instanceof graphiti.util.InputPort){
-          result.add(port);
-       }
-      }
-      
-      return result;
+      return this.inputPorts.clone();
     },
     
     /**
@@ -68,16 +63,7 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      **/
     getOutputPorts: function()
     {
-      var result = new graphiti.util.ArrayList();
-      
-      for(var i=0;i<this.ports.getSize();i++) {
-       var port = this.ports.get(i);
-       if(port instanceof graphiti.OutputPort){
-          result.add(port);
-       }
-      }
-      
-      return result;
+      return this.outputPorts.clone();
     },
     
     /**
@@ -90,13 +76,20 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      **/
     getPort: function( portName)
     {
-      for(var i=0;i<this.ports.getSize();i++) {
-       var port = this.ports.get(i);
-       if(port.getName() === portName){
-          return port;
-       }
-      }
-      
+        for ( var i = 0; i < this.outputPorts.getSize(); i++) {
+            var port = this.outputPorts.get(i);
+            if (port.getName() === portName) {
+                return port;
+            }
+        }
+
+        for ( var i = 0; i < this.inputPorts.getSize(); i++) {
+            var port = this.inputPorts.get(i);
+            if (port.getName() === portName) {
+                return port;
+            }
+        }
+          
       return null;
     },
     
@@ -105,38 +98,46 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      * Return the input port with the corresponding name.
      *
      * 
-     * @param {String} portName The name of the port to return.
+     * @param {String/Number} portName The name or numeric index of the port to return.
      * @return {graphiti.InputPort} Returns the port with the hands over name or null.
      **/
     getInputPort: function( portName)
     {
-      for(var i=0;i<this.ports.getSize();i++){
-       var port = this.ports.get(i);
-       if(port.getName() === portName && port instanceof graphiti.InputPort){
-          return port;
-       }
-      }
+        if(typeof portName === "number"){
+            return this.inputPorts.get(portName);
+        }
+        
+        for ( var i = 0; i < this.inputPorts.getSize(); i++) {
+            var port = this.inputPorts.get(i);
+            if (port.getName() === portName) {
+                return port;
+            }
+        }
       
-      return null;
+        return null;
     },
     
     /**
      * @method
      * Return the output port with the corresponding name.
      *
-     * @param {String} portName The name of the port to return.
+     * @param {String/Number} portName The name or the numeric index of the port to return.
      * @return {graphiti.OutputPort} Returns the port with the hands over name or null.
      **/
     getOutputPort: function( portName)
     {
-      for(var i=0;i<this.ports.getSize();i++) {
-       var port = this.ports.get(i);
-       if(port.getName() === portName && port instanceof graphiti.OutputPort){
-          return port;
-       }
-      }
-      
-      return null;
+        if(typeof portName === "number"){
+            return this.outputPorts.get(portName);
+        }
+        
+         for ( var i = 0; i < this.outputPorts.getSize(); i++) {
+            var port = this.outputPorts.get(i);
+            if (port.getName() === portName) {
+                return port;
+            }
+        }
+
+        return null;
     },
     
     /**
@@ -149,19 +150,29 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      **/
     addPort: function(port, x, y)
     {
-      this.ports.add(port);
-      port.setPosition(x,y);
-      port.setParent(this);
-      port.setCanvas(this.canvas);
+        if(typeof y === "undefined"){
+            x=10;
+            y=10;
+        }
+        
+        if (port instanceof graphiti.InputPort) {
+            this.inputPorts.add(port);
+        }
+        else {
+            this.outputPorts.add(port);
+        }
+        
+        port.setPosition(x, y);
+        port.setParent(this);
+        port.setCanvas(this.canvas);
 
-      // You can't delete a port with the [DEL] key if a port is a child of a node
-      port.setDeleteable(false);
-    
-      port.getShapeElement();
-      if(this.canvas!==null)
-      {
-        this.canvas.registerPort(port);
-      }
+        // You can't delete a port with the [DEL] key if a port is a child of a node
+        port.setDeleteable(false);
+
+        if (this.canvas !== null) {
+            port.getShapeElement();
+            this.canvas.registerPort(port);
+        }
     },
     
     /**
@@ -172,7 +183,8 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      **/
     removePort : function(port)
     {
-        this.ports.remove(port);
+        this.inputPorts.remove(port);
+        this.outputPorts.remove(port);
 
         if (port.getCanvas() !== null) {
             port.getCanvas().unregisterPort(port);
@@ -188,23 +200,38 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
     
     /**
      * @method
-     * Create a standard InputPort for this element. Inherited class can override this
+     * Create a standard Port for this element. Inherited class can override this
      * method to create its own type of ports.
      * 
-     * @param {grpahiti.Canvas} canvas the canvas to use
      * @param {String} type the type of the requested port. possible ["input", "output"]
      * @param {String} [name] name of the port
      * @template
      */
-    createPort: function(canvas, type, name){
+    createPort: function(type, name){
+        var newPort = null;
+        var count =0;
     	switch(type){
     	case "input":
-    		return new graphiti.InputPort(canvas,name);
+    		newPort= new graphiti.InputPort(name);
+    		count = this.inputPorts.getSize();
+    		break;
     	case "output":
-    		return new graphiti.OutputPort(canvas,name);
+    		newPort= new graphiti.OutputPort(name);
+            count = this.outputPorts.getSize();
+    		break;
+    	default:
+            throw "Unknown type ["+type+"] of port requested";
     	}
     	
-    	throw "Unknown type ["+type+"] of port requested";
+    	if(typeof name === "undefined"){
+    	    newPort.setName(type+count);
+    	}
+    	
+    	this.addPort(newPort);
+    	// relayout the ports
+    	this.setDimension(this.width,this.height);
+    	
+    	return newPort;
     },
     
     /**
@@ -212,23 +239,58 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      **/
     setCanvas : function(canvas)
     {
-        var i = 0;
         var oldCanvas = this.canvas;
         this._super(canvas);
-
+        var canvas =  this.canvas;
+        
         if (oldCanvas !== null) {
-            for (i = 0; i < this.ports.getSize(); i++) {
-                oldCanvas.unregisterPort(this.ports.get(i));
-            }
+            this.inputPorts.each(function(i,port){
+                oldCanvas.unregisterPort(port);
+            });
+            this.outputPorts.each(function(i,port){
+                oldCanvas.unregisterPort(port);
+            });
         }
 
-        if (this.canvas !== null) {
-            for (i = 0; i < this.ports.getSize(); i++) {
-                this.canvas.registerPort(this.ports.get(i));
-            }
+        if (canvas !== null) {
+            this.inputPorts.each(function(i,port){
+                port.setCanvas(canvas);
+                canvas.registerPort(port);
+       
+            });
+            this.outputPorts.each(function(i,port){
+                port.setCanvas(canvas);
+                canvas.registerPort(port);
+            });
         }
     },
     
+    
+    /**
+     * @inheritdoc
+     *
+     * @param {Number} w The new width of the figure
+     * @param {Number} h The new height of the figure
+     **/
+    setDimension:function(w, h)
+    {
+        this._super(w,h);
+        
+        // get the new, maybe adjusted, width
+        w = this.getWidth();
+
+        // layout the ports with default vertical gap.
+        //
+        var gap = this.getHeight()/(this.outputPorts.getSize()+1);
+        this.outputPorts.each(function(i, port){
+            port.setPosition(w,gap*(i+1));
+        });
+        
+        gap = this.getHeight()/(this.inputPorts.getSize()+1);
+        this.inputPorts.each(function(i, port){
+            port.setPosition(0,gap*(i+1));
+        });
+    },
 
     /**
      * @method

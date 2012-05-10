@@ -24,7 +24,9 @@ graphiti.util.ArrayList = Class.extend({
     
      /**
       * @method
-      * Reverses the order of the elements in the ArrayList
+      * Reverses the order of the elements in the ArrayList. The array will be modified!
+      * 
+     * @return {graphiti.util.ArrayList} self
       */
      reverse:function()
      {
@@ -34,6 +36,8 @@ graphiti.util.ArrayList = Class.extend({
            newData[i] = this.data[this.size-i-1];
         }
         this.data = newData;
+        
+        return this;
      },
     
      /**
@@ -81,6 +85,7 @@ graphiti.util.ArrayList = Class.extend({
         {
            return this.data[this.getSize() - 1];
         }
+        return null;
      },
     
      /**
@@ -127,6 +132,7 @@ graphiti.util.ArrayList = Class.extend({
      * Adds a element at the end of the Vector.
      *
      * @param {Object} obj the object to add
+     * @return {graphiti.util.ArrayList} self
      */
      add:function(obj)
      {
@@ -135,6 +141,8 @@ graphiti.util.ArrayList = Class.extend({
            this.resize();
         }
         this.data[this.size++] = obj;
+        
+        return this;
      },
 
     /**
@@ -142,6 +150,7 @@ graphiti.util.ArrayList = Class.extend({
      * Add all elements into this array.
      *
      * @param {graphiti.util.ArrayList} list
+     * @return {graphiti.util.ArrayList} self
      */
      addAll:function(list)
      {
@@ -152,6 +161,7 @@ graphiti.util.ArrayList = Class.extend({
         {
            this.add(list.get(i));
         }
+        return this;
      },
     
      /**
@@ -166,6 +176,7 @@ graphiti.util.ArrayList = Class.extend({
         var index = this.indexOf(obj);
         if(index>=0)
          return this.removeElementAt(index);
+        
         return null;
      },
 
@@ -177,7 +188,9 @@ graphiti.util.ArrayList = Class.extend({
      *
      * @param {Object} obj the object to insert.
      * @param {Number} index the insert position.
-     */
+     * 
+     * @return {graphiti.util.ArrayList} self
+    */
      insertElementAt:function(obj, index) 
      {
         if (this.size == this.capacity) 
@@ -191,6 +204,8 @@ graphiti.util.ArrayList = Class.extend({
         }
         this.data[index] = obj;
         this.size++;
+        
+        return this;
      },
 
     /**
@@ -198,6 +213,7 @@ graphiti.util.ArrayList = Class.extend({
      * removes an element at a specific index.
      *
      * @param {Number} index the index of the element to remove
+     * @return {Object} the removed object
      */
      removeElementAt:function(index)
      {
@@ -210,12 +226,15 @@ graphiti.util.ArrayList = Class.extend({
     
         this.data[this.getSize()-1] = null;
         this.size--;
+        
         return element;
      },
 
     /**
      * @method
      * removes all elements in the Vector
+     * 
+     * @return {graphiti.util.ArrayList} self
      */
      removeAllElements:function()
      {
@@ -225,6 +244,8 @@ graphiti.util.ArrayList = Class.extend({
         {
            this.data[i] = null;
         }
+        
+        return this;
      },
     
      /**
@@ -233,7 +254,8 @@ graphiti.util.ArrayList = Class.extend({
       * not in the list.
       *
       * @param {Object} obj the element to check
-      * @return {Number}
+      * 
+      * @return {Number} the index of the element or -1
       */
      indexOf:function(obj)
      {
@@ -277,6 +299,8 @@ graphiti.util.ArrayList = Class.extend({
         }
     
         this.data = newData;
+        
+        return this;
      },
     
     
@@ -295,9 +319,18 @@ graphiti.util.ArrayList = Class.extend({
         }
         this.size = temp.length;
         this.data = temp;
+        
+        return this;
      }, 
     
-     // sort() - sorts the collection based on a field name - f
+     /**
+      * @method
+      * Sorts the collection based on a field name - f
+      * 
+      * @param {String} the fieldname for the sorting
+      * 
+      * @return {graphiti.util.ArrayList} self
+      */
      sort:function(f) 
      {
         var i, j;
@@ -326,9 +359,16 @@ graphiti.util.ArrayList = Class.extend({
            }
            this.data[j+1] = currentObj;
         }
+        
+        return this;
      },
     
-     // clone() -- copies the contents of a Vector to another Vector returning the new Vector.
+     /** 
+      * @method
+      * copies the contents of a Vector to another Vector returning the new Vector.
+      * 
+      * @returns {graphiti.util.ArrayList} the new ArrayList
+      */
      clone:function() 
      {
         var newVector = new graphiti.util.ArrayList(this.size);
@@ -356,7 +396,8 @@ graphiti.util.ArrayList = Class.extend({
          
          for (var i=0; i<this.getSize(); i++) 
          {
-            func(i, this.data[i]);
+            if(func(i, this.data[i])===false)
+                break;
          }
       },
      
@@ -364,6 +405,8 @@ graphiti.util.ArrayList = Class.extend({
      overwriteElementAt:function(obj, index) 
      {
         this.data[index] = obj;
+        
+        return this;
      },
     
      getPersistentAttributes:function()

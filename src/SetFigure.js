@@ -36,11 +36,11 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
     {
       // remove the shape if we reset the canvas and the element
         // was already drawn
-      if(canvas===null && this.svgNodes!==null)
-      {
+      if(canvas===null && this.svgNodes!==null){
          this.svgNodes.remove();
          this.svgNodes=null;
       }
+      
       this._super(canvas);
      },
  

@@ -10,11 +10,11 @@
 graphiti.shape.basic.LineResizeHandle = graphiti.shape.basic.Circle.extend({
     NAME : "graphiti.shape.basic.LineResizeHandle",
 
-    init : function(canvas, type)
+    init : function(type)
     {
         this._super();
 
-        if (canvas.isTouchDevice()) {
+        if (graphiti.isTouchDevice) {
             this.setDimension(20, 20);
         }
         else {
