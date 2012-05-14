@@ -26,6 +26,13 @@ graphiti.shape.diagram.Sparkline = graphiti.shape.diagram.Diagram.extend({
         this.min = 0;
         this.max = 10;
 
+        // set some feasible default values
+        //
+        if(typeof width === "undefined"){
+            width=180;
+            height=50;
+        }
+        
         this._super( width, height);
     },
     
