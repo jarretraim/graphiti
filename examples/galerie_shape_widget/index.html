@@ -77,9 +77,8 @@
 	<SCRIPT src="../../src/shape/node/Between.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/note/PostIt.js"></SCRIPT>
 
-	<SCRIPT src="../../src/shape/diagram/Diagram.js"></SCRIPT>
-	<SCRIPT src="../../src/shape/diagram/Sparkline.js"></SCRIPT>
-	<SCRIPT src="../../src/shape/diagram/Pie.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/widget/Widget.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/widget/Slider.js"></SCRIPT>
 
 	<SCRIPT src="../../src/ui/parts/GraphicalEditor.js"></SCRIPT>
 	<SCRIPT src="../../src/ui/parts/GraphicalViewer.js"></SCRIPT>
@@ -108,20 +107,9 @@
         //
         var canvas = new graphiti.Canvas("gfx_holder");
 
-        var testData = [];
-        for(var i=0;i<100;i++) {
-           testData.push(Math.floor(Math.random() * 100));
-        }
-           
-        var sparkline = new graphiti.shape.diagram.Sparkline(200,80);
-        sparkline.setData(testData);
-        canvas.addFigure( sparkline,100,60);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.diagram.Sparkline\nsimple to configure with some InputPort's and OutputPort's"),350,80);
+        canvas.addFigure(new graphiti.shape.widget.Slider(90,20),50,50);
+        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.widget.Slider"),200,55);
         
-        var pie = new graphiti.shape.diagram.Pie(80,80);
-        pie.setData([30,60,122,4]);
-        canvas.addFigure( pie,100,160);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.diagram.Pie\nsimple to configure with some InputPort's and OutputPort's"),350,180);
     });
 </script>
 

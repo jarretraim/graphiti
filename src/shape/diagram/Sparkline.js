@@ -22,11 +22,24 @@
  */
 graphiti.shape.diagram.Sparkline = graphiti.shape.diagram.Diagram.extend({
     
-    init: function(){
-        this.path=null;
-        this._super();
+    init: function( width, height){
+        this.min = 0;
+        this.max = 10;
+
+        this._super( width, height);
     },
     
+    
+    setData:function( data){
+        this.min = Math.min.apply(Math, data);
+        this.max = Math.max.apply(Math, data);
+
+        if(this.max==this.min){
+            this.max = this.min+1;
+        }
+        
+        this._super(data);
+    },
     
     /**
      * @method
@@ -34,8 +47,7 @@ graphiti.shape.diagram.Sparkline = graphiti.shape.diagram.Diagram.extend({
      * 
      */
     createSet: function(){
-        this.path = this.canvas.paper.path("M0 0 l0 0");
-        return this.path;
+        return this.canvas.paper.path("M0 0 l0 0");
     },
      
     /**
@@ -43,6 +55,11 @@ graphiti.shape.diagram.Sparkline = graphiti.shape.diagram.Diagram.extend({
      * @param attributes
      */
     repaint: function(attributes){
+        if (typeof attributes === "undefined") {
+            attributes = {};
+        }
+
+        attributes.fill= "90-#000:5-#4d4d4d:95";
         
         var padding = this.padding;
         var width = this.getWidth()- 2*+this.padding;
@@ -58,7 +75,7 @@ graphiti.shape.diagram.Sparkline = graphiti.shape.diagram.Diagram.extend({
             };
         };
 
-        if(this.path!==null && (typeof this.cache.pathString ==="undefined")){
+        if(this.svgNodes!==null && (typeof this.cache.pathString ==="undefined")){
             var prev_pt=null;
             $.each(this.data, $.proxy(function(idx, item) {
                 var pt = toCoords(item, idx);
@@ -70,11 +87,9 @@ graphiti.shape.diagram.Sparkline = graphiti.shape.diagram.Diagram.extend({
                 }
                 prev_pt = pt;
             },this));
-            this.path.attr({path:this.cache.pathString, stroke: "#f0f0f0"});
+            this.svgNodes.attr({path:this.cache.pathString, stroke: "#f0f0f0"});
             
         }
-        
         this._super(attributes);
     }
-
 });

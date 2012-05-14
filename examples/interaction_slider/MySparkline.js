@@ -11,23 +11,17 @@ MySparkline = graphiti.shape.diagram.Sparkline.extend({
         this.setBackgroundColor("#FF765E");
         this.setRadius(5);
         this.createPort("input");
-        this.startTimer(500);
-        
-
+        this.startTimer(100);
+        this.setDimension(250,50);
     },
-
     
-    /**
-     * @method
-     * Called if the value of any port has been changed
-     * 
-     * @param {graphiti.Port} relatedPort
-     * @template
-     */
-    onPortValueChanged: function(relatedPort){
-        // call the timer manually. In this case we are safe and we
-        // didn'T lost any data...
-        this.onTimer();
+    setData:function( data){
+        this._super(data);
+
+        this.min = 0;
+        this.max = 100;
+        this.cache= {};
+        this.repaint();
     },
     
     /**
@@ -39,7 +33,7 @@ MySparkline = graphiti.shape.diagram.Sparkline.extend({
     onTimer:function(){
          var port = this.getInputPort(0);
          var value=port.getValue();
-         this.data.push(value===true?5:0);
+         this.data.push(value);
          if(this.data.length>this.maxValues)
              this.data.shift();
          this.setData(this.data);

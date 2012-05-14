@@ -23,7 +23,8 @@ var graphiti =
         arrow:{},
         node: {},
         note: {},
-        diagram:{}
+        diagram:{},
+        widget:{}
     },
     
     command : {

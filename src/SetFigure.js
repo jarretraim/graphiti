@@ -16,14 +16,16 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
      * Creates a new figure element which are not assigned to any canvas.
      * 
      */
-    init: function() {
-      this._super();
+    init: function( width, height) {
+      // collection of SVG DOM nodes
+      this.svgNodes=null;
+
+      this._super( width, height);
+
 
       this.setResizeable(false);
       this.setStroke(0);
       this.setBackgroundColor(null); 
-      // collection of SVG DOM nodes
-      this.svgNodes=null;
     },
     
     /**

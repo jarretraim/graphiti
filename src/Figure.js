@@ -52,6 +52,10 @@ graphiti.Figure = Class.extend({
         //
         this.x = 0;
         this.y = 0;
+        
+        this.minHeight = 5;
+        this.minWidth = 5;
+        
         this.width  = this.getMinWidth();
         this.height = this.getMinHeight();
         this.alpha = 1.0;
@@ -307,60 +311,18 @@ graphiti.Figure = Class.extend({
     	 // Subclasses must implement this method.
      },
      
-     
-    /** 
-     * @method
-     * Create the draggable elements. Called by the framework of the element has been added to the 
-     * Canvas.
-     * 
-     * @private
-     **/
-    createDraggable:function()
-    {
-		this._startDrag = $.proxy(function(dx, dy, event) {
-
-			if (this.isSelectable()===true) {
-				this.canvas.setCurrentSelection(this);
-			}
-
-			this.isInDragDrop = this.onDragStart();
-		},this);
-		
-        this._moveDrag = $.proxy(function (dx, dy) 
-        {
-           if(this.isInDragDrop===false){
-              return;
-           }
-   
-           this.onDrag(dx,dy);
-        },this);
-        
-        this._upDrag = $.proxy(function () 
-        {
-           if(this.isInDragDrop===false){
-                return;
-           }
-
-           this.onDragEnd();
-        },this);
-        this.shape.drag(this._moveDrag, this._startDrag, this._upDrag);
-        
-        this.shape.hover(function (event) {
-            this.onMouseEnter();
-        }, function (event) {
-            this.onMouseLeave();
-        }, this, this);
-    },
-    
 
     /**
      * @method
-     * Will be called if the drag and drop action beginns. You can return [false] if you
+     * Will be called if the drag and drop action begins. You can return [false] if you
      * want avoid that the figure can be move.
+     * 
+     * @param {Number} relativeX the x coordinate within the figure
+     * @param {Number} relativeY the y-coordinate within the figure.
      * 
      * @return {boolean} true if the figure accepts dragging
      **/
-    onDragStart : function( )
+    onDragStart : function(relativeX, relativeY )
     {
       this.isInDragDrop =false;
       this.isMoving = false;
@@ -418,6 +380,19 @@ graphiti.Figure = Class.extend({
 
     /**
      * @method
+     * Called by the framework if the figure returns false for the drag operation. In this
+     * case we send a "panning" event - mouseDown + mouseMove. This is very usefull for
+     * UI-Widget like slider, spinner,...
+     * 
+     * @param {Number} dx the x difference between the mouse down operation and now
+     * @param {Number} dy the y difference between the mouse down operation and now
+     */
+    onPanning: function(dx, dy){
+        
+    },
+    
+    /**
+     * @method
      * Will be called after a drag and drop action.<br>
      * Sub classes can override this method to implement additional stuff. Don't forget to call
      * the super implementation via <code>this._super();</code>
@@ -426,28 +401,7 @@ graphiti.Figure = Class.extend({
      **/
     onDragEnd : function()
     {
-        /*
-       if(this.getWorkflow().getEnableSmoothFigureHandling()==true)
-       {
-          var oFigure = this;
-          var slowShow = function()
-          {
-             if(oFigure.alpha<1.0)
-                oFigure.setAlpha(Math.min(1.0,oFigure.alpha+0.05));
-             else
-             {
-                window.clearInterval(oFigure.timer);
-                oFigure.timer = -1;
-             }
-          };
-          if(oFigure.timer>0)
-             window.clearInterval(oFigure.timer);
-          oFigure.timer = window.setInterval(slowShow,20);
-      }
-      else*/
-//      {
-          this.setAlpha(this.originalAlpha);
-  //    }
+      this.setAlpha(this.originalAlpha);
   
       // Element ist zwar schon an seine Position, das Command muss aber trotzdem
       // in dem CommandStack gelegt werden damit das Undo funktioniert.
@@ -653,9 +607,19 @@ graphiti.Figure = Class.extend({
      */
     getMinWidth:function()
     {
-      return 5;
+      return this.minWidth;
     },
 
+    /**
+     * @method
+     * Set the minimum width of this figure
+     * 
+     * @param {Number} w
+     */
+    setMinWidth: function(w){
+      this.minWidth = w;
+    },
+    
     /**
      * @method
      * This value is relevant for the interactive resize of the figure.
@@ -664,9 +628,19 @@ graphiti.Figure = Class.extend({
      */
     getMinHeight:function()
     {
-      return 5;
+      return this.minHeight;
     },
 
+    /**
+     * @method
+     * Set the minimum heigth of the figure.
+     * 
+     * @param {Number} h
+     */
+    setMinHeight:function(h){
+        this.minHeight = h;
+    },
+    
     /**
      * @method
      * The x-offset related to the parent figure or canvas.

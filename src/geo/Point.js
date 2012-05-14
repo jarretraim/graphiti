@@ -4,6 +4,8 @@
  */
 graphiti.geo.Point = Class.extend({
 
+    NAME : "graphiti.geo.Point",
+    
     /**
      * @constructor 
      * Creates a new Point object with the hands over coordinates.
@@ -14,8 +16,71 @@ graphiti.geo.Point = Class.extend({
     {
         this.x = parseInt(x);
         this.y = parseInt(y);
+
+        // limit for the maxi/minimum boundary of this rectangle
+        // It is not possible that the rect leave the boundary if set.
+        this.bx = null;
+        this.by = null;
+        this.bw = null;
+        this.bh = null;
     },
 
+    
+    /**
+     * @method
+     * Set the boundary of the rectangle. If set, the rectangle is always inside
+     * the boundary. A setX or setY will always be adjusted.
+     */
+    setBoundary:function(bx, by, bw, bh){
+        if(bx instanceof graphiti.geo.Rectangle){
+            this.bx = bx.x;
+            this.by = bx.y;
+            this.bw = bx.w;
+            this.bh = bx.h;
+        }else
+        {
+            this.bx = bx;
+            this.by = by;
+            this.bw = bw;
+            this.bh = bh;
+        }
+        this.adjustBoundary();
+    },
+    
+
+    /**
+     * @method
+     * @private
+     */
+    adjustBoundary:function(){
+        if(this.bx===null){
+            return;
+        }
+        this.x = Math.min(Math.max(this.bx, this.x), this.bw);
+        this.y = Math.min(Math.max(this.by, this.y), this.bh);
+    },
+    
+    /**
+     * @method
+     * Moves this Rectangle horizontally by dx and vertically by dy, then returns 
+     * this Rectangle for convenience.<br>
+     * <br>
+     * The method return the object itself. This allows you to do command chaining, where 
+     * you can perform multiple methods on the same elements.
+     *
+     * @param {Number} dx  Shift along X axis
+     * @param {Number} dy  Shift along Y axis
+     * 
+     * @return  {graphiti.geo.Rectangle} The method return the object itself
+     **/
+    translate:function( dx,  dy)
+    {
+      this.x +=dx;
+      this.y +=dy;
+      this.adjustBoundary();
+      return this;
+    },
+        
     /**
      * @method 
      * The X value of the point
@@ -47,6 +112,7 @@ graphiti.geo.Point = Class.extend({
     setX : function(x)
     {
         this.x = x;
+        this.adjustBoundary();
     },
 
     /**
@@ -58,8 +124,22 @@ graphiti.geo.Point = Class.extend({
     setY : function(y)
     {
         this.y = y;
+        this.adjustBoundary();
     },
 
+    /**
+     * @method
+     * Set the new x/y coordinates of this point
+     * 
+     * @param {Number} x
+     * @param {Number} y
+     */
+    setPosition:function(x,y){
+        this.x=x;
+        this.y=y;
+        this.adjustBoundary();
+    },
+    
     /**
      * @method 
      * Calculates the relative position of the specified Point to this Point.

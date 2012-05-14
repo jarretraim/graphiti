@@ -7,31 +7,37 @@
  */
 graphiti.shape.diagram.Diagram = graphiti.SetFigure.extend({
     
-    init: function(){
+    init: function( width, height){
         
         this.data = [];
-        this.min = 0;
-        this.max = 10;
         this.padding = 5;
         this.cache = {}; 
-        this._super();
+        
+        this._super( width, height);
         
         this.setBackgroundColor("#8dabf2");
         this.setStroke(1);
         this.setColor("#f0f0f0");
         this.setRadius(2);
         this.setResizeable(true);
-        this.setDimension(200,60);
     },
     
+    /**
+     * @method
+     * Set the data for the chart/diagram element
+     * 
+     * @param {Array} data
+     */
     setData:function( data){
         this.data = data;
-        this.min = Math.min.apply(Math, this.data);
-        this.max = Math.max.apply(Math, this.data);
-        if(this.max==this.min){
-            this.max = this.min+1;
-        }
         this.cache={};
+        
+
+       if (this.svgNodes !== null) {
+            this.svgNodes.remove();
+            this.svgNodes = this.createSet();
+        }
+        
         this.repaint();
     },
 
@@ -46,7 +52,7 @@ graphiti.shape.diagram.Diagram = graphiti.SetFigure.extend({
      * 
      * @return {Number} the calculated width of the label
      **/
-    getWidth : function() {
+    getWidth:function() {
         return this.width;
     },
     
@@ -56,24 +62,24 @@ graphiti.shape.diagram.Diagram = graphiti.SetFigure.extend({
      * 
      * @return {Number} the calculated height of the label
      */
-    getHeight:function()
-    {
+    getHeight:function(){
        return this.height;
     },
-
+    
     /**
-     * @method
      * 
      * @param attributes
      */
-    repaint: function(attributes){
+    repaint:function(attributes){
+        
         if (typeof attributes === "undefined") {
             attributes = {};
         }
 
-        attributes.fill= "90-#000:5-#4d4d4d:95";
-       
+        if(typeof attributes.fill ==="undefined"){
+            attributes.fill= "none";
+        }
+         
         this._super(attributes);
     }
-
 });

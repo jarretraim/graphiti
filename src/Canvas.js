@@ -147,7 +147,8 @@ graphiti.Canvas = Class.extend(
         this.mouseDownX = 0;
         this.mouseDownY = 0;
         this.mouseDraggingElement = null;
-        
+        this.mouseDownElement = null;
+
         this.html.bind("mouseup touchend", $.proxy(function(event)
         {
             if (this.mouseDown === false)
@@ -1219,16 +1220,22 @@ graphiti.Canvas = Class.extend(
         var figure = this.getBestFigure(x, y);
 
         if(figure!==null && figure.isDraggable()){
-            canDragStart = figure.onDragStart();
+            canDragStart = figure.onDragStart(x-figure.getAbsoluteX(),y-figure.getAbsoluteY());
             // Element send a veto about the drag&drop operation
             if(canDragStart===false){
-               this.mouseDraggingElement = null;
+                this.mouseDraggingElement = null;
+                this.mouseDownElement = figure;
             }
             else{
                this.mouseDraggingElement = figure;
+               this.mouseDownElement = figure;
             }
         }
 
+ //       if(canDragStart===false){
+ //           return;
+ //       }
+        
         if (figure !== this.currentSelection && figure !== null && figure.isSelectable()===true) {
 
             this.hideResizeHandles();
@@ -1236,7 +1243,6 @@ graphiti.Canvas = Class.extend(
 
             // its a line
             if (figure instanceof graphiti.shape.basic.Line) {
-                this.showLineResizeHandles(this.currentSelection);
                 // you can move a line with Drag&Drop...but not a connection.
                 // A Connection is fixed linked with the corresponding ports.
                 //
@@ -1247,8 +1253,8 @@ graphiti.Canvas = Class.extend(
                     }
                 }
             }
-            else {
-                this.showResizeHandles(this.currentSelection);
+            else if(canDragStart===false){
+                this.setCurrentSelection(null);
             }
         }
         else if(figure === null){
@@ -1291,6 +1297,9 @@ graphiti.Canvas = Class.extend(
                 }
             }
        }
+       else if(this.mouseDownElement!==null){
+           this.mouseDownElement.onPanning(dx, dy);
+       }
     },
 
 
@@ -1308,7 +1317,8 @@ graphiti.Canvas = Class.extend(
             }
             this.mouseDraggingElement = null;
         }
-    }
+        this.mouseDownElement = null;
+    } 
 
 });
 

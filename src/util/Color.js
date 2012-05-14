@@ -57,6 +57,17 @@ graphiti.util.Color = Class.extend({
     
     /**
      * @method
+     * Convert the color object into a HTML CSS representation
+     * @return {String} the color in rgb(##,##,##) representation
+     **/
+    getHashStyle:function()
+    {
+      return "#"+this.hex();
+    },
+    
+    
+    /**
+     * @method
      * The red part of the color.
      * 
      * @return {Number} the [red] part of the color.

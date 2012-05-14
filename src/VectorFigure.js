@@ -43,12 +43,15 @@ graphiti.VectorFigure = graphiti.shape.node.Node.extend({
         attributes.x = this.getAbsoluteX();
         attributes.y = this.getAbsoluteY();
         
-        if(this.color === null || this.stroke ===0){
-            attributes.stroke = "none";
+        if(typeof attributes.stroke==="undefined"){
+            if(this.color === null || this.stroke ===0){
+                attributes.stroke = "none";
+            }
+            else {
+                attributes.stroke = "#" + this.color.hex();
+            }
         }
-        else {
-            attributes.stroke = "#" + this.color.hex();
-        }
+        
         attributes["stroke-width"] = this.stroke;
         
         if(typeof attributes.fill === "undefined"){

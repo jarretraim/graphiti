@@ -10,6 +10,8 @@
  */
 graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 
+    NAME : "graphiti.geo.Rectangle",
+    
     /**
      * @constructor 
      * Creates a new Point object with the hands over coordinates.
@@ -24,27 +26,22 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
         this.w = w;
         this.h = h;
     },
-	
-	/**
-	 * @method
-	 * Moves this Rectangle horizontally by dx and vertically by dy, then returns 
-	 * this Rectangle for convenience.<br>
-	 * <br>
-	 * The method return the object itself. This allows you to do command chaining, where 
-	 * you can perform multiple methods on the same elements.
-	 *
-	 * @param {Number} dx  Shift along X axis
-	 * @param {Number} dy  Shift along Y axis
-	 * 
-	 * @return  {graphiti.geo.Rectangle} The method return the object itself
-	 **/
-	translate:function( dx,  dy)
-	{
-	  this.x +=dx;
-	  this.y +=dy;
-	  return this;
-	},
-	
+
+
+    /**
+     * @method
+     * @private
+     */
+    adjustBoundary:function(){
+        if(this.bx===null){
+            return;
+        }
+        this.x = Math.min(Math.max(this.bx, this.x), this.bw-this.w);
+        this.y = Math.min(Math.max(this.by, this.y), this.bh-this.h);
+        this.w = Math.min(this.w, this.bw);
+        this.h = Math.min(this.h, this.bh);
+    },
+    
 	/**
 	 * @method
 	 * Resizes this Rectangle by the values supplied as input and returns this for 
@@ -64,6 +61,7 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 	{
 	  this.w +=dw;
 	  this.h +=dh;
+      this.adjustBoundary();
 	  return this;
 	},
 	
@@ -80,11 +78,12 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 	 */
 	setBounds:function( rect)
 	{
-	   this.x = rect.x;
-	   this.y = rect.y;
-	   this.w = rect.w;
-	   this.h = rect.h;
-	   return this;
+	    this.setPosition(rect,x,rect,y);
+
+	    this.w = rect.w;
+	    this.h = rect.h;
+	    
+  	   return this;
 	},
 	
 	/**
@@ -112,6 +111,18 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 	
 	/**
 	 * @method
+	 * Set the new width of the rectangle.
+	 * 
+	 * @param {Number} w the new width of the rectangle
+	 */
+	setWidth: function(w){
+      this.w = w;
+      this.adjustBoundary();
+      return this;
+	},
+	
+	/**
+	 * @method
 	 * The height of the dimension element.
 	 * 
 	 * @return {Number}
@@ -120,6 +131,17 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 	{
 	  return this.h;
 	},
+    /**
+     * @method
+     * Set the new height of the rectangle.
+     * 
+     * @param {Number} h the new height of the rectangle
+     */
+    setHeight: function(h){
+      this.h = h;
+      this.adjustBoundary();
+      return this;
+    },	
 	
 	/**
 	 * @method
@@ -300,12 +322,37 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 	 * @method
 	 * Compares two Dimension objects
 	 * 
-	 * @param {graphiti.geo.Rectangle}
+	 * @param {graphiti.geo.Rectangle} o
 	 *@return {Boolean}
 	 **/
 	equals:function( o)
 	{
 	  return this.x==o.x && this.y==o.y && this.w==o.w && this.h==o.h;
-	}
+	},
+	
+    /**
+     * @method
+     * Detect whenever the hands over coordinate is inside the figure.
+     *
+     * @param {Number} iX
+     * @param {Number} iY
+     * @returns {Boolean}
+     */
+    hitTest : function ( iX , iY)
+    {
+        var iX2 = this.x + this.getWidth();
+        var iY2 = this.y + this.getHeight();
+        return (iX >= this.x && iX <= iX2 && iY >= this.y && iY <= iY2);
+    },
+    
+    toJSON : function(){
+        return  { 
+              width:this.w,
+              height:this.h,
+              x : this.x,
+              y :this.y
+          };
+      }
+
 
 });

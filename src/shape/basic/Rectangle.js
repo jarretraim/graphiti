@@ -49,7 +49,7 @@ graphiti.shape.basic.Rectangle = graphiti.VectorFigure.extend({
         this.setDimension(width, height);
       }
     },
-    
+
     /**
      * @inheritdoc
      **/
@@ -113,5 +113,14 @@ graphiti.shape.basic.Rectangle = graphiti.VectorFigure.extend({
         memento.radius = this.radius;
         
         return memento;
+    },
+    
+    toJSON : function(){
+      return  { 
+            width:this.width,
+            height:this.height,
+            x : this.x,
+            y :this.y
+        };
     }
 });
