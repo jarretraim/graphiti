@@ -267,6 +267,15 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
                 canvas.registerPort(port);
             });
         }
+        else {
+            this.inputPorts.each(function(i,port){
+                port.setCanvas(null);
+            });
+            this.outputPorts.each(function(i,port){
+                port.setCanvas(null);
+            });
+        }
+        
     },
     
     
