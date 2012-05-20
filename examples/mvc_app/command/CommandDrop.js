@@ -80,8 +80,6 @@ example.mvc_simple.CommandDrop = graphiti.command.Command.extend({
 		    	
 	    }
 	    this.canvas.setCurrentSelection(null);
-
-
 	},
 
     /**

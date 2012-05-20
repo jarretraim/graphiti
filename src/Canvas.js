@@ -41,6 +41,8 @@ graphiti.Canvas = Class.extend(
         this.setScrollArea(document.body);
         this.canvasId = canvasId;
         this.html = $("#"+canvasId);
+        this.initialWidth = this.getWidth();
+        this.initialHeight = this.getHeight();
         
         // avoid the "highlighting" in iPad, iPhone if the user tab/touch on the canvas.
         // iOS highlight per default all elements which register an "onClick, onMouseDown" event.
@@ -90,18 +92,15 @@ graphiti.Canvas = Class.extend(
         // painting stuff
         //
         this.paper = Raphael(canvasId, this.getWidth(), this.getHeight());
-            
+      
         // Status handling
         //
-        this.zoomFactor = 1.0;
-        this.enableSmoothFigureHandling=false;
+        this.zoomFactor = 1.0; // range [0.001..10]
+        
         this.currentSelection  = null;
         this.currentDropTarget = null;
         this.isInExternalDragOperation=false;
                 
-        this.snapToGridHelper = null;
-        this.snapToGeometryHelper = null;
-        
         // the line between the dragging port and its origin position
         this.connectionLine    = new graphiti.shape.basic.Line();
       
@@ -131,9 +130,16 @@ graphiti.Canvas = Class.extend(
 
         this.resizeHandleHalfWidth = this.resizeHandle2.getWidth()/2;
        
+        // SnapTo status var's
+        //
+        this.snapToGridHelper = null;
+        this.snapToGeometryHelper = null;
+
         this.verticalSnapToHelperLine = null;
         this.horizontalSnapToHelperLine = null;
 
+        // internal document with all figures, ports, ....
+        //
         this.figures = new graphiti.util.ArrayList();
         this.lines = new graphiti.util.ArrayList();
         this.commonPorts = new graphiti.util.ArrayList();
@@ -168,8 +174,8 @@ graphiti.Canvas = Class.extend(
                this.onMouseMove(pos.x, pos.y);
             }
             else{
-               var diffX = event.clientX - this.mouseDownX;
-               var diffY = event.clientY - this.mouseDownY;
+               var diffX = (event.clientX - this.mouseDownX)*this.zoomFactor;
+               var diffY = (event.clientY - this.mouseDownY)*this.zoomFactor;
                this.onMouseDrag(diffX, diffY);
            }
         }, this));
@@ -223,6 +229,38 @@ graphiti.Canvas = Class.extend(
     },
     
 
+
+    /**
+     * @method
+     * Set the new zoom factor for the canvas. The value must be between [0.01--10]
+     * 
+     * @param {Number} zoomFactor new zoom factor.
+     */
+    setZoom : function(zoomFactor)
+    {
+       this.zoomFactor = Math.min(Math.max(0.01,zoomFactor),10);
+        
+        var viewBoxWidth  = parseInt(this.initialWidth*this.zoomFactor);
+        var viewBoxHeight = parseInt(this.initialHeight*this.zoomFactor);
+        
+// BUG: raphael didn't handle setViewBox AND setSeize correct
+//        this.paper.setSize(this.html.width(), this.html.height());
+        this.paper.setViewBox(0, 0, viewBoxWidth, viewBoxHeight);
+        
+        this.html.width(this.initialWidth / this.zoomFactor);
+        this.html.height(this.initialHeight / this.zoomFactor);
+    },
+
+    /**
+     * @method
+     * Return the current zoom factor of the canvas.
+     * 
+     * @returns {Number}
+     */
+    getZoom: function(){
+        return this.zoomFactor;
+    },
+    
     /**
      * @method
      * Transforms a document coordinate to canvas coordinate.
@@ -232,10 +270,9 @@ graphiti.Canvas = Class.extend(
      * @returns {graphiti.geo.Point}
      */
 	fromDocumentToCanvasCoordinate : function(x,y) {
-		
 		return new graphiti.geo.Point(
-				x - this.getAbsoluteX() + this.getScrollLeft(),
-				y - this.getAbsoluteY() + this.getScrollTop());
+				(x - this.getAbsoluteX() + this.getScrollLeft())*this.zoomFactor,
+				(y - this.getAbsoluteY() + this.getScrollTop())*this.zoomFactor);
 	},
 	
     getHtmlContainer: function(){
@@ -320,8 +357,7 @@ graphiti.Canvas = Class.extend(
      * 
      * @return {Number}
      **/
-    getWidth : function()
-    {
+    getWidth : function(){
         return this.html.width();
     },
 
@@ -357,18 +393,15 @@ graphiti.Canvas = Class.extend(
       figure.getShapeElement();
       
      
-      if(figure instanceof graphiti.shape.basic.Line)
-      {
+      if(figure instanceof graphiti.shape.basic.Line){
         this.lines.add(figure);
       }
-      else
-      {
+      else{
         this.figures.add(figure);
 
         // Compartments must be stored in an additional structure
         //
-        if(figure instanceof graphiti.CompartmentFigure)
-        {
+        if(figure instanceof graphiti.CompartmentFigure){
           this.compartments.add(figure);
         }
         
@@ -380,7 +413,6 @@ graphiti.Canvas = Class.extend(
       // init a repaint of the figure. This enforce that all properties
       // ( color, dim, stroke,...) will be set.
       figure.repaint();
- 
       figure.fireMoveEvent();
     },
 
@@ -391,8 +423,7 @@ graphiti.Canvas = Class.extend(
      *
      * @param {graphiti.Figure} figure The figure to remove
      **/
-    removeFigure:function(figure)
-    {
+    removeFigure:function(figure){
         if(figure instanceof graphiti.shape.basic.Line){
            this.lines.remove(figure);
          }
@@ -1063,30 +1094,6 @@ graphiti.Canvas = Class.extend(
        }
     },
 
-    /**
-     * @method
-     * Returns the flag if the Canvas has enabled the smooth figure handling during add, remove, selection,
-     * drag&drop.
-     *
-     * @type boolean
-     **/
-    getEnableSmoothFigureHandling:function()
-    {
-        return this.enableSmoothFigureHandling;
-    },
-
-    /**
-     * @method
-     * Set the flag for the smooth figure handling during add, remove, selection,
-     * drag&drop.
-     *
-     * @param {boolean} flag The smooth figure handling flag.
-     **/
-    setEnableSmoothFigureHandling:function(/*:boolean*/ flag)
-    {
-        this.enableSmoothFigureHandling=flag;
-    },
-
 
     /**
      * @method
@@ -1178,6 +1185,10 @@ graphiti.Canvas = Class.extend(
          this.commandStack.undo();
       else if(keyCode==89 && ctrl)
          this.commandStack.redo();
+      else if(keyCode ===107)
+          this.setZoom(this.zoomFactor*0.95);
+      else if(keyCode ===109)
+          this.setZoom(this.zoomFactor*1.05);
     },
 
     /**
@@ -1276,7 +1287,7 @@ graphiti.Canvas = Class.extend(
     {
        if (this.mouseDraggingElement !== null) {
             this.mouseDraggingElement.onDrag(dx, dy);
-            var p = this.fromDocumentToCanvasCoordinate(this.mouseDownX + dx, this.mouseDownY + dy);
+            var p = this.fromDocumentToCanvasCoordinate(this.mouseDownX + (dx/this.zoomFactor), this.mouseDownY + (dy/this.zoomFactor));
             
             var target = this.getBestFigure(p.x, p.y,this.mouseDraggingElement);
             
