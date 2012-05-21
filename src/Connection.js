@@ -149,6 +149,7 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
     {
       this.targetDecorator = decorator;
       this.routingRequired =true;
+      
       this.repaint();
     },
     
@@ -175,6 +176,7 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
       this.sourceAnchor = anchor;
       this.sourceAnchor.setOwner(this.sourcePort);
       this.routingRequired =true;
+      
       this.repaint();
     },
     
@@ -189,6 +191,7 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
       this.targetAnchor = anchor;
       this.targetAnchor.setOwner(this.targetPort);
       this.routingRequired =true;
+      
       this.repaint();
     },
     
@@ -253,6 +256,7 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
     onDragEnter : function( draggedFigure )
     {
     	this.setGlow(true);
+    	
     	return true;
     },
  
@@ -299,83 +303,6 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
          return this._super();
       }
      },
-    
-     /**
-      * @method
-      * Fired if any property of the related model has been changed
-      *  
-      * @param {graphiti.mvc.Event} event
-      */
-     propertyChange : function(event)
-     {
-         switch (event.property) {
-         case graphiti.mvc.Event.PROPERTY_CHANGED:
-             this.paint();
-             break;
-         case graphiti.mvc.Event.SOURCE_CHANGED:
-             this.refreshSourcePort();
-             break;
-         case graphiti.mvc.Event.TARGET_CHANGED:
-             this.refreshTargetPort();
-             break;
-         default:
-             this._super(event);
-             break;
-         }
-     },
-
-
-    /**
-     * @method
-     * Called by the inherit class if the source port model of the connections has been changed.<br>
-     * Only used if you are working with the MVC pattern.
-     *
-     **/
-    refreshSourcePort:function()
-    {
-       var model    = this.getModel().getSourceModel();
-       var portName = this.getModel().getSourcePortName();
-       // try to find the corresponding port in the workflow document to this model
-       //
-       var figures = this.getCanvas().getFigures();
-       var count = figures.getSize();
-       for(var i=0;i<count;i++)
-       {
-          var figure = figures.get(i);
-          if(figure.getModel()===model)
-          {
-            var port = figure.getOutputPort(portName);
-            this.setSource(port);
-          }
-       }
-       this.setRouter(this.getRouter());
-    },
-    
-    /**
-     * @method
-     * Called by the inherit class if the target port model of the connections has been changed.<br>
-     * Only used if you are working with the MVC pattern.
-     *
-     **/
-    refreshTargetPort:function()
-    {
-       var model    = this.getModel().getTargetModel();
-       var portName = this.getModel().getTargetPortName();
-       // try to find the corresponding port in the workflow document to this model
-       //
-       var figures = this.getCanvas().getFigures();
-       var count = figures.getSize();
-       for(var i=0;i<count;i++)
-       {
-          var figure = figures.get(i);
-          if(figure.getModel()===model)
-          {
-            var port = figure.getInputPort(portName);
-            this.setTarget(port);
-          }
-       }
-       this.setRouter(this.getRouter());
-    },
     
     /**
      * @method

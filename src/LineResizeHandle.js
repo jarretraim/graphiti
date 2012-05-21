@@ -88,36 +88,42 @@ graphiti.shape.basic.LineResizeHandle = graphiti.shape.basic.Circle.extend({
      **/
     onDrag : function(dx, dy)
     {
-        this.setPosition(this.ox+dx,this.oy+dy );
-        
-        var port = this.getOppositeSidePort();
-        
-        if (port !== null) {
-            target = port.getDropTarget(this.getX(), this.getY(), null);
+        this.setPosition(this.ox + dx, this.oy + dy);
 
-            // the hovering element has been changed
-            if (target !== this.currentTarget) {
-                if (this.currentTarget !== null) {
-                    this.currentTarget.onDragLeave(port);
-                    this.getCanvas().getCurrentSelection().setGlow(false);
-                }
-                if (target !== null) {
-                    var isDropTarget = target.onDragEnter(port);
-                    this.getCanvas().getCurrentSelection().setGlow(isDropTarget);
-                }
+        var port = this.getOppositeSidePort();
+        var isDropTarget = this.currentTarget !== null;
+
+        target = port.getDropTarget(this.getX(), this.getY(), null);
+
+        // the hovering element has been changed
+        if (target !== this.currentTarget) {
+
+            if (this.currentTarget !== null) {
+                this.currentTarget.onDragLeave(port);
+                this.getCanvas().getCurrentSelection().setGlow(false);
             }
+
+            if (target !== null) {
+                isDropTarget = target.onDragEnter(port);
+                this.getCanvas().getCurrentSelection().setGlow(isDropTarget);
+            }
+        }
+
+        // mark the possible drop target
+        //
+        if (isDropTarget === true) {
             this.currentTarget = target;
         }
-        
+        else {
+            this.currentTarget = null;
+        }
+
         return true;
     },
     
     /**
-     * @method 
-     * Called after a drag and drop action.<br>
-     * Sub classes can override this method to implement additional stuff. 
-     * Don't forget to call the super implementation via <code>this._super();</code>
-     * 
+     * @method Called after a drag and drop action.<br>
+     *         Sub classes can override this method to implement additional stuff. Don't forget to call the super implementation via <code>this._super();</code>
      * @return {boolean}
      */
     onDragEnd : function()
@@ -125,17 +131,18 @@ graphiti.shape.basic.LineResizeHandle = graphiti.shape.basic.Circle.extend({
         if (!this.isDraggable()) {
             return false;
         }
-
+  
         var port = this.getOppositeSidePort();
         if (port !== null) {
-            target = port.getDropTarget(this.getX(), this.getY(), port);
-            if (target !== null) {
-                this.onDrop(target);
-                target.onDragLeave(port);
+            if (this.currentTarget !== null) {
+                
+                this.onDrop(this.currentTarget);
+                this.currentTarget.onDragLeave(port);
                 this.getCanvas().getCurrentSelection().setGlow(false);
+                this.currentTarget = null;
             }
         }
-
+        
         // A Connection is stuck to the corresponding ports. So we must reset the position
         // to the origin port if we doesn't drop the ResizeHandle on a other port.
         //

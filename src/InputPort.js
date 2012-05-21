@@ -35,26 +35,9 @@ graphiti.InputPort = graphiti.Port.extend({
     	if(!(figure instanceof graphiti.Port)){
     		return false;
     	}
- 
-    	var line = null;
-
         // User drag&drop a normal port
         if (figure instanceof graphiti.OutputPort) {
             return this._super(figure);
-        }
-        // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
-        else if (figure instanceof graphiti.shape.basic.LineStartResizeHandle) {
-            line = this.getCanvas().getCurrentSelection();
-            if (line instanceof graphiti.Connection && line.getSource() instanceof graphiti.InputPort) {
-                return this._super(line.getTarget());
-            }
-        }
-        // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
-        else if (figure instanceof graphiti.shape.basic.LineEndResizeHandle) {
-            line = this.getCanvas().getCurrentSelection();
-            if (line instanceof graphiti.Connection && line.getTarget() instanceof graphiti.InputPort) {
-                return this._super(line.getSource());
-            }
         }
         
         return false;
@@ -73,25 +56,8 @@ graphiti.InputPort = graphiti.Port.extend({
   		 return;
   	  }
 
-  	  var line = null;
-      if(figure instanceof graphiti.OutputPort)
-      {
+      if(figure instanceof graphiti.OutputPort){
         this._super( figure);
-      }
-      // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
-      else if (figure instanceof graphiti.shape.basic.LineStartResizeHandle)
-      {
-        line = this.getCanvas().getCurrentSelection();
-        if(line instanceof graphiti.Connection && line.getSource() instanceof graphiti.InputPort){
-           this._super(line.getTarget());
-        }
-      }
-      else if (figure instanceof graphiti.shape.basic.LineEndResizeHandle)
-      {
-        line = this.getCanvas().getCurrentSelection();
-        if(line instanceof graphiti.Connection && line.getTarget() instanceof graphiti.InputPort){
-           this._super(line.getSource());
-        }
       }
     },
     

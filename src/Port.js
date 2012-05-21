@@ -407,10 +407,18 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
       this.name=name;
     },
     
+    /**
+     * @method
+     * Hit test for ports. This method respect the corona diameter of the port for the hit test.
+     * 
+     * @param {Number} iX
+     * @param {Number} iY
+     * @returns {Boolean}
+     */
     hitTest:function (/*:int*/ iX ,/*:int*/ iY)
     {
-        var x = this.getAbsoluteX()-this.coronaWidth-this.getWidth()/2;
-        var y = this.getAbsoluteY()-this.coronaWidth-this.getHeight()/2;
+        var x = this.getAbsoluteX()-(this.coronaWidth*2)-this.getWidth()/2;
+        var y = this.getAbsoluteY()-(this.coronaWidth*2)-this.getHeight()/2;
         var iX2 = x + this.width + (this.coronaWidth*2);
         var iY2 = y + this.height + (this.coronaWidth*2);
         return (iX >= x && iX <= iX2 && iY >= y && iY <= iY2);

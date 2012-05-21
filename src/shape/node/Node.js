@@ -225,9 +225,7 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
             throw "Unknown type ["+type+"] of port requested";
     	}
     	
-    	if(typeof name === "undefined"){
-    	    newPort.setName(type+count);
-    	}
+   	    newPort.setName(type+count);
     	
     	this.addPort(newPort, locator);
     	// relayout the ports

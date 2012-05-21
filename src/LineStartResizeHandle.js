@@ -87,8 +87,7 @@ graphiti.shape.basic.LineStartResizeHandle = graphiti.shape.basic.LineResizeHand
     
       // The ResizeHandle of a Connection has been droped on a Port
       // This will enforce a ReconnectCommand
-      if(line instanceof graphiti.Connection)
-      {
+      if(line instanceof graphiti.Connection && this.command !==null) {
          this.command.setNewPorts(dropTarget, line.getTarget());
          this.getCanvas().getCommandStack().execute(this.command);
       }

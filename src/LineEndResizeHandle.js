@@ -88,8 +88,7 @@ graphiti.shape.basic.LineEndResizeHandle = graphiti.shape.basic.LineResizeHandle
       var line = this.getCanvas().getCurrentSelection();
       line.isMoving=false;
       
-      if(line instanceof graphiti.Connection)
-      {
+      if(line instanceof graphiti.Connection && this.command !==null){
          this.command.setNewPorts(line.getSource(),dropTarget);
          this.getCanvas().getCommandStack().execute(this.command);
       }
