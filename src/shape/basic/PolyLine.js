@@ -85,7 +85,7 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
         // Use the internal router if any has been set....
         //
         this.router.route(this);
-    
+    /*
         var lines =this.getCanvas().getLines();
         var intersections = new graphiti.util.ArrayList();
         lines.each($.proxy(function(i, line){
@@ -93,7 +93,7 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
         },this));
         if(!intersections.isEmpty())
             console.log(intersections);
-        
+        */
         // paint the decorator if any exists
         //
         if(this.getSource().getParent().isMoving===false && this.getTarget().getParent().isMoving===false )
