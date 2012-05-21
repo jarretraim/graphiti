@@ -312,7 +312,14 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
      return new graphiti.geo.Point(this.endX,this.endY);
    },
 
-
+   
+   getSegments: function(){
+       var result = new graphiti.util.ArrayList();
+       result.add({start: this.getStartPoint(), end: this.getendPoint()});
+       return result;
+   },
+   
+   
    /**
     * @method
     * Returns the length of the line.
@@ -412,9 +419,69 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
    hitTest: function( px, py)
    {
      return graphiti.shape.basic.Line.hit(this.corona, this.startX,this.startY, this.endX, this.endY, px,py);
+   },
+   
+   intersection: function (other){
+       var result = new graphiti.util.ArrayList();
+       
+       // empty result. the lines are equal...infinit array
+       if(other === this){
+           return result;
+       }
+       
+       var segments1= this.getSegments();
+       var segments2= other.getSegments();
+       
+       segments1.each(function(i, s1){
+           segments2.each(function(j, s2){
+     //          console.log(s1);
+     //          console.log(s2);
+     //          console.log("....");
+               var p= graphiti.shape.basic.Line.intersection(s1.start, s1.end, s2.start, s2.end);
+               if(p!==null){
+                   result.add(p);
+               }
+           });
+       });
+       return result;
    }
-
 });
+
+
+/**
+ * 
+ * @param {graphiti.geo.Point} a1
+ * @param {graphiti.geo.Point} a2
+ * @param {graphiti.geo.Point} b1
+ * @param {graphiti.geo.Point} b2
+ * @returns
+ */
+graphiti.shape.basic.Line.intersection = function(a1, a2, b1, b2) {
+    var result;
+    
+    var ua_t = (b2.x - b1.x) * (a1.y - b1.y) - (b2.y - b1.y) * (a1.x - b1.x);
+    var ub_t = (a2.x - a1.x) * (a1.y - b1.y) - (a2.y - a1.y) * (a1.x - b1.x);
+    var u_b  = (b2.y - b1.y) * (a2.x - a1.x) - (b2.x - b1.x) * (a2.y - a1.y);
+
+    if ( u_b != 0 ) {
+        var ua = ua_t / u_b;
+        var ub = ub_t / u_b;
+
+        if ( 0 <= ua && ua <= 1 && 0 <= ub && ub <= 1 ) {
+            result = new graphiti.geo.Point(a1.x + ua * (a2.x - a1.x), a1.y + ua * (a2.y - a1.y));
+        } else {
+            result = null;// No Intersection;
+        }
+    } else {
+        if ( ua_t == 0 || ub_t == 0 ) {
+            result = null;// Coincident
+        } else {
+            result = null; // Parallel
+        }
+    }
+
+    return result;
+};
 
 /**
  * Static util function to determine is a point(px,py) on the line(x1,y1,x2,y2)

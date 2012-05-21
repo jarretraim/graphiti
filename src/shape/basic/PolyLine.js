@@ -86,6 +86,14 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
         //
         this.router.route(this);
     
+        var lines =this.getCanvas().getLines();
+        var intersections = new graphiti.util.ArrayList();
+        lines.each($.proxy(function(i, line){
+            intersections.addAll(this.intersection(line));
+        },this));
+        if(!intersections.isEmpty())
+            console.log(intersections);
+        
         // paint the decorator if any exists
         //
         if(this.getSource().getParent().isMoving===false && this.getTarget().getParent().isMoving===false )
@@ -194,11 +202,15 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
       return result;
     },
     
+    getSegments: function(){
+        return this.lineSegments;
+    },
+    
     /*
      * @private
      *
      **/
-    addPoint:function(/*:graphiti.Point*/ p)
+    addPoint:function(/*:graphiti.geo.Point*/ p)
     {
       p = new graphiti.geo.Point(p.x, p.y);
       if(this.oldPoint!==null)
@@ -246,8 +258,7 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
       }
       return false;
     },
-    
-   
+
     /**
      * @method
      * Returns the Command to perform the specified Request or null.
