@@ -38,7 +38,7 @@ graphiti.shape.analog.ResistorBridge = graphiti.SVGFigure.extend({
             var w = figure.getParent().getWidth();
             var h = figure.getParent().getHeight();
             
-            figure.setPosition(w*index+1, h/2);
+            figure.setPosition(w*(index-2), h/2);
         }
     }),
 
@@ -53,11 +53,11 @@ graphiti.shape.analog.ResistorBridge = graphiti.SVGFigure.extend({
         this.inputLocator = new this.MyInputPortLocator();
         this.outputLocator = new this.MyOutputPortLocator();
         
-        this.createPort("input",this.inputLocator);
-        this.createPort("input",this.inputLocator);
+        this.createPort("hybrid",this.inputLocator);
+        this.createPort("hybrid",this.inputLocator);
         
-        this.createPort("output",this.outputLocator);
-        this.createPort("output",this.outputLocator);
+        this.createPort("hybrid",this.outputLocator);
+        this.createPort("hybrid",this.outputLocator);
     },
     
 

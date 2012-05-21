@@ -30,13 +30,12 @@ graphiti.InputPort = graphiti.Port.extend({
      **/
     onDragEnter : function(figure)
     {
-    	// Ports accepts only Ports as DropTarget
-    	//
-    	if(!(figure instanceof graphiti.Port)){
-    		return false;
-    	}
         // User drag&drop a normal port
         if (figure instanceof graphiti.OutputPort) {
+            return this._super(figure);
+        }
+        // User drag&drop a normal port
+        if (figure instanceof graphiti.HybridPort) {
             return this._super(figure);
         }
         
@@ -50,14 +49,12 @@ graphiti.InputPort = graphiti.Port.extend({
      */
     onDragLeave:function( figure)
     {
-  	  // Ports accepts only Ports as DropTarget
-  	  //
-  	  if(!(figure instanceof graphiti.Port)){
-  		 return;
-  	  }
-
       if(figure instanceof graphiti.OutputPort){
         this._super( figure);
+      }
+      
+      else if(figure instanceof graphiti.HybridPort){
+          this._super( figure);
       }
     },
     
@@ -82,12 +79,17 @@ graphiti.InputPort = graphiti.Port.extend({
             return null;
          }
     
-         // InputPort can only connect to an OutputPort. InputPort/InputPort make no sense
+         // InputPort can only connect to an OutputPort. InputPort->InputPort make no sense
          if(request.source instanceof graphiti.OutputPort){
             // This is the different to the OutputPort implementation of createCommand
             return new graphiti.command.CommandConnect(request.canvas,request.source,request.target);
          }
-    
+         
+         if(request.source instanceof graphiti.HybridPort){
+             // This is the different to the OutputPort implementation of createCommand
+             return new graphiti.command.CommandConnect(request.canvas,request.source,request.target);
+         }
+      
          return null;
        }
     

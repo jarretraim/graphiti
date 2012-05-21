@@ -25,6 +25,7 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
       
       this.inputPorts = new graphiti.util.ArrayList();
       this.outputPorts= new graphiti.util.ArrayList();
+      this.hybridPorts= new graphiti.util.ArrayList();
       
       this._super();
     },
@@ -39,8 +40,10 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
     getPorts: function()
     {
       // TODO: expensive! Find another solution.
-      var result = this.inputPorts.clone();
-      return result.addAll(this.outputPorts);
+      return this.inputPorts
+             .clone()
+             .addAll(this.outputPorts)
+             .addAll(this.hybridPorts);
     },
     
     
@@ -52,7 +55,9 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      **/
     getInputPorts: function()
     {
-      return this.inputPorts.clone();
+      return this.inputPorts
+               .clone()
+               .addAll(this.hybridPorts);
     },
     
     /**
@@ -63,7 +68,9 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      **/
     getOutputPorts: function()
     {
-      return this.outputPorts.clone();
+      return this.outputPorts
+          .clone()
+          .addAll(this.hybridPorts);
     },
     
     /**
@@ -76,21 +83,28 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      **/
     getPort: function( portName)
     {
-        for ( var i = 0; i < this.outputPorts.getSize(); i++) {
+        var i=0;
+        for ( i = 0; i < this.outputPorts.getSize(); i++) {
             var port = this.outputPorts.get(i);
             if (port.getName() === portName) {
                 return port;
             }
         }
 
-        for ( var i = 0; i < this.inputPorts.getSize(); i++) {
+        for ( i = 0; i < this.inputPorts.getSize(); i++) {
             var port = this.inputPorts.get(i);
             if (port.getName() === portName) {
                 return port;
             }
         }
           
-      return null;
+        for ( i = 0; i < this.hybridPorts.getSize(); i++) {
+            var port = this.hybridPorts.get(i);
+            if (port.getName() === portName) {
+                return port;
+            }
+        }
+         return null;
     },
     
     /**
@@ -157,8 +171,11 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
         if (port instanceof graphiti.InputPort) {
             this.inputPorts.add(port);
         }
-        else {
+        else if(port instanceof graphiti.OutputPort){
             this.outputPorts.add(port);
+        }
+        else if(port instanceof graphiti.HybridPort){
+            this.hybridPorts.add(port);
         }
 
         if((typeof locator !== "undefined") && (locator instanceof graphiti.layout.locator.Locator)){
@@ -187,6 +204,7 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
     {
         this.inputPorts.remove(port);
         this.outputPorts.remove(port);
+        this.hybridPorts.remove(port);
 
         if (port.getCanvas() !== null) {
             port.getCanvas().unregisterPort(port);
@@ -212,6 +230,7 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
     createPort: function(type, locator){
         var newPort = null;
         var count =0;
+        
     	switch(type){
     	case "input":
     		newPort= new graphiti.InputPort(name);
@@ -221,6 +240,10 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
     		newPort= new graphiti.OutputPort(name);
             count = this.outputPorts.getSize();
     		break;
+        case "hybrid":
+            newPort= new graphiti.HybridPort(name);
+            count = this.hybridPorts.getSize();
+            break;
     	default:
             throw "Unknown type ["+type+"] of port requested";
     	}
@@ -243,22 +266,15 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
         this._super(canvas);
         var canvas =  this.canvas;
         
+        var ports = this.getPorts();
         if (oldCanvas !== null) {
-            this.inputPorts.each(function(i,port){
-                oldCanvas.unregisterPort(port);
-            });
-            this.outputPorts.each(function(i,port){
+            ports.each(function(i,port){
                 oldCanvas.unregisterPort(port);
             });
         }
 
         if (canvas !== null) {
-            this.inputPorts.each(function(i,port){
-                port.setCanvas(canvas);
-                canvas.registerPort(port);
-       
-            });
-            this.outputPorts.each(function(i,port){
+            ports.each(function(i,port){
                 port.setCanvas(canvas);
                 canvas.registerPort(port);
             });
@@ -266,10 +282,7 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
             this.setDimension(this.width,this.height);
         }
         else {
-            this.inputPorts.each(function(i,port){
-                port.setCanvas(null);
-            });
-            this.outputPorts.each(function(i,port){
+            ports.each(function(i,port){
                 port.setCanvas(null);
             });
         }
@@ -302,6 +315,10 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
         this.inputPorts.each(function(i, port){
             port.locator.relocate(i,port);
         });
+        
+        this.hybridPorts.each(function(i, port){
+            port.locator.relocate(i,port);
+        });
     },
 
     /**
@@ -312,34 +329,7 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      * @template
      */
     onPortValueChanged: function(relatedPort){
-    },
     
-    /**
-     * @method
-     * Returns the List of the connection model objects for which this Figure's model is the source. 
-     * Callers must not modify the returned List. <br>
-     * Only called if you use the MVC pattern of Draw2D<br>
-     *
-     * @return {graphiti.util.ArrayList} the List of model source connections
-     * @template
-     */
-    getModelSourceConnections: function()
-    {
-       return graphiti.util.ArrayList.EMPTY_LIST;
-    },
-    
-    /**
-     * @method
-     * Only called if you use the MVC pattern of Draw2D
-     * 
-     * @private
-     * @final
-     */
-    refreshConnections: function()
-    {
-       // notify the view that the element has been changed
-       if(this.canvas!==null){
-          this.canvas.refreshConnections(this);
-       }
     }
+    
 });

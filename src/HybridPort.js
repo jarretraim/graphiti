@@ -1,6 +1,6 @@
 /**
  * @class graphiti.HybridPort
- * A OutputPort is the start anchor for a {@link graphiti.Connection}.
+ * A HybridPort can work as Input and as Output port in the same way for a {@link graphiti.Connection}.
  * 
  * @author Andreas Herz
  * @extends graphiti.Port
@@ -29,32 +29,11 @@ graphiti.HybridPort = graphiti.Port.extend({
      */
     onDragEnter : function(figure)
     {
-    	// Ports accepts only Ports as DropTarget
-    	//
-    	if(!(figure instanceof graphiti.Port)){
-    		return false;
-    	}
- 
-    	var line = null;
-
     	// Accept any kind of port
         if (figure instanceof graphiti.Port) {
             return this._super(figure);
         }
-        // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
-        else if (figure instanceof graphiti.shape.basic.LineStartResizeHandle) {
-            line = this.getCanvas().getCurrentSelection();
-            if (line instanceof graphiti.Connection && line.getSource() instanceof graphiti.OutputPort) {
-                return this._super(line.getTarget());
-            }
-        }
-        // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
-        else if (figure instanceof graphiti.shape.basic.LineEndResizeHandle) {
-            line = this.getCanvas().getCurrentSelection();
-            if (line instanceof graphiti.Connection && line.getTarget() instanceof graphiti.OutputPort) {
-                return this._super(line.getSource());
-            }
-        }
+        
         return false;
     },
     
@@ -70,25 +49,11 @@ graphiti.HybridPort = graphiti.Port.extend({
 		 return;
 	  }
 
-	  var line = null;
-	  
 	  // accept any kind of port
       if(figure instanceof graphiti.Port){
         this._super( figure);
       }
-      // User drag&drop a ResizeHandle. This will enforce a ConnectionReconnectCommand
-      else if (figure instanceof graphiti.shape.basic.LineStartResizeHandle){
-        line = this.getCanvas().getCurrentSelection();
-        if(line instanceof graphiti.Connection && line.getSource() instanceof graphiti.OutputPort){
-           this._super( line.getTarget());
-        }
-      }
-      else if (figure instanceof graphiti.shape.basic.LineEndResizeHandle){
-        line = this.getCanvas().getCurrentSelection();
-        if(line instanceof graphiti.Connection && line.getTarget() instanceof graphiti.OutputPort){
-           this._super( line.getSource());
-        }
-      }
+      
     },
 
     /**
@@ -105,13 +70,21 @@ graphiti.HybridPort = graphiti.Port.extend({
            
          if(request.source.getParent().getId() === request.target.getParent().getId()){
             return null;
+         }    
+
+         if (request.source instanceof graphiti.InputPort) {
+            // This is the difference to the InputPort implementation of createCommand.
+            return new graphiti.command.CommandConnect(request.canvas, request.target, request.source);
          }
-    
-         if(request.source instanceof graphiti.InputPort){
-            // This is the different to the InputPort implementation of createCommand.
-            return new graphiti.command.CommandConnect(request.canvas,request.target,request.source);
+         else if (request.source instanceof graphiti.OutputPort) {
+            // This is the different to the OutputPort implementation of createCommand
+            return new graphiti.command.CommandConnect(request.canvas, request.source, request.target);
          }
-    
+         else if (request.source instanceof graphiti.HybridPort) {
+            // This is the different to the OutputPort implementation of createCommand
+            return new graphiti.command.CommandConnect(request.canvas, request.source, request.target);
+         }
+         
          return null;
        }
     

@@ -15,10 +15,10 @@ graphiti.layout.locator.InputPortLocator = graphiti.layout.locator.Locator.exten
      * Default constructor for a Locator which can layout a port in context of a 
      * {@link grapiti.shape.node.Node}
      * 
-     * @param {graphiti.shape.node.Node} node
      */
-    init:function( ){
+    init:function(  ){
       this._super();
+
     },    
    
    /**

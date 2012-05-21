@@ -49,8 +49,8 @@ graphiti.shape.analog.ResistorVertical = graphiti.SVGFigure.extend({
         this.inputLocator = new this.MyInputPortLocator();
         this.outputLocator = new this.MyOutputPortLocator();
 
-        this.createPort("input", this.inputLocator); // GND
-        this.createPort("output",this.outputLocator);// VCC
+        this.createPort("hybrid", this.inputLocator); 
+        this.createPort("hybrid",this.outputLocator);
     },
     
 
