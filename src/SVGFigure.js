@@ -54,16 +54,15 @@ graphiti.SVGFigure = graphiti.SetFigure.extend({
             this.setDimension(parseInt(match[1]), parseInt(match[2]));
         }
         
-        var findAttr  = new RegExp('([a-z\-]+)="(.*?)"','gi');
-        var findStyle = new RegExp('([a-z\-]+) ?: ?([^ ;]+)[ ;]?','gi');
-        var findNodes = new RegExp('<(rect|polyline|circle|ellipse|path|polygon|image|text).*?\/>','gi');
+        var findAttr  = new RegExp('([a-z0-9\-]+)="(.*?)"','gi');
+        var findStyle = new RegExp('([a-z0-9\-]+) ?: ?([^ ;]+)[ ;]?','gi');
+        var findNodes = new RegExp('<(line|rect|polyline|circle|ellipse|path|polygon|image|text).*?\/>','gi');
         
         while(match = findNodes.exec(rawSVG)){      
           var shape=null;
           var style=null;
-          var attr = { 'fill':'#000' };
+          var attr = { };
           var node = RegExp.$1;
-          
           while(findAttr.exec(match)){
             switch(RegExp.$1) {
               case 'stroke-dasharray':
@@ -78,30 +77,43 @@ graphiti.SVGFigure = graphiti.SetFigure.extend({
             }
           };
           
-          if (typeof attr['stroke-width'] === 'undefined'){
-            attr['stroke-width'] = (typeof attr['stroke'] === 'undefined' ? 0 : 1);
-          }
           
           if ( style !== null){
             while(findStyle.exec(style))
               attr[RegExp.$1] = RegExp.$2;
           }
-         switch(node) {
+          
+          if (typeof attr['stroke-width'] === 'undefined'){
+              attr['stroke-width'] = (typeof attr['stroke'] === 'undefined' ? 0 : 1);
+          }
+          
+          switch(node) {
             case 'rect':
               shape = canvas.paper.rect();
-            break;
+              break;
             case 'circle':
               shape = canvas.paper.circle();
-            break;
+              break;
             case 'ellipse':
               shape = canvas.paper.ellipse();
-            break;
+              break;
             case 'path':
+              attr['fill'] ="none";
               shape = canvas.paper.path(attr['d']);
-            break;
+              break;
+            case 'line':
+              attr['d']= "M "+attr["x1"]+" "+attr["y1"]+"L"+attr["x2"]+" "+attr["y2"];
+              attr['fill'] ="none";
+              shape = canvas.paper.path(attr['d']);
+             break;
+            case 'polyline':
+              var path = attr['points'];
+              attr['d'] = "M "+path.replace(" "," L");
+              shape = canvas.paper.path(attr['d']);
+              break;
             case 'polygon':
               shape = canvas.paper.polygon(attr['points']);
-            break;
+              break;
             case 'image':
               shape = canvas.paper.image();
               break;

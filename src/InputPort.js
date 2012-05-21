@@ -18,6 +18,10 @@ graphiti.InputPort = graphiti.Port.extend({
     init : function( name)
     {
         this._super( name);
+        
+        // responsive for the arrangement of the port 
+        // calculates the x/y coordinates in relation to the parent node
+        this.locator=new graphiti.layout.locator.InputPortLocator();
     },
 
     

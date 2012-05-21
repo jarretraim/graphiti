@@ -145,19 +145,14 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      * Add a port to this node at the given position.<br>
      *
      * @param {graphiti.Port} port The new port to add.
-     * @param {Number} x The x position.
-     * @param {Number} y The y position.
+     * @param {graphiti.layout.locator.Locator} locator The layouter for the port.
      **/
-    addPort: function(port, x, y)
+    addPort: function(port, locator)
     {
         if(!(port instanceof graphiti.Port)){
             throw "Argument is not typeof 'graphiti.Port'. \nFunction: graphiti.shape.node.Node#addPort";
         }
         
-        if(typeof y === "undefined"){
-            x=10;
-            y=10;
-        }
         
         if (port instanceof graphiti.InputPort) {
             this.inputPorts.add(port);
@@ -165,8 +160,11 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
         else {
             this.outputPorts.add(port);
         }
+
+        if((typeof locator !== "undefined") && (locator instanceof graphiti.layout.locator.Locator)){
+            port.setLocator(locator);
+        }
         
-        port.setPosition(x, y);
         port.setParent(this);
         port.setCanvas(this.canvas);
 
@@ -208,10 +206,10 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      * method to create its own type of ports.
      * 
      * @param {String} type the type of the requested port. possible ["input", "output"]
-     * @param {String} [name] name of the port
+     * @param {graphiti.layout.locator.Locator} [locator] the layouter to use for this port
      * @template
      */
-    createPort: function(type, name){
+    createPort: function(type, locator){
         var newPort = null;
         var count =0;
     	switch(type){
@@ -231,7 +229,7 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
     	    newPort.setName(type+count);
     	}
     	
-    	this.addPort(newPort);
+    	this.addPort(newPort, locator);
     	// relayout the ports
     	this.setDimension(this.width,this.height);
     	
@@ -266,6 +264,8 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
                 port.setCanvas(canvas);
                 canvas.registerPort(port);
             });
+            // relayout the ports
+            this.setDimension(this.width,this.height);
         }
         else {
             this.inputPorts.each(function(i,port){
@@ -288,20 +288,21 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
     setDimension:function(w, h)
     {
         this._super(w,h);
-        
-        // get the new, maybe adjusted, width
-        w = this.getWidth();
 
-        // layout the ports with default vertical gap.
+        // make no sense to layout the ports if we not part
+        // of the canvas
+        if(this.shape==null){
+            return;
+        }
+        
+        // layout the ports
         //
-        var gap = this.getHeight()/(this.outputPorts.getSize()+1);
         this.outputPorts.each(function(i, port){
-            port.setPosition(w,gap*(i+1));
+            port.locator.relocate(i,port);
         });
         
-        gap = this.getHeight()/(this.inputPorts.getSize()+1);
         this.inputPorts.each(function(i, port){
-            port.setPosition(0,gap*(i+1));
+            port.locator.relocate(i,port);
         });
     },
 

@@ -21,11 +21,12 @@ graphiti.layout.locator.Locator= Class.extend({
      * @method
      * Controls the location of an I{@link graphiti.Figure} 
      *
+     * @param {Number} index child index of the figure
      * @param {graphiti.Figure} figure the figure to control
+     * 
      * @template
      **/
-    relocate:function(figure)
-    {
-    	// 
+    relocate:function(index, figure){
+    	
     }
 });

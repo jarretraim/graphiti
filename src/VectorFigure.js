@@ -62,7 +62,7 @@ graphiti.VectorFigure = graphiti.shape.node.Node.extend({
                attributes.fill ="none";
            }
         }
-     
+
         this._super(attributes);
     },
 

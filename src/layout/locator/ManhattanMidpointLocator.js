@@ -26,9 +26,10 @@ graphiti.layout.locator.ManhattanMidpointLocator= graphiti.layout.locator.Connec
      * @method
      * Relocates the given Figure.
      *
+     * @param {Number} index child index of the target
      * @param {graphiti.Figure} target The figure to relocate
      **/
-    relocate:function( target)
+    relocate:function(index, target)
     {
        var conn = this.getConnection();
        var points = conn.getPoints();

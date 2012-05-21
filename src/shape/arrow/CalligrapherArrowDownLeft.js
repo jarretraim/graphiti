@@ -17,6 +17,8 @@
  */
 graphiti.shape.arrow.CalligrapherArrowDownLeft = graphiti.SVGFigure.extend({
    
+    NAME:"graphiti.shape.arrow.CalligrapherArrowDownLeft",
+
     /**
      * @constructor
      * Create a new instance

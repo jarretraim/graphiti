@@ -76,7 +76,6 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
        // The "set" should always be on top.
        var shape= this.canvas.paper.rect(this.getX(),this.getY(),this.getWidth(), this.getHeight());;
        this.svgNodes = this.createSet();
-       
        return shape;
     },
     

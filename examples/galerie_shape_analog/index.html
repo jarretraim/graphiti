@@ -80,6 +80,15 @@
 	<SCRIPT src="../../src/shape/node/Between.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/note/PostIt.js"></SCRIPT>
 
+	<SCRIPT src="../../src/shape/widget/Widget.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/widget/Slider.js"></SCRIPT>
+
+	<SCRIPT src="../../src/shape/analog/OpAmp.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/analog/ResistorBridge.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/analog/ResistorVertical.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/analog/VoltageSupplyHorizontal.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/analog/VoltageSupplyVertical.js"></SCRIPT>
+
 	<SCRIPT src="../../src/ui/parts/GraphicalEditor.js"></SCRIPT>
 	<SCRIPT src="../../src/ui/parts/GraphicalViewer.js"></SCRIPT>
 
@@ -88,32 +97,40 @@
 	<SCRIPT src="../../src/mvc/AbstractConnectionModel.js"></SCRIPT>
 	<SCRIPT src="../../src/mvc/Event.js"></SCRIPT>
 
-	<SCRIPT src="MyFigure.js"></SCRIPT>
+	<SCRIPT src="../../src/io/Reader.js"></SCRIPT>
+	<SCRIPT src="../../src/io/Writer.js"></SCRIPT>
+	<SCRIPT src="../../src/io/json/Writer.js"></SCRIPT>
+	<SCRIPT src="../../src/io/json/Reader.js"></SCRIPT>
 
 <script type="text/javascript">
-$(document).ready(function() {
 
-     document.ontouchmove = function(e) {
-        e.preventDefault();
-     };
-    
-     var canvas = new graphiti.Canvas("gfx_holder");
+    $(document).ready(function()
+    {
 
-     var figure = new MyFigure();
-     canvas.addFigure( figure,150,150);
+        document.ontouchmove = function(e)
+        {
+            e.preventDefault();
+        };
 
- 
-	 ///////////////////////////////////////////////////////////////////// 
-	 // JUST ADD SOME DOCU ELEMENTS ON THE SCREEN
-	 ///////////////////////////////////////////////////////////////////// 
-	 var arrowLeft = new graphiti.shape.arrow.CalligrapherArrowLeft();
-	 arrowLeft.setColor("#0d0d0d");
-	 canvas.addFigure(arrowLeft, 250,160);
+        // create the canvas for the user interaction
+        //
+        var canvas = new graphiti.Canvas("gfx_holder");
 
-	 var msg = new graphiti.shape.note.PostIt("Double click on the box to change the corner radius.\nNo magic, just to show the usage for a click event.");
-	 canvas.addFigure(msg, 20,20);
-});
+        canvas.addFigure(new graphiti.shape.analog.OpAmp(),50,50);
+        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.analog.OpAmp"),200,55);
+        
+        canvas.addFigure(new graphiti.shape.analog.ResistorBridge(),50,150);
+        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.analog.ResistorBridge"),200,155);
+        
+        canvas.addFigure(new graphiti.shape.analog.VoltageSupplyHorizontal(),50,250);
+        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.analog.VoltageSupplyHorizontal"),200,255);
 
+        canvas.addFigure(new graphiti.shape.analog.VoltageSupplyVertical(),50,350);
+        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.analog.VoltageSupplyVertical"),200,355);
+
+        canvas.addFigure(new graphiti.shape.analog.ResistorVertical(),50,450);
+        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.analog.ResistorVertical"),200,455);
+    });
 </script>
 
 </head>
@@ -121,7 +138,6 @@ $(document).ready(function() {
 <body>
 <div id="gfx_holder" style="width:1500px; height:1500px;-webkit-tap-highlight-color: rgba(0,0,0,0); ">
 </div>
-
 
 </body>
 </html>

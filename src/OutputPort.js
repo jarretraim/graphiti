@@ -20,9 +20,12 @@ graphiti.OutputPort = graphiti.Port.extend({
         this._super(name);
       
         this.maxFanOut = 100; // the maximimum connections which goes out of this port
+        
+        // responsive for the arrangement of the port 
+        // calculates the x/y coordinates in relation to the parent node
+        this.locator=new graphiti.layout.locator.OutputPortLocator();
     },
 
-    
     /**
      * @private
      **/

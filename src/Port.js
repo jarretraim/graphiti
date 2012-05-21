@@ -19,6 +19,8 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
      */
     init : function( name)
     {
+        this.locator = null;
+        
         this._super();
         
         if (graphiti.isTouchDevice) {
@@ -58,6 +60,20 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
         this.value = null; 
     },
 
+    
+
+    /**
+     * @method
+     * Set the locator/layouter of the port. A locator is responsive for the x/y arrangement of the 
+     * port in relation to the parent node.
+     * 
+     * @param {graphiti.layout.locator.Locator} locator
+     */
+    setLocator: function(locator){
+        this.locator = locator;
+    },
+    
+    
     /**
      * @method
      * Set a value for the port. This is usefull for interactive/dynamic diagrams like circuits, simulator,...
