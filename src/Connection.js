@@ -12,7 +12,7 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
 
 //    DEFAULT_ROUTER: new graphiti.layout.connection.DirectRouter(),
     DEFAULT_ROUTER: new graphiti.layout.connection.ManhattanConnectionRouter(),
-    
+        
     /**
      * @constructor
      * Creates a new figure element which are not assigned to any canvas.
@@ -244,6 +244,10 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
     },
     
 
+    postProcess: function(postPorcessCache){
+    	this.router.postProcess(this, this.getCanvas(), postPorcessCache);
+    },
+    
     /**
      * @method
      * Called by the framework during drag&drop operations.
@@ -311,7 +315,7 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
      * @param {graphiti.Port} port The new source port of this connection.
      * 
      **/
-    setSource:function(/*:graphiti.Port*/ port)
+    setSource:function( port)
     {
       if(this.sourcePort!==null){
         this.sourcePort.detachMoveListener(this);
@@ -345,7 +349,7 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
      * 
      * @param {graphiti.Port} port The new target port of this connection
      **/
-    setTarget:function(/*:graphiti.Port*/ port)
+    setTarget:function( port)
     {
       if(this.targetPort!==null){
         this.targetPort.detachMoveListener(this);

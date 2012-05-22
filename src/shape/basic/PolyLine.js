@@ -9,9 +9,11 @@
  * @extends graphiti.shape.basic.Line
  */
 graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
-    NAME : "graphiti.Connection",
+    
+	NAME : "graphiti.shape.basic.PolyLine",
 
-   
+    BRIDE_HORIZONTAL : " r 0 0 3 -4 7 -4 10 0 13 0 ",
+
     /**
      * @constructor
      * Creates a new figure element which are not assigned to any canvas.
@@ -25,8 +27,12 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
       //
       this.svgPathString = null;
       
+      // all line segments with start/end as simple object member
       this.lineSegments = new graphiti.util.ArrayList();
     
+      // all possible brides (line crossings)
+      this.bridges = new graphiti.util.ArrayList();
+      
       this.setColor(new  graphiti.util.Color(0,0,115));
       this.setStroke(1);
       
@@ -85,15 +91,7 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
         // Use the internal router if any has been set....
         //
         this.router.route(this);
-    /*
-        var lines =this.getCanvas().getLines();
-        var intersections = new graphiti.util.ArrayList();
-        lines.each($.proxy(function(i, line){
-            intersections.addAll(this.intersection(line));
-        },this));
-        if(!intersections.isEmpty())
-            console.log(intersections);
-        */
+
         // paint the decorator if any exists
         //
         if(this.getSource().getParent().isMoving===false && this.getTarget().getParent().isMoving===false )
@@ -119,7 +117,7 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
           }
           this.svgPathString = path;
         }
-        
+        console.log(this.svgPathString);
         this.finishStroke();
     
         for( i=0; i<this.children.getSize();i++)
@@ -167,10 +165,11 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
      **/
     startStroke:function()
     {
-     this.oldPoint=null;
-     this.lineSegments = new graphiti.util.ArrayList();
+       this.oldPoint=null;
+       this.lineSegments = new graphiti.util.ArrayList();
+       this.bridges = new graphiti.util.ArrayList();
     },
-    
+
     /**
      * @private
      *
@@ -202,8 +201,25 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
       return result;
     },
     
+    /**
+     * @method
+     * Return all line segments of the polyline.
+     * 
+     * @returns {graphiti.util.ArrayList}
+     */
     getSegments: function(){
         return this.lineSegments;
+    },
+    
+    /**
+     * @method
+     * Add optional bridge to the line. Is not part of the PolyLine. It is just for the
+     * visual representation.
+     * 
+     * @param {graphiti.geo.Point} point the coordinate to bridge
+     */
+    addBridge: function(point){
+        this.bridges.add(point);	
     },
     
     /*
@@ -213,8 +229,7 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
     addPoint:function(/*:graphiti.geo.Point*/ p)
     {
       p = new graphiti.geo.Point(p.x, p.y);
-      if(this.oldPoint!==null)
-      {
+      if(this.oldPoint!==null){
         // store the painted line segment for the "mouse selection test"
         // (required for user interaction)
         var line = {};
@@ -222,12 +237,10 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
         line.end   = p;
         this.lineSegments.add(line);
       }
-    
-      this.oldPoint = {};
-      this.oldPoint.x = p.x;
-      this.oldPoint.y = p.y;
+      
+      this.oldPoint = {x: p.x, y:p.y};
     },
-    
+
     /**
      * @see graphiti.Figure#onOtherFigureMoved
      **/

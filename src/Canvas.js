@@ -155,6 +155,17 @@ graphiti.Canvas = Class.extend(
         this.mouseDraggingElement = null;
         this.mouseDownElement = null;
 
+        // register the canvas as CommandStackListener. The canvas can cleanup, smotth,...connections after document modification
+        //
+        this.commandStack.addEventListener($.proxy(function(event){
+        	if(event.isPostChangeEvent()===true){
+        		var cache = {};
+	        	this.getLines().each(function(i, line){
+	        		line.postProcess(cache);
+	        	});
+        	}
+        },this));
+        
         this.html.bind("mouseup touchend", $.proxy(function(event)
         {
             if (this.mouseDown === false)
