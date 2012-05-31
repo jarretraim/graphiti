@@ -71,6 +71,9 @@ graphiti.shape.diagram.Diagram = graphiti.SetFigure.extend({
      * @param attributes
      */
     repaint:function(attributes){
+        if(this.repaintBlocked===true || this.shape==null){
+            return;
+        }
         
         if (typeof attributes === "undefined") {
             attributes = {};

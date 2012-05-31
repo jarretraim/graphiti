@@ -226,13 +226,27 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
       return this.router;
     },
     
+    /**
+     * @method
+     * Calculate the path of the polyline
+     * 
+     * @private
+     */
+    calculatePath: function(){
+        
+        if(this.sourcePort===null || this.targetPort===null){
+            return;
+        }
+        
+        this._super();
+    },
     
     /**
      * @private
      **/
     repaint:function(attributes)
     {
-      if(this.shape===null){
+      if(this.repaintBlocked===true || this.shape===null){
           return;
       }
       
@@ -379,9 +393,9 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
     },
     
     /**
-     * @see graphiti.Figure#onOtherFigureMoved
+     * 
      **/
-    onOtherFigureMoved:function(/*:graphiti.Figure*/ figure)
+    onOtherFigureIsMoving:function(/*:graphiti.Figure*/ figure)
     {
       if(figure===this.sourcePort){
         this.setStartPoint(this.sourcePort.getAbsoluteX(), this.sourcePort.getAbsoluteY());

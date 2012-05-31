@@ -48,6 +48,10 @@ graphiti.shape.basic.LineResizeHandle = graphiti.shape.basic.Circle.extend({
      * @param attributes
      */
     repaint:function(attributes){
+        if(this.repaintBlocked===true || this.shape===null){
+            return;
+        }
+        
         if(typeof attributes === "undefined"){
             attributes= {};
         }

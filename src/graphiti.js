@@ -110,21 +110,21 @@ var graphiti =
             d = b[1].substring(0, b[1].length - 1);
             b = [];
             b = d.split(",");
-            e = b.length == 0 ? {x:0, y:0} : {x:b[0], y:b[1]};
+            e = b.length === 0 ? {x:0, y:0} : {x:b[0], y:b[1]};
           }else {
-            if(a[i].substring(0, 1) == "r") {
+            if(a[i].substring(0, 1) === "r") {
               d = a[i];
               b = d.split("(");
               d = b[1].substring(0, b[1].length - 1);
               b = d.split(",");
-              h = b.length == 0 ? {x:0, y:0, z:0} : {x:b[0], y:b[1], z:b[2]};
+              h = b.length === 0 ? {x:0, y:0, z:0} : {x:b[0], y:b[1], z:b[2]};
             }else {
-              if(a[i].substring(0, 1) == "s") {
+              if(a[i].substring(0, 1) === "s") {
                 d = a[i];
                 b = d.split("(");
                 d = b[1].substring(0, b[1].length - 1);
                 b = d.split(",");
-                j = b.length == 0 ? {x:1, y:1} : {x:b[0], y:b[1]};
+                j = b.length === 0 ? {x:1, y:1} : {x:b[0], y:b[1]};
               }
             }
           }
@@ -165,4 +165,4 @@ function pushErrorStack(/*:Exception*/ e, /*:String*/ functionName)
 {
   _errorStack_.push(functionName+"\n");
   /*re*/throw e;
-};
+}

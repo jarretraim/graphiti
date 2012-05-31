@@ -36,10 +36,12 @@ graphiti.ResizeHandle = graphiti.shape.basic.Rectangle.extend({
  
       this._super();
       
-      if(graphiti.isTouchDevice)
+      if(graphiti.isTouchDevice){
           this.setDimension(15,15);
-      else
+      }
+      else{
           this.setDimension(8,8);
+      }
           
       this.type = type;
       this.canvas = canvas;

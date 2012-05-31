@@ -154,8 +154,9 @@ graphiti.util.ArrayList = Class.extend({
      */
      addAll:function(list)
      {
-        if(!(list instanceof graphiti.util.ArrayList))
+        if(!(list instanceof graphiti.util.ArrayList)){
           throw "Unable to handle unknown object type in ArrayList.addAll";
+        }
 
         for (var i=0;i<list.getSize(); i++)
         {
@@ -394,7 +395,8 @@ graphiti.util.ArrayList = Class.extend({
              throw "parameter must type of 'function'";
          }
          
-         for (var i=0; i<this.getSize(); i++) 
+         var s= this.getSize();
+         for (var i=0; i<s; i++) 
          {
             if(func(i, this.data[i])===false)
                 break;

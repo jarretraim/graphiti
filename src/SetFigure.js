@@ -52,7 +52,7 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
      **/
     repaint : function(attributes)
     {
-        if(this.shape===null){
+        if(this.repaintBlocked===true || this.shape===null){
             return;
         }
         
@@ -74,7 +74,7 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
     {
        // NOTE: don't change the order of the two calles. This defines the z-oder in the canvas.
        // The "set" should always be on top.
-       var shape= this.canvas.paper.rect(this.getX(),this.getY(),this.getWidth(), this.getHeight());;
+       var shape= this.canvas.paper.rect(this.getX(),this.getY(),this.getWidth(), this.getHeight());
        this.svgNodes = this.createSet();
        return shape;
     },

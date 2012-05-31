@@ -103,7 +103,7 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
       * @param attributes
       */
      repaint:function(attributes){
-         if(this.shape===null){
+         if(this.repaintBlocked===true || this.shape===null){
              return;
          }
 
@@ -374,7 +374,7 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
      * 
      * @param {graphiti.Figure} figure The figure which has been moved
      **/
-    onOtherFigureMoved:function(/*:graphiti.Figure*/ figure)
+    onOtherFigureIsMoving:function( figure)
     {
       this.repaint();
       

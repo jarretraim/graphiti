@@ -62,6 +62,10 @@ graphiti.shape.diagram.Sparkline = graphiti.shape.diagram.Diagram.extend({
      * @param attributes
      */
     repaint: function(attributes){
+        if(this.repaintBlocked===true || this.shape===null){
+            return;
+        }
+        
         if (typeof attributes === "undefined") {
             attributes = {};
         }

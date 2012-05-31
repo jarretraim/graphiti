@@ -129,34 +129,5 @@ graphiti.layout.connection.ConnectionRouter = Class.extend({
     route:function( connection)
     {
     	throw "subclasses must implement the method [ConnectionRouter.route]";
-    },
-    
-    /**
-     * @method
-     * Called after all routings has been done. This can be used to smoth the edges or add some 
-     * bridges on connections crossings. 
-     * Don't change the routing! This method will be called for ALL connections in the canvas at every StackChangeEvent.
-     * 
-     * @param {graphiti.Connection} relatedConnection The Connection to postprocess
-     * @param {graphiti.Canvas} canvas the related canvas.
-     * @param {Object} postprocessCache Cache to use during this postprocess cycle.
-     */
-    postProcess: function(relatedConnection, canvas, postprocessCache){
-        // calculate all intersections of all connections
-    	// ....but only once
-    	if(typeof postprocessCache.intersetions === "undefined"){
-	    	var lines = canvas.getLines().clone();
-	    	postprocessCache.intersetions = new graphiti.util.ArrayList();
-	    	while(lines.getSize()>0){
-	    		var l1 = lines.removeElementAt(0);
-    			lines.each(function(ii,l2){
-    				var partInter =l1.intersection(l2);
-    				partInter.each(function(iii,p){
-    				    l1.addBridge(p);	
-    				});
-    				postprocessCache.intersetions.addAll(partInter);
-    			});
-	    	}
-    	}
-    }
+    }   
 });

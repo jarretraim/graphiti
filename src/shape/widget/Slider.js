@@ -132,7 +132,7 @@ graphiti.shape.widget.Slider = graphiti.shape.widget.Widget.extend({
      */
     repaint: function(attributes){
         
-        if (this.shape === null){
+        if (this.repaintBlocked===true || this.shape === null){
             return;
         }
 

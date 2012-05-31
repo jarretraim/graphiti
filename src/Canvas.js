@@ -1,5 +1,4 @@
-﻿
-/**
+﻿/**
  * @class graphiti.Canvas
  * Interactive paint area of the graphiti library.
  * <br>
@@ -20,7 +19,6 @@ $(document).ready(function() {
     canvas.addFigure(figure2,120,150);
 
 });
-
 
  * </pre>
  * @inheritable
@@ -49,6 +47,8 @@ graphiti.Canvas = Class.extend(
         // .... I don't like these.
         this.html.css({"-webkit-tap-highlight-color": "rgba(0,0,0,0)"});
         
+        // Drag&Drop Handling from foreign DIV into the Canvas
+        //
         // Create the droppable area for the css class "graphiti_droppable"
         // This can be done by a palette of toolbar or something else.
         // For more information see : http://jqueryui.com/demos/droppable/
@@ -145,26 +145,51 @@ graphiti.Canvas = Class.extend(
         this.commonPorts = new graphiti.util.ArrayList();
         this.dropTargets = new graphiti.util.ArrayList();
        
+        // listener for selection handling
         this.selectionListeners = new graphiti.util.ArrayList();
 
+        // The CommandStack for undo/redo ooperations
         this.commandStack = new graphiti.command.CommandStack();
-
+       
+        
+        // INTERSECTION/CROSSING handling for connections and lines
+        //
+        
+        this.linesToRepaintAfterDragDrop =  new graphiti.util.ArrayList();;
+        
+        this.lineIntersections = new graphiti.util.ArrayList();
+        
+        // Calculate all intersection between the different lines
+        //
+        this.commandStack.addEventListener($.proxy(function(event){
+        	if(event.isPostChangeEvent()===true){
+        	    this.lineIntersections = new graphiti.util.ArrayList();
+                var lines = this.getLines().clone();
+                while(lines.getSize()>0){
+                    var l1 = lines.removeElementAt(0);
+                    lines.each($.proxy(function(ii,l2){
+                        var partInter =l1.intersection(l2);
+                        if(partInter.getSize()>0){
+                           this.lineIntersections.add({line:l1, other:l2, intersection:partInter});
+                           this.lineIntersections.add({line:l2, other:l1, intersection:partInter});
+                        }
+                    },this));
+                }
+                this.linesToRepaintAfterDragDrop.each(function(i,line){
+                    line.svgPathString=null;
+                    line.repaint();
+                });
+                this.linesToRepaintAfterDragDrop =  new graphiti.util.ArrayList();;
+        	}
+        },this));
+        
+        // DragDrop handling
+        //
         this.mouseDown  = false;
         this.mouseDownX = 0;
         this.mouseDownY = 0;
         this.mouseDraggingElement = null;
         this.mouseDownElement = null;
-
-        // register the canvas as CommandStackListener. The canvas can cleanup, smotth,...connections after document modification
-        //
-        this.commandStack.addEventListener($.proxy(function(event){
-        	if(event.isPostChangeEvent()===true){
-        		var cache = {};
-	        	this.getLines().each(function(i, line){
-	        		line.postProcess(cache);
-	        	});
-        	}
-        },this));
         
         this.html.bind("mouseup touchend", $.proxy(function(event)
         {
@@ -406,6 +431,7 @@ graphiti.Canvas = Class.extend(
      
       if(figure instanceof graphiti.shape.basic.Line){
         this.lines.add(figure);
+        this.linesToRepaintAfterDragDrop = this.lines;
       }
       else{
         this.figures.add(figure);
@@ -426,7 +452,6 @@ graphiti.Canvas = Class.extend(
       figure.repaint();
       figure.fireMoveEvent();
     },
-
 
     /**
      * @method
@@ -517,9 +542,27 @@ graphiti.Canvas = Class.extend(
          if(figure.id==id)
             return figure;
       }
-      return null;;
+      return null;
     },
 
+    /**
+     * @method
+     * Return all intersections between the given line and all other
+     * lines in the canvas
+     * 
+     * @param {graphiti.Line} line the line for the intersection test
+     * @return {graphiti.util.ArrayList} 
+     */
+    getIntersection:function(line){
+       var result = new graphiti.util.ArrayList();
+       this.lineIntersections.each($.proxy(function(i, entry){
+           if(entry.line ===line){
+               result.addAll(entry.intersection);
+           }
+       },this));
+       return result;
+    },
+    
     /**
      * Enable/disable the snap to grid behavior of the canvas. All figures will snap to the grid during the
      * the drag and drop operation.
@@ -1254,10 +1297,7 @@ graphiti.Canvas = Class.extend(
             }
         }
 
- //       if(canDragStart===false){
- //           return;
- //       }
-        
+
         if (figure !== this.currentSelection && figure !== null && figure.isSelectable()===true) {
 
             this.hideResizeHandles();
@@ -1297,6 +1337,28 @@ graphiti.Canvas = Class.extend(
     onMouseDrag : function(/* :int */dx,/* :int */dy)
     {
        if (this.mouseDraggingElement !== null) {
+            // it is only neccessary to repaint all connections if we change the layout of any connection
+            // This can only happen if we:
+            //    - at least one intersection
+            //    - we move a "Node. Only a node can have ports ans connections
+            if(this.linesToRepaintAfterDragDrop.isEmpty()===true && (this.mouseDraggingElement instanceof graphiti.shape.node.Node)){
+                var nodeConnections = this.mouseDraggingElement.getConnections();
+                var newLineIntersections = this.lineIntersections.clone();
+                this.lineIntersections.each($.proxy(function(i, inter){
+                    
+                    if(nodeConnections.contains(inter.line) || nodeConnections.contains(inter.other)){
+                        newLineIntersections.remove(inter);
+                        this.linesToRepaintAfterDragDrop.add(inter.line);
+                        this.linesToRepaintAfterDragDrop.add(inter.other);
+                    }
+                },this));
+                this.lineIntersections = newLineIntersections;
+                this.linesToRepaintAfterDragDrop.each(function(i, line){
+                    line.svgPathString=null;
+                    line.repaint();
+                });
+            }
+            
             this.mouseDraggingElement.onDrag(dx, dy);
             var p = this.fromDocumentToCanvasCoordinate(this.mouseDownX + (dx/this.zoomFactor), this.mouseDownY + (dy/this.zoomFactor));
             

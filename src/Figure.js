@@ -285,7 +285,7 @@ graphiti.Figure = Class.extend({
      **/
      repaint : function(attributes)
      {
-         if (this.shape === null){
+         if (this.repaintBlocked===true || this.shape === null){
              return;
          }
 
@@ -381,11 +381,12 @@ graphiti.Figure = Class.extend({
     /**
      * @method
      * Called by the framework if the figure returns false for the drag operation. In this
-     * case we send a "panning" event - mouseDown + mouseMove. This is very usefull for
+     * case we send a "panning" event - mouseDown + mouseMove. This is very useful for
      * UI-Widget like slider, spinner,...
      * 
      * @param {Number} dx the x difference between the mouse down operation and now
      * @param {Number} dy the y difference between the mouse down operation and now
+     * @template
      */
     onPanning: function(dx, dy){
         
@@ -978,25 +979,24 @@ graphiti.Figure = Class.extend({
      **/
     fireMoveEvent: function()
     {
-      var size= this.moveListener.getSize();
-      for(var i=0;i<size;i++)
-      {
-        this.moveListener.get(i).onOtherFigureMoved(this);
-      }
+        // first call. Reured for connections to update the routing,...
+        //
+        this.moveListener.each($.proxy(function(i, item){
+            item.onOtherFigureIsMoving(this);
+        },this));
+        
     },
     
     /**
      * @method
-     * Fired if a figure has been moved. This object receives only this event if it has registered 
-     * before.
+     * Fired if a figure is moving.
      *
      * @param {graphiti.Figure} figure The figure which has changed its position
      * @template
      */
-    onOtherFigureMoved:function(figure)
-    {
+    onOtherFigureIsMoving:function(figure){
     },
-
+    
     /**
      * @method
      * Returns the Command to perform the specified Request or null.
@@ -1006,8 +1006,9 @@ graphiti.Figure = Class.extend({
      **/
     createCommand:function( request)
     {
-      if(request===null)
+      if(request===null){
           return null;
+      }
       
       if(request.getPolicy() === graphiti.EditPolicy.MOVE)
       {

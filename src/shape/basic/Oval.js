@@ -56,7 +56,7 @@ graphiti.shape.basic.Oval = graphiti.VectorFigure.extend({
     **/
    repaint: function(attributes)
    {
-       if(this.shape===null){
+       if(this.repaintBlocked===true || this.shape===null){
            return;
        }
 

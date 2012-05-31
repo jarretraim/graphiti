@@ -42,8 +42,14 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
      * 
      */
     init: function(startX, startY, endX, endY ) {
-        this._super();
+        // for performance reasons if we made some bulk changes to the object
+        // For this case we can block the repaint and enable it after the bulk
+        // Update of the properties
+        this.repaintBlocked = false;
         
+        // click area for the line hit test
+        this.corona = 10;
+        this.isGlowing = false;
         this.lineColor = this.DEFAULT_COLOR;
         this.stroke=1;
         
@@ -61,9 +67,9 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
             this.endX   = 100;
             this.endY   = 100;
         }
-        // click area for the line hit test
-        this.corona = 10;
-        this.isGlowing = false;
+
+        this._super();
+        
 
         this.setSelectable(true);
         this.setDeleteable(true);
@@ -100,7 +106,7 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
     */
    repaint:function(attributes)
    {
-       if(this.shape===null){
+       if(this.repaintBlocked===true || this.shape===null){
            return;
        }
 
@@ -467,8 +473,9 @@ graphiti.shape.basic.Line.intersection = function(a1, a2, b1, b2) {
         var ua = ua_t / u_b;
         var ub = ub_t / u_b;
 
-        if ( 0 <= ua && ua <= 1 && 0 <= ub && ub <= 1 ) {
-            result = new graphiti.geo.Point(a1.x + ua * (a2.x - a1.x), a1.y + ua * (a2.y - a1.y));
+//        if ( 0 <= ua && ua <= 1 && 0 <= ub && ub <= 1 ) {
+        if ( 0 < ua && ua < 1 && 0 < ub && ub < 1 ) {
+            result = new graphiti.geo.Point(parseInt(a1.x + ua * (a2.x - a1.x)), parseInt(a1.y + ua * (a2.y - a1.y)));
         } else {
             result = null;// No Intersection;
         }
@@ -546,3 +553,4 @@ graphiti.shape.basic.Line.hit= function( coronaWidth, X1, Y1,  X2,  Y2, px, py)
     }
     return Math.sqrt(lenSq)<coronaWidth;
 };
+

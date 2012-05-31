@@ -12,121 +12,169 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
     
 	NAME : "graphiti.shape.basic.PolyLine",
 
-    BRIDE_HORIZONTAL : " r 0 0 3 -4 7 -4 10 0 13 0 ",
+    BRIDE_HORIZONTAL_LR : " r 0 0 3 -4 7 -4 10 0 13 0 ", // Left to right
+    BRIDE_HORIZONTAL_RL : " r 0 0 -3 -4 -7 -4 -10 0 -13 0 ", // right to left
 
     /**
      * @constructor
      * Creates a new figure element which are not assigned to any canvas.
      */
     init: function( ) {
-      this._super();
-      
-      this.oldPoint=null;
-      
+        
       // internal status handling for performance reasons
       //
       this.svgPathString = null;
-      
-      // all line segments with start/end as simple object member
-      this.lineSegments = new graphiti.util.ArrayList();
-    
-      // all possible brides (line crossings)
-      this.bridges = new graphiti.util.ArrayList();
-      
-      this.setColor(new  graphiti.util.Color(0,0,115));
-      this.setStroke(1);
+      this.oldPoint=null;
       
       // possible decorations ( e.g. a Label) of the Connection
       this.children = new graphiti.util.ArrayList();
+      
+      // all line segments with start/end as simple object member
+      this.lineSegments = new graphiti.util.ArrayList();
+      this.basePoints = new graphiti.util.ArrayList();
+      
+      // all possible brides (line crossings)
+      this.bridges = new graphiti.util.ArrayList();
 
+      this._super();
+      
+      
+      this.setColor(new  graphiti.util.Color(0,0,115));
+      this.setStroke(1);
     },
     
     /**
      * @method
      * Set the start point of the line.
-     * This method fires a <i>document dirty</i> event.
      *
      * @param {Number} x the x coordinate of the start point
      * @param {Number} y the y coordinate of the start point
      **/
-    setStartPoint:function( x, y)
-    {
-        this.svgPathString=null;
+    setStartPoint:function( x, y){
+        this.repaintBlocked=true;
         this._super(x,y);
+        this.calculatePath();
+        
+        this.repaintBlocked=false;
+        this.repaint();
     },
 
     /**
      * Set the end point of the line.
-     * This method fires a <i>document dirty</i> event.
      *
      * @param {Number} x the x coordinate of the end point
      * @param {Number} y the y coordinate of the end point
      **/
-    setEndPoint:function(x,  y)
-    {
-        this.svgPathString=null;
+    setEndPoint:function(x,  y){
+        this.repaintBlocked=true;
         this._super(x,y);
+        this.calculatePath();
+        
+        this.repaintBlocked=false;
+        this.repaint();
     },
 
-
+    /**
+     * @method
+     * Calculate the path of the polyline
+     * 
+     * @private
+     */
+    calculatePath: function(){
+        
+        if(this.shape===null){
+            return;
+        }
+    
+        this.svgPathString = null;
+        // cleanup the routing cache
+        //
+        this.oldPoint=null;
+        this.lineSegments = new graphiti.util.ArrayList();
+        this.basePoints = new graphiti.util.ArrayList();
+    
+        // Use the internal router
+        //
+        this.router.route(this);
+        
+        for(var i=0; i<this.children.getSize();i++) {
+            var entry = this.children.get(i);
+            entry.locator.relocate(i, entry.figure);
+        }
+    },
     
     /**
      * @private
      **/
-    repaint:function()
+    repaint : function()
     {
-      if(this.shape===null){
+      if(this.repaintBlocked===true || this.shape===null){
           return;
       }
       
-      var i=0;
+      if(this.svgPathString===null){
+          if(this.lineSegments.getSize()==0){
+              this.calculatePath();
+          }
+          
+          
+          var intersections = this.getCanvas().getIntersection(this);
+          
+          var i=0;
+          // paint the decorator if any exists
+          //
+          if(this.getSource().getParent().isMoving===false && this.getTarget().getParent().isMoving===false )
+          {
+            if(this.targetDecorator!==null){
+              this.targetDecorator.paint(new graphiti.Graphics(this.graphics,this.getEndAngle(),this.getEndPoint()));
+            }
       
-     // routing is only neccessary if any start or endpoint has ben changed....This is an expensive method
-     // avooid unneccessary usage
-     //
-     if(this.svgPathString === null){
-    	
-        this.startStroke();
-    
-        // Use the internal router if any has been set....
-        //
-        this.router.route(this);
-
-        // paint the decorator if any exists
-        //
-        if(this.getSource().getParent().isMoving===false && this.getTarget().getParent().isMoving===false )
-        {
-          if(this.targetDecorator!==null){
-            this.targetDecorator.paint(new graphiti.Graphics(this.graphics,this.getEndAngle(),this.getEndPoint()));
+            if(this.sourceDecorator!==null){
+              this.sourceDecorator.paint(new graphiti.Graphics(this.graphics,this.getStartAngle(),this.getStartPoint()));
+            }
           }
-    
-          if(this.sourceDecorator!==null){
-            this.sourceDecorator.paint(new graphiti.Graphics(this.graphics,this.getStartAngle(),this.getStartPoint()));
-          }
-        }
-        
-        if(this.shape!==null)
-        {
+          
           var ps = this.getPoints();
           var p = ps.get(0);
-          var path = "M"+p.x+" "+p.y;
-          for( i=0;i<ps.getSize();i++)
-          {
-            p = ps.get(i);
-            path=path+"L"+p.x+" "+p.y;
-          }
-          this.svgPathString = path;
-        }
-        console.log(this.svgPathString);
-        this.finishStroke();
-    
-        for( i=0; i<this.children.getSize();i++)
-        {
-            var entry = this.children.get(i);
-            entry.locator.relocate(entry.figure);
-        }
+          var path = ["M",p.x," ",p.y];
+          var oldP = p;
+          for( i=1;i<ps.getSize();i++){
+                p = ps.get(i);
+                
+                intersections.sort("x");
+                
+                // check for intersection and paint a bridge if required
+                // line goes from left to right
+                //
+                var bridgeWidth = 5;
+                var bridgeCode = this.BRIDE_HORIZONTAL_LR;
+                
+                // line goes from right->left. Inverse the bridge and the bridgeWidth
+                //
+                if (oldP.x > p.x) {
+                    intersections = intersections.reverse();
+                    bridgeCode =this.BRIDE_HORIZONTAL_RL;
+                    bridgeWidth = -bridgeWidth;
+                }
+                
+                intersections.each($.proxy(function(ii, interP)
+                {
+                    if (graphiti.shape.basic.Line.hit(1, oldP.x, oldP.y, p.x, p.y, interP.x, interP.y) === true) {
+                        // we draw only horizontal bridges. Just a design issue
+                        if (p.y === interP.y) {
+                            path.push("L", (interP.x - bridgeWidth), " ", interP.y);
+                            path.push(bridgeCode);
+                        }
+                    }
+
+                }, this));
+
+                path.push("L", p.x, " ", p.y);
+                oldP = p;
+            }
+          this.svgPathString = path.join("");
       }
-     
+      
       this._super({path:this.svgPathString});
     },
     
@@ -140,8 +188,7 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
      * @return {Boolean} true if this port accepts the dragging port for a drop operation
      * @template
      **/
-    onDragEnter : function( draggedFigure )
-    {
+    onDragEnter : function( draggedFigure ){
     	this.setGlow(true);
     	return true;
     },
@@ -153,32 +200,11 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
      * @param {graphiti.Figure} draggedFigure The figure which is currently dragging
      * @template
      **/
-    onDragLeave:function( draggedFigure )
-    {
+    onDragLeave:function( draggedFigure ){
     	this.setGlow(false);
     },
 
-    
-    /**
-     * @private
-     *
-     **/
-    startStroke:function()
-    {
-       this.oldPoint=null;
-       this.lineSegments = new graphiti.util.ArrayList();
-       this.bridges = new graphiti.util.ArrayList();
-    },
 
-    /**
-     * @private
-     *
-     **/
-    finishStroke:function()
-    {
-      this.oldPoint=null;
-    },
-    
     /**
      * @method
      * Returns the fulcrums of the connection
@@ -187,18 +213,7 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
      **/
     getPoints:function()
     {
-      var result = new graphiti.util.ArrayList();
-      var line=null;
-      for(var i = 0; i< this.lineSegments.getSize();i++)
-      {
-         line = this.lineSegments.get(i);
-         result.add(line.start);
-      }
-      // add the last point
-      if(line!==null){
-        result.add(line.end);
-      }
-      return result;
+        return this.basePoints;
     },
     
     /**
@@ -213,41 +228,35 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
     
     /**
      * @method
-     * Add optional bridge to the line. Is not part of the PolyLine. It is just for the
-     * visual representation.
+     * used for the router to add the calculated points
      * 
-     * @param {graphiti.geo.Point} point the coordinate to bridge
-     */
-    addBridge: function(point){
-        this.bridges.add(point);	
-    },
-    
-    /*
      * @private
      *
      **/
     addPoint:function(/*:graphiti.geo.Point*/ p)
     {
       p = new graphiti.geo.Point(p.x, p.y);
+      this.basePoints.add(p);
       if(this.oldPoint!==null){
         // store the painted line segment for the "mouse selection test"
         // (required for user interaction)
-        var line = {};
-        line.start = this.oldPoint;
-        line.end   = p;
-        this.lineSegments.add(line);
+        this.lineSegments.add({start: this.oldPoint, end:p});
       }
       
-      this.oldPoint = {x: p.x, y:p.y};
+      this.oldPoint = p;
     },
 
     /**
-     * @see graphiti.Figure#onOtherFigureMoved
+     * @see graphiti.Figure#onOtherFigureHasMoved
      **/
-    onOtherFigureMoved:function(/*:graphiti.Figure*/ figure)
+    onOtherFigureIsMoving:function(/*:graphiti.Figure*/ figure)
     {
-      this.svgPathString = null;
+      this.repaintBlocked=true;
       this._super(figure);
+      this.calculatePath();
+      
+      this.repaintBlocked=false;
+      this.repaint();
     },
     
     /**
@@ -262,8 +271,7 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
      **/
     hitTest:function( px, py)
     {
-      for(var i = 0; i< this.lineSegments.getSize();i++)
-      {
+      for(var i = 0; i< this.lineSegments.getSize();i++){
          var line = this.lineSegments.get(i);
          if(graphiti.shape.basic.Line.hit(this.corona, line.start.x,line.start.y,line.end.x, line.end.y, px,py)){
            return true;
@@ -279,11 +287,10 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
      * @param {graphiti.EditPolicy} request describes the Command being requested
      * @return {graphiti.command.Command}
      **/
-    createCommand:function(request)
+    createCommand:function(request) 
     {
  
-      if(request.getPolicy() === graphiti.EditPolicy.DELETE)
-      {
+      if(request.getPolicy() === graphiti.EditPolicy.DELETE){
         if(this.isDeleteable()===true){
           return new graphiti.command.CommandDelete(this);
         }
@@ -292,3 +299,4 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
       return null;
     }
 });
+

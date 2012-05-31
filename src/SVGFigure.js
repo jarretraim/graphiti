@@ -50,8 +50,9 @@ graphiti.SVGFigure = graphiti.SetFigure.extend({
         }
         
         var findDim   = new RegExp('<svg width="(.*?)" height="(.*?)" .*?>','gi');
-        if(match=findDim.exec(rawSVG)){
-            this.setDimension(parseInt(match[1]), parseInt(match[2]));
+        var match=findDim.exec(rawSVG);
+        if(match){
+            this.setDimension(parseInt(match[1],10), parseInt(match[2],10));
         }
         
         var findAttr  = new RegExp('([a-z0-9\-]+)="(.*?)"','gi');
@@ -75,16 +76,17 @@ graphiti.SVGFigure = graphiti.SetFigure.extend({
                 attr[RegExp.$1] = RegExp.$2;
               break;
             }
-          };
+          }
           
           
           if ( style !== null){
-            while(findStyle.exec(style))
+            while(findStyle.exec(style)){
               attr[RegExp.$1] = RegExp.$2;
+            }
           }
           
           if (typeof attr['stroke-width'] === 'undefined'){
-              attr['stroke-width'] = (typeof attr['stroke'] === 'undefined' ? 0 : 1);
+              attr['stroke-width'] = (typeof attr.stroke === 'undefined' ? 0 : 1);
           }
           
           switch(node) {
@@ -98,35 +100,34 @@ graphiti.SVGFigure = graphiti.SetFigure.extend({
               shape = canvas.paper.ellipse();
               break;
             case 'path':
-              attr['fill'] ="none";
-              shape = canvas.paper.path(attr['d']);
+              attr.fill ="none";
+              shape = canvas.paper.path(attr.d);
               break;
             case 'line':
-              attr['d']= "M "+attr["x1"]+" "+attr["y1"]+"L"+attr["x2"]+" "+attr["y2"];
-              attr['fill'] ="none";
-              shape = canvas.paper.path(attr['d']);
+              attr.d= "M "+attr.x1+" "+attr.y1+"L"+attr.x2+" "+attr.y2;
+              attr.fill ="none";
+              shape = canvas.paper.path(attr.d);
              break;
             case 'polyline':
-              var path = attr['points'];
-              attr['d'] = "M "+path.replace(" "," L");
-              shape = canvas.paper.path(attr['d']);
+              var path = attr.points;
+              attr.d = "M "+path.replace(" "," L");
+              shape = canvas.paper.path(attr.d);
               break;
             case 'polygon':
-              shape = canvas.paper.polygon(attr['points']);
+              shape = canvas.paper.polygon(attr.points);
               break;
             case 'image':
               shape = canvas.paper.image();
               break;
-            break;
             //-F case 'text':
             //-F   shape = this.text();
             //-F break;
           }
-          if(shape!=null){
+          if(shape!==null){
               shape.attr(attr);
               set.push(shape);
           }
-        };
+        }
       } catch (error) {
         alert('The SVG data you entered was invalid! (' + error + ')');
       }

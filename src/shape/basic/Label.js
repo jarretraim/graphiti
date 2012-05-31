@@ -63,7 +63,7 @@ graphiti.shape.basic.Label= graphiti.SetFigure.extend({
      **/
     repaint: function(attributes)
     {
-        if(this.shape===null){
+        if(this.repaintBlocked===true || this.shape===null){
             return;
         }
 

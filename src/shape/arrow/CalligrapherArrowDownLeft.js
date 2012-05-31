@@ -42,7 +42,7 @@ graphiti.shape.arrow.CalligrapherArrowDownLeft = graphiti.SVGFigure.extend({
      **/
     repaint : function(attributes)
     {
-        if(this.shape===null){
+        if(this.repaintBlocked===true || this.shape===null){
             return;
         }
 

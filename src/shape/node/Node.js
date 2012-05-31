@@ -156,6 +156,30 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
     
     /**
      * @method
+     * Return the input port with the corresponding name.
+     *
+     * 
+     * @param {String/Number} portName The name or numeric index of the port to return.
+     * @return {graphiti.InputPort} Returns the port with the hands over name or null.
+     **/
+    getHybridPort: function( portName)
+    {
+        if(typeof portName === "number"){
+            return this.hybridPorts.get(portName);
+        }
+        
+        for ( var i = 0; i < this.hybridPorts.getSize(); i++) {
+            var port = this.hybridPorts.get(i);
+            if (port.getName() === portName) {
+                return port;
+            }
+        }
+      
+        return null;
+    },
+    
+    /**
+     * @method
      * Add a port to this node at the given position.<br>
      *
      * @param {graphiti.Port} port The new port to add.
@@ -257,6 +281,24 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
     	return newPort;
     },
     
+    getConnections: function(){
+        var connections = new graphiti.util.ArrayList();
+        var ports = this.getPorts();
+        for(var i=0; i<ports.getSize(); i++)
+        {
+          var port = ports.get(i);
+          // Do NOT add twice the same connection if it is linking ports from the same node
+          for (var c = 0, c_size = port.getConnections().getSize() ; c< c_size ; c++)
+          {
+              if(!connections.contains(port.getConnections().get(c)))
+              {
+                connections.add(port.getConnections().get(c));
+              }
+          }
+        }
+        return connections;
+    },
+
     /**
      * @private
      **/
