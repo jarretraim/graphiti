@@ -1,7 +1,8 @@
 
 /**
- * @class graphiti.command.CommandDelete
- * Commoand which deletes a figure. Supports the CommandStack.
+ * @class graphiti.command.CommandAdd
+ * 
+ * Command to add a figure with CommandStack support.
  * 
  * @extends graphiti.command.Command
  */

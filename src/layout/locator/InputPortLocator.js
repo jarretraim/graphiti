@@ -18,7 +18,6 @@ graphiti.layout.locator.InputPortLocator = graphiti.layout.locator.Locator.exten
      */
     init:function(  ){
       this._super();
-
     },    
    
    /**

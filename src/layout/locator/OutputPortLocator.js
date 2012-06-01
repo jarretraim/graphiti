@@ -1,5 +1,5 @@
 /**
- * @class graphiti.layout.locator.InputPortLocator
+ * @class graphiti.layout.locator.OutputPortLocator
  * 
  * Repositions a Figure attached to a Connection when the 
  * Connection is moved. Provides for alignment at the start 

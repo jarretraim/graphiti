@@ -70,6 +70,8 @@ graphiti.shape.basic.Rectangle = graphiti.VectorFigure.extend({
     },
 
     /**
+     * @method
+     * 
      * @inheritdoc
      */
     createShapeElement : function()

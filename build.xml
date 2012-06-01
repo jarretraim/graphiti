@@ -102,8 +102,8 @@
 	<!-- =================================================================== -->
 	<target name="productive"  description="Compress each JS file"  >
 		<antcall target="clean"/>
-		<antcall target="prepare"/>
 		<antcall target="doc"/>
+		<antcall target="prepare"/>
 
 		<mkdir  dir="${dist.dir}"/>
 		<delete quiet="true" file="${dist.dir}/graphiti_${archiv_infix}_${graphiti.version}.zip"/>
