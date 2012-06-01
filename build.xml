@@ -5,16 +5,16 @@
 	<property name="graphiti.version.minor"    value="9"/>
 	<property name="graphiti.version.bugfix"   value="30"/>
 	<property name="graphiti.version"          value="${graphiti.version.major}.${graphiti.version.minor}.${graphiti.version.bugfix}"/>
-    <property name="src.dir"       location="${basedir}/src" />
-    <property name="example.dir"   location="${basedir}/examples" />
-    <property name="lib.dir"       location="${basedir}/lib" />
+	<property name="src.dir"       location="${basedir}/src" />
+	<property name="example.dir"   location="${basedir}/examples" />
+	<property name="lib.dir"       location="${basedir}/lib" />
 
 	<property name="localweb.dir"  value="/Users/andherz/Sites/graphiti/"/>
-	
+
 	<property name="prepared.dir"  value="./TMP/prepared"/>
 	<property name="normal.dir"    value="./TMP/normal"/>
 	<property name="compress.dir"  value="./TMP/compressed"/>
-	
+
 	<property name="build.dir"     value="./build"/>
 
 	<path id="compile.classpath">
@@ -27,12 +27,16 @@
 	<taskdef name="compress-js" classname="com.webpanes.tools.ant.taskdefs.CompressJS">
 		<classpath refid="compile.classpath"/>
 	</taskdef>
-	
+
 	<taskdef name="jslint" classname="net.happygiraffe.jslint.ant.JSLintTask">
-	  <classpath>
-	    <pathelement location="./build/jslint4java-1.2.1+rhino.jar"/>
-	  </classpath>
+		<classpath>
+			<pathelement location="./build/jslint4java-1.2.1+rhino.jar"/>
+		</classpath>
 	</taskdef>
+
+	<target name="clean" description="replace Version in the js files">
+		<delete quiet="true" dir="${prepared.dir}"/>
+	</target>
 	
 	<!-- =================================================================== -->
 	<!-- PREPARE                                                             -->
@@ -40,222 +44,316 @@
 	<!-- Dabei wird @VERSION@ in allen files ersetzt.                        -->
 	<!-- =================================================================== -->
 	<target name="prepare" description="replace Version in the js files">
-	   <delete quiet="true" dir="${prepared.dir}"/>
-	   <mkdir  dir="${prepared.dir}"/>
-	   <mkdir  dir="${prepared.dir}/src"/>
-	   <mkdir  dir="${prepared.dir}/lib"/>
-	   <mkdir  dir="${prepared.dir}/examples"/>
-	   <filter token="VERSION" value="${graphiti.version}"/>
-	   
-	   <copy todir="${prepared.dir}/src" filtering="true" encoding="ISO-8859-1">
-	      <fileset dir="${src.dir}">
-	         <include name="**/*.html"/>
-	         <include name="**/*.js"/>
-	      </fileset>
-	   </copy>
-		
-	   <copy todir="${prepared.dir}/lib" filtering="true" encoding="ISO-8859-1">
-	      <fileset dir="${lib.dir}">
-	         <include name="**/*.html"/>
-	         <include name="**/*.js"/>
-	      </fileset>
-	   </copy>
-		
-	   <copy todir="${prepared.dir}/examples" filtering="true" encoding="ISO-8859-1">
-	      <fileset dir="${example.dir}">
-	         <include name="**/*.html"/>
-	         <include name="**/*.js"/>
-	      </fileset>
-	   </copy>
-	   
+		<mkdir  dir="${prepared.dir}"/>
+		<mkdir  dir="${prepared.dir}/src"/>
+		<mkdir  dir="${prepared.dir}/lib"/>
+		<mkdir  dir="${prepared.dir}/examples"/>
+		<filter token="VERSION" value="${graphiti.version}"/>
+
+		<copy todir="${prepared.dir}/src" filtering="true" encoding="ISO-8859-1">
+			<fileset dir="${src.dir}">
+				<include name="**/*.css" />
+				<include name="**/*.html" />
+				<include name="**/*.js" />
+			</fileset>
+		</copy>
+
+		<copy todir="${prepared.dir}/lib" filtering="true" encoding="ISO-8859-1">
+			<fileset dir="${lib.dir}">
+				<include name="**/*.css" />
+				<include name="**/*.html" />
+				<include name="**/*.js" />
+			</fileset>
+		</copy>
+
+		<copy todir="${prepared.dir}/examples" filtering="true" encoding="ISO-8859-1">
+			<fileset dir="${example.dir}">
+				<include name="**/*.css" />
+				<include name="**/*.html" />
+				<include name="**/*.js" />
+			</fileset>
+		</copy>
+		<copy todir="${prepared.dir}/examples" filtering="false">
+			<fileset dir="${example.dir}">
+				<exclude name="**/*.css" />
+				<exclude name="**/*.html" />
+				<exclude name="**/*.js" />
+			</fileset>
+		</copy>
+
 	</target>
-	
+
 	<!-- =================================================================== -->
 	<!-- PRODUCTIVE                                                          -->
 	<!-- =================================================================== -->
-	<target name="productive" depends="doc, prepare" description="Compress each JS file"  >
-	  <mkdir  dir="${compress.dir}"/>
-
-	  <compress-js todir="${compress.dir}" stripCR="true">
-	     <fileset dir="${prepared.dir}/src">
-	        <include name="**/*.js"/>
-	     </fileset>
-	  </compress-js>
+	<target name="productive" depends="clean, prepare, doc" description="Compress each JS file"  >
+		<antcall target="clean"/>
+		<antcall target="prepare"/>
+		<antcall target="doc"/>
+		
+		<compress-js todir="${compress.dir}" stripCR="true">
+			<fileset dir="${prepared.dir}/src">
+				<include name="**/*.js"/>
+			</fileset>
+		</compress-js>
 
 		<replaceregexp
 	            match="(?s)&lt;!--REGEXP_START_REMOVE--&gt;(.*)&lt;!--REGEXP_END_REMOVE--&gt;"
 	            replace="&lt;SCRIPT src='../../src/graphiti.js'&gt;&lt;/SCRIPT&gt;"
 	            byline="false">
-	            <fileset dir="${prepared.dir}/examples" includes="**/*.html" />
-       </replaceregexp>
-		
-        <concat destfile="${prepared.dir}/graphiti.js" binary="false">
-		<header filtering="no" trimleading="yes">
+			<fileset dir="${prepared.dir}/examples" includes="**/*.html" />
+		</replaceregexp>
+
+		<concat destfile="${prepared.dir}/graphiti.js" binary="false">
+			<header filtering="no" trimleading="yes">
 /**
 			COPYRIGHT
 **/
               </header>
-        	<fileset file="${compress.dir}/graphiti.js"></fileset>
-        	<fileset file="${compress.dir}/util/Color.js"></fileset>
+			<fileset file="${compress.dir}/graphiti.js">
+			</fileset>
+			<fileset file="${compress.dir}/util/Color.js">
+			</fileset>
 
-        	<fileset file="${compress.dir}/util/ArrayList.js"></fileset>
-        	<fileset file="${compress.dir}/util/UUID.js"></fileset>
-        	<fileset file="${compress.dir}/geo/PositionConstants.js"></fileset>
-        	<fileset file="${compress.dir}/geo/Point.js"></fileset>
-        	<fileset file="${compress.dir}/geo/Rectangle.js"></fileset>
-        	
-        	<fileset file="${compress.dir}/EditPolicy.js"></fileset>
-        	<fileset file="${compress.dir}/command/Command.js"></fileset>
-        	<fileset file="${compress.dir}/command/CommandStack.js"></fileset>
-        	<fileset file="${compress.dir}/command/CommandStackEvent.js"></fileset>
-        	<fileset file="${compress.dir}/command/CommandStackEventListener.js"></fileset>
-        	<fileset file="${compress.dir}/command/CommandMove.js"></fileset>
-        	<fileset file="${compress.dir}/command/CommandResize.js"></fileset>
-        	<fileset file="${compress.dir}/command/CommandConnect.js"></fileset>
-        	<fileset file="${compress.dir}/command/CommandReconnect.js"></fileset>
-        	<fileset file="${compress.dir}/command/CommandDelete.js"></fileset>
-        	<fileset file="${compress.dir}/command/CommandAdd.js"></fileset>
-        	
-        	<fileset file="${compress.dir}/layout/connection/ConnectionRouter.js"></fileset>
-        	<fileset file="${compress.dir}/layout/connection/DirectRouter.js"></fileset>
-        	<fileset file="${compress.dir}/layout/connection/ManhattanConnectionRouter.js"></fileset>
+			<fileset file="${compress.dir}/util/ArrayList.js">
+			</fileset>
+			<fileset file="${compress.dir}/util/UUID.js">
+			</fileset>
+			<fileset file="${compress.dir}/geo/PositionConstants.js">
+			</fileset>
+			<fileset file="${compress.dir}/geo/Point.js">
+			</fileset>
+			<fileset file="${compress.dir}/geo/Rectangle.js">
+			</fileset>
 
-        	<fileset file="${compress.dir}/layout/mesh/MeshLayouter.js"></fileset>
-        	<fileset file="${compress.dir}/layout/mesh/ExplodeLayouter.js"></fileset>
-        	<fileset file="${compress.dir}/layout/mesh/ProposedMeshChange.js"></fileset>
+			<fileset file="${compress.dir}/EditPolicy.js">
+			</fileset>
+			<fileset file="${compress.dir}/command/Command.js">
+			</fileset>
+			<fileset file="${compress.dir}/command/CommandStack.js">
+			</fileset>
+			<fileset file="${compress.dir}/command/CommandStackEvent.js">
+			</fileset>
+			<fileset file="${compress.dir}/command/CommandStackEventListener.js">
+			</fileset>
+			<fileset file="${compress.dir}/command/CommandMove.js">
+			</fileset>
+			<fileset file="${compress.dir}/command/CommandResize.js">
+			</fileset>
+			<fileset file="${compress.dir}/command/CommandConnect.js">
+			</fileset>
+			<fileset file="${compress.dir}/command/CommandReconnect.js">
+			</fileset>
+			<fileset file="${compress.dir}/command/CommandDelete.js">
+			</fileset>
+			<fileset file="${compress.dir}/command/CommandAdd.js">
+			</fileset>
 
-        	<fileset file="${compress.dir}/layout/locator/Locator.js"></fileset>
-        	<fileset file="${compress.dir}/layout/locator/PortLocator.js"></fileset>
-        	<fileset file="${compress.dir}/layout/locator/InputPortLocator.js"></fileset>
-        	<fileset file="${compress.dir}/layout/locator/OutputPortLocator.js"></fileset>
-        	<fileset file="${compress.dir}/layout/locator/ConnectionLocator.js"></fileset>
-        	<fileset file="${compress.dir}/layout/locator/ManhattanMidpointLocator.js"></fileset>
+			<fileset file="${compress.dir}/layout/connection/ConnectionRouter.js">
+			</fileset>
+			<fileset file="${compress.dir}/layout/connection/DirectRouter.js">
+			</fileset>
+			<fileset file="${compress.dir}/layout/connection/ManhattanConnectionRouter.js">
+			</fileset>
 
-        	<fileset file="${compress.dir}/Canvas.js"></fileset>
-        	<fileset file="${compress.dir}/Figure.js"></fileset>
-        	<fileset file="${compress.dir}/shape/node/Node.js"></fileset>
-        	<fileset file="${compress.dir}/VectorFigure.js"></fileset>
-        	<fileset file="${compress.dir}/shape/basic/Rectangle.js"></fileset>
-        	<fileset file="${compress.dir}/SetFigure.js"></fileset>
-        	<fileset file="${compress.dir}/SVGFigure.js"></fileset>
-        	
-        	<fileset file="${compress.dir}/shape/basic/Oval.js"></fileset>
-        	<fileset file="${compress.dir}/shape/basic/Circle.js"></fileset>
-        	<fileset file="${compress.dir}/CompartmentFigure.js"></fileset>
-        	<fileset file="${compress.dir}/shape/basic/Label.js"></fileset>
-        	<fileset file="${compress.dir}/shape/basic/Line.js"></fileset>
-        	<fileset file="${compress.dir}/shape/basic/PolyLine.js"></fileset>
-        	<fileset file="${compress.dir}/Connection.js"></fileset>
-        	<fileset file="${compress.dir}/VectorFigure.js"></fileset>
-        	<fileset file="${compress.dir}/ResizeHandle.js"></fileset>
-        	<fileset file="${compress.dir}/LineResizeHandle.js"></fileset>
-        	<fileset file="${compress.dir}/LineStartResizeHandle.js"></fileset>
-        	<fileset file="${compress.dir}/LineEndResizeHandle.js"></fileset>
-        	<fileset file="${compress.dir}/Port.js"></fileset>
-        	<fileset file="${compress.dir}/InputPort.js"></fileset>
-        	<fileset file="${compress.dir}/OutputPort.js"></fileset>
-        	<fileset file="${compress.dir}/HybridPort.js"></fileset>
-        	<fileset file="${compress.dir}/ConnectionAnchor.js"></fileset>
+			<fileset file="${compress.dir}/layout/mesh/MeshLayouter.js">
+			</fileset>
+			<fileset file="${compress.dir}/layout/mesh/ExplodeLayouter.js">
+			</fileset>
+			<fileset file="${compress.dir}/layout/mesh/ProposedMeshChange.js">
+			</fileset>
 
-        	<fileset file="${compress.dir}/shape/arrow/CalligrapherArrowLeft.js"></fileset>
-        	<fileset file="${compress.dir}/shape/arrow/CalligrapherArrowDownLeft.js"></fileset>
-        	<fileset file="${compress.dir}/shape/node/Start.js"></fileset>
-        	<fileset file="${compress.dir}/shape/node/End.js"></fileset>
-        	<fileset file="${compress.dir}/shape/node/Between.js"></fileset>
-        	<fileset file="${compress.dir}/shape/note/PostIt.js"></fileset>
+			<fileset file="${compress.dir}/layout/locator/Locator.js">
+			</fileset>
+			<fileset file="${compress.dir}/layout/locator/PortLocator.js">
+			</fileset>
+			<fileset file="${compress.dir}/layout/locator/InputPortLocator.js">
+			</fileset>
+			<fileset file="${compress.dir}/layout/locator/OutputPortLocator.js">
+			</fileset>
+			<fileset file="${compress.dir}/layout/locator/ConnectionLocator.js">
+			</fileset>
+			<fileset file="${compress.dir}/layout/locator/ManhattanMidpointLocator.js">
+			</fileset>
 
-        	<fileset file="${compress.dir}/shape/widget/Widget.js"></fileset>
-        	<fileset file="${compress.dir}/shape/widget/Slider.js"></fileset>
+			<fileset file="${compress.dir}/Canvas.js">
+			</fileset>
+			<fileset file="${compress.dir}/Figure.js">
+			</fileset>
+			<fileset file="${compress.dir}/shape/node/Node.js">
+			</fileset>
+			<fileset file="${compress.dir}/VectorFigure.js">
+			</fileset>
+			<fileset file="${compress.dir}/shape/basic/Rectangle.js">
+			</fileset>
+			<fileset file="${compress.dir}/SetFigure.js">
+			</fileset>
+			<fileset file="${compress.dir}/SVGFigure.js">
+			</fileset>
 
-        	<fileset file="${compress.dir}/shape/diagram/Diagram.js"></fileset>
-        	<fileset file="${compress.dir}/shape/diagram/Pie.js"></fileset>
-        	<fileset file="${compress.dir}/shape/diagram/Sparkline.js"></fileset>
+			<fileset file="${compress.dir}/shape/basic/Oval.js">
+			</fileset>
+			<fileset file="${compress.dir}/shape/basic/Circle.js">
+			</fileset>
+			<fileset file="${compress.dir}/CompartmentFigure.js">
+			</fileset>
+			<fileset file="${compress.dir}/shape/basic/Label.js">
+			</fileset>
+			<fileset file="${compress.dir}/shape/basic/Line.js">
+			</fileset>
+			<fileset file="${compress.dir}/shape/basic/PolyLine.js">
+			</fileset>
+			<fileset file="${compress.dir}/Connection.js">
+			</fileset>
+			<fileset file="${compress.dir}/VectorFigure.js">
+			</fileset>
+			<fileset file="${compress.dir}/ResizeHandle.js">
+			</fileset>
+			<fileset file="${compress.dir}/LineResizeHandle.js">
+			</fileset>
+			<fileset file="${compress.dir}/LineStartResizeHandle.js">
+			</fileset>
+			<fileset file="${compress.dir}/LineEndResizeHandle.js">
+			</fileset>
+			<fileset file="${compress.dir}/Port.js">
+			</fileset>
+			<fileset file="${compress.dir}/InputPort.js">
+			</fileset>
+			<fileset file="${compress.dir}/OutputPort.js">
+			</fileset>
+			<fileset file="${compress.dir}/HybridPort.js">
+			</fileset>
+			<fileset file="${compress.dir}/ConnectionAnchor.js">
+			</fileset>
 
-        	<fileset file="${compress.dir}/shape/analog/OpAmp.js"></fileset>
-        	<fileset file="${compress.dir}/shape/analog/ResistorBridge.js"></fileset>
-        	<fileset file="${compress.dir}/shape/analog/ResistorVertical.js"></fileset>
-        	<fileset file="${compress.dir}/shape/analog/VoltageSupplyHorizontal.js"></fileset>
-        	<fileset file="${compress.dir}/shape/analog/VoltageSupplyVertical.js"></fileset>
+			<fileset file="${compress.dir}/shape/arrow/CalligrapherArrowLeft.js">
+			</fileset>
+			<fileset file="${compress.dir}/shape/arrow/CalligrapherArrowDownLeft.js">
+			</fileset>
+			<fileset file="${compress.dir}/shape/node/Start.js">
+			</fileset>
+			<fileset file="${compress.dir}/shape/node/End.js">
+			</fileset>
+			<fileset file="${compress.dir}/shape/node/Between.js">
+			</fileset>
+			<fileset file="${compress.dir}/shape/note/PostIt.js">
+			</fileset>
 
-        	<fileset file="${compress.dir}/ui/parts/GraphicalEditor.js"></fileset>
-        	<fileset file="${compress.dir}/ui/parts/GraphicalViewer.js"></fileset>
+			<fileset file="${compress.dir}/shape/widget/Widget.js">
+			</fileset>
+			<fileset file="${compress.dir}/shape/widget/Slider.js">
+			</fileset>
 
-        	<fileset file="${compress.dir}/mvc/controller/EditPartFactory.js"></fileset>
-        	<fileset file="${compress.dir}/mvc/AbstractObjectModel.js"></fileset>
-        	<fileset file="${compress.dir}/mvc/AbstractConnectionModel.js"></fileset>
-        	<fileset file="${compress.dir}/mvc/Event.js"></fileset>
+			<fileset file="${compress.dir}/shape/diagram/Diagram.js">
+			</fileset>
+			<fileset file="${compress.dir}/shape/diagram/Pie.js">
+			</fileset>
+			<fileset file="${compress.dir}/shape/diagram/Sparkline.js">
+			</fileset>
 
-        	<fileset file="${compress.dir}/io/Reader.js"></fileset>
-        	<fileset file="${compress.dir}/io/Writer.js"></fileset>
-        	<fileset file="${compress.dir}/io/png/Writer.js"></fileset>
-        	<fileset file="${compress.dir}/io/json/Writer.js"></fileset>
-        	<fileset file="${compress.dir}/io/json/Reader.js"></fileset>  
-       </concat>
-  	        
-  	   <delete quiet="true" dir="${prepared.dir}/src"/>
-  	   <move file="${prepared.dir}/graphiti.js" tofile="${prepared.dir}/src/graphiti.js"/>
+			<fileset file="${compress.dir}/shape/analog/OpAmp.js">
+			</fileset>
+			<fileset file="${compress.dir}/shape/analog/ResistorBridge.js">
+			</fileset>
+			<fileset file="${compress.dir}/shape/analog/ResistorVertical.js">
+			</fileset>
+			<fileset file="${compress.dir}/shape/analog/VoltageSupplyHorizontal.js">
+			</fileset>
+			<fileset file="${compress.dir}/shape/analog/VoltageSupplyVertical.js">
+			</fileset>
 
-	   <delete quiet="true" dir="${compress.dir}"/>
-    	
+			<fileset file="${compress.dir}/ui/parts/GraphicalEditor.js">
+			</fileset>
+			<fileset file="${compress.dir}/ui/parts/GraphicalViewer.js">
+			</fileset>
+
+			<fileset file="${compress.dir}/mvc/controller/EditPartFactory.js">
+			</fileset>
+			<fileset file="${compress.dir}/mvc/AbstractObjectModel.js">
+			</fileset>
+			<fileset file="${compress.dir}/mvc/AbstractConnectionModel.js">
+			</fileset>
+			<fileset file="${compress.dir}/mvc/Event.js">
+			</fileset>
+
+			<fileset file="${compress.dir}/io/Reader.js">
+			</fileset>
+			<fileset file="${compress.dir}/io/Writer.js">
+			</fileset>
+			<fileset file="${compress.dir}/io/png/Writer.js">
+			</fileset>
+			<fileset file="${compress.dir}/io/svg/Writer.js">
+			</fileset>
+			<fileset file="${compress.dir}/io/json/Writer.js">
+			</fileset>
+			<fileset file="${compress.dir}/io/json/Reader.js">
+			</fileset>
+		</concat>
+
+		<delete quiet="true" dir="${prepared.dir}/src"/>
+		<move file="${prepared.dir}/graphiti.js" tofile="${prepared.dir}/src/graphiti.js"/>
+
+		<delete quiet="true" dir="${compress.dir}"/>
+
 	</target>
 
-	
+
 	<!-- =================================================================== -->
 	<!-- DOCUMENTATION                                                       -->
 	<!-- =================================================================== -->
-	<target name="doc" depends="prepare" > 
- 	    <filter token="VERSION" value="${graphiti.version}"/>
+	<target name="doc" depends="prepare" >
+		<mkdir  dir="${prepared.dir}/jsdoc"/>
+		<filter token="VERSION" value="${graphiti.version}"/>
 		<copy file="jsduck.conf" tofile="jsduck.conf.gen" filtering="true" encoding="ISO-8859-1"/>
 
 		<exec executable="cmd" os="windows">
-		  <arg line='/c jsduck --config ./jsduck.conf.gen'/>
+			<arg line='/c jsduck --config ./jsduck.conf.gen'/>
 		</exec>
-		
+
 		<exec executable="jsduck" >
-		  <arg line='--config ./jsduck.conf.gen'/>
+			<arg line='--config ./jsduck.conf.gen'/>
 		</exec>
-		
+
 		<delete file="jsduck.conf.gen"/>
-		
-		<copy todir="./jsdoc/">
-		    <fileset dir="./template/" includes="*.css"/>
+
+		<copy todir="${prepared.dir}/jsdoc/">
+			<fileset dir="./template/" includes="*.css"/>
 		</copy>
-				
-		<mkdir dir="./jsdoc/grapihit"/>
-		<mkdir dir="./jsdoc/graphiti/lib"/>
-		
-		<copy todir="./jsdoc/graphiti/lib">
-		    <fileset dir="./lib"/>
+
+		<mkdir dir="${prepared.dir}/jsdoc/graphiti/lib"/>
+
+		<copy todir="${prepared.dir}/jsdoc/graphiti/lib">
+			<fileset dir="./lib"/>
 		</copy>
-		
-		<copy todir="./jsdoc/graphiti/src">
-		    <fileset dir="./src"/>
+
+		<copy todir="${prepared.dir}/jsdoc/graphiti/src">
+			<fileset dir="./src"/>
 		</copy>
-		
-		<copy todir="./jsdoc/graphiti/examples">
-		    <fileset dir="./examples"/>
+
+		<copy todir="${prepared.dir}/jsdoc/graphiti/examples">
+			<fileset dir="./examples"/>
 		</copy>
-		
-	</target> 	
-	
-    <!-- This is the default target - it generates the JsDoc documents -->
-    <target name="all" depends="doc" description="Generate JsDoc.">
-    </target>
-	
+
+	</target>
+
+	<!-- This is the default target - it generates the JsDoc documents -->
+	<target name="all" depends="doc" description="Generate JsDoc.">
+	</target>
+
 	<target name="local" depends="doc">
 		<delete includeemptydirs="true">
-		    <fileset dir="${localweb.dir}" includes="**/*"/>
+			<fileset dir="${localweb.dir}" includes="**/*"/>
 		</delete>
 
 		<copy todir="${localweb.dir}" overwrite="true">
-		    <fileset dir="${basedir}"/>
-  	    </copy>
+			<fileset dir="${basedir}"/>
+		</copy>
 	</target>
-		
+
 	<target name="lint" description="Check the javascript">
-	  <jslint >
-	    <formatter type="plain" />
-	    <fileset dir="${src.dir}" includes="*.js" />
-	  </jslint>
+		<jslint >
+			<formatter type="plain" />
+			<fileset dir="${src.dir}" includes="*.js" />
+		</jslint>
 	</target>
 </project>
