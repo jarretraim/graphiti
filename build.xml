@@ -5,6 +5,7 @@
 	<property name="graphiti.version.minor"    value="9"/>
 	<property name="graphiti.version.bugfix"   value="30"/>
 	<property name="graphiti.version"          value="${graphiti.version.major}.${graphiti.version.minor}.${graphiti.version.bugfix}"/>
+	<property name="dist.dir"      location="${basedir}/dist" />
 	<property name="src.dir"       location="${basedir}/src" />
 	<property name="example.dir"   location="${basedir}/examples" />
 	<property name="lib.dir"       location="${basedir}/lib" />
@@ -27,7 +28,11 @@
 	<taskdef name="compress-js" classname="com.webpanes.tools.ant.taskdefs.CompressJS">
 		<classpath refid="compile.classpath"/>
 	</taskdef>
-
+	
+	<taskdef name="unset" classname="ise.antelope.tasks.Unset">
+	    <classpath refid="compile.classpath"/>
+    </taskdef>
+	
 	<taskdef name="jslint" classname="net.happygiraffe.jslint.ant.JSLintTask">
 		<classpath>
 			<pathelement location="./build/jslint4java-1.2.1+rhino.jar"/>
@@ -49,13 +54,22 @@
 		<mkdir  dir="${prepared.dir}/lib"/>
 		<mkdir  dir="${prepared.dir}/examples"/>
 		<filter token="VERSION" value="${graphiti.version}"/>
-
+		<echo message="${copyright}" file="copyright.txt"/>
+		
 		<copy todir="${prepared.dir}/src" filtering="true" encoding="ISO-8859-1">
 			<fileset dir="${src.dir}">
 				<include name="**/*.css" />
 				<include name="**/*.html" />
+			</fileset>
+		</copy>
+
+		<copy todir="${prepared.dir}/src" filtering="true" encoding="ISO-8859-1">
+			<fileset dir="${src.dir}">
 				<include name="**/*.js" />
 			</fileset>
+ 		    <filterchain>
+			   <concatfilter prepend="copyright.txt"/>
+		    </filterchain>
 		</copy>
 
 		<copy todir="${prepared.dir}/lib" filtering="true" encoding="ISO-8859-1">
@@ -86,11 +100,18 @@
 	<!-- =================================================================== -->
 	<!-- PRODUCTIVE                                                          -->
 	<!-- =================================================================== -->
-	<target name="productive" depends="clean, prepare, doc" description="Compress each JS file"  >
+	<target name="productive"  description="Compress each JS file"  >
 		<antcall target="clean"/>
 		<antcall target="prepare"/>
 		<antcall target="doc"/>
-		
+
+		<mkdir  dir="${dist.dir}"/>
+		<delete quiet="true" file="${dist.dir}/graphiti_${archiv_infix}_${graphiti.version}.zip"/>
+		<zip destfile="${dist.dir}/graphiti_${archiv_infix}_${graphiti.version}.zip">
+		  <fileset dir="${prepared.dir}">
+   	      </fileset>
+		</zip>
+
 		<compress-js todir="${compress.dir}" stripCR="true">
 			<fileset dir="${prepared.dir}/src">
 				<include name="**/*.js"/>
@@ -105,11 +126,8 @@
 		</replaceregexp>
 
 		<concat destfile="${prepared.dir}/graphiti.js" binary="false">
-			<header filtering="no" trimleading="yes">
-/**
-			COPYRIGHT
-**/
-              </header>
+			<header filtering="no" trimleading="yes">${copyright}
+			</header>
 			<fileset file="${compress.dir}/graphiti.js">
 			</fileset>
 			<fileset file="${compress.dir}/util/Color.js">
@@ -295,6 +313,11 @@
 
 		<delete quiet="true" dir="${compress.dir}"/>
 
+		<delete quiet="true" file="${dist.dir}/graphiti_compress_${archiv_infix}_${graphiti.version}.zip"/>
+		<zip destfile="${dist.dir}/graphiti_compress_${archiv_infix}_${graphiti.version}.zip">
+		  <fileset dir="${prepared.dir}">
+   	      </fileset>
+		</zip>
 	</target>
 
 
@@ -337,8 +360,15 @@
 	</target>
 
 	<!-- This is the default target - it generates the JsDoc documents -->
-	<target name="all" depends="doc" description="Generate JsDoc.">
-	</target>
+	<target name="all" depends="" description="Generate JsDoc.">
+		<loadproperties srcFile="copyright_mit.properties" /> 
+		<antcall target="productive"/>
+
+		<unset file="copyright_mit.properties"/>
+		
+		<loadproperties srcFile="copyright_gpl.properties" /> 
+		<antcall target="productive"/>
+    </target>
 
 	<target name="local" depends="doc">
 		<delete includeemptydirs="true">
