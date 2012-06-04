@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Test-JsDoc" default="all" basedir=".">
 
+    <property file="../../hidden.properties" />
+
 	<property name="graphiti.version.major"    value="0"/>
 	<property name="graphiti.version.minor"    value="9"/>
 	<property name="graphiti.version.bugfix"   value="30"/>
@@ -87,6 +89,7 @@
 				<include name="**/*.js" />
 			</fileset>
 		</copy>
+		
 		<copy todir="${prepared.dir}/examples" filtering="false">
 			<fileset dir="${example.dir}">
 				<exclude name="**/*.css" />
@@ -105,9 +108,12 @@
 		<antcall target="doc"/>
 		<antcall target="prepare"/>
 
+        <property name="archiv.develop" value="graphiti_develop_${archiv_infix}_${graphiti.version}.zip"/>
+        <property name="archiv.productive" value="graphiti_productive_${archiv_infix}_${graphiti.version}.zip"/>
+
 		<mkdir  dir="${dist.dir}"/>
-		<delete quiet="true" file="${dist.dir}/graphiti_${archiv_infix}_${graphiti.version}.zip"/>
-		<zip destfile="${dist.dir}/graphiti_${archiv_infix}_${graphiti.version}.zip">
+		<delete quiet="true" file="${dist.dir}/${archiv.productive}"/>
+		<zip destfile="${dist.dir}/${archiv.productive}">
 		  <fileset dir="${prepared.dir}">
    	      </fileset>
 		</zip>
@@ -313,8 +319,8 @@
 
 		<delete quiet="true" dir="${compress.dir}"/>
 
-		<delete quiet="true" file="${dist.dir}/graphiti_compress_${archiv_infix}_${graphiti.version}.zip"/>
-		<zip destfile="${dist.dir}/graphiti_compress_${archiv_infix}_${graphiti.version}.zip">
+		<delete quiet="true" file="${dist.dir}/${archiv.develop}"/>
+		<zip destfile="${dist.dir}/${archiv.develop}">
 		  <fileset dir="${prepared.dir}">
    	      </fileset>
 		</zip>
@@ -359,15 +365,16 @@
 
 	</target>
 
+
 	<!-- This is the default target - it generates the JsDoc documents -->
 	<target name="all" depends="" description="Generate JsDoc.">
 		<loadproperties srcFile="copyright_mit.properties" /> 
 		<antcall target="productive"/>
-
 		<unset file="copyright_mit.properties"/>
 		
 		<loadproperties srcFile="copyright_gpl.properties" /> 
 		<antcall target="productive"/>
+		<unset file="copyright_gpl.properties"/>
     </target>
 
 	<target name="local" depends="doc">
@@ -376,7 +383,7 @@
 		</delete>
 
 		<copy todir="${localweb.dir}" overwrite="true">
-			<fileset dir="${basedir}"/>
+			<fileset dir="${prepared.dir}"/>
 		</copy>
 	</target>
 
@@ -385,5 +392,28 @@
 			<formatter type="plain" />
 			<fileset dir="${src.dir}" includes="*.js" />
 		</jslint>
+	</target>
+
+	<target name="email">
+  	  <loadproperties srcFile="copyright_mit.properties" /> 
+      <property name="archiv.develop" value="graphiti_develop_${archiv_infix}_${graphiti.version}.zip"/>
+      <property name="archiv.productive" value="graphiti_productive_${archiv_infix}_${graphiti.version}.zip"/>
+	
+	
+		<mail mailhost="${mail.host}" 
+		      mailport="587"
+		      enableStartTLS="true"
+		      user="${mail.user}" 
+		      password="${mail.password}" 
+			  from="${mail.from}" 
+			  replyTo="${mail.from}" 
+			  encoding="auto"
+			  tolist="a.herz@freegroup.de" 
+			  subject="graphiti version ${graphiti.version} ready for download" 
+			  messagemimetype="text/html"
+				messagefile="./template/email.html">
+
+		
+		</mail>
 	</target>
 </project>

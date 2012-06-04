@@ -92,7 +92,7 @@ graphiti.Canvas = Class.extend(
         // painting stuff
         //
         this.paper = Raphael(canvasId, this.getWidth(), this.getHeight());
-      
+
         // Status handling
         //
         this.zoomFactor = 1.0; // range [0.001..10]
@@ -550,7 +550,7 @@ graphiti.Canvas = Class.extend(
      * Return all intersections between the given line and all other
      * lines in the canvas
      * 
-     * @param {graphiti.Line} line the line for the intersection test
+     * @param {graphiti.shape.basic.Line} line the line for the intersection test
      * @return {graphiti.util.ArrayList} 
      */
     getIntersection:function(line){

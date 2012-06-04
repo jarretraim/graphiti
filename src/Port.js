@@ -290,7 +290,7 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
     },
     
     /**
-     * @inheritdoc
+     * @method
      * 
      * @param {graphiti.Figure} figure The figure which is currently dragging
      * 
@@ -323,7 +323,7 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
     },
     
     /**
-     * @inheritdoc
+     * @method
      * 
      * @param {graphiti.Figure} figure The figure which is currently dragging
      * @private
