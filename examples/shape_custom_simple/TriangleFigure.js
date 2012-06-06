@@ -35,6 +35,6 @@ TriangleFigure = graphiti.VectorFigure.extend({
     createShapeElement : function()
     {
        return this.canvas.paper.path("");
-    },
+    }
 
 });
