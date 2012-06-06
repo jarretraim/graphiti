@@ -31,6 +31,5 @@ graphiti.shape.node.Start = graphiti.shape.basic.Rectangle.extend({
         this.setBackgroundColor(this.DEFAULT_COLOR);
         this.setColor(this.DEFAULT_COLOR.darker());
     }
-    
-    
+ 
 });
