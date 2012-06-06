@@ -5,7 +5,7 @@
 
 	<property name="graphiti.version.major"    value="0"/>
 	<property name="graphiti.version.minor"    value="9"/>
-	<property name="graphiti.version.bugfix"   value="30"/>
+	<property name="graphiti.version.bugfix"   value="31"/>
 	<property name="graphiti.version"          value="${graphiti.version.major}.${graphiti.version.minor}.${graphiti.version.bugfix}"/>
 	<property name="dist.dir"      location="${basedir}/dist" />
 	<property name="src.dir"       location="${basedir}/src" />
@@ -368,14 +368,27 @@
 
 	<!-- This is the default target - it generates the JsDoc documents -->
 	<target name="all" depends="" description="Generate JsDoc.">
-		<loadproperties srcFile="copyright_mit.properties" /> 
-		<antcall target="productive"/>
-		<unset file="copyright_mit.properties"/>
-		
-		<loadproperties srcFile="copyright_gpl.properties" /> 
-		<antcall target="productive"/>
-		<unset file="copyright_gpl.properties"/>
-    </target>
+		<delete includeemptydirs="true">
+			<fileset dir="${dist.dir}" includes="**/*"/>
+		</delete>
+	
+		<loadproperties srcFile="copyright_mit.properties" />
+		<antcall target="productive" />
+		<unset file="copyright_mit.properties" />
+
+		<loadproperties srcFile="copyright_gpl.properties" />
+		<antcall target="productive" />
+		<unset file="copyright_gpl.properties" />
+
+		<!-- move this stuff via FTP to the Draw2D server -->
+		<ftp server="${graphiti.ftp.server}" remotedir="${graphiti.ftp.dir}/download"
+			userid="${graphiti.ftp.user}" password="${graphiti.ftp.password}"
+			verbose="yes" binary="yes">
+			<fileset dir="${dist.dir}/">
+				<include name="*.zip" />
+			</fileset>
+		</ftp>
+	</target>
 
 	<target name="local" depends="doc">
 		<delete includeemptydirs="true">
@@ -395,6 +408,7 @@
 	</target>
 
 	<target name="email">
+	  <loadfile property="changelog"   srcFile="changelog.txt"/>
   	  <loadproperties srcFile="copyright_mit.properties" /> 
       <property name="archiv.develop" value="graphiti_develop_${archiv_infix}_${graphiti.version}.zip"/>
       <property name="archiv.productive" value="graphiti_productive_${archiv_infix}_${graphiti.version}.zip"/>
@@ -408,12 +422,10 @@
 			  from="${mail.from}" 
 			  replyTo="${mail.from}" 
 			  encoding="auto"
-			  tolist="a.herz@freegroup.de" 
+			  tolist="${graphiti.mailinglist}" 
 			  subject="graphiti version ${graphiti.version} ready for download" 
 			  messagemimetype="text/html"
-				messagefile="./template/email.html">
-
-		
+			  messagefile="./template/email.html">
 		</mail>
 	</target>
 </project>
