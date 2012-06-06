@@ -17,6 +17,6 @@ MyFigure = graphiti.shape.basic.Rectangle.extend({
      */
     onDoubleClick: function(){
     	this.setRadius( this.getRadius()===5?20:5);
-    },
+    }
 
 });
