@@ -29,6 +29,6 @@ graphiti.shape.node.End = graphiti.shape.basic.Rectangle.extend({
         this.setDimension(50, 50);
         this.setBackgroundColor(this.DEFAULT_COLOR);
         this.setColor(this.DEFAULT_COLOR.darker());
-    },
+    }
 
 });

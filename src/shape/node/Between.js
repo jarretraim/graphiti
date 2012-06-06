@@ -29,6 +29,6 @@ graphiti.shape.node.Between = graphiti.shape.basic.Rectangle.extend({
 
         this.createPort("output");
         this.createPort("input");
-    },
+    }
 
 });

@@ -57,8 +57,9 @@ graphiti.SVGFigure = graphiti.SetFigure.extend({
         
         var findAttr  = new RegExp('([a-z0-9\-]+)="(.*?)"','gi');
         var findStyle = new RegExp('([a-z0-9\-]+) ?: ?([^ ;]+)[ ;]?','gi');
-        var findNodes = new RegExp('<(line|rect|polyline|circle|ellipse|path|polygon|image|text).*?\/>','gi');
-        
+        //var findNodes = new RegExp('<(line|rect|polyline|circle|ellipse|path|polygon|image|text).*?\/>','gi');
+        var findNodes = new RegExp('<(line|rect|polyline|circle|ellipse|path|polygon|image|text).*?(\/>|.*</text>)','gi');
+               
         while(match = findNodes.exec(rawSVG)){      
           var shape=null;
           var style=null;
@@ -119,9 +120,11 @@ graphiti.SVGFigure = graphiti.SetFigure.extend({
             case 'image':
               shape = canvas.paper.image();
               break;
-            //-F case 'text':
-            //-F   shape = this.text();
-            //-F break;
+            case 'text':
+              shape = canvas.paper.text();
+              attr["text-anchor"] = "start";
+              attr.y= parseInt(attr.y)+shape.getBBox().height/2;
+              break;
           }
           if(shape!==null){
               shape.attr(attr);
