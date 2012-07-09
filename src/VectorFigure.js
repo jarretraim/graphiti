@@ -6,7 +6,7 @@
  * 
  * @inheritable
  * @author Andreas Herz
- * @extends {graphiti.shape.node.Node}
+ * @extends graphiti.shape.node.Node
  */
 graphiti.VectorFigure = graphiti.shape.node.Node.extend({
     NAME : "graphiti.VectorFigure",

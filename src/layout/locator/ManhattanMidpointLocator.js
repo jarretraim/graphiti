@@ -9,6 +9,7 @@
  * @extend graphiti.layout.locator.ConnectionLocator
  */
 graphiti.layout.locator.ManhattanMidpointLocator= graphiti.layout.locator.ConnectionLocator.extend({
+    NAME : "graphiti.layout.locator.ManhattanMidpointLocator",
     
     /**
      * @constructor
@@ -31,7 +32,7 @@ graphiti.layout.locator.ManhattanMidpointLocator= graphiti.layout.locator.Connec
      **/
     relocate:function(index, target)
     {
-       var conn = this.getConnection();
+       var conn = this.getParent();
        var points = conn.getPoints();
        
        var index = Math.floor((points.getSize() -2) / 2);

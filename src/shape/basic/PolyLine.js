@@ -25,10 +25,7 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
       //
       this.svgPathString = null;
       this.oldPoint=null;
-      
-      // possible decorations ( e.g. a Label) of the Connection
-      this.children = new graphiti.util.ArrayList();
-      
+    
       // all line segments with start/end as simple object member
       this.lineSegments = new graphiti.util.ArrayList();
       this.basePoints = new graphiti.util.ArrayList();
@@ -87,6 +84,7 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
         }
     
         this.svgPathString = null;
+        
         // cleanup the routing cache
         //
         this.oldPoint=null;
@@ -96,11 +94,6 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
         // Use the internal router
         //
         this.router.route(this);
-        
-        for(var i=0; i<this.children.getSize();i++) {
-            var entry = this.children.get(i);
-            entry.locator.relocate(i, entry.figure);
-        }
     },
     
     /**

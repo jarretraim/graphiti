@@ -46,7 +46,7 @@ graphiti.io.json.Writer = graphiti.io.Writer.extend({
         //
         for(i=0; i< figures.getSize(); i++){
             f = figures.get(i);
-             result.push(f.getPersistentAttributes());
+            result.push(f.getPersistentAttributes());
         }
         
         // jQuery style to iterate

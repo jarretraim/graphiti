@@ -64,16 +64,17 @@ graphiti.io.json.Reader = graphiti.io.Reader.extend({
                     node = canvas.getFigure(val.node);
                     target = node.getPort(val.port);
                 }
-                else {
-                    o[i] = val;
-                }
+                // use the setPersistence..... instead
+               // else {
+               //     o[i] = val;
+               // }
             }
             if(source!==null && target!==null){
                 o.setSource(source);
                 o.setTarget(target);
             }
-            
-            canvas.addFigure(o, element.x, element.y);
+            o.setPersistentAttributes(element);
+            canvas.addFigure(o);
         });
     }
 });

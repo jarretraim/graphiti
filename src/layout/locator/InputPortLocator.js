@@ -9,7 +9,8 @@
  * @extend graphiti.layout.locator.Locator
  */
 graphiti.layout.locator.InputPortLocator = graphiti.layout.locator.Locator.extend({
-    
+    NAME : "graphiti.layout.locator.InputPortLocator",
+     
     /**
      * @constructor
      * Default constructor for a Locator which can layout a port in context of a 

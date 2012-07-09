@@ -93,28 +93,18 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
      * @param {graphiti.Figure} figure the figure to add as decoration to the connection.
      * @param {graphiti.layout.locator.ConnectionLocator} locator the locator for the child. 
     **/
-    addFigure : function(figure, locator)
+    addFigure : function(child, locator)
     {
-        var entry = {};
-        entry.figure = figure;
-        entry.locator = locator;
-
-        this.children.add(entry);
-        this.repaint();
-    },
-    
-    /**
-     * @private
-     * @param canvas
-     */
-    setCanvas: function(canvas){
-        this._super(canvas);
-        for(var i=0; i<this.children.getSize();i++){
-            var entry = this.children.get(i);
-            entry.figure.setCanvas(canvas);
+        // just to ensure the right interface for the locator.
+        // The base class needs only 'graphiti.layout.locator.Locator'.
+        if(!(locator instanceof graphiti.layout.locator.ConnectionLocator)){
+           throw "Locator must implement the class graphiti.layout.locator.ConnectionLocator"; 
         }
+        
+        this._super(child, locator);
     },
     
+
     /**
      * @method
      * Set the ConnectionDecorator for this object.
@@ -550,6 +540,21 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
                 };
                
         return memento;
+    },
+    
+    /**
+     * @method 
+     * Read all attributes from the serialized properties and transfer them into the shape.
+     * 
+     * @param {Object} memento
+     * @returns 
+     */
+    setPersistentAttributes : function(memento)
+    {
+        this._super(memento);
+        // no extra param to read.
+        // Reason: done by the Layoute/Router
     }
+    
 
 });

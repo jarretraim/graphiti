@@ -2,9 +2,9 @@
 <head>
 <title></title>
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, , maximum-scale=1.0" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
+   
     <link type="text/css" rel="stylesheet" href="./css/example.css" />
 
 	<SCRIPT src="../../lib/shifty.js"></SCRIPT>
@@ -53,6 +53,8 @@
 	<SCRIPT src="../../src/layout/locator/OutputPortLocator.js"></SCRIPT>
 	<SCRIPT src="../../src/layout/locator/ConnectionLocator.js"></SCRIPT>
 	<SCRIPT src="../../src/layout/locator/ManhattanMidpointLocator.js"></SCRIPT>
+	<SCRIPT src="../../src/layout/locator/TopLocator.js"></SCRIPT>
+	<SCRIPT src="../../src/layout/locator/BottomLocator.js"></SCRIPT>
 
 	<SCRIPT src="../../src/Canvas.js"></SCRIPT>
 	<SCRIPT src="../../src/Figure.js"></SCRIPT>
@@ -68,8 +70,6 @@
 	<SCRIPT src="../../src/shape/basic/Label.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/basic/Line.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/basic/PolyLine.js"></SCRIPT>
-	<SCRIPT src="../../src/shape/basic/Diamond.js"></SCRIPT>
-	
 	<SCRIPT src="../../src/Connection.js"></SCRIPT>
 	<SCRIPT src="../../src/VectorFigure.js"></SCRIPT>
 	<SCRIPT src="../../src/ResizeHandle.js"></SCRIPT>
@@ -118,39 +118,73 @@
 	<SCRIPT src="../../src/io/json/Reader.js"></SCRIPT>
     <!--REGEXP_END_REMOVE-->
 
+	<script>
+	/** declare the namespace object for this example */
+	var example = {
+			figure_locator: {}
+	};
+	</script>
+
+	<SCRIPT src="LabeledEnd.js"></SCRIPT>
+
+
 <script type="text/javascript">
+$(document).ready(function() {
 
-    $(document).ready(function()
-    {
+    document.ontouchmove = function(e) {
+        e.preventDefault();
+    };
+    
+     // Create the paint area. The id in the constructor must be
+     // an existing DIV 
+	 var canvas = new graphiti.Canvas("gfx_holder");
+	
+     // create a basic figure and add a Label/child via API call
+     //
+	 var start = new graphiti.shape.node.Start();
+	 start.addFigure(new graphiti.shape.basic.Label("Test Label"), new graphiti.layout.locator.TopLocator(start));	
+	 canvas.addFigure( start, 50,150);
+	 
+	 // Create a custom shape with a build in feature for decoration/labels 
+	 // Good example for inheritence of shapes
+	 //
+	 var end = new example.figure_locator.LabeledEnd();
+	 canvas.addFigure( end, 350,250);
+	 
+	  
+	  // add an event listener to the Canvas for change notifications.
+	  // We just dump the current canvas document into the DIV
+	  //
+	  canvas.getCommandStack().addEventListener(function(e){
+	      if(e.isPostChangeEvent()){
+	          var writer = new graphiti.io.json.Writer();
+	          console.log(JSON.stringify(writer.marshal(canvas),null,2));
+	      }
+	  });
 
-        document.ontouchmove = function(e)
-        {
-            e.preventDefault();
-        };
+	 ///////////////////////////////////////////////////////////////////// 
+	 // THIS IS ONLY FOR THE ARROW AND THE POST-IT
+	 ///////////////////////////////////////////////////////////////////// 
+	 var arrowLeft = new graphiti.shape.arrow.CalligrapherArrowLeft();
+	 arrowLeft.setColor("#0d0d0d");
+	 canvas.addFigure(arrowLeft, 320,155);
+	 
+	 var msg = new graphiti.shape.note.PostIt("Drag&Drop the blue box and notice the label.\nIt sticks always on the top or bottom of the shape.");
+	 canvas.addFigure(msg, 20,20);
+	 
+	 $("body").scrollTop(0)
+	          .scrollLeft(0);
+	 
+});
 
-        // create the canvas for the user interaction
-        //
-        var canvas = new graphiti.Canvas("gfx_holder");
-
-        canvas.addFigure(new graphiti.shape.basic.Oval(80,30),50,50);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.basic.Oval"),200,55);
-        
-        canvas.addFigure(new graphiti.shape.basic.Circle(80),50,150);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.basic.Circle"),200,175);
-        
-        canvas.addFigure(new graphiti.shape.basic.Rectangle(80,40),50,300);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.basic.Rectangle"),200,305);
-
-        canvas.addFigure(new graphiti.shape.basic.Diamond(40,60),50,450);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.basic.Diamond"),200,455);
-    });
 </script>
 
 </head>
 
 <body>
-<div id="gfx_holder" style="width:1500px; height:1500px;-webkit-tap-highlight-color: rgba(0,0,0,0); ">
-</div>
+
+   <div id="gfx_holder" style="width:1500px; height:1500px; ">
+   </div>
 
 </body>
 </html>

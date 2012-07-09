@@ -1,0 +1,24 @@
+##.##.2012 version 0.9.34
+    - new shape "graphiti.shape.basic.Diamond"
+    - consider the z-order of the shapes in the hitTest for 
+      drag/drop operation
+    - new method Figure.getZOrder. 
+	- fixing broken reference in jsDoc
+	
+27.06.2012 version 0.9.33
+    - provide a method to export/import shape specific attributes.
+      Inspect './examples/io_json_extend/' for details.
+      
+      
+26.06.2012 version 0.9.32
+    - move the label (child) of a connection into the "Figure" base class.
+      Now all shapes can have a decoration figure.
+      
+	
+06.05.2012 version 0.9.31
+    - fixing some syntax error related to IE7 and IE8. (trailing comma in a array)
+    - add JSON parser fallback for IE7, IE8
+    
+
+06.05.2012 version 0.9.30
+    - first developer preview

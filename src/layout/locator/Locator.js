@@ -6,16 +6,29 @@
  * @author Andreas Herz
  */
 graphiti.layout.locator.Locator= Class.extend({
-    
+    NAME : "graphiti.layout.locator.Locator",
+   
     /**
      * @constructor
      * Initial Constructor
      * 
+     * @param {graphiti.Figure} [parentShape] the parent or owner of the child 
      */
-    init:function( )
+    init:function(parentShape )
     {
+        this.parent = parentShape;
     },
     
+    /**
+     * @method
+     * Returns the associated owner of the locator
+     *
+     * @return {graphiti.Figure}
+     **/
+    getParent:function()
+    {
+       return this.parent;
+    },
     
     /**
      * @method
@@ -26,7 +39,8 @@ graphiti.layout.locator.Locator= Class.extend({
      * 
      * @template
      **/
-    relocate:function(index, figure){
+    relocate:function(index, figure)
+    {
     	
     }
 });

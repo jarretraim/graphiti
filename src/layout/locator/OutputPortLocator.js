@@ -9,6 +9,7 @@
  * @extend graphiti.layout.locator.Locator
  */
 graphiti.layout.locator.OutputPortLocator = graphiti.layout.locator.Locator.extend({
+    NAME : "graphiti.layout.locator.OutputPortLocator",
     
     /**
      * @constructor

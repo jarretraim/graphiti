@@ -9,29 +9,18 @@
  * @extend graphiti.layout.locator.Locator
  */
 graphiti.layout.locator.ConnectionLocator= graphiti.layout.locator.Locator.extend({
+    NAME : "graphiti.layout.locator.ConnectionLocator",
     
     /**
      * @constructor
      * Default constructor for a Locator which can layout a figure in context of a 
      * {@link grapiti.Connector}
      * 
-     * @param {graphiti.Connection} connection
+     * @param {graphiti.Figure} parentShape the base or parent figure for the locator
      */
-    init:function( connection)
+    init:function( parentShape)
     {
-      this._super();
-      this.connection = connection;
-    },
-    
-    
-    /**
-     * @method
-     * Returns the associated connection
-     *
-     * @return {graphiti.Connection}
-     **/
-    getConnection:function()
-    {
-       return this.connection;
+      this._super(parentShape);
     }
+    
 });

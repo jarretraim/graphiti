@@ -117,12 +117,17 @@ graphiti.shape.basic.Rectangle = graphiti.VectorFigure.extend({
         return memento;
     },
     
-    toJSON : function(){
-      return  { 
-            width:this.width,
-            height:this.height,
-            x : this.x,
-            y :this.y
-        };
+    /**
+     * @method 
+     * Read all attributes from the serialized properties and transfer them into the shape.
+     * 
+     * @param {Object} memento
+     * @returns 
+     */
+    setPersistentAttributes : function(memento)
+    {
+        this._super(memento);
+        this.radius = memento.radius;
     }
+    
 });

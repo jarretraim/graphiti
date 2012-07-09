@@ -17,7 +17,7 @@
 	<SCRIPT src="../../lib/canvg.js"></SCRIPT>
 	<SCRIPT src="../../lib/Class.js"></SCRIPT>
 	<SCRIPT src="../../lib/json2.js"></SCRIPT>
-     
+    
     <!--REGEXP_START_REMOVE-->
 	<SCRIPT src="../../src/graphiti.js"></SCRIPT>
 	<SCRIPT src="../../src/util/Color.js"></SCRIPT>
@@ -53,6 +53,8 @@
 	<SCRIPT src="../../src/layout/locator/OutputPortLocator.js"></SCRIPT>
 	<SCRIPT src="../../src/layout/locator/ConnectionLocator.js"></SCRIPT>
 	<SCRIPT src="../../src/layout/locator/ManhattanMidpointLocator.js"></SCRIPT>
+	<SCRIPT src="../../src/layout/locator/TopLocator.js"></SCRIPT>
+	<SCRIPT src="../../src/layout/locator/BottomLocator.js"></SCRIPT>
 
 	<SCRIPT src="../../src/Canvas.js"></SCRIPT>
 	<SCRIPT src="../../src/Figure.js"></SCRIPT>
@@ -68,8 +70,6 @@
 	<SCRIPT src="../../src/shape/basic/Label.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/basic/Line.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/basic/PolyLine.js"></SCRIPT>
-	<SCRIPT src="../../src/shape/basic/Diamond.js"></SCRIPT>
-	
 	<SCRIPT src="../../src/Connection.js"></SCRIPT>
 	<SCRIPT src="../../src/VectorFigure.js"></SCRIPT>
 	<SCRIPT src="../../src/ResizeHandle.js"></SCRIPT>
@@ -118,32 +118,75 @@
 	<SCRIPT src="../../src/io/json/Reader.js"></SCRIPT>
     <!--REGEXP_END_REMOVE-->
 
+	<script>
+	/** declare the namespace object for this example */
+	var example = {
+			io_json_extend: {}
+	};
+	</script>
+
+	<SCRIPT src="LabeledEnd.js"></SCRIPT>
+
 <script type="text/javascript">
 
-    $(document).ready(function()
-    {
+// the document to load....in this case a simple JSON Object 
+var jsonDocument = 
+    [
+      
+      {
+        "type": "example.io_json_extend.LabeledEnd",
+        "id": "ebfb35bb-5767-8155-c804-14bda7759dc2",
+        "x": 72,
+        "y": 165,
+        "width": 50,
+        "height": 50,
+        "radius": 2,
+        "my_label": "My custom Label"  // see LabeledEnd.js setPersistendAttributes/getPersistendAttributes for more information
+      }
+    ];
+                
+$(document).ready(function() {
 
-        document.ontouchmove = function(e)
-        {
-            e.preventDefault();
-        };
+  document.ontouchmove = function(e) {
+      e.preventDefault();
+  };
+    
+  // create the canvas for the user interaction
+  //
+  var canvas = new graphiti.Canvas("gfx_holder");
+  
+  // unmarshal the JSON document into the canvas
+  // (load)
+  var reader = new graphiti.io.json.Reader();
+  reader.unmarshal(canvas, jsonDocument);
+  
+  // display the JSON document in the preview DIV
+  //
+  displayJSON(canvas);
 
-        // create the canvas for the user interaction
-        //
-        var canvas = new graphiti.Canvas("gfx_holder");
+  
+  // add an event listener to the Canvas for change notifications.
+  // We just dump the current canvas document into the DIV
+  //
+  canvas.getCommandStack().addEventListener(function(e){
+      if(e.isPostChangeEvent()){
+          displayJSON(canvas);
+      }
+  });
+  
 
-        canvas.addFigure(new graphiti.shape.basic.Oval(80,30),50,50);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.basic.Oval"),200,55);
-        
-        canvas.addFigure(new graphiti.shape.basic.Circle(80),50,150);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.basic.Circle"),200,175);
-        
-        canvas.addFigure(new graphiti.shape.basic.Rectangle(80,40),50,300);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.basic.Rectangle"),200,305);
+  // add an information PostIt to the canvas
+  var msg = new graphiti.shape.note.PostIt("Purpose of this example: How to import/export your own \nattributes, in this case a label, via  JSON.\n \nInspect LabeledEnd.js for further details.");
+  canvas.addFigure(msg, 20,20);
+	 
 
-        canvas.addFigure(new graphiti.shape.basic.Diamond(40,60),50,450);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.basic.Diamond"),200,455);
-    });
+});
+
+function displayJSON(canvas){
+    var writer = new graphiti.io.json.Writer();
+    $("#json").text(JSON.stringify(writer.marshal(canvas),null,2));
+}
+
 </script>
 
 </head>
@@ -152,5 +195,7 @@
 <div id="gfx_holder" style="width:1500px; height:1500px;-webkit-tap-highlight-color: rgba(0,0,0,0); ">
 </div>
 
+<pre id="json" style="overflow:auto;position:absolute; top:10px; right:10px; width:350; height:500;background:white;border:1px solid gray">
+</pre>
 </body>
 </html>

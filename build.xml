@@ -5,7 +5,7 @@
 
 	<property name="graphiti.version.major"    value="0"/>
 	<property name="graphiti.version.minor"    value="9"/>
-	<property name="graphiti.version.bugfix"   value="31"/>
+	<property name="graphiti.version.bugfix"   value="34"/>
 	<property name="graphiti.version"          value="${graphiti.version.major}.${graphiti.version.minor}.${graphiti.version.bugfix}"/>
 	<property name="dist.dir"      location="${basedir}/dist" />
 	<property name="src.dir"       location="${basedir}/src" />
@@ -31,6 +31,10 @@
 		<classpath refid="compile.classpath"/>
 	</taskdef>
 	
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath refid="compile.classpath"/>
+	</taskdef>
+
 	<taskdef name="unset" classname="ise.antelope.tasks.Unset">
 	    <classpath refid="compile.classpath"/>
     </taskdef>
@@ -112,8 +116,8 @@
         <property name="archiv.productive" value="graphiti_productive_${archiv_infix}_${graphiti.version}.zip"/>
 
 		<mkdir  dir="${dist.dir}"/>
-		<delete quiet="true" file="${dist.dir}/${archiv.productive}"/>
-		<zip destfile="${dist.dir}/${archiv.productive}">
+		<delete quiet="true" file="${dist.dir}/${archiv.develop}"/>
+		<zip destfile="${dist.dir}/${archiv.develop}">
 		  <fileset dir="${prepared.dir}">
    	      </fileset>
 		</zip>
@@ -150,6 +154,7 @@
 			<fileset file="${compress.dir}/geo/Rectangle.js">
 			</fileset>
 
+			
 			<fileset file="${compress.dir}/EditPolicy.js">
 			</fileset>
 			<fileset file="${compress.dir}/command/Command.js">
@@ -199,6 +204,10 @@
 			</fileset>
 			<fileset file="${compress.dir}/layout/locator/ManhattanMidpointLocator.js">
 			</fileset>
+			<fileset file="${compress.dir}/layout/locator/TopLocator.js">
+			</fileset>
+			<fileset file="${compress.dir}/layout/locator/BottomLocator.js">
+			</fileset>
 
 			<fileset file="${compress.dir}/Canvas.js">
 			</fileset>
@@ -209,6 +218,8 @@
 			<fileset file="${compress.dir}/VectorFigure.js">
 			</fileset>
 			<fileset file="${compress.dir}/shape/basic/Rectangle.js">
+			</fileset>			
+			<fileset file="${compress.dir}/shape/basic/Diamond.js">
 			</fileset>
 			<fileset file="${compress.dir}/SetFigure.js">
 			</fileset>
@@ -319,8 +330,8 @@
 
 		<delete quiet="true" dir="${compress.dir}"/>
 
-		<delete quiet="true" file="${dist.dir}/${archiv.develop}"/>
-		<zip destfile="${dist.dir}/${archiv.develop}">
+		<delete quiet="true" file="${dist.dir}/${archiv.productive}"/>
+		<zip destfile="${dist.dir}/${archiv.productive}">
 		  <fileset dir="${prepared.dir}">
    	      </fileset>
 		</zip>
@@ -367,27 +378,57 @@
 
 
 	<!-- This is the default target - it generates the JsDoc documents -->
-	<target name="all" depends="" description="Generate JsDoc.">
+	<target name="all" depends="" description="Build the complete product and inform the customers via email.">
+		
+		<!-- Lib with MIT license
+		  - build
+		  - ftp
+		  - email
+		  -->
 		<delete includeemptydirs="true">
 			<fileset dir="${dist.dir}" includes="**/*"/>
 		</delete>
-	
-		<loadproperties srcFile="copyright_mit.properties" />
+	    <loadproperties srcFile="./template/copyright_MIT.properties" />
 		<antcall target="productive" />
-		<unset file="copyright_mit.properties" />
-
-		<loadproperties srcFile="copyright_gpl.properties" />
-		<antcall target="productive" />
-		<unset file="copyright_gpl.properties" />
-
-		<!-- move this stuff via FTP to the Draw2D server -->
-		<ftp server="${graphiti.ftp.server}" remotedir="${graphiti.ftp.dir}/download"
+		
+		<ftp server="${graphiti.ftp.server}" remotedir="${graphiti.ftp.dir}/download/MIT"
 			userid="${graphiti.ftp.user}" password="${graphiti.ftp.password}"
 			verbose="yes" binary="yes">
 			<fileset dir="${dist.dir}/">
 				<include name="*.zip" />
 			</fileset>
 		</ftp>
+		
+		<!-- inform all customer about the new delivery -->
+        <loadfile property="params" srcFile="./template/mailinglist_MIT.txt"/>
+        <foreach list="${params}" delimiter="&#x0A;" target="email" param="email" inheritall="true"/>
+		<unset file="./template/copyright_MIT.properties" />
+
+
+		<!-- Lib with MIT license
+		  - build
+		  - ftp
+		  - email
+		  -->
+		<delete includeemptydirs="true">
+			<fileset dir="${dist.dir}" includes="**/*"/>
+		</delete>
+		<loadproperties srcFile="./template/copyright_GPL.properties" />
+		<antcall target="productive" />
+		 
+		<ftp server="${graphiti.ftp.server}" remotedir="${graphiti.ftp.dir}/download/GPL"
+			userid="${graphiti.ftp.user}" password="${graphiti.ftp.password}"
+			verbose="yes" binary="yes">
+			<fileset dir="${dist.dir}/">
+				<include name="*.zip" />
+			</fileset>
+		</ftp>
+		
+		<!-- inform all customer about the new delivery -->
+        <loadfile property="params" srcFile="./template/mailinglist_GPL.txt"/>
+        <foreach list="${params}" delimiter="&#x0A;" target="email" param="email"  inheritall="true"/>
+		<unset file="./template/copyright_GPL.properties" />
+
 	</target>
 
 	<target name="local" depends="doc">
@@ -407,14 +448,13 @@
 		</jslint>
 	</target>
 
+
 	<target name="email">
-	  <loadfile property="changelog"   srcFile="changelog.txt"/>
-  	  <loadproperties srcFile="copyright_mit.properties" /> 
-      <property name="archiv.develop" value="graphiti_develop_${archiv_infix}_${graphiti.version}.zip"/>
+	  <loadfile property="changelog"     srcFile="./template/changelog.txt"/>
+      <property name="archiv.develop"    value="graphiti_develop_${archiv_infix}_${graphiti.version}.zip"/>
       <property name="archiv.productive" value="graphiti_productive_${archiv_infix}_${graphiti.version}.zip"/>
 	
-	
-		<mail mailhost="${mail.host}" 
+ 	  <mail mailhost="${mail.host}" 
 		      mailport="587"
 		      enableStartTLS="true"
 		      user="${mail.user}" 
@@ -422,10 +462,12 @@
 			  from="${mail.from}" 
 			  replyTo="${mail.from}" 
 			  encoding="auto"
-			  tolist="${graphiti.mailinglist}" 
+			  tolist="${email}" 
 			  subject="graphiti version ${graphiti.version} ready for download" 
 			  messagemimetype="text/html"
-			  messagefile="./template/email.html">
+			  messagefile="./template/email_${archiv_infix}.html">
 		</mail>
+	
 	</target>
+
 </project>

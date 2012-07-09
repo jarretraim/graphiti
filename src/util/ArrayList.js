@@ -418,7 +418,22 @@ graphiti.util.ArrayList = Class.extend({
                increment: this.increment,
                size: this.getSize()
                };
+     },
+     
+     /**
+      * @method 
+      * Read all attributes from the serialized properties and transfer them into the shape.
+      * 
+      * @param {Object} memento
+      * @returns 
+      */
+     setPersistentAttributes : function(memento)
+     {
+         this.data = memento.data;
+         this.increment = memento.increment;
+         this.size = memento.size;
      }
+     
 
 });
 

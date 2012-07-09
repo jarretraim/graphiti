@@ -887,7 +887,7 @@ graphiti.Canvas = Class.extend(
         var testFigure = null;
         
 
-        // ResizeHandles 
+        // ResizeHandles first
         for ( var i = 0, len = this.resizeHandles.getSize(); i < len; i++)
         {
             testFigure = this.resizeHandles.get(i);
@@ -896,7 +896,7 @@ graphiti.Canvas = Class.extend(
             }
         }
 
-       // Checking ports
+        // Checking ports
         //
         for ( var i = 0, len = this.commonPorts.getSize(); i < len; i++)
         {
@@ -922,6 +922,10 @@ graphiti.Canvas = Class.extend(
             if (figure.hitTest(x, y) === true && figure !== figureToIgnore)
             {
                 if (result === null)
+                {
+                    result = figure;
+                }
+                else if(result.getZOrder()< figure.getZOrder())
                 {
                     result = figure;
                 }

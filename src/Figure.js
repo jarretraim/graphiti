@@ -25,7 +25,10 @@ graphiti.Figure = Class.extend({
         
         this.canvas = null;
         this.shape  = null;
-         
+        
+        // possible decorations ( e.g. a Label) of the Connection
+        this.children = new graphiti.util.ArrayList();
+            
         // behavior flags
         //
         this.selectable = true;
@@ -123,7 +126,25 @@ graphiti.Figure = Class.extend({
               this.startTimer(this.timerInterval);
     	  }
       }
+      
+      for(var i=0; i<this.children.getSize();i++){
+          var entry = this.children.get(i);
+          entry.figure.setCanvas(canvas);
+      }
+
      },
+     
+     /**
+      * @method
+      * Return the current assigned canvas container.
+      * 
+      * @return {graphiti.Canvas}
+      */
+     getCanvas:function()
+     {
+         return this.canvas;
+     },
+     
     
      /**
       * @method
@@ -163,17 +184,24 @@ graphiti.Figure = Class.extend({
     	
      },
      
-    /**
-     * @method
-     * Return the current assigned canvas container.
-     * 
-     * @return {graphiti.Canvas}
-     */
-    getCanvas:function()
-    {
-       return this.canvas;
-    },
-    
+     /**
+      * @method
+      * Add a child figure to the figure. The hands over figure doesn't support drag&drop 
+      * operations. It's only a decorator for the connection.<br>
+      * Mainly for labels or other fancy decorations :-)
+      *
+      * @param {graphiti.Figure} figure the figure to add as decoration to the connection.
+      * @param {graphiti.layout.locator.Locator} locator the locator for the child. 
+     **/
+     addFigure : function(child, locator)
+     {
+         var entry = {};
+         entry.figure = child;
+         entry.locator = locator;
+
+         this.children.add(entry);
+         this.repaint();
+     },
 
     /**
      * Set the primary model object that this Line represents. This method is used 
@@ -265,7 +293,7 @@ graphiti.Figure = Class.extend({
      */
     createShapeElement : function()
     {
-        throw "Inherited class ["+this.type+"] must override the abstract method createShapeElement";
+        throw "Inherited class ["+this.NAME+"] must override the abstract method createShapeElement";
     },
 
     /**
@@ -297,6 +325,14 @@ graphiti.Figure = Class.extend({
          attributes.opacity = this.alpha;
          
         this.shape.attr(attributes);
+        
+        // Relocate all children of the figure.
+        // This means that the Locater can calculate the new Position of the child.
+        //
+        for(var i=0; i<this.children.getSize();i++) {
+            var entry = this.children.get(i);
+            entry.locator.relocate(i, entry.figure);
+        }
      },
      
      /**
@@ -530,6 +566,27 @@ graphiti.Figure = Class.extend({
      */
     isVisible: function(){
         return this.shape!==null;
+    },
+    
+    /**
+     * @method
+     * Return the current z-index of the element. Currently this is an expensive method. The index will be calculated
+     * all the time. Cacheing is not implemented at the moment.
+     * 
+     * @return {Number}
+     */
+    getZOrder: function(){
+        if(this.shape==null){
+            return -1;
+        }
+        
+        var i = 0;
+        var child = this.shape.node;
+        while( (child = child.previousSibling) != null ) {
+          i++;
+        }
+        console.log(this.NAME+":"+i);
+        return i;
     },
     
     /**
@@ -1046,15 +1103,40 @@ graphiti.Figure = Class.extend({
      */
     getPersistentAttributes : function()
     {
-        return {
+        var memento= {
             type  : this.NAME,
             id    : this.id,
             x     : this.x,
             y     : this.y,
             width : this.width,
-            height: this.height           
+            height: this.height,
+            children: []
         };
+        this.children.each(function(i, element){
+            var childMemento = element.figure.getPersistentAttributes();
+            childMemento.locator = element.locator.NAME;
+            memento.children.push(childMemento);
+        });
+
+        return memento;
+    },
+    
+    /**
+     * @method 
+     * Read all attributes from the serialized properties and transfer them into the shape.
+     * 
+     * @param {Object} memento
+     * @returns 
+     */
+    setPersistentAttributes : function(memento)
+    {
+        this.id   = memento.id;
+        this.x    = memento.x;
+        this.y    = memento.y;
+        this.width= memento.width;
+        this.height= memento.height;
     }
+    
 
 });
 

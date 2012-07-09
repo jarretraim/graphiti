@@ -176,7 +176,18 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 	  return new graphiti.geo.Point(this.x,this.y);
 	},
 	
-	/**
+    /**
+     * @method
+     * The top center coordinate of the dimension object.
+     * 
+     * @return {graphiti.geo.Point} a new point objects which holds the coordinates
+     **/
+    getTopCenter:function()
+    {
+      return new graphiti.geo.Point(this.x+(this.w/2),this.y);
+    },
+
+    /**
 	 * @method
 	 * The top right corner of the dimension object.
 	 * 
@@ -198,6 +209,17 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 	  return new graphiti.geo.Point(this.x,this.y+this.h);
 	},
 	
+	/**
+     * @method
+     * The bottom center coordinate of the dimension object.
+     * 
+     * @return {graphiti.geo.Point} a new point objects which holds the coordinates
+     **/
+    getBottomCenter:function()
+    {
+      return new graphiti.geo.Point(this.x+(this.w/2),this.y+this.h);
+    },
+    
 	/**
 	 * @method
 	 * The center of the dimension object

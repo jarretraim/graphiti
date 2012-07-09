@@ -1,6 +1,0 @@
-
-06.05.2012 version 0.9.31
-    - fixing some syntax error related to IE7 and IE8. (trailing comma in a array)
-    - add JSON parser fallback for IE7, IE8
-
-06.05.2012 version 0.9.30

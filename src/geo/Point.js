@@ -211,5 +211,19 @@ graphiti.geo.Point = Class.extend({
             x : this.x,
             y : this.y
         };
+    },
+    
+    /**
+     * @method 
+     * Read all attributes from the serialized properties and transfer them into the shape.
+     * 
+     * @param {Object} memento
+     * @returns 
+     */
+    setPersistentAttributes : function(memento)
+    {
+        this.x    = memento.x;
+        this.y    = memento.y;
     }
+    
 });

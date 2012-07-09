@@ -69,7 +69,6 @@
 	<SCRIPT src="../../src/shape/basic/Line.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/basic/PolyLine.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/basic/Diamond.js"></SCRIPT>
-	
 	<SCRIPT src="../../src/Connection.js"></SCRIPT>
 	<SCRIPT src="../../src/VectorFigure.js"></SCRIPT>
 	<SCRIPT src="../../src/ResizeHandle.js"></SCRIPT>
@@ -118,32 +117,75 @@
 	<SCRIPT src="../../src/io/json/Reader.js"></SCRIPT>
     <!--REGEXP_END_REMOVE-->
 
+
 <script type="text/javascript">
 
-    $(document).ready(function()
-    {
+MyInputPortLocator = graphiti.layout.locator.Locator.extend({
+    init:function( ){
+      this._super();
+    },    
+    relocate:function(index, figure){
+        var w = figure.getParent().getWidth();
+        var h = figure.getParent().getHeight();
 
-        document.ontouchmove = function(e)
-        {
-            e.preventDefault();
-        };
+        figure.setPosition(w/2, 0);
+    }
+});
 
-        // create the canvas for the user interaction
-        //
-        var canvas = new graphiti.Canvas("gfx_holder");
 
-        canvas.addFigure(new graphiti.shape.basic.Oval(80,30),50,50);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.basic.Oval"),200,55);
-        
-        canvas.addFigure(new graphiti.shape.basic.Circle(80),50,150);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.basic.Circle"),200,175);
-        
-        canvas.addFigure(new graphiti.shape.basic.Rectangle(80,40),50,300);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.basic.Rectangle"),200,305);
+MyOutputPortLocator = graphiti.layout.locator.Locator.extend({
+    init:function( ){
+      this._super();
+    },    
+    relocate:function(index, figure){
+        var w = figure.getParent().getWidth();
+        var h = figure.getParent().getHeight();
 
-        canvas.addFigure(new graphiti.shape.basic.Diamond(40,60),50,450);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.basic.Diamond"),200,455);
-    });
+        figure.setPosition(w/2, h);
+    }
+});
+
+
+$(document).ready(function() {
+    
+
+
+    document.ontouchmove = function(e) {
+        e.preventDefault();
+    };
+    
+  var canvas = new graphiti.Canvas("gfx_holder");
+
+  // Add input and output ports to any shape via generic API calls
+  // and custom locators
+  //
+  var d = new graphiti.shape.basic.Diamond();
+  canvas.addFigure( d,100,100);
+
+  var inputLocator = new MyInputPortLocator();
+  var outputLocator = new MyOutputPortLocator();
+
+  d.createPort("input",inputLocator);
+  d.createPort("output",outputLocator);
+  
+  // add input and output ports via genric API calls and DEFAULT
+  // locators. The default locator arange input on the left and ouput on the right
+  // side of the shape
+  //
+  var d2 = new graphiti.shape.basic.Diamond();
+  canvas.addFigure( d2,300,150);
+
+  d2.createPort("input");
+  d2.createPort("output");
+  
+  ///////////////////////////////////////////////////////////////////// 
+  // JUST ADD SOME DOCU ELEMENTS ON THE SCREEN
+  ///////////////////////////////////////////////////////////////////// 
+  var msg = new graphiti.shape.note.PostIt("Add input and output ports at any position of the \nshape via generic API calls.");
+  canvas.addFigure(msg, 20,20);
+
+});
+
 </script>
 
 </head>
@@ -151,6 +193,7 @@
 <body>
 <div id="gfx_holder" style="width:1500px; height:1500px;-webkit-tap-highlight-color: rgba(0,0,0,0); ">
 </div>
+
 
 </body>
 </html>
