@@ -1,4 +1,6 @@
-##.##.2012 version 0.9.34
+09.07.2012 version 0.9.34
+    - new example 'shape_add_port_via_api' to show the handling of a 'Locator' and 
+      handling of dynamic ports.
     - new shape "graphiti.shape.basic.Diamond"
     - consider the z-order of the shapes in the hitTest for 
       drag/drop operation

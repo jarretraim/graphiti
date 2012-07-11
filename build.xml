@@ -400,8 +400,8 @@
 		</ftp>
 		
 		<!-- inform all customer about the new delivery -->
-        <loadfile property="params" srcFile="./template/mailinglist_MIT.txt"/>
-        <foreach list="${params}" delimiter="&#x0A;" target="email" param="email" inheritall="true"/>
+        <loadfile property="params_mit" srcFile="./template/mailinglist_MIT.txt"/>
+        <foreach list="${params_mit}" delimiter="&#x0A;" target="email" param="email" inheritall="true"/>
 		<unset file="./template/copyright_MIT.properties" />
 
 
@@ -425,8 +425,8 @@
 		</ftp>
 		
 		<!-- inform all customer about the new delivery -->
-        <loadfile property="params" srcFile="./template/mailinglist_GPL.txt"/>
-        <foreach list="${params}" delimiter="&#x0A;" target="email" param="email"  inheritall="true"/>
+        <loadfile property="params_gpl" srcFile="./template/mailinglist_GPL.txt"/>
+        <foreach list="${params_gpl}" delimiter="&#x0A;" target="email" param="email"  inheritall="true"/>
 		<unset file="./template/copyright_GPL.properties" />
 
 	</target>

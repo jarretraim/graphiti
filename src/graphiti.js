@@ -32,26 +32,21 @@ var graphiti =
     },
 
     layout: {
-        connection :{
-        },
-	    mesh :{
-	    },
-	    locator: {
-	    }
+        connection :{},
+	    mesh :{},
+	    locator: {},
+	    constraint:{}
     },
     
     mvc:{
     	model:{},
     	view:{},
     	controller:{}
-    	
     },
     
     
     ui :{
-    	parts:{
-    		
-    	}
+    	parts:{}
     },
     
     isTouchDevice : (
