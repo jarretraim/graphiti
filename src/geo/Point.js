@@ -131,12 +131,18 @@ graphiti.geo.Point = Class.extend({
      * @method
      * Set the new x/y coordinates of this point
      * 
-     * @param {Number} x
-     * @param {Number} y
+     * @param {Number|graphiti.geo.Point} x
+     * @param {Number} [y]
      */
     setPosition:function(x,y){
-        this.x=x;
-        this.y=y;
+    	if(x instanceof graphiti.geo.Point){
+     	   this.x=x.x;
+    	   this.y=x.y;
+    	}
+    	else{
+    	   this.x=x;
+    	   this.y=y;
+    	}
         this.adjustBoundary();
     },
     

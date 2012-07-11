@@ -23,6 +23,10 @@ example.connection_labeledit.LabelConnection= graphiti.Connection.extend({
       this.addFigure(this.label, new graphiti.layout.locator.ManhattanMidpointLocator(this));
     },
     
+    getLabelShape:function(){
+    	return this.label;
+    },
+        
     getLabel:function(){
     	return this.label.getText();
     },

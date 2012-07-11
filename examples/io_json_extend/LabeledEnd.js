@@ -55,4 +55,13 @@ example.io_json_extend.LabeledEnd = graphiti.shape.node.End.extend({
         this.label.setText(memento.my_label);
     }
     
+
+    getLabel:function(){
+    	return this.label.getText();
+    },
+    
+    setLabel: function(text){
+    	this.label.setText(text);
+    }
+
 });

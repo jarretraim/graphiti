@@ -374,9 +374,9 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.CompartmentFigure.js" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.EditPolicy.js" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.Figure.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.Line.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.Oval.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.Rectangle.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.shape.basic.Line.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.shape.basic.Oval.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.shape.basic.Rectangle.js" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.ResizeHandle.js" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.VectorFigure.js" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/output/graphiti.command.Command.js" afterPath="" />
@@ -465,11 +465,11 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/CompartmentFigure.html" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/EditPolicy.html" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/Figure.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/Line.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/Oval.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/shape/basic/Line.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/shape/basic/Oval.html" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/Point.html" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/PositionConstants.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/Rectangle.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/shape/basic/Rectangle.html" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/ResizeHandle.html" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/VectorFigure.html" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/jsdoc/source/graphiti.html" afterPath="" />
@@ -545,7 +545,7 @@
         <option value="$PROJECT_DIR$/src/Figure.js" />
         <option value="$PROJECT_DIR$/src/util/ArrayList.js" />
         <option value="$PROJECT_DIR$/src/CompartmentFigure.js" />
-        <option value="$PROJECT_DIR$/src/Oval.js" />
+        <option value="$PROJECT_DIR$/src/shape/basic/Oval.js" />
         <option value="$PROJECT_DIR$/src/command/CommandMove.js" />
         <option value="$PROJECT_DIR$/src/command/Command.js" />
         <option value="$PROJECT_DIR$/src/command/CommandResize.js" />
@@ -816,7 +816,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Oval.js">
+    <entry file="file://$PROJECT_DIR$/src/shape/basic/Oval.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="4" column="0" selection-start="92" selection-end="166" vertical-scroll-proportion="0.0">
           <folding />

@@ -258,8 +258,12 @@ graphiti.Canvas = Class.extend(
         //
         $(document).bind("keydown",$.proxy(function(event)
         {
-          var ctrl = event.ctrlKey;
-          this.onKeyDown(event.keyCode, ctrl);
+     	  // don't initiate the delete command if the event comes from an INPUT field. In this case the user want delete
+      	  // a character in the input field and not the related shape
+      	  if(!$(event.target).is("input")){
+             var ctrl = event.ctrlKey;
+             this.onKeyDown(event.keyCode, ctrl);
+           }
         },this));
 
     },
@@ -279,7 +283,7 @@ graphiti.Canvas = Class.extend(
         var viewBoxWidth  = parseInt(this.initialWidth*this.zoomFactor);
         var viewBoxHeight = parseInt(this.initialHeight*this.zoomFactor);
         
-// BUG: raphael didn't handle setViewBox AND setSeize correct
+// BUG: raphael didn't handle setViewBox AND setSize correct
 //        this.paper.setSize(this.html.width(), this.html.height());
         this.paper.setViewBox(0, 0, viewBoxWidth, viewBoxHeight);
         
@@ -311,7 +315,21 @@ graphiti.Canvas = Class.extend(
 				(y - this.getAbsoluteY() + this.getScrollTop())*this.zoomFactor);
 	},
 	
-    getHtmlContainer: function(){
+    /**
+     * @method
+     * Transforms a canvas coordinate to document coordinate.
+     * 
+     * @param {Number} x the x coordinate in the canvas 
+     * @param {Number} y the y coordinate in the canvas
+     * @returns {graphiti.geo.Point} the document coordinate
+     */
+	fromCanvasToDocumentCoordinate : function(x,y) {
+		return new graphiti.geo.Point(
+				(x + this.getAbsoluteX() - this.getScrollLeft())*this.zoomFactor,
+				(y + this.getAbsoluteY() - this.getScrollTop())*this.zoomFactor);
+	},
+	
+	getHtmlContainer: function(){
        return this.html; 
     },
     
@@ -335,11 +353,23 @@ graphiti.Canvas = Class.extend(
      * 
      * Set the area which are scrolling the canvas.
      * 
-     * @return {Number} 
+     * @param 
      **/
     setScrollArea:function(elementSelector)
     {
        this.scrollArea= $(elementSelector);
+    },
+
+    /**
+     * @method
+     * 
+     * return the scrolling area of the canvas. This is jQuery object
+     * 
+     * @return {Number} 
+     **/
+    getScrollArea:function()
+    {
+       return this.scrollArea;
     },
 
     /**

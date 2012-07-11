@@ -1,3 +1,6 @@
+##.##.2012 version 0.9.35
+    - new Locator for shape decorations. LeftLocator, RightLocator and CenterLocator.
+
 09.07.2012 version 0.9.34
     - new example 'shape_add_port_via_api' to show the handling of a 'Locator' and 
       handling of dynamic ports.
@@ -5,7 +8,7 @@
     - consider the z-order of the shapes in the hitTest for 
       drag/drop operation
     - new method Figure.getZOrder. 
-	- fixing broken reference in jsDoc
+    - fixing broken reference in jsDoc
 	
 27.06.2012 version 0.9.33
     - provide a method to export/import shape specific attributes.
