@@ -55,6 +55,8 @@
 	<SCRIPT src="../../src/layout/locator/ManhattanMidpointLocator.js"></SCRIPT>
 	<SCRIPT src="../../src/layout/locator/TopLocator.js"></SCRIPT>
 	<SCRIPT src="../../src/layout/locator/BottomLocator.js"></SCRIPT>
+	<SCRIPT src="../../src/layout/locator/LeftLocator.js"></SCRIPT>
+	<SCRIPT src="../../src/layout/locator/RightLocator.js"></SCRIPT>
 
 	<SCRIPT src="../../src/Canvas.js"></SCRIPT>
 	<SCRIPT src="../../src/Figure.js"></SCRIPT>
@@ -143,7 +145,7 @@ $(document).ready(function() {
      //
 	 var start = new graphiti.shape.node.Start();
 	 start.addFigure(new graphiti.shape.basic.Label("Test Label"), new graphiti.layout.locator.TopLocator(start));	
-	 canvas.addFigure( start, 50,150);
+	 canvas.addFigure( start, 80,150);
 	 
 	 // Create a custom shape with a build in feature for decoration/labels 
 	 // Good example for inheritence of shapes
@@ -151,8 +153,21 @@ $(document).ready(function() {
 	 var end = new example.figure_locator.LabeledEnd();
 	 canvas.addFigure( end, 350,250);
 	 
+		
+     // create a basic figure and add a Label/child via API call
+     //
+	 var start2 = new graphiti.shape.node.Start();
+	 start2.addFigure(new graphiti.shape.basic.Label("Left Label"), new graphiti.layout.locator.LeftLocator(start2));	
+	 canvas.addFigure( start2, 80,250);
 	  
-	  // add an event listener to the Canvas for change notifications.
+		
+     // create a basic figure and add a Label/child via API call
+     //
+	 var end2 = new graphiti.shape.node.End();
+	 end2.addFigure(new graphiti.shape.basic.Label("Right Label"), new graphiti.layout.locator.RightLocator(end2));	
+	 canvas.addFigure( end2, 350,100);
+
+	 // add an event listener to the Canvas for change notifications.
 	  // We just dump the current canvas document into the DIV
 	  //
 	  canvas.getCommandStack().addEventListener(function(e){
@@ -165,10 +180,6 @@ $(document).ready(function() {
 	 ///////////////////////////////////////////////////////////////////// 
 	 // THIS IS ONLY FOR THE ARROW AND THE POST-IT
 	 ///////////////////////////////////////////////////////////////////// 
-	 var arrowLeft = new graphiti.shape.arrow.CalligrapherArrowLeft();
-	 arrowLeft.setColor("#0d0d0d");
-	 canvas.addFigure(arrowLeft, 320,155);
-	 
 	 var msg = new graphiti.shape.note.PostIt("Drag&Drop the blue box and notice the label.\nIt sticks always on the top or bottom of the shape.");
 	 canvas.addFigure(msg, 20,20);
 	 

@@ -208,6 +208,12 @@
 			</fileset>
 			<fileset file="${compress.dir}/layout/locator/BottomLocator.js">
 			</fileset>
+			<fileset file="${compress.dir}/layout/locator/LeftLocator.js">
+			</fileset>
+			<fileset file="${compress.dir}/layout/locator/RightLocator.js">
+			</fileset>
+			<fileset file="${compress.dir}/layout/locator/CenterLocator.js">
+			</fileset>
 
 			<fileset file="${compress.dir}/Canvas.js">
 			</fileset>
@@ -297,18 +303,9 @@
 			<fileset file="${compress.dir}/shape/analog/VoltageSupplyVertical.js">
 			</fileset>
 
-			<fileset file="${compress.dir}/ui/parts/GraphicalEditor.js">
+			<fileset file="${compress.dir}/ui/LabelEditor.js">
 			</fileset>
-			<fileset file="${compress.dir}/ui/parts/GraphicalViewer.js">
-			</fileset>
-
-			<fileset file="${compress.dir}/mvc/controller/EditPartFactory.js">
-			</fileset>
-			<fileset file="${compress.dir}/mvc/AbstractObjectModel.js">
-			</fileset>
-			<fileset file="${compress.dir}/mvc/AbstractConnectionModel.js">
-			</fileset>
-			<fileset file="${compress.dir}/mvc/Event.js">
+			<fileset file="${compress.dir}/ui/LabelInplaceEditor.js">
 			</fileset>
 
 			<fileset file="${compress.dir}/io/Reader.js">
