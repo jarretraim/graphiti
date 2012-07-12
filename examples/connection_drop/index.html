@@ -100,13 +100,8 @@
 	<SCRIPT src="../../src/shape/analog/VoltageSupplyHorizontal.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/analog/VoltageSupplyVertical.js"></SCRIPT>
 
-	<SCRIPT src="../../src/ui/parts/GraphicalEditor.js"></SCRIPT>
-	<SCRIPT src="../../src/ui/parts/GraphicalViewer.js"></SCRIPT>
-
-	<SCRIPT src="../../src/mvc/controller/EditPartFactory.js"></SCRIPT>
-	<SCRIPT src="../../src/mvc/AbstractObjectModel.js"></SCRIPT>
-	<SCRIPT src="../../src/mvc/AbstractConnectionModel.js"></SCRIPT>
-	<SCRIPT src="../../src/mvc/Event.js"></SCRIPT>
+	<SCRIPT src="../../src/ui/LabelEditor.js"></SCRIPT>
+	<SCRIPT src="../../src/ui/LabelInplaceEditor.js"></SCRIPT>
 
 	<SCRIPT src="../../src/io/Reader.js"></SCRIPT>
 	<SCRIPT src="../../src/io/Writer.js"></SCRIPT>
@@ -147,7 +142,6 @@ $(document).ready(function() {
 	  canvas.addFigure(end, 450,250);
 	
 	  // Add a connection via API calls between Start and Stop
-	  // It is more confortable with the MVC pattern
 	  //
 	  var connection = new graphiti.Connection();
 	  connection.setSource(start.getOutputPort(0));

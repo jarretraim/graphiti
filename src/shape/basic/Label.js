@@ -36,11 +36,17 @@ graphiti.shape.basic.Label= graphiti.SetFigure.extend({
     		this.text = "";
     	}
     	
+        // appearance of the shape
+        //
         this.fontSize = 12;
         this.fontColor = new graphiti.util.Color("#080808");
         this.padding = 4;
         
         this.setStroke(1);
+        
+        // behavior of the shape
+        //
+        this.editor = null;
     },
     
     /** 
@@ -163,7 +169,32 @@ graphiti.shape.basic.Label= graphiti.SetFigure.extend({
      **/
     setDimension:function(/*:int*/ w, /*:int*/ h)
     {
+        // Don't call the _super method here.
         // Dimension of a Label is autocalculated. "set" is not possible
+    },
+    
+    /**
+     * @method
+     * Set an editor for the label. This can be a dialog or inplace editor for the 
+     * Text.<br>
+     * The editor will be activated if you doubleClick on the label.
+     * 
+     * @param {graphiti.ui.LabelEditor} editor
+     */
+    installEditor: function( editor ){
+      this.editor = editor;  
+    },
+    
+    /**
+     * @method
+     * Called when a user dbl clicks on the element
+     * 
+     * @template
+     */
+    onDoubleClick: function(){
+        if(this.editor!==null){
+            this.editor.start(this);
+        }
     },
     
     

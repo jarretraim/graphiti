@@ -120,7 +120,6 @@
 	</script>
 
 	<SCRIPT src="LabelConnection.js"></SCRIPT>
-	<SCRIPT src="LabelEditor.js"></SCRIPT>
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -147,21 +146,11 @@ $(document).ready(function() {
 	 c.setTarget(end.getPort("input0"));
 	 canvas.addFigure(c);
 	
-	
-	 // Create a generic Editor for the new Connection label
-	 // The editor register a "SelectionListener" at the canvas
-	 // to show/hide the corresponding editor.
-	 //
-	 var editor = new example.connection_labeledit.LabelEditor(canvas);
-	 
 	 ///////////////////////////////////////////////////////////////////// 
 	 // JUST ADD SOME DOCU ELEMENTS ON THE SCREEN
 	 ///////////////////////////////////////////////////////////////////// 
-	 var arrowLeft = new graphiti.shape.arrow.CalligrapherArrowLeft();
-	 arrowLeft.setColor("#0d0d0d");
-	 canvas.addFigure(arrowLeft, 180,235);
 	 
-	 var msg = new graphiti.shape.note.PostIt("Click/Tap on the green connection and a label editor\napear. Just done with a little snippet of jQuery code.");
+	 var msg = new graphiti.shape.note.PostIt("DoubleClick on the label to edit the text.");
 	 canvas.addFigure(msg, 20,20);
 	 
 	 $("body").scrollTop(0)

@@ -5,17 +5,18 @@ MyFigure = graphiti.shape.basic.Rectangle.extend({
     
     init : function()
     {
+        this.value=false;
+        this.colors={};
+        this.colors[true]="#00f000";
+        this.colors[false]="#f00000";
+        
+
         this._super();
         
         this.createPort("output");
         this.setDimension(30,30);
         this.setResizeable(false);
         
-        this.value=false;
-        
-        this.colors={};
-        this.colors[true]="#00f000";
-        this.colors[false]="#f00000";
         
         this.setBackgroundColor(this.colors[this.value]);
     },

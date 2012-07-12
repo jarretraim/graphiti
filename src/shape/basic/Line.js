@@ -440,9 +440,6 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
        
        segments1.each(function(i, s1){
            segments2.each(function(j, s2){
-     //          console.log(s1);
-     //          console.log(s2);
-     //          console.log("....");
                var p= graphiti.shape.basic.Line.intersection(s1.start, s1.end, s2.start, s2.end);
                if(p!==null){
                    result.add(p);

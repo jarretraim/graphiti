@@ -79,7 +79,12 @@ graphiti.shape.diagram.Sparkline = graphiti.shape.diagram.Diagram.extend({
         var min = this.min;
         var max = this.max;
         var toCoords = function(value, idx) {
-            var step = (width/ (length-1));
+            var step =1;
+            // avoid divisionByZero
+            if(length>1){
+                step = (width/ (length-1));
+            }
+
             return {
                 y:  -((value-min)/(max-min) * height) + height+padding,
                 x: padding+idx*step
@@ -98,6 +103,7 @@ graphiti.shape.diagram.Sparkline = graphiti.shape.diagram.Diagram.extend({
                 }
                 prev_pt = pt;
             },this));
+
             this.svgNodes.attr({path:this.cache.pathString, stroke: "#f0f0f0"});
             
         }

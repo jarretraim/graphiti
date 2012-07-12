@@ -510,8 +510,6 @@ graphiti.Canvas = Class.extend(
         if(this.currentSelection === figure){
           this.setCurrentSelection(null);
         }
-
-        figure.setModel(null);
     },
     
     /**
@@ -960,7 +958,35 @@ graphiti.Canvas = Class.extend(
                     result = figure;
                 }
             }
+            else{
+                var children= figure.getChildren();
+                children.each(function(i,e){
+                    if(e.hitTest(x,y)===true){
+                        result = figure;
+                        return false; // break the each-loop
+                    }
+                });
+            }
         }
+        if(result !==null)
+            return result;
+        
+        // 4.) Check the children of the lines as well
+        //     Not selectable/draggable. But should receive onClick/onDoubleClick events 
+       //      as well.
+        var count = this.lines.getSize();
+        for(var i=0;i< count;i++)
+        {
+          var line = this.lines.get(i);
+          var children= line.getChildren();
+          children.each(function(i,e){
+              if(e.hitTest(x,y)===true){
+                  result = e;
+                  return false;
+              }
+          });
+        }
+        
         return result;
     },
 

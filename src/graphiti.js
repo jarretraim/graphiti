@@ -38,15 +38,10 @@ var graphiti =
 	    constraint:{}
     },
     
-    mvc:{
-    	model:{},
-    	view:{},
-    	controller:{}
-    },
     
     
     ui :{
-    	parts:{}
+    	
     },
     
     isTouchDevice : (

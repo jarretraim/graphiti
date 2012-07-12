@@ -15,7 +15,7 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
      * @constructor
      * Creates a new Node element which are not assigned to any canvas.
      * 
-     * @param {String} [name] the name of the port. required for MVC
+     * @param {String} [name] the name of the port.
      */
     init : function( name)
     {

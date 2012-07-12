@@ -21,13 +21,9 @@ example.connection_labeledit.LabelConnection= graphiti.Connection.extend({
       // add the new decoration to the connection with a position locator.
       //
       this.addFigure(this.label, new graphiti.layout.locator.ManhattanMidpointLocator(this));
-    },
-    
-    getLabel:function(){
-    	return this.label.getText();
-    },
-    
-    setLabel: function(text){
-    	this.label.setText(text);
+      
+      // Register a label editor with a dialog
+      //
+      this.label.installEditor(new graphiti.ui.LabelEditor());
     }
 });

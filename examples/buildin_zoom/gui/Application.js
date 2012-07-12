@@ -1,6 +1,5 @@
 
 /**
- * @class example.mvc_simple.MyGraphicalEditor
  * 
  * The **GraphicalEditor** is responsible for layout and dialog handling.
  * 

@@ -10,7 +10,7 @@ graphiti.Figure = Class.extend({
     
 	NAME : "graphiti.Figure",
     
-	MIN_TIMER_INTERVAL: 50, // minimum timer intervall in milli seconds
+	MIN_TIMER_INTERVAL: 50, // minimum timer interval in milliseconds
 	
     /**
      * @constructor
@@ -42,10 +42,6 @@ graphiti.Figure = Class.extend({
         this.timerId = -1;
         this.timerInterval = 0;
         
-        // model for the MVC pattern
-        //
-        this.model = null; 
- 
         // possible parent of the figure. Can be a ComparmentFigure or, in a case of a Port,
         // a normal Figure.
         //
@@ -195,6 +191,11 @@ graphiti.Figure = Class.extend({
      **/
      addFigure : function(child, locator)
      {
+         // the child is now a slave of the parent
+         //
+         child.setDraggable(false);
+         child.setSelectable(false);
+         
          var entry = {};
          entry.figure = child;
          entry.locator = locator;
@@ -203,68 +204,18 @@ graphiti.Figure = Class.extend({
          this.repaint();
      },
 
-    /**
-     * Set the primary model object that this Line represents. This method is used 
-     * by an EditPartFactory when creating an Line.
-     * 
-     * @param {graphiti.mvc.AbstractObjectModel} model The model
-     * @final
-     */
-    setModel:function( model)
-    {
-       if(this.model!==null){
-          this.model.removePropertyChangeListener(this);
-       }
-
-       this.model = model;
-
-       if(this.model!==null){
-          this.model.addPropertyChangeListener(this);
-       }
-    },
-
-
-    /**
-     * Returns the primary model object that this Figure represents.
-     * 
-     * @type {graphiti.mvc.AbstractObjectModel}
-     * @final
-     */
-    getModel:function()
-    {
-       return this.model;
-    },
-
-
-    /**
-     * @method
-     * Called by the MVC framework if any data on the related model has been changed. The figure
-     * enfoces a repaint or only an update of the position related to type of event.
-     * 
-     * @private
-     * @param {graphiti.mvc.Event} event
-     */
-    propertyChange:function( event)
-    {
-      switch(event.property)
-      {
-        case graphiti.mvc.Event.PROPERTY_CHANGED:
-        	this.updateViewFromModel();
-            this.repaint();
-            break;
-        case graphiti.mvc.Event.POSITION_CHANGED:
-            this.setPosition(event.newValue.x,event.newValue.y);
-            break;
-        case graphiti.mvc.Event.CONNECTION_ADDED:
-            this.refreshConnections();
-            break;
-        case graphiti.mvc.Event.CONNECTION_REMOVED:
-            this.refreshConnections();
-            break;
-        default:
-            break;
-       }
-    },
+     /**
+      * @method
+      * Return all children/decorations of this shape
+      */
+     getChildren : function(){
+         var shapes = new graphiti.util.ArrayList();
+         this.children.each(function(i,e){
+             shapes.add(e.figure);
+         });
+         return shapes;
+     },
+     
 
     /**
      * @method
@@ -296,15 +247,6 @@ graphiti.Figure = Class.extend({
         throw "Inherited class ["+this.NAME+"] must override the abstract method createShapeElement";
     },
 
-    /**
-     * @method
-     * Template method to synch. the model into the view. Required if the MVC pattern is used.
-     * 
-     * @template
-     */
-    updateViewFromModel:function()
-    {
-    },
 
     /**
      * @method
@@ -585,7 +527,6 @@ graphiti.Figure = Class.extend({
         while( (child = child.previousSibling) != null ) {
           i++;
         }
-        console.log(this.NAME+":"+i);
         return i;
     },
     
@@ -1130,11 +1071,19 @@ graphiti.Figure = Class.extend({
      */
     setPersistentAttributes : function(memento)
     {
-        this.id   = memento.id;
-        this.x    = memento.x;
-        this.y    = memento.y;
-        this.width= memento.width;
-        this.height= memento.height;
+        this.id    = memento.id;
+        this.x     = memento.x;
+        this.y     = memento.y;
+        
+        // width and height are optional parameter for the JSON stuff.
+        // We use the defaults are the attributes not present
+        if(typeof memento.width !== "undefined"){
+            this.width = memento.width;
+        }
+        
+        if(typeof memento.height !== "undefined"){
+            this.height= memento.height;
+        }
     }
     
 

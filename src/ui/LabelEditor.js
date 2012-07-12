@@ -24,10 +24,10 @@ graphiti.ui.LabelEditor = Class.extend({
      * @param {graphiti.shape.basic.Label} label the label to edit
      */
     start: function( label){
-    	var newText = prompt("Label: ", shape.getText());
-    	if(newText){
-    		shape.setText(newText);
-    	}
+        var newText = prompt("Label: ", label.getText());
+        if(newText){
+            label.setText(newText);
+        }
     }
     
 });

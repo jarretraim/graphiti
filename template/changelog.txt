@@ -1,5 +1,14 @@
-##.##.2012 version 0.9.35
+12.07.2012 version 0.9.35
     - new Locator for shape decorations. LeftLocator, RightLocator and CenterLocator.
+    - Provide the onClick and onDoubleCLick events for the children/decoration of a shape as well. Children can now
+      handle this events in its own callback method.
+    - buildin editor for Labels. see package graphiti.ui.LabelEditor and the examples
+      connection_labeledit_dialog and connection_label_edit_inplace
+    - fix bug in the JSON serialization. Use good defaults if some attributes are missing
+    - new example connection_label_edit_inplace
+    - drop code for unfinished MVC pattern. Not good enough for production. Rewrite
+      if required.
+    - avoid DivionByZero in Sparkline if the widget contains no data
 
 09.07.2012 version 0.9.34
     - new example 'shape_add_port_via_api' to show the handling of a 'Locator' and 

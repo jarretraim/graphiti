@@ -104,13 +104,8 @@
 	<SCRIPT src="../../src/shape/analog/VoltageSupplyHorizontal.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/analog/VoltageSupplyVertical.js"></SCRIPT>
 
-	<SCRIPT src="../../src/ui/parts/GraphicalEditor.js"></SCRIPT>
-	<SCRIPT src="../../src/ui/parts/GraphicalViewer.js"></SCRIPT>
-
-	<SCRIPT src="../../src/mvc/controller/EditPartFactory.js"></SCRIPT>
-	<SCRIPT src="../../src/mvc/AbstractObjectModel.js"></SCRIPT>
-	<SCRIPT src="../../src/mvc/AbstractConnectionModel.js"></SCRIPT>
-	<SCRIPT src="../../src/mvc/Event.js"></SCRIPT>
+	<SCRIPT src="../../src/ui/LabelEditor.js"></SCRIPT>
+	<SCRIPT src="../../src/ui/LabelInplaceEditor.js"></SCRIPT>
 
 	<SCRIPT src="../../src/io/Reader.js"></SCRIPT>
 	<SCRIPT src="../../src/io/Writer.js"></SCRIPT>
@@ -166,16 +161,6 @@ $(document).ready(function() {
 	 var end2 = new graphiti.shape.node.End();
 	 end2.addFigure(new graphiti.shape.basic.Label("Right Label"), new graphiti.layout.locator.RightLocator(end2));	
 	 canvas.addFigure( end2, 350,100);
-
-	 // add an event listener to the Canvas for change notifications.
-	  // We just dump the current canvas document into the DIV
-	  //
-	  canvas.getCommandStack().addEventListener(function(e){
-	      if(e.isPostChangeEvent()){
-	          var writer = new graphiti.io.json.Writer();
-	          console.log(JSON.stringify(writer.marshal(canvas),null,2));
-	      }
-	  });
 
 	 ///////////////////////////////////////////////////////////////////// 
 	 // THIS IS ONLY FOR THE ARROW AND THE POST-IT

@@ -54,14 +54,4 @@ example.io_json_extend.LabeledEnd = graphiti.shape.node.End.extend({
         // read the special value (the label) and update the label/decoration of the element
         this.label.setText(memento.my_label);
     }
-    
-
-    getLabel:function(){
-    	return this.label.getText();
-    },
-    
-    setLabel: function(text){
-    	this.label.setText(text);
-    }
-
 });

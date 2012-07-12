@@ -13,7 +13,7 @@ graphiti.OutputPort = graphiti.Port.extend({
      * @constructor
      * Create a new OutputPort element
      * 
-     * @param {String} [name] the name for the Port. Required for MVC
+     * @param {String} [name] the name for the Port. 
      */
     init : function(name)
     {

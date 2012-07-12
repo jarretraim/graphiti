@@ -32,11 +32,11 @@ graphiti.shape.basic.Rectangle = graphiti.VectorFigure.extend({
      * 
      */
     init: function( width, height) {
+       // corner radius
+       this.radius = 2;
+        
       this._super();
 
-      // corner radius
-      this.radius = 2;
-      
       this.setBackgroundColor( new graphiti.util.Color(100,100,100));
       this.setColor(new graphiti.util.Color(50,50,50));
 
@@ -127,7 +127,10 @@ graphiti.shape.basic.Rectangle = graphiti.VectorFigure.extend({
     setPersistentAttributes : function(memento)
     {
         this._super(memento);
-        this.radius = memento.radius;
+        
+        if(typeof memento.radius ==="number"){
+            this.radius = memento.radius;
+        }
     }
     
 });
