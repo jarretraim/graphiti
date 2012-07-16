@@ -59,14 +59,14 @@ graphiti.HybridPort = graphiti.Port.extend({
     /**
      * @inheritdoc
      *
-     * @param {graphiti.EditPolicy} request describes the Command being requested
+     * @param {graphiti.command.CommandType} request describes the Command being requested
      * @return {graphiti.command.Command} null or a valid command
      **/
     createCommand:function(request)
     {
        // Connect request between two ports
        //
-       if(request.getPolicy() === graphiti.EditPolicy.CONNECT) {
+       if(request.getPolicy() === graphiti.command.CommandType.CONNECT) {
            
          if(request.source.getParent().getId() === request.target.getParent().getId()){
             return null;

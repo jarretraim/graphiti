@@ -1,3 +1,15 @@
+16.07.2012 version 0.9.37
+    - 
+
+16.07.2012 version 0.9.36
+    - rename class graphiti.EditPolcy to graphiti.command.CommandType
+    - concept for drag&drop and other edit constraint handling: graphiti.policy.EditPolicy
+    - new class DragDropEditPolicy
+    - new class RegioEditPolicy
+    - new class HorizontalEditPolicy
+    - new class VerticalEditPolicy
+    - new example for EditConstraint usage "edit_policy_constraint"
+
 12.07.2012 version 0.9.35
     - new Locator for shape decorations. LeftLocator, RightLocator and CenterLocator.
     - Provide the onClick and onDoubleCLick events for the children/decoration of a shape as well. Children can now

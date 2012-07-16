@@ -243,6 +243,43 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 	  return new graphiti.geo.Point(this.x+this.w,this.y+this.h);
 	},
 	
+	
+	/**
+	 * @method
+	 * Return a new rectangle which fits into this rectangle. <b>ONLY</b> the x/y coordinates
+	 * will be changed. Not the dimension of the given rectangle.
+	 * 
+	 * @param {graphiti.geo.Rectangle} rect the rectangle to adjust
+	 * @return the new shifted rectangle
+	 */
+	moveInside: function(rect){
+	    var newRect = new graphiti.geo.Rectangle(rect.x,rect.y,rect.w,rect.h);
+	    // shift the coordinate right/down if coordinate not inside the rect
+	    //
+	    newRect.x= Math.max(newRect.x,this.x);
+	    newRect.y= Math.max(newRect.y,this.y);
+	    
+	    // ensure that the right border is inside this rect (if possible). 
+	    //
+	    if(newRect.w<this.w){
+	        newRect.x = Math.min(newRect.x+newRect.w, this.x+this.w)-newRect.w; 
+	    }
+	    else{
+	        newRect.x = this.x;
+	    }
+	    
+	    // ensure that the bottom is inside this rectangle
+	    //
+        if(newRect.h<this.h){
+            newRect.y = Math.min(newRect.y+newRect.h, this.y+this.h)-newRect.h; 
+        }
+        else{
+            newRect.y = this.y;
+        }
+
+        return newRect;
+	},
+	
 	/**
 	 * @method
 	 * Return the minimum distance of this rectangle to the given {@link graphiti.geo.Point} or 

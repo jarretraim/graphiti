@@ -389,12 +389,12 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
     * @method
     * Returns the Command to perform the specified Request or null.
     *
-    * @param {graphiti.EditPolicy} request describes the Command being requested
+    * @param {graphiti.command.CommandType} request describes the Command being requested
     * @return {graphiti.command.Command} null or a Command
     **/
    createCommand:function( request)
    {
-     if(request.getPolicy() == graphiti.EditPolicy.MOVE)
+     if(request.getPolicy() === graphiti.command.CommandType.MOVE)
      {
        var x1 = this.getStartX();
        var y1 = this.getStartY();
@@ -402,7 +402,7 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
        var y2 = this.getEndY();
        return new graphiti.command.CommandMoveLine(this,x1,y1,x2,y2);
      }
-     if(request.getPolicy() == graphiti.EditPolicy.DELETE)
+     if(request.getPolicy() === graphiti.command.CommandType.DELETE)
      {
         if(this.isDeleteable()===false){
            return null;

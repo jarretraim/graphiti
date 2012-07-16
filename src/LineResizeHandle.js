@@ -76,7 +76,7 @@ graphiti.shape.basic.LineResizeHandle = graphiti.shape.basic.Circle.extend({
         this.ox = this.x;
         this.oy = this.y;
 
-        this.command = this.getCanvas().getCurrentSelection().createCommand(new graphiti.EditPolicy(graphiti.EditPolicy.MOVE_BASEPOINT));
+        this.command = this.getCanvas().getCurrentSelection().createCommand(new graphiti.command.CommandType(graphiti.command.CommandType.MOVE_BASEPOINT));
 
         return true;
     },

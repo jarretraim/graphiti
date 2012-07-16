@@ -5,7 +5,7 @@
 
 	<property name="graphiti.version.major"    value="0"/>
 	<property name="graphiti.version.minor"    value="9"/>
-	<property name="graphiti.version.bugfix"   value="34"/>
+	<property name="graphiti.version.bugfix"   value="36"/>
 	<property name="graphiti.version"          value="${graphiti.version.major}.${graphiti.version.minor}.${graphiti.version.bugfix}"/>
 	<property name="dist.dir"      location="${basedir}/dist" />
 	<property name="src.dir"       location="${basedir}/src" />
@@ -155,7 +155,7 @@
 			</fileset>
 
 			
-			<fileset file="${compress.dir}/EditPolicy.js">
+			<fileset file="${compress.dir}/command/CommandType.js">
 			</fileset>
 			<fileset file="${compress.dir}/command/Command.js">
 			</fileset>
@@ -215,6 +215,17 @@
 			<fileset file="${compress.dir}/layout/locator/CenterLocator.js">
 			</fileset>
 
+			<fileset file="${compress.dir}/policy/EditPolicy.js">
+			</fileset>
+			<fileset file="${compress.dir}/policy/DragDropEditPolicy.js">
+			</fileset>
+			<fileset file="${compress.dir}/policy/RegionEditPolicy.js">
+			</fileset>
+			<fileset file="${compress.dir}/policy/HorizontalEditPolicy.js">
+			</fileset>
+			<fileset file="${compress.dir}/policy/VerticalEditPolicy.js">
+			</fileset>
+
 			<fileset file="${compress.dir}/Canvas.js">
 			</fileset>
 			<fileset file="${compress.dir}/Figure.js">
@@ -243,6 +254,7 @@
 			<fileset file="${compress.dir}/shape/basic/Line.js">
 			</fileset>
 			<fileset file="${compress.dir}/shape/basic/PolyLine.js">
+			
 			</fileset>
 			<fileset file="${compress.dir}/Connection.js">
 			</fileset>
@@ -450,7 +462,7 @@
 	  <loadfile property="changelog"     srcFile="./template/changelog.txt"/>
       <property name="archiv.develop"    value="graphiti_develop_${archiv_infix}_${graphiti.version}.zip"/>
       <property name="archiv.productive" value="graphiti_productive_${archiv_infix}_${graphiti.version}.zip"/>
-	
+
  	  <mail mailhost="${mail.host}" 
 		      mailport="587"
 		      enableStartTLS="true"
@@ -464,7 +476,7 @@
 			  messagemimetype="text/html"
 			  messagefile="./template/email_${archiv_infix}.html">
 		</mail>
-	
+
 	</target>
 
 </project>

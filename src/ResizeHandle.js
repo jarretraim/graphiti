@@ -144,8 +144,8 @@ graphiti.ResizeHandle = graphiti.shape.basic.Rectangle.extend({
 
         var figure = this.getCanvas().getCurrentSelection();
 
-        this.commandMove = figure.createCommand(new graphiti.EditPolicy(graphiti.EditPolicy.MOVE));
-        this.commandResize = figure.createCommand(new graphiti.EditPolicy(graphiti.EditPolicy.RESIZE));
+        this.commandMove = figure.createCommand(new graphiti.command.CommandType(graphiti.command.CommandType.MOVE));
+        this.commandResize = figure.createCommand(new graphiti.command.CommandType(graphiti.command.CommandType.RESIZE));
 
         return true;
     },

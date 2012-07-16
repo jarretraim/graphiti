@@ -22,7 +22,6 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
 
       this._super( width, height);
 
-
       this.setResizeable(false);
       this.setStroke(0);
       this.setBackgroundColor(null); 
@@ -37,7 +36,7 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
     setCanvas: function( canvas )
     {
       // remove the shape if we reset the canvas and the element
-        // was already drawn
+      // was already drawn
       if(canvas===null && this.svgNodes!==null){
          this.svgNodes.remove();
          this.svgNodes=null;
@@ -70,8 +69,7 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
     /**
      * @private
      */
-    createShapeElement : function()
-    {
+    createShapeElement : function(){
        // NOTE: don't change the order of the two calles. This defines the z-oder in the canvas.
        // The "set" should always be on top.
        var shape= this.canvas.paper.rect(this.getX(),this.getY(),this.getWidth(), this.getHeight());
@@ -108,8 +106,7 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
      * 
 	 * @return {Number} the calculated height of the label
 	 */
-    getHeight:function()
-    {
+    getHeight:function(){
         if (this.shape === null) {
             return 0;
         }

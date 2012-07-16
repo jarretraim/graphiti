@@ -499,12 +499,12 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
      * @method
      * Returns the Command to perform the specified Request or null.
       *
-     * @param {graphiti.EditPolicy} request describes the Command being requested
+     * @param {graphiti.command.CommandType} request describes the Command being requested
      * @return {graphiti.command.Command} null or a Command
      **/
-    createCommand:function(/*:graphiti.EditPolicy*/ request)
+    createCommand:function( request)
     {
-      if(request.getPolicy() === graphiti.EditPolicy.MOVE_BASEPOINT)
+      if(request.getPolicy() === graphiti.command.CommandType.MOVE_BASEPOINT)
       {
         // DragDrop of a connection doesn't create a undo command at this point. This will be done in
         // the onDrop method

@@ -54,6 +54,12 @@
 	<SCRIPT src="../../src/layout/locator/ConnectionLocator.js"></SCRIPT>
 	<SCRIPT src="../../src/layout/locator/ManhattanMidpointLocator.js"></SCRIPT>
 
+	<SCRIPT src="../../src/policy/EditPolicy.js"></SCRIPT>
+	<SCRIPT src="../../src/policy/DragDropEditPolicy.js"></SCRIPT>
+	<SCRIPT src="../../src/policy/RegionEditPolicy.js"></SCRIPT>
+	<SCRIPT src="../../src/policy/HorizontalEditPolicy.js"></SCRIPT>
+	<SCRIPT src="../../src/policy/VerticalEditPolicy.js"></SCRIPT>
+
 	<SCRIPT src="../../src/Canvas.js"></SCRIPT>
 	<SCRIPT src="../../src/Figure.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/node/Node.js"></SCRIPT>
@@ -68,6 +74,8 @@
 	<SCRIPT src="../../src/shape/basic/Label.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/basic/Line.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/basic/PolyLine.js"></SCRIPT>
+	<SCRIPT src="../../src/shape/basic/Diamond.js"></SCRIPT>
+	
 	<SCRIPT src="../../src/Connection.js"></SCRIPT>
 	<SCRIPT src="../../src/VectorFigure.js"></SCRIPT>
 	<SCRIPT src="../../src/ResizeHandle.js"></SCRIPT>
@@ -125,21 +133,32 @@
         //
         var canvas = new graphiti.Canvas("gfx_holder");
 
-        canvas.addFigure(new graphiti.shape.analog.OpAmp(),50,50);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.analog.OpAmp"),200,55);
+        // Install a Edit Policy for a DragDrop region 
+        // It is now not possible to move the element outside the given 
+        // rectangle 
+        //
+        var oval1 = new graphiti.shape.basic.Oval(80,30);
+        oval1.installEditPolicy(new graphiti.policy.RegionEditPolicy(10,10,300,300));
+        canvas.addFigure(oval1,50,100);
+        canvas.addFigure(new graphiti.shape.basic.Label("oval1.installEditPolicy(new graphiti.policy.RegionEditPolicy(10,10,300,300));"),200,105);
         
-        canvas.addFigure(new graphiti.shape.analog.ResistorBridge(),50,150);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.analog.ResistorBridge"),200,155);
+		var oval2 = new graphiti.shape.basic.Oval(80,30);
+        oval2.installEditPolicy(new graphiti.policy.VerticalEditPolicy());
+        canvas.addFigure(oval2,50,180);
+        canvas.addFigure(new graphiti.shape.basic.Label("oval2.installEditPolicy(new graphiti.policy.VerticalEditPolicy());"),200,185);
         
-        canvas.addFigure(new graphiti.shape.analog.VoltageSupplyHorizontal(),50,250);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.analog.VoltageSupplyHorizontal"),200,255);
+		var oval3 = new graphiti.shape.basic.Oval(80,30);
+        oval3.installEditPolicy(new graphiti.policy.HorizontalEditPolicy());
+        canvas.addFigure(oval3,50,280);
+        canvas.addFigure(new graphiti.shape.basic.Label("oval3.installEditPolicy(new graphiti.policy.HorizontalEditPolicy());"),200,285);
+        
 
-        canvas.addFigure(new graphiti.shape.analog.VoltageSupplyVertical(),50,350);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.analog.VoltageSupplyVertical"),200,355);
-
-        canvas.addFigure(new graphiti.shape.analog.ResistorVertical(),50,450);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.analog.ResistorVertical"),200,455);
-        
+   	 ///////////////////////////////////////////////////////////////////// 
+   	 // THIS IS ONLY FOR THE ARROW AND THE POST-IT
+   	 ///////////////////////////////////////////////////////////////////// 
+   	 var msg = new graphiti.shape.note.PostIt("Drag&Drop the green oval. They have installed different EditPolicy constraints.\nRectangle, vertical or horizontal.");
+   	 canvas.addFigure(msg, 20,20);
+   	 
     });
 </script>
 

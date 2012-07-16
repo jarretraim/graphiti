@@ -192,7 +192,7 @@ graphiti.command.CommandStack = Class.extend({
      * @method
      * Adds a listener to the command stack, which will be notified whenever a command has been processed on the stack.
      * 
-     * @param {graphiti.command.CommandStackListener} listener the listener to add.
+     * @param {graphiti.command.CommandStackEventListener} listener the listener to add.
      */
     addEventListener:function( listener)
     {
@@ -214,7 +214,7 @@ graphiti.command.CommandStack = Class.extend({
      * @method
      * Removes a listener from the command stack.
      * 
-     * @param {graphiti.command.CommandStackListener} listener the listener to remove.
+     * @param {graphiti.command.CommandStackEventListener} listener the listener to remove.
      */
     removeEventListener:function(listener)
     {

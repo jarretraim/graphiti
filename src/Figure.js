@@ -36,9 +36,10 @@ graphiti.Figure = Class.extend({
         this.resizeable = true;
         this.draggable = true;
         this.canSnapToHelper = true;
-        this.snapToGridAnchor = new graphiti.geo.Point(0,0);   // hot spot for snap to grid  
+        this.snapToGridAnchor = new graphiti.geo.Point(0,0);    // hot spot for snap to grid  
+        this.editPolicy = new graphiti.util.ArrayList(); // List<graphiti.layout.constraint.EditPolicy)
         
-        // time for animation or automatic update
+        // timer for animation or automatic update
         this.timerId = -1;
         this.timerInterval = 0;
         
@@ -181,6 +182,19 @@ graphiti.Figure = Class.extend({
      },
      
      /**
+      * Install a new edit policy to the figure. Each editpolicy is able to focus on a single editing 
+      * task or group of related tasks. This also allows editing behavior to be selectively reused across 
+      * different figure implementations. Also, behavior can change dynamically, such as when the layouts 
+      * or routing methods change.
+      * Example for limited DragDrop behaviour can be a graphiti.layout.constraint.RegionConstriantPolicy.
+      * 
+      * @param {graphiti.policy.EditPolicy} policy
+      */
+     installEditPolicy: function(policy){
+         this.editPolicy.add(policy);
+     },
+     
+     /**
       * @method
       * Add a child figure to the figure. The hands over figure doesn't support drag&drop 
       * operations. It's only a decorator for the connection.<br>
@@ -306,7 +320,7 @@ graphiti.Figure = Class.extend({
       this.isMoving = false;
       this.originalAlpha = this.getAlpha();
 
-      this.command = this.createCommand(new graphiti.EditPolicy(graphiti.EditPolicy.MOVE));
+      this.command = this.createCommand(new graphiti.command.CommandType(graphiti.command.CommandType.MOVE));
 
       if(this.command!==null){
          this.ox = this.x;
@@ -330,6 +344,16 @@ graphiti.Figure = Class.extend({
      **/
     onDrag : function( dx,  dy)
     {
+      // apply all EditPolicy for DragDrop Operations
+      //
+      this.editPolicy.each($.proxy(function(i,e){
+            if(e.getRole()===graphiti.policy.EditPolicy.Role.PRIMARY_DRAG_ROLE){
+                var newPos = e.apply(this,this.ox+dx,this.oy+dy);
+                dx = newPos.x-this.ox;
+                dy = newPos.y-this.oy;
+            }
+      },this));
+        
       this.x = this.ox+dx;
       this.y = this.oy+dy;
 
@@ -344,6 +368,7 @@ graphiti.Figure = Class.extend({
         this.y = p.y;
       }
 
+      
       this.setPosition(this.x, this.y);
       
 
@@ -999,7 +1024,7 @@ graphiti.Figure = Class.extend({
      * @method
      * Returns the Command to perform the specified Request or null.
       *
-     * @param {graphiti.EditPolicy} request describes the Command being requested
+     * @param {graphiti.command.CommandType} request describes the Command being requested
      * @return {graphiti.command.Command} null or a Command
      **/
     createCommand:function( request)
@@ -1008,7 +1033,7 @@ graphiti.Figure = Class.extend({
           return null;
       }
       
-      if(request.getPolicy() === graphiti.EditPolicy.MOVE)
+      if(request.getPolicy() === graphiti.command.CommandType.MOVE)
       {
         if(!this.isDraggable()){
           return null;
@@ -1016,7 +1041,7 @@ graphiti.Figure = Class.extend({
         return new graphiti.command.CommandMove(this);
       }
 
-      if(request.getPolicy() === graphiti.EditPolicy.DELETE)
+      if(request.getPolicy() === graphiti.command.CommandType.DELETE)
       {
         if(!this.isDeleteable()){
            return null;
@@ -1024,7 +1049,7 @@ graphiti.Figure = Class.extend({
         return new graphiti.command.CommandDelete(this);
       }
       
-      if(request.getPolicy() === graphiti.EditPolicy.RESIZE)
+      if(request.getPolicy() === graphiti.command.CommandType.RESIZE)
       {
         if(!this.isResizeable()){
            return null;

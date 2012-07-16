@@ -307,7 +307,7 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
     	
         // Create a CONNECT Command to determine if we can show a Corona. Only valid
         // dropTarget did have a corona
-        var request = new graphiti.EditPolicy(graphiti.EditPolicy.CONNECT);
+        var request = new graphiti.command.CommandType(graphiti.command.CommandType.CONNECT);
         request.canvas = this.parent.getCanvas();
         request.source = draggedFigure;
         request.target = this;
@@ -355,7 +355,7 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
     		return;
     	}
  
-    	var request = new graphiti.EditPolicy(graphiti.EditPolicy.CONNECT);
+    	var request = new graphiti.command.CommandType(graphiti.command.CommandType.CONNECT);
         request.canvas = this.parent.getCanvas();
         request.source = dropTarget;
         request.target = this;
@@ -459,14 +459,14 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
     /**
      * @inheritdoc
      *
-     * @param {graphiti.EditPolicy} request describes the Command being requested
+     * @param {graphiti.command.CommandType} request describes the Command being requested
      * @return {graphiti.command.Command} null or a valid command
      **/
-    createCommand:function(/*:graphiti.EditPolicy*/ request)
+    createCommand:function(request)
     {
        // the port has its own implementation of the CommandMove
        //
-       if(request.getPolicy() ===graphiti.EditPolicy.MOVE)
+       if(request.getPolicy() ===graphiti.command.CommandType.MOVE)
        {
          if(!this.isDraggable()){
             return null;
@@ -475,7 +475,7 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
        }
        // Connect request between two ports
        //
-       if(request.getPolicy() ===graphiti.EditPolicy.CONNECT)
+       if(request.getPolicy() ===graphiti.command.CommandType.CONNECT)
        {
          if(request.source.parent.id === request.target.parent.id){
             return null;

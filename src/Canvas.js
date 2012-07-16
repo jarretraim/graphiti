@@ -869,7 +869,7 @@ graphiti.Canvas = Class.extend(
      * @method
      * Register a listener to the Canvas. The listener must provide a function "onSelectionChanged".
      * 
-     * @param {Object/function} w an object which implements the 'onSelectionChanged' method or a callback function
+     * @param {Object|Function} w an object which implements the 'onSelectionChanged' method or a callback function
      **/
     addSelectionListener:function(w)
     {
@@ -1225,7 +1225,7 @@ graphiti.Canvas = Class.extend(
      * Graphiti use the jQuery draggable/droppable lib. Please inspect
      * http://jqueryui.com/demos/droppable/ for further information.
      * 
-     * @param {HTMLNode} draggedDomNode The DOM element which is currently dragging
+     * @param {HTMLElement} draggedDomNode The DOM element which is currently dragging
      * 
     * @template
      **/
@@ -1294,7 +1294,7 @@ graphiti.Canvas = Class.extend(
       // kann. Bei einer Linie geht dies leider nicht, und muss hier abgehandelt werden.
       //
       if(keyCode==46 && this.currentSelection!==null)
-         this.commandStack.execute(this.currentSelection.createCommand(new graphiti.EditPolicy(graphiti.EditPolicy.DELETE)));
+         this.commandStack.execute(this.currentSelection.createCommand(new graphiti.command.CommandType(graphiti.command.CommandType.DELETE)));
       else if(keyCode==90 && ctrl)
          this.commandStack.undo();
       else if(keyCode==89 && ctrl)
@@ -1369,7 +1369,7 @@ graphiti.Canvas = Class.extend(
                 // A Connection is fixed linked with the corresponding ports.
                 //
                 if (!(figure instanceof graphiti.Connection)) {
-                    this.draggingLineCommand = figure.createCommand(new graphiti.EditPolicy(graphiti.EditPolicy.MOVE));
+                    this.draggingLineCommand = figure.createCommand(new graphiti.command.CommandType(graphiti.command.CommandType.MOVE));
                     if (this.draggingLineCommand !== null) {
                         this.draggingLine = figure;
                     }

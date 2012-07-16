@@ -28,14 +28,16 @@ var graphiti =
         widget:{}
     },
     
+    policy : {
+    },
+    
     command : {
     },
 
     layout: {
         connection :{},
 	    mesh :{},
-	    locator: {},
-	    constraint:{}
+	    locator: {}
     },
     
     

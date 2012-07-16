@@ -1,7 +1,7 @@
 
 
 /**
- * @class graphiti.EditPolicy
+ * @class graphiti.command.CommandType
  * 
  * EditPolicies should determine an Figures editing capabilities. 
  * It is possible to implement an Figure such that it handles all editing 
@@ -13,9 +13,9 @@
  * 
  * @author Andreas Herz
  */
-graphiti.EditPolicy = Class.extend({
+graphiti.command.CommandType = Class.extend({
 	
-    NAME : "graphiti.EditPolicy",
+    NAME : "graphiti.command.CommandType",
 
     /**
      * @constructor
@@ -39,10 +39,10 @@ graphiti.EditPolicy = Class.extend({
     }
 });
  
-graphiti.EditPolicy.DELETE         = "DELETE";
-graphiti.EditPolicy.MOVE           = "MOVE";
-graphiti.EditPolicy.CONNECT        = "CONNECT";
-graphiti.EditPolicy.MOVE_BASEPOINT = "MOVE_BASEPOINT";
-graphiti.EditPolicy.RESIZE         = "RESIZE";
+graphiti.command.CommandType.DELETE         = "DELETE";
+graphiti.command.CommandType.MOVE           = "MOVE";
+graphiti.command.CommandType.CONNECT        = "CONNECT";
+graphiti.command.CommandType.MOVE_BASEPOINT = "MOVE_BASEPOINT";
+graphiti.command.CommandType.RESIZE         = "RESIZE";
 
 

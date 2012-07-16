@@ -277,13 +277,13 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
      * @method
      * Returns the Command to perform the specified Request or null.
       *
-     * @param {graphiti.EditPolicy} request describes the Command being requested
+     * @param {graphiti.command.CommandType} request describes the Command being requested
      * @return {graphiti.command.Command}
      **/
     createCommand:function(request) 
     {
  
-      if(request.getPolicy() === graphiti.EditPolicy.DELETE){
+      if(request.getPolicy() === graphiti.command.CommandType.DELETE){
         if(this.isDeleteable()===true){
           return new graphiti.command.CommandDelete(this);
         }
