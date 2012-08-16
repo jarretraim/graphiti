@@ -46,9 +46,8 @@ graphiti.layout.locator.LeftLocator= graphiti.layout.locator.Locator.extend({
     {
        var parent = this.getParent();
        var boundingBox = parent.getBoundingBox();
-       var topLeft = boundingBox.getTopLeft();
-       
+
        var targetBoundingBox = target.getBoundingBox();
-       target.setPosition(topLeft.x-targetBoundingBox.w-5,topLeft.y+(boundingBox.h/2)-(targetBoundingBox.h/2));
+       target.setPosition(-targetBoundingBox.w-5,(boundingBox.h/2)-(targetBoundingBox.h/2));
     }
 });

@@ -20,7 +20,6 @@ graphiti.command.CommandDelete = graphiti.command.Command.extend({
        this.figure   = figure;
        this.canvas = figure.getCanvas();
        this.connections = null;
-       this.compartmentDeleteCommands = null; 
     },
     
     /**
@@ -40,17 +39,6 @@ graphiti.command.CommandDelete = graphiti.command.Command.extend({
      **/
     undo:function()
     {
-        if(this.figure instanceof graphiti.CompartmentFigure)
-        {
-           for(var i=0; i<this.compartmentDeleteCommands.getSize();i++)
-           {
-             var deleteCommand = this.compartmentDeleteCommands.get(i);
-             // add the figure to the compartment figure
-             this.figure.addChild(deleteCommand.figure);
-             // add the figure to the canvas
-             this.canvas.getCommandStack().undo();
-           }
-        }
         this.canvas.addFigure(this.figure);
         if(this.figure instanceof graphiti.Connection)
            this.figure.reconnect();
@@ -72,33 +60,6 @@ graphiti.command.CommandDelete = graphiti.command.Command.extend({
      **/
     redo:function()
     {
-        // We must delete all children of this figure if this element an
-        // compartment figure.
-        //
-        if(this.figure instanceof graphiti.CompartmentFigure)
-        {
-          if(this.compartmentDeleteCommands===null)
-          {
-             this.compartmentDeleteCommands = new graphiti.util.ArrayList();
-             var children = this.figure.getChildren().clone();
-             for(var i=0; i<children.getSize();i++)
-             {
-               var child = children.get(i);
-               this.figure.removeChild(child);
-               var deleteCommand = new graphiti.CommandDelete(child);
-               this.compartmentDeleteCommands.add(deleteCommand);
-               this.canvas.getCommandStack().execute(deleteCommand);
-             }
-          }
-          else
-          {
-             for(var i=0; i<this.compartmentDeleteCommands.getSize();i++)
-             {
-                this.canvas.redo();
-             }
-          }
-        }
-    
         this.canvas.setCurrentSelection(null);
         if(this.figure instanceof graphiti.shape.node.Node && this.connections===null)
         {
@@ -127,7 +88,7 @@ graphiti.command.CommandDelete = graphiti.command.Command.extend({
        if(this.connections===null)
           this.connections = new graphiti.util.ArrayList();
     
-        // remove this figure from the parent CompartmentFigure
+        // remove this figure from the parent 
         //
         if(this.parent!==null)
           this.parent.removeChild(this.figure);

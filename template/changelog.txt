@@ -1,5 +1,9 @@
-16.07.2012 version 0.9.37
-    - 
+16.08.2012 version 0.9.37
+    - remove double call of the commit callback in the LabelInplaceEditor
+    - enable InplaceEdit for labels attached to normals shapes
+    - Unbind the click callback of the <body> element after the inline editor dies
+    
+       
 
 16.07.2012 version 0.9.36
     - rename class graphiti.EditPolcy to graphiti.command.CommandType

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Test-JsDoc" default="all" basedir=".">
+<project name="Test-JsDoc" default="local" basedir=".">
 
     <property file="../../hidden.properties" />
 
@@ -247,8 +247,6 @@
 			</fileset>
 			<fileset file="${compress.dir}/shape/basic/Circle.js">
 			</fileset>
-			<fileset file="${compress.dir}/CompartmentFigure.js">
-			</fileset>
 			<fileset file="${compress.dir}/shape/basic/Label.js">
 			</fileset>
 			<fileset file="${compress.dir}/shape/basic/Line.js">
@@ -387,7 +385,7 @@
 
 
 	<!-- This is the default target - it generates the JsDoc documents -->
-	<target name="all" depends="" description="Build the complete product and inform the customers via email.">
+	<target name="dist" depends="" description="Build the complete product and inform the customers via email.">
 		
 		<!-- Lib with MIT license
 		  - build

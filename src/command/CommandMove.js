@@ -34,8 +34,7 @@ graphiti.command.CommandMove = graphiti.command.Command.extend({
             this.oldX = x;
             this.oldY = y;
         }
-        this.oldCompartment = figure.getParent();
-    },
+   },
     
   
     /**
@@ -62,7 +61,6 @@ graphiti.command.CommandMove = graphiti.command.Command.extend({
     {
        this.newX = x;
        this.newY = y;
-       this.newCompartment = this.figure.getCanvas().getBestCompartmentFigure(x,y,this.figure);
     },
 
     /**
@@ -99,11 +97,6 @@ graphiti.command.CommandMove = graphiti.command.Command.extend({
     undo:function()
     {
        this.figure.setPosition(this.oldX, this.oldY);
-       if(this.newCompartment!==null)
-          this.newCompartment.removeChild(this.figure);
-    
-       if(this.oldCompartment!==null)
-          this.oldCompartment.addChild(this.figure);
     },
     
     /**
@@ -115,10 +108,5 @@ graphiti.command.CommandMove = graphiti.command.Command.extend({
     redo:function()
     {
        this.figure.setPosition(this.newX, this.newY);
-       if(this.oldCompartment!==null)
-          this.oldCompartment.removeChild(this.figure);
-    
-       if(this.newCompartment!==null)
-          this.newCompartment.addChild(this.figure);
     }
 });

@@ -466,12 +466,6 @@ graphiti.Canvas = Class.extend(
       else{
         this.figures.add(figure);
 
-        // Compartments must be stored in an additional structure
-        //
-        if(figure instanceof graphiti.CompartmentFigure){
-          this.compartments.add(figure);
-        }
-        
         if(typeof y !== "undefined"){
         	figure.setPosition(x,y);
         }
@@ -498,10 +492,6 @@ graphiti.Canvas = Class.extend(
         }
 
         figure.setCanvas(null);
-
-        if(figure instanceof graphiti.CompartmentFigure){
-           this.compartments.remove(figure);
-        }
 
         if(figure instanceof graphiti.Connection){
            figure.disconnect();
@@ -962,7 +952,7 @@ graphiti.Canvas = Class.extend(
                 var children= figure.getChildren();
                 children.each(function(i,e){
                     if(e.hitTest(x,y)===true){
-                        result = figure;
+                        result = e;
                         return false; // break the each-loop
                     }
                 });
@@ -990,30 +980,6 @@ graphiti.Canvas = Class.extend(
         return result;
     },
 
-    /**
-     * @method
-     * Returns the best compartment figure at the location [x,y].
-     *
-     * @param {Number} x The x position.
-     * @param {Number} y The y position.
-     * @param {graphiti.Figure} figureToIgnore The figure which should be ignored.
-     **/
-    getBestCompartmentFigure:function( x,  y, figureToIgnore)
-    {
-      var result = null;
-      for(var i=0;i<this.figures.getSize();i++)
-      {
-        var figure = this.figures.get(i);
-        if((figure instanceof graphiti.CompartmentFigure) && figure.hitTest(x,y)===true && figure!==figureToIgnore)
-        {
-            if(result===null){
-               result = figure;
-               break;
-            }
-        }
-      }
-      return result;
-    },
 
     /**
      * @method
@@ -1339,26 +1305,31 @@ graphiti.Canvas = Class.extend(
      **/
     onMouseDown : function(/* :int */x, /* :int */y)
     {
-       var canDragStart = true;
-        // check if a line has been hit
-        //
+        var canDragStart = true;
+
         var figure = this.getBestFigure(x, y);
 
-        if(figure!==null && figure.isDraggable()){
-            canDragStart = figure.onDragStart(x-figure.getAbsoluteX(),y-figure.getAbsoluteY());
+        // check if the user click on a child shape. DragDrop and movement must redirect
+        // to the parent
+        // Exception: Port's
+        if((figure!==null && figure.getParent()!==null) && !(figure instanceof graphiti.Port)){
+            figure = figure.getParent();
+        }
+        
+        if (figure !== null && figure.isDraggable()) {
+            canDragStart = figure.onDragStart(x - figure.getAbsoluteX(), y - figure.getAbsoluteY());
             // Element send a veto about the drag&drop operation
-            if(canDragStart===false){
+            if (canDragStart === false) {
                 this.mouseDraggingElement = null;
                 this.mouseDownElement = figure;
             }
-            else{
-               this.mouseDraggingElement = figure;
-               this.mouseDownElement = figure;
+            else {
+                this.mouseDraggingElement = figure;
+                this.mouseDownElement = figure;
             }
         }
 
-
-        if (figure !== this.currentSelection && figure !== null && figure.isSelectable()===true) {
+        if (figure !== this.currentSelection && figure !== null && figure.isSelectable() === true) {
 
             this.hideResizeHandles();
             this.setCurrentSelection(figure);
@@ -1375,12 +1346,12 @@ graphiti.Canvas = Class.extend(
                     }
                 }
             }
-            else if(canDragStart===false){
+            else if (canDragStart === false) {
                 this.setCurrentSelection(null);
             }
         }
-        else if(figure === null){
-        	this.setCurrentSelection(null);
+        else if (figure === null) {
+            this.setCurrentSelection(null);
         }
     },
     

@@ -43,8 +43,7 @@ graphiti.Figure = Class.extend({
         this.timerId = -1;
         this.timerInterval = 0;
         
-        // possible parent of the figure. Can be a ComparmentFigure or, in a case of a Port,
-        // a normal Figure.
+        // possible parent of the figure. 
         //
         this.parent = null;
         
@@ -209,6 +208,7 @@ graphiti.Figure = Class.extend({
          //
          child.setDraggable(false);
          child.setSelectable(false);
+         child.setParent(this);
          
          var entry = {};
          entry.figure = child;
@@ -938,9 +938,9 @@ graphiti.Figure = Class.extend({
     /**
      * @method
      * Set the parent of this figure.
-     * Don't call them manually. Is CompartmentFigre.appendChild() instead.
+     * Don't call them manually.
 
-     * @param {graphiti.CompartmentFigure} parent The new parent of this figure
+     * @param {graphiti.Figure} parent The new parent of this figure
      * @private
      **/
     setParent:function( parent)
@@ -952,7 +952,7 @@ graphiti.Figure = Class.extend({
      * @method
      * Get the parent of this figure.
      *
-     * @return {graphiti.CompartmentFigure}
+     * @return {graphiti.Figure}
      **/
     getParent:function()
     {

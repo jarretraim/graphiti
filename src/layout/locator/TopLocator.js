@@ -33,9 +33,8 @@ graphiti.layout.locator.TopLocator= graphiti.layout.locator.Locator.extend({
     {
        var parent = this.getParent();
        var boundingBox = parent.getBoundingBox();
-       var topCenter = boundingBox.getTopCenter();
-       
+    
        var targetBoundingBox = target.getBoundingBox();
-       target.setPosition(topCenter.x-(targetBoundingBox.w/2),topCenter.y-2-targetBoundingBox.h);
+       target.setPosition(boundingBox.w/2-(targetBoundingBox.w/2),-(targetBoundingBox.h+2));
     }
 });

@@ -49,9 +49,8 @@ graphiti.layout.locator.CenterLocator= graphiti.layout.locator.Locator.extend({
     {
        var parent = this.getParent();
        var boundingBox = parent.getBoundingBox();
-       var center = boundingBox.getCenter();
-       
+
        var targetBoundingBox = target.getBoundingBox();
-       target.setPosition(center.x-targetBoundingBox.w/2,center.y-(targetBoundingBox.h/2));
+       target.setPosition(boundingBox.w/2-targetBoundingBox.w/2,boundingBox.h/2-(targetBoundingBox.h/2));
     }
 });

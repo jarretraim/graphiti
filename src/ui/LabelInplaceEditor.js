@@ -26,15 +26,12 @@ graphiti.ui.LabelInplaceEditor =  graphiti.ui.LabelEditor.extend({
     start: function( label){
         this.label = label;
 
+        this.commitCallback = $.proxy(this.commit,this);
+        
         // commit the editor if the user clicks anywhere in the document
         //
-        var bodyClick = $.proxy(function(e){
-            $("body").unbind("click",bodyClick);
-            this.commit();
-        },this);
-        $("body").bind("click",bodyClick);
-        
-        
+        $("body").bind("click",this.commitCallback);
+      
         // append the input field to the document and register 
         // the ENTER and ESC key for commit /cancel the operation
         //
@@ -57,9 +54,7 @@ graphiti.ui.LabelInplaceEditor =  graphiti.ui.LabelEditor.extend({
            }
          },this));
         
-         this.html.bind("blur",$.proxy(function(e){
-            this.commit();
-         },this));
+         this.html.bind("blur",this.commitCallback);
          
          // avoid commit of the operation if we click inside the editor
          //
@@ -97,6 +92,8 @@ graphiti.ui.LabelInplaceEditor =  graphiti.ui.LabelEditor.extend({
      * @private
      */
     commit: function(){
+        this.html.unbind("blur",this.commitCallback);
+        $("body").unbind("click",this.commitCallback);
         var label = this.html.val();
         this.label.setText(label);
         this.html.fadeOut($.proxy(function(){
@@ -112,9 +109,12 @@ graphiti.ui.LabelInplaceEditor =  graphiti.ui.LabelEditor.extend({
      * @private
      */
     cancel: function(){
+        this.html.unbind("blur",this.commitCallback);
+        $("body").unbind("click",this.commitCallback);
         this.html.fadeOut($.proxy(function(){
             this.html.remove();
             this.html = null;
+            
         },this));
         
     }

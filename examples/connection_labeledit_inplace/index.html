@@ -54,6 +54,7 @@
 	<SCRIPT src="../../src/layout/locator/OutputPortLocator.js"></SCRIPT>
 	<SCRIPT src="../../src/layout/locator/ConnectionLocator.js"></SCRIPT>
 	<SCRIPT src="../../src/layout/locator/ManhattanMidpointLocator.js"></SCRIPT>
+	<SCRIPT src="../../src/layout/locator/RightLocator.js"></SCRIPT>
 
 	<SCRIPT src="../../src/Canvas.js"></SCRIPT>
 	<SCRIPT src="../../src/Figure.js"></SCRIPT>
@@ -65,7 +66,6 @@
 	
 	<SCRIPT src="../../src/shape/basic/Oval.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/basic/Circle.js"></SCRIPT>
-	<SCRIPT src="../../src/CompartmentFigure.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/basic/Label.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/basic/Line.js"></SCRIPT>
 	<SCRIPT src="../../src/shape/basic/PolyLine.js"></SCRIPT>
@@ -139,13 +139,22 @@ $(document).ready(function() {
 	 canvas.addFigure( start, 50,450);
 	 canvas.addFigure( end, 230,150);
 		
-	 // Create a Connection and connect he Start and End node
+	 // Create a Connection and connect the Start and End node
 	 //
 	 var c = new example.connection_labeledit.LabelConnection();
 	 c.setSource(start.getPort("output0"));
 	 c.setTarget(end.getPort("input0"));
 	 canvas.addFigure(c);
 	
+	 
+	 // create some native shapes and assign some labels to it
+	 // 
+	 var rect = new graphiti.shape.basic.Rectangle();
+     var label = new graphiti.shape.basic.Label("I'm a Label too");
+     label.installEditor(new graphiti.ui.LabelInplaceEditor());
+     rect.addFigure(label, new graphiti.layout.locator.RightLocator(rect));
+     canvas.addFigure(rect,300,200);
+	 
 	 ///////////////////////////////////////////////////////////////////// 
 	 // JUST ADD SOME DOCU ELEMENTS ON THE SCREEN
 	 ///////////////////////////////////////////////////////////////////// 

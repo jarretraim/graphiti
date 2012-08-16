@@ -60,7 +60,7 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
         }
         
         if(this.svgNodes!==null){
-            this.svgNodes.transform("t"+this.x+","+this.y);
+            this.svgNodes.transform("t"+this.getAbsoluteX()+","+this.getAbsoluteY());
         }
         
         this._super(attributes);
