@@ -43,9 +43,14 @@ graphiti.shape.analog.VoltageSupplyVertical = graphiti.SVGFigure.extend({
      * @constructor
      * Create a new instance
      */
-    init:function(){
-        this._super();
-
+    init:function(width, height){
+        if(typeof width === "undefined"){
+            width = 30;
+            height= 50;
+        }
+        
+        this._super(width,height);
+        
         this.inputLocator = new this.MyInputPortLocator();
         this.outputLocator = new this.MyOutputPortLocator();
 
@@ -55,7 +60,7 @@ graphiti.shape.analog.VoltageSupplyVertical = graphiti.SVGFigure.extend({
     
 
     getSVG: function(){
-         return '<svg width="49" height="28" xmlns="http://www.w3.org/2000/svg" version="1.1">'+
+         return '<svg  xmlns="http://www.w3.org/2000/svg" version="1.1">'+
                 '<path d="m19.62398,12.37594l-9.87926,0m-9.74355,8.22145l29.36289,0m-9.74007,8.22469l-9.87927,0m-9.74355,8.22145l29.36289,0" id="path10560" stroke-miterlimit="14.3" stroke="#010101" fill="none"/>'+
                 '<path d="m14.63157,9.81646l0,-9.81646m0,47.2328l0,-9.81646" id="path10562" stroke-miterlimit="14.3" stroke-linecap="square" stroke="#010101" fill="none"/>'+
                 '</svg>';

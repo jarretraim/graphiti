@@ -24,7 +24,6 @@ graphiti.shape.analog.ResistorBridge = graphiti.SVGFigure.extend({
         relocate:function(index, figure){
             var w = figure.getParent().getWidth();
             var h = figure.getParent().getHeight();
-            
             figure.setPosition(w/2+1, h*index);
         }
     }),
@@ -47,8 +46,13 @@ graphiti.shape.analog.ResistorBridge = graphiti.SVGFigure.extend({
      * @constructor
      * Create a new instance
      */
-    init:function(){
-        this._super();
+    init:function(width, height){
+        if(typeof width === "undefined"){
+            width = 50;
+            height= 50;
+        }
+        
+        this._super(width,height);
         
         this.inputLocator = new this.MyInputPortLocator();
         this.outputLocator = new this.MyOutputPortLocator();
@@ -62,7 +66,7 @@ graphiti.shape.analog.ResistorBridge = graphiti.SVGFigure.extend({
     
 
     getSVG: function(){
-         return '<svg width="46" height="36" xmlns="http://www.w3.org/2000/svg" version="1.1">'+
+         return '<svg  xmlns="http://www.w3.org/2000/svg" version="1.1">'+
                  '<path fill="#010101" stroke="#010101" stroke-miterlimit="14.3" id="path12322" d="m47.62207,22.71094l0,0c0.73145,0.73242 0.71777,1.93359 -0.03027,2.68164c-0.74805,0.74951 -1.94922,0.76123 -2.68073,0.0293c-0.73138,-0.73242 -0.71967,-1.93211 0.03033,-2.68115c0.74707,-0.74803 1.94727,-0.76219 2.68066,-0.02979l0,0z"/>'+
                  '<path fill="#010101" stroke="#010101" stroke-miterlimit="14.3" id="path12324" d="m25.84082,0.93115l0,0c0.73145,0.73096 0.71875,1.93359 -0.02832,2.68066c-0.75,0.74951 -1.94922,0.76123 -2.68164,0.0293c-0.73242,-0.73241 -0.71973,-1.93164 0.0293,-2.68065c0.74805,-0.74756 1.94922,-0.76172 2.68066,-0.0293l0,0l0,-0.00002z"/>'+
                  '<path fill="#010101" stroke="#010101" stroke-miterlimit="14.3" id="path12326" d="m25.75098,44.58203l0,0c0.73145,0.73193 0.71875,1.93311 -0.02832,2.68115c-0.75,0.74902 -1.94922,0.76074 -2.68262,0.0293c-0.73145,-0.73193 -0.71973,-1.93262 0.03033,-2.68164c0.74707,-0.74756 1.94922,-0.76123 2.68066,-0.02879l0,0l-0.00006,-0.00002z"/>'+

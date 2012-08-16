@@ -2,7 +2,11 @@
     - resizeable SVG shapes. It is now possible to resize the native "SVG" shapes as well
     - remove double call of the commit callback in the LabelInplaceEditor
     - enable InplaceEdit for labels attached to normals shapes
-    - Unbind the click callback of the <body> element after the inline editor dies        
+    - Unbind the click callback of the <body> element after the inline editor dies       
+    - redirect the "OpAmp.setBackgroundColor" call to the OpAmp triangle and not to the complete
+      boundingBox of shape. Provide example in the galerie_shape_analog example.
+    - Change the Locator calculation from absolute to relative coordinates related to the parent
+      
 
 16.07.2012 version 0.9.36
     - rename class graphiti.EditPolcy to graphiti.command.CommandType

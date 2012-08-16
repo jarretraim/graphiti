@@ -87,7 +87,7 @@ graphiti.shape.basic.Label= graphiti.SetFigure.extend({
         lattr.fill = "#" + this.fontColor.hex();
         this.svgNodes.attr(lattr);
 
-   
+        
         this._super(attributes);
     },
     

@@ -64,10 +64,6 @@ graphiti.io.json.Reader = graphiti.io.Reader.extend({
                     node = canvas.getFigure(val.node);
                     target = node.getPort(val.port);
                 }
-                // use the setPersistence..... instead
-               // else {
-               //     o[i] = val;
-               // }
             }
             if(source!==null && target!==null){
                 o.setSource(source);

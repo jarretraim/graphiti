@@ -125,7 +125,10 @@ graphiti.shape.widget.Slider = graphiti.shape.widget.Widget.extend({
         this.onValueChange(this.currentValue);
     },
     
-    
+    isResizeable:function()
+    {
+      return false;
+    },
     /**
      * 
      * @param attributes

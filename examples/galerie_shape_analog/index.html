@@ -127,17 +127,22 @@
         canvas.addFigure(new graphiti.shape.analog.OpAmp(),50,50);
         canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.analog.OpAmp"),200,55);
         
-        canvas.addFigure(new graphiti.shape.analog.ResistorBridge(),50,150);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.analog.ResistorBridge"),200,155);
+        var greenOpAmp= new graphiti.shape.analog.OpAmp();
+        greenOpAmp.setBackgroundColor("#A0ffA0");
+        canvas.addFigure(greenOpAmp,50,150);
+        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.analog.OpAmp (with setBackgroundColor(\"#A0ffA0\"))"),200,155);
+ 
+        canvas.addFigure(new graphiti.shape.analog.ResistorBridge(),50,250);
+        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.analog.ResistorBridge"),200,255);
         
-        canvas.addFigure(new graphiti.shape.analog.VoltageSupplyHorizontal(),50,250);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.analog.VoltageSupplyHorizontal"),200,255);
+        canvas.addFigure(new graphiti.shape.analog.VoltageSupplyHorizontal(),50,350);
+        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.analog.VoltageSupplyHorizontal"),200,355);
 
-        canvas.addFigure(new graphiti.shape.analog.VoltageSupplyVertical(),50,350);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.analog.VoltageSupplyVertical"),200,355);
+        canvas.addFigure(new graphiti.shape.analog.VoltageSupplyVertical(),50,450);
+        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.analog.VoltageSupplyVertical"),200,455);
 
-        canvas.addFigure(new graphiti.shape.analog.ResistorVertical(),50,450);
-        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.analog.ResistorVertical"),200,455);
+        canvas.addFigure(new graphiti.shape.analog.ResistorVertical(),50,550);
+        canvas.addFigure(new graphiti.shape.basic.Label("graphiti.shape.analog.ResistorVertical"),200,555);
         
     });
 </script>

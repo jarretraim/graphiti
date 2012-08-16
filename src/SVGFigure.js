@@ -16,8 +16,8 @@ graphiti.SVGFigure = graphiti.SetFigure.extend({
      * Creates a new figure element which are not assigned to any canvas.
      * 
      */
-    init: function() {
-      this._super();
+    init: function(width, height) {
+      this._super(width, height);
 
     },
 
@@ -35,7 +35,7 @@ graphiti.SVGFigure = graphiti.SetFigure.extend({
      */
     importSVG : function (canvas, rawSVG) {
       
-        var set = canvas.paper.set();
+      var set = canvas.paper.set();
         
        
       try {

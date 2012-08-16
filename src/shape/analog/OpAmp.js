@@ -24,7 +24,7 @@ graphiti.shape.analog.OpAmp = graphiti.SVGFigure.extend({
         },    
         relocate:function(index, figure){
             var gap = 19;
-            figure.setPosition(0, 8+gap*index);
+            figure.setPosition(0, (8+gap*index)*figure.getParent().scaleY);
         }
     }),
 
@@ -32,8 +32,13 @@ graphiti.shape.analog.OpAmp = graphiti.SVGFigure.extend({
      * @constructor
      * Create a new instance
      */
-    init:function(){
-        this._super();
+    init:function(width, height){
+        if(typeof width === "undefined"){
+            width = 50;
+            height= 50;
+        }
+        
+        this._super(width,height);
         this.inputLocator = new this.MyInputPortLocator();
         
         this.createPort("input", this.inputLocator);
@@ -44,11 +49,38 @@ graphiti.shape.analog.OpAmp = graphiti.SVGFigure.extend({
     
 
     getSVG: function(){
-         return '<svg width="46" height="36" xmlns="http://www.w3.org/2000/svg" version="1.1">'+
+         return '<svg xmlns="http://www.w3.org/2000/svg" version="1.1">'+
                  '<path d="m8.2627,0l0,35.36035l31.23926,-17.76025l-31.23926,-17.60011l0,0l0,0.00001zm2.27832,27.36719l4.08105,0m-2.10449,-2.20703l0,4.27979m2.26367,-21.35938l-4.15918,0"  stroke="#010101" fill="#ffffff"/>'+
                  '<line x1="0.53516"  y1="8"  x2="8.21191"  y2="8"  stroke="#010101"/>'+
                  '<line x1="39.14941" y1="18" x2="45.81055" y2="18" stroke="#010101" />'+
                  '<line x1="0.53516"  y1="27" x2="8.21191"  y2="27" stroke="#010101" />'+
                 '</svg>';
-    }
+    },
+    
+    /**
+     * @method
+     * propagate all attributes like color, stroke,... to the shape element
+     **/
+     repaint : function(attributes)
+     {
+         if (this.repaintBlocked===true || this.shape === null){
+             return;
+         }
+
+         if(typeof attributes === "undefined" ){
+             attributes = {};
+         }
+
+         // redirect the backgroundColor to an internal SVG node.
+         // In this case only a small part of the shape are filled with the background color
+         // and not the complete rectangle/bounding box
+         //
+         attributes["fill"] = "transparent";
+         if( this.bgColor!=null){
+             this.svgNodes[0].attr({fill:"#" + this.bgColor.hex()});
+         }
+         
+         this._super(attributes);
+     }
+
 });

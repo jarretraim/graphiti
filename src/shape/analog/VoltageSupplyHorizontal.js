@@ -43,9 +43,14 @@ graphiti.shape.analog.VoltageSupplyHorizontal = graphiti.SVGFigure.extend({
      * @constructor
      * Create a new instance
      */
-    init:function(){
-        this._super();
-
+    init:function(width, height){
+        if(typeof width === "undefined"){
+            width = 50;
+            height= 30;
+        }
+        
+        this._super(width,height);
+        
         this.createPort("hybrid", new this.MyInputPortLocator());  // GND
         this.createPort("hybrid", new this.MyOutputPortLocator()); // VCC
     },
