@@ -19,10 +19,12 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
     init: function( width, height) {
       // collection of SVG DOM nodes
       this.svgNodes=null;
-
+      this.originalWidth = 1;
+      this.originalHeight= 1;
+      
       this._super( width, height);
 
-      this.setResizeable(false);
+ //     this.setResizeable(false);
       this.setStroke(0);
       this.setBackgroundColor(null); 
     },
@@ -51,6 +53,9 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
      **/
     repaint : function(attributes)
     {
+        var scaleX =  this.width / this.originalWidth;
+        var scaleY =  this.height / this.originalHeight;
+        
         if(this.repaintBlocked===true || this.shape===null){
             return;
         }
@@ -60,7 +65,8 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
         }
         
         if(this.svgNodes!==null){
-            this.svgNodes.transform("t"+this.getAbsoluteX()+","+this.getAbsoluteY());
+            
+            this.svgNodes.transform("s"+scaleX+","+scaleY+","+this.getAbsoluteX()+","+this.getAbsoluteY()+" t"+this.getAbsoluteX()+","+this.getAbsoluteY());
         }
         
         this._super(attributes);
@@ -69,11 +75,19 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
     /**
      * @private
      */
-    createShapeElement : function(){
+    createShapeElement : function()
+    {
        // NOTE: don't change the order of the two calles. This defines the z-oder in the canvas.
        // The "set" should always be on top.
        var shape= this.canvas.paper.rect(this.getX(),this.getY(),this.getWidth(), this.getHeight());
        this.svgNodes = this.createSet();
+       
+       this.originalWidth = this.svgNodes.getBBox().width;
+       this.originalHeight= this.svgNodes.getBBox().height;
+       
+       this.width  = this.originalWidth;
+       this.height = this.originalHeight;
+
        return shape;
     },
     
@@ -83,34 +97,9 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
      * 
      * @template
      */
-    createSet: function(){
+    createSet: function()
+    {
     	return this.canvas.paper.set(); // return empty set as default;
     },
     
-    /**
-     * @method
-     * Return the calculate width of the set. This calculates the bounding box of all elements.
-     * 
-     * @return {Number} the calculated width of the label
-     **/
-	getWidth : function() {
-		if (this.shape === null) {
-			return 0;
-		}
-		return Math.max(this.svgNodes.getBBox().width,this.shape.getBBox().width);
-	},
-    
-    /**
-     * @method
-     * Return the calculated height of the set. This calculates the bounding box of all elements.
-     * 
-	 * @return {Number} the calculated height of the label
-	 */
-    getHeight:function(){
-        if (this.shape === null) {
-            return 0;
-        }
-        return Math.max(this.svgNodes.getBBox().height,this.shape.getBBox().height);
-    }
-
 });
