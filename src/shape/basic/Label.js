@@ -104,7 +104,8 @@ graphiti.shape.basic.Label= graphiti.SetFigure.extend({
     {
       return false;
     },
-        
+       
+    
     /**
      * @method
      * Set the new font size in [pt].

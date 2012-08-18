@@ -1,4 +1,16 @@
+/**
+ * @class graphiti.layout.connection.ManhattanConnectionRouter
+ * Provides a {@link graphiti.Connection} with an orthogonal route between the Connection's source 
+ * and target anchors.
+ * 
+ * @inheritable
+ * @author Andreas Herz
+ * 
+ * @extends  graphiti.layout.connection.ConnectionRouter
+ */
+graphiti.layout.connection.BezierConnectionRouter = graphiti.layout.connection.ConnectionRouter.extend({
 
+	
 /**
  * @class Routes a {@link @NAMESPACE@Connection}, possibly using a constraint.
  *

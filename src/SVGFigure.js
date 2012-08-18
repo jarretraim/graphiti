@@ -36,7 +36,6 @@ graphiti.SVGFigure = graphiti.SetFigure.extend({
     importSVG : function (canvas, rawSVG) {
       
       var set = canvas.paper.set();
-        
        
       try {
         if (typeof rawSVG === 'undefined'){
@@ -49,6 +48,8 @@ graphiti.SVGFigure = graphiti.SetFigure.extend({
           throw "The data you entered doesn't contain valid SVG.";
         }
         
+        // Override the dimension from the JSON if the SVG contains any
+        //
         var findDim   = new RegExp('<svg width="(.*?)" height="(.*?)" .*?>','gi');
         var match=findDim.exec(rawSVG);
         if(match){

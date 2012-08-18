@@ -34,7 +34,7 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
     
     /**
      * @method
-     * Set/Reset the cnavas for the element.
+     * Set/Reset the canvas for the element.
      * 
      * @param {graphiti.Canvas} canvas the canvas to use
      */
@@ -58,21 +58,24 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
      **/
     repaint : function(attributes)
     {
-        if (this.originalWidth !== null) {
-            this.scaleX = this.width / this.originalWidth;
-            this.scaleY = this.height / this.originalHeight;
-        }
-
+        // repaint can be blocked during deserialization and if the shape
+        // not part of any canvas.
+        //
         if (this.repaintBlocked === true || this.shape === null) {
             return;
         }
 
+        if (this.originalWidth !== null) {
+        	this.scaleX = this.width / this.originalWidth;
+        	this.scaleY = this.height / this.originalHeight;
+        }
+        
         if (typeof attributes === "undefined") {
             attributes = {};
         }
 
         if (this.svgNodes !== null) {
-            if (this.isResizeable() === true) {
+            if (this.automaticResizeInnerContent() === true && this.isResizeable()===true) {
                 this.svgNodes.transform("s"+this.scaleX+","+this.scaleY+","+this.getAbsoluteX()+","+this.getAbsoluteY()+ " t"
                         + this.getAbsoluteX() + "," + this.getAbsoluteY());
             }
@@ -84,6 +87,19 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
         this._super(attributes);
     },
 
+    /**
+     * @method
+     * Indicates whenever a SetFigure should automaticly resize the inner set/svg with a transformation
+     * if the user resize the shape. This is not always the wante behaviour (see Slider).
+     * 
+     * @returns {Boolean}
+     */
+    automaticResizeInnerContent:function()
+    {
+      return true;
+    },
+    
+    
     /**
      * @private
      */
@@ -109,6 +125,6 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
     createSet: function()
     {
     	return this.canvas.paper.set(); // return empty set as default;
-    },
-    
+    }
+   
 });
