@@ -30,6 +30,18 @@ graphiti.layout.locator.Locator= Class.extend({
        return this.parent;
     },
     
+    
+    /**
+     * @method
+     * Set the associated owner of the locator
+     *
+     * @param {graphiti.Figure} parentShape
+     **/
+    setParent:function(parentShape)
+    {
+        this.parent= parentShape;
+    },
+    
     /**
      * @method
      * Controls the location of an I{@link graphiti.Figure} 

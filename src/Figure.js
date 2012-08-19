@@ -215,6 +215,11 @@ graphiti.Figure = Class.extend({
          entry.locator = locator;
 
          this.children.add(entry);
+         
+         if(this.canvas!==null){
+             child.setCanvas(this.canvas);
+         }
+         
          this.repaint();
      },
 
@@ -231,7 +236,21 @@ graphiti.Figure = Class.extend({
      },
      
 
-    /**
+     /**
+      * @method
+      * Remove all children/decorations of this shape
+      * 
+      */
+     resetChildren : function(){
+         this.children.each(function(i,e){
+             e.figure.setCanvas(null);
+         });
+         this.children= new graphiti.util.ArrayList();
+         this.repaint();
+     },
+     
+
+     /**
      * @method
      * return the current SVG shape element or create it on demand.
      * 
@@ -1077,13 +1096,7 @@ graphiti.Figure = Class.extend({
             width : this.width,
             height: this.height
         };
-        /*
-        this.children.each(function(i, element){
-            var childMemento = element.figure.getPersistentAttributes();
-            childMemento.locator = element.locator.NAME;
-            memento.children.push(childMemento);
-        });
-       */
+
         return memento;
     },
     

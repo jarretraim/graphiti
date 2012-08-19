@@ -33,10 +33,17 @@ example.io_json_extend.LabeledEnd = graphiti.shape.node.End.extend({
     {
         var memento = this._super();
         
-        // add your special data to the persistend object
+        // add all decorations to the memento 
         //
-        memento.my_label = this.label.getText();
-        
+        memento.labels = [];
+        this.children.each(function(i,e){
+            memento.labels.push({
+                id:e.figure.getId(),
+                label:e.figure.getText(),
+                locator:e.locator.NAME
+            });
+        });
+    
         return memento;
     },
     
@@ -51,7 +58,17 @@ example.io_json_extend.LabeledEnd = graphiti.shape.node.End.extend({
     {
         this._super(memento);
         
-        // read the special value (the label) and update the label/decoration of the element
-        this.label.setText(memento.my_label);
+        // remove all decorations created in the constructor of this element
+        //
+        this.resetChildren();
+        
+        // and restore all children of the JSON document instead.
+        //
+        $.each(memento.labels, $.proxy(function(i,e){
+            var label = new graphiti.shape.basic.Label(e.label);
+            var locator =  eval("new "+e.locator+"()");
+            locator.setParent(this);
+            this.addFigure(label, locator);
+        },this));
     }
 });
