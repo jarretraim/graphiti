@@ -5,7 +5,7 @@
 
 	<property name="graphiti.version.major"    value="0"/>
 	<property name="graphiti.version.minor"    value="9"/>
-	<property name="graphiti.version.bugfix"   value="36"/>
+	<property name="graphiti.version.bugfix"   value="38"/>
 	<property name="graphiti.version"          value="${graphiti.version.major}.${graphiti.version.minor}.${graphiti.version.bugfix}"/>
 	<property name="dist.dir"      location="${basedir}/dist" />
 	<property name="src.dir"       location="${basedir}/src" />

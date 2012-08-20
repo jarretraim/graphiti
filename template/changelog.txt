@@ -1,3 +1,5 @@
+19.08.2012 version 0.9.38
+
 19.08.2012 version 0.9.37
     - resizeable SVG shapes. It is now possible to resize the native "SVG" shapes as well
     - remove double call of the commit callback in the LabelInplaceEditor
