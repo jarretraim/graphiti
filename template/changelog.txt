@@ -1,5 +1,8 @@
-19.08.2012 version 0.9.38
-
+20.08.2012 version 0.9.38
+    - fixing NullPointerException after delete a connected node and reconnect them with
+      Drag&Drop. Reported on StackOverflow.com
+      http://stackoverflow.com/questions/11557870/how-to-control-connection-after-deletion-of-node
+      
 19.08.2012 version 0.9.37
     - resizeable SVG shapes. It is now possible to resize the native "SVG" shapes as well
     - remove double call of the commit callback in the LabelInplaceEditor

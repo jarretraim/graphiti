@@ -287,6 +287,10 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
       //
       this.parent.getCanvas().hideConnectionLine();
       this.isInDragDrop =false;
+      
+      // Reset the drag&drop flyover information 
+      //
+      this.currentTarget = null;
     },
     
     /**
