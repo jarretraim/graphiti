@@ -110,23 +110,10 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
               this.calculatePath();
           }
           
-          
           var intersections = this.getCanvas().getIntersection(this);
           
           var i=0;
-          // paint the decorator if any exists
-          //
-          if(this.getSource().getParent().isMoving===false && this.getTarget().getParent().isMoving===false )
-          {
-            if(this.targetDecorator!==null){
-              this.targetDecorator.paint(new graphiti.Graphics(this.graphics,this.getEndAngle(),this.getEndPoint()));
-            }
-      
-            if(this.sourceDecorator!==null){
-              this.sourceDecorator.paint(new graphiti.Graphics(this.graphics,this.getStartAngle(),this.getStartPoint()));
-            }
-          }
-          
+
           var ps = this.getPoints();
           var p = ps.get(0);
           var path = ["M",p.x," ",p.y];

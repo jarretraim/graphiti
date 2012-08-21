@@ -10,8 +10,8 @@
 graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
     NAME : "graphiti.Connection",
 
-//    DEFAULT_ROUTER: new graphiti.layout.connection.DirectRouter(),
-    DEFAULT_ROUTER: new graphiti.layout.connection.ManhattanConnectionRouter(),
+    DEFAULT_ROUTER: new graphiti.layout.connection.DirectRouter(),
+//    DEFAULT_ROUTER: new graphiti.layout.connection.ManhattanConnectionRouter(),
         
     /**
      * @constructor
@@ -25,9 +25,15 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
     
       this.oldPoint=null;
       
-      this.sourceDecorator = null; /*:graphiti.ConnectionDecorator*/
+      this.sourceDecorator = new graphiti.decoration.connection.ArrowDecorator(); /*:graphiti.ConnectionDecorator*/
       this.targetDecorator = null; /*:graphiti.ConnectionDecorator*/
-    
+      
+      // decoration of the polyline
+      //
+      this.startDecoSet = null;
+      this.endDecoSet=null;
+  
+      
       this.sourceAnchor = new graphiti.ConnectionAnchor(this);
       this.targetAnchor = new graphiti.ConnectionAnchor(this);
     
@@ -243,8 +249,28 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
       if(this.sourcePort===null || this.targetPort===null){
           return;
       }
-      
+
       this._super(attributes);
+
+	    // paint the decorator if any exists
+	    //
+	    if(this.getSource().getParent().isMoving===false && this.getTarget().getParent().isMoving===false )
+	    {
+	      if(this.targetDecorator!==null && this.endDecoSet===null){
+	      	this.endDecoSet= this.targetDecorator.paint(this.getCanvas().paper);
+	      }
+	
+	      if(this.sourceDecorator!==null && this.startDecoSet===null){
+	      	this.startDecoSet= this.sourceDecorator.paint(this.getCanvas().paper);
+	      }
+	    }
+	    
+	    // transfor the decorations to the end/start and rotate them as well
+	    //
+	    if(this.startDecoSet!==null){
+	  	  this.startDecoSet.transform("r"+this.getStartAngle()+"," + this.getStartX() + "," + this.getStartY()+" t" + this.getStartX() + "," + this.getStartY());
+	    }
+
     },
     
 
@@ -403,9 +429,15 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
      **/
     getStartAngle:function()
     {
+    	// return a good default value if the connection is not routed at the 
+    	//  moment
+    	if( this.lineSegments.getSize()===0){
+    		return 0;
+    	}
+    	
       var p1 = this.lineSegments.get(0).start;
       var p2 = this.lineSegments.get(0).end;
-      if(this.router instanceof graphiti.BezierConnectionRouter)
+      if(this.router instanceof graphiti.layout.connection.BezierConnectionRouter)
       {
        p2 = this.lineSegments.get(5).end;
       }
@@ -432,13 +464,15 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
     
     getEndAngle:function()
     {
+      // return a good default value if the connection is not routed at the 
+      //  moment
       if (this.lineSegments.getSize() === 0) {
         return 90;
       }
     
       var p1 = this.lineSegments.get(this.lineSegments.getSize()-1).end;
       var p2 = this.lineSegments.get(this.lineSegments.getSize()-1).start;
-      if(this.router instanceof graphiti.layout.connection.BezierRouter)
+      if(this.router instanceof graphiti.layout.connection.BezierConnectionRouter)
       {
        p2 = this.lineSegments.get(this.lineSegments.getSize()-5).end;
       }

@@ -34,12 +34,15 @@ var graphiti =
     command : {
     },
 
+    decoration:{
+    	connection:{}
+    }, 
+    
     layout: {
         connection :{},
 	    mesh :{},
 	    locator: {}
     },
-    
     
     
     ui :{
