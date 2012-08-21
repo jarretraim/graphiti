@@ -1,3 +1,6 @@
+21.08.2012 version 0.9.39
+    - fixing missing render context in InternetExplorer (patching canvg.js)
+    
 20.08.2012 version 0.9.38
     - fixing NullPointerException after delete a connected node and reconnect them with
       Drag&Drop. Reported on StackOverflow.com
