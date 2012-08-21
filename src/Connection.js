@@ -10,8 +10,8 @@
 graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
     NAME : "graphiti.Connection",
 
-    DEFAULT_ROUTER: new graphiti.layout.connection.DirectRouter(),
-//    DEFAULT_ROUTER: new graphiti.layout.connection.ManhattanConnectionRouter(),
+//    DEFAULT_ROUTER: new graphiti.layout.connection.DirectRouter(),
+    DEFAULT_ROUTER: new graphiti.layout.connection.ManhattanConnectionRouter(),
         
     /**
      * @constructor
@@ -25,7 +25,7 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
     
       this.oldPoint=null;
       
-      this.sourceDecorator = new graphiti.decoration.connection.ArrowDecorator(); /*:graphiti.ConnectionDecorator*/
+      this.sourceDecorator = null; /*:graphiti.ConnectionDecorator*/
       this.targetDecorator = null; /*:graphiti.ConnectionDecorator*/
       
       // decoration of the polyline
@@ -115,9 +115,9 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
      * @method
      * Set the ConnectionDecorator for this object.
      *
-     * @param {graphiti.ConnectionDecorator} the new source decorator for the connection
+     * @param {graphiti.decoration.connection.Decorator} the new source decorator for the connection
      **/
-    setSourceDecorator:function(/*:graphiti.ConnectionDecorator*/ decorator)
+    setSourceDecorator:function( decorator)
     {
       this.sourceDecorator = decorator;
       this.routingRequired = true;
@@ -139,9 +139,9 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
      * @method
      * Set the ConnectionDecorator for this object.
      *
-     * @param {graphiti.ConnectionDecorator} the new target decorator for the connection
+     * @param {graphiti.decoration.connection.Decorator} the new target decorator for the connection
      **/
-    setTargetDecorator:function(/*:graphiti.ConnectionDecorator*/ decorator)
+    setTargetDecorator:function( decorator)
     {
       this.targetDecorator = decorator;
       this.routingRequired =true;
@@ -265,11 +265,15 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
 	      }
 	    }
 	    
-	    // transfor the decorations to the end/start and rotate them as well
+	    // translate/transform the decorations to the end/start of the connection 
+	    // and rotate them as well
 	    //
 	    if(this.startDecoSet!==null){
 	  	  this.startDecoSet.transform("r"+this.getStartAngle()+"," + this.getStartX() + "," + this.getStartY()+" t" + this.getStartX() + "," + this.getStartY());
 	    }
+        if(this.endDecoSet!==null){
+            this.endDecoSet.transform("r"+this.getEndAngle()+"," + this.getEndX() + "," + this.getEndY()+" t" + this.getEndX() + "," + this.getEndY());
+        }
 
     },
     

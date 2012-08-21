@@ -184,7 +184,9 @@
 			</fileset>
 			<fileset file="${compress.dir}/layout/connection/ManhattanConnectionRouter.js">
 			</fileset>
-
+			<fileset file="${compress.dir}/layout/connection/BezierConnectionRouter.js">
+			</fileset>
+			
 			<fileset file="${compress.dir}/layout/mesh/MeshLayouter.js">
 			</fileset>
 			<fileset file="${compress.dir}/layout/mesh/ExplodeLayouter.js">
@@ -317,7 +319,16 @@
 			</fileset>
 			<fileset file="${compress.dir}/ui/LabelInplaceEditor.js">
 			</fileset>
-
+			
+			<fileset file="${compress.dir}/decoration/connection/Decorator.js">
+			</fileset>			
+			<fileset file="${compress.dir}/decoration/connection/ArrowDecorator.js">
+			</fileset>			
+			<fileset file="${compress.dir}/decoration/connection/DiamondDecorator.js">
+			</fileset>			
+			<fileset file="${compress.dir}/decoration/connection/CircleDecorator.js">
+			</fileset>
+			
 			<fileset file="${compress.dir}/io/Reader.js">
 			</fileset>
 			<fileset file="${compress.dir}/io/Writer.js">

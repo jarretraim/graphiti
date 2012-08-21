@@ -78,7 +78,7 @@ graphiti.layout.connection.BezierConnectionRouter = graphiti.layout.connection.C
     /**
      * @private
      */
-    _route : function(pointList, /* :@NAMESPACE@Connection */conn,/* :@NAMESPACE@Point */fromPt, /* :int */fromDir, /* :@NAMESPACE@Point */toPt, /* :int */
+    _route : function(pointList, /* :Connection */conn,/* :Point */fromPt, /* :int */fromDir, /* :Point */toPt, /* :int */
             toDir)
     {
         var TOL = 0.1;
@@ -99,7 +99,7 @@ graphiti.layout.connection.BezierConnectionRouter = graphiti.layout.connection.C
         var dir;
 
         if (((xDiff * xDiff) < (TOLxTOL)) && ((yDiff * yDiff) < (TOLxTOL))) {
-            pointList.push(new /* :NAMESPACE */Point(toPt.x, toPt.y));
+            pointList.push(new graphiti.geo.Point(toPt.x, toPt.y));
             return;
         }
 

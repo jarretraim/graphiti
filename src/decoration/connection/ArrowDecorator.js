@@ -16,14 +16,10 @@ graphiti.decoration.connection.ArrowDecorator = graphiti.decoration.connection.D
 	 * @param {Number} [width] the width of the arrow
 	 * @param {Number} [height] the height of the arrow
 	 */
-	init : function(width, height)
-	{	
-      if(width ===undefined || width<1)
-		this.width  = 10;
-      
-	  if(height === undefined || height <1)
-	    this.height = 15;
-	},
+    init : function(width, height)
+    {   
+        this._super( width, height);
+    },
 
 	/**
 	 * Draw a filled arrow decoration.
@@ -44,29 +40,15 @@ graphiti.decoration.connection.ArrowDecorator = graphiti.decoration.connection.D
 	paint:function(paper)
 	{
 		var st = paper.set();
-		var path = ["M", this.width/2," " , -this.height/2];  // Go to the top center..
-		path.push(  "L", this.width  , " ", 0);               // ...draw line to the right middle
-		path.push(  "L", this.width/2, " ", this.height/2);   // ...bottom center...
-		path.push(  "L", 0           , " ", 0);               // ...left middle...
-		path.push(  "L", this.width/2, " ", -this.height/2);  // and close the path
-		
+		var path = ["M0 0"];  
+		path.push(  "L", this.width, " ", -this.height/2); 
+		path.push(  "L", this.width, " ", this.height/2);
+		path.push(  "L0 0");
 		st.push(
 	        paper.path(path.join(""))
 		);
-		
+        st.attr({fill:this.backgroundColor.getHashStyle()});
 		return st;
-	},
-	
-	/**
-	 * Change the dimension of the arrow
-	 *
-	 * @param {Number} width  The new width of the arrow
-	 * @param {Number} height The new height of the arrow
-	 **/
-	setDimension:function( /*:int*/ width, height)
-	{
-	    this.width=width;
-	    this.height=height;
 	}
 });
 
