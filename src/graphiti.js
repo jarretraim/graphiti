@@ -25,6 +25,7 @@ var graphiti =
         note: {},
         diagram:{},
         analog:{},
+        icon:{},
         widget:{}
     },
     

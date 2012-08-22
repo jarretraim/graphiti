@@ -77,10 +77,10 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
         if (this.svgNodes !== null) {
             if (this.automaticResizeInnerContent() === true && this.isResizeable()===true) {
                 this.svgNodes.transform("s"+this.scaleX+","+this.scaleY+","+this.getAbsoluteX()+","+this.getAbsoluteY()+ " t"
-                        + this.getAbsoluteX() + "," + this.getAbsoluteY());
+                        + (this.getAbsoluteX()-this.offsetX) + "," + (this.getAbsoluteY()-this.offsetY));
             }
             else {
-                this.svgNodes.transform("t" + this.getAbsoluteX() + "," + this.getAbsoluteY());
+                this.svgNodes.transform("t" + (this.getAbsoluteX()-this.offsetX) + "," + (this.getAbsoluteY()-this.offsetY));
             }
         }
 
@@ -110,9 +110,13 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
        var shape= this.canvas.paper.rect(this.getX(),this.getY(),this.getWidth(), this.getHeight());
        this.svgNodes = this.createSet();
        
-       this.originalWidth = this.svgNodes.getBBox().width;
-       this.originalHeight= this.svgNodes.getBBox().height;
+       var bb = this.svgNodes.getBBox();
+       this.originalWidth = bb.width;
+       this.originalHeight= bb.height;
 
+       this.offsetX = bb.x;
+       this.offsetY = bb.y;
+       
        return shape;
     },
     
