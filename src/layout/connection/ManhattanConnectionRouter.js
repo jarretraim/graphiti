@@ -37,8 +37,20 @@ graphiti.layout.connection.ManhattanConnectionRouter = graphiti.layout.connectio
 	   var toPt    = conn.getEndPoint();
 	   var toDir   = this.getEndDirection(conn);
 	
-	   // draw a line between the two points.
+	   // calculate the lines between the two points.
+	   //
 	   this._route(conn,toPt, toDir, fromPt, fromDir);
+	   
+	   // calculate the path string for the SVG rendering
+	   //
+       var ps = conn.getPoints();
+       var p = ps.get(0);
+       var path = ["M",p.x," ",p.y];
+       for( var i=1;i<ps.getSize();i++){
+             p = ps.get(i);
+             path.push("L", p.x, " ", p.y);
+       }
+       conn.svgPathString = path.join("");
 	},
 	
 	/**

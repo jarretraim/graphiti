@@ -230,6 +230,17 @@ graphiti.geo.Point = Class.extend({
     {
         this.x    = memento.x;
         this.y    = memento.y;
+    },
+    
+    /**
+     * @method 
+     * Clone the Point and return them
+     * 
+     * @returns 
+     */
+    clone : function()
+    {
+       return new graphiti.geo.Point(this.x,this.y);
     }
     
 });

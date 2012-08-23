@@ -12,8 +12,6 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
     
 	NAME : "graphiti.shape.basic.PolyLine",
 
-    BRIDE_HORIZONTAL_LR : " r 0 0 3 -4 7 -4 10 0 13 0 ", // Left to right
-    BRIDE_HORIZONTAL_RL : " r 0 0 -3 -4 -7 -4 -10 0 -13 0 ", // right to left
 
     /**
      * @constructor
@@ -106,53 +104,7 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
       }
       
       if(this.svgPathString===null){
-          if(this.lineSegments.getSize()==0){
-              this.calculatePath();
-          }
-          
-          var intersections = this.getCanvas().getIntersection(this);
-          
-          var i=0;
-
-          var ps = this.getPoints();
-          var p = ps.get(0);
-          var path = ["M",p.x," ",p.y];
-          var oldP = p;
-          for( i=1;i<ps.getSize();i++){
-                p = ps.get(i);
-                
-                intersections.sort("x");
-                
-                // check for intersection and paint a bridge if required
-                // line goes from left to right
-                //
-                var bridgeWidth = 5;
-                var bridgeCode = this.BRIDE_HORIZONTAL_LR;
-                
-                // line goes from right->left. Inverse the bridge and the bridgeWidth
-                //
-                if (oldP.x > p.x) {
-                    intersections = intersections.reverse();
-                    bridgeCode =this.BRIDE_HORIZONTAL_RL;
-                    bridgeWidth = -bridgeWidth;
-                }
-                
-                intersections.each($.proxy(function(ii, interP)
-                {
-                    if (graphiti.shape.basic.Line.hit(1, oldP.x, oldP.y, p.x, p.y, interP.x, interP.y) === true) {
-                        // we draw only horizontal bridges. Just a design issue
-                        if (p.y === interP.y) {
-                            path.push("L", (interP.x - bridgeWidth), " ", interP.y);
-                            path.push(bridgeCode);
-                        }
-                    }
-
-                }, this));
-
-                path.push("L", p.x, " ", p.y);
-                oldP = p;
-            }
-          this.svgPathString = path.join("");
+          this.calculatePath();
       }
       
       this._super({path:this.svgPathString});

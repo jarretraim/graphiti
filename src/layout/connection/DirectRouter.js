@@ -34,7 +34,19 @@ graphiti.layout.connection.DirectRouter = graphiti.layout.connection.ConnectionR
      */
     route:function( connection)
     {
-       connection.addPoint(connection.getStartPoint());
-       connection.addPoint(connection.getEndPoint());
+       var start =connection.getStartPoint();
+       var end = connection.getEndPoint();
+       
+       // required for hit tests
+       //
+       connection.addPoint(start);
+       connection.addPoint(end);
+       
+       // calculate the path
+       var path = ["M",start.x," ",start.y];
+       path.push("L", end.x, " ", end.y);
+
+       connection.svgPathString = path.join("");
+
     }
 });

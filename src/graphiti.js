@@ -25,6 +25,7 @@ var graphiti =
         note: {},
         diagram:{},
         analog:{},
+        icon:{},
         widget:{}
     },
     
@@ -59,6 +60,9 @@ var graphiti =
         )
     
 };
+
+
+
 
 // hacking RaphaelJS to support groups of elements
 //
@@ -161,3 +165,10 @@ function pushErrorStack(/*:Exception*/ e, /*:String*/ functionName)
   _errorStack_.push(functionName+"\n");
   /*re*/throw e;
 }
+
+
+Math.sign = function()
+{
+ if (this < 0) {return -1;};
+ return 1;
+};

@@ -11,7 +11,9 @@ graphiti.Connection = graphiti.shape.basic.PolyLine.extend({
     NAME : "graphiti.Connection",
 
 //    DEFAULT_ROUTER: new graphiti.layout.connection.DirectRouter(),
-    DEFAULT_ROUTER: new graphiti.layout.connection.ManhattanConnectionRouter(),
+//    DEFAULT_ROUTER: new graphiti.layout.connection.ManhattanConnectionRouter(),
+//    DEFAULT_ROUTER: new graphiti.layout.connection.ManhattanBridgedConnectionRouter(),
+    DEFAULT_ROUTER: new graphiti.layout.connection.BezierConnectionRouter(),
         
     /**
      * @constructor

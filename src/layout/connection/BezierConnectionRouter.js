@@ -5,7 +5,7 @@
  * @author Andreas Herz
  * @extends graphiti.layout.connection.ConnectionRouter
  */
-graphiti.layout.connection.BezierConnectionRouter = graphiti.layout.connection.ConnectionRouter.extend({
+graphiti.layout.connection.BezierConnectionRouter = graphiti.layout.connection.ManhattanConnectionRouter.extend({
     /**
      * @constructor Creates a new Router object
      */
@@ -15,201 +15,62 @@ graphiti.layout.connection.BezierConnectionRouter = graphiti.layout.connection.C
         this.iteration = 5;
     },
 
-    drawBezier : function(/* :Array */pointArray,/* :Array */resultArray, /* :float */t, /* :int */iter)
-    {
-        var n = pointArray.length - 1;
-
-        var q = [];
-        var n_plus_1 = n + 1;
-        for ( var i = 0; i < n_plus_1; i++) {
-            q[i] = [];
-            q[i][0] = pointArray[i];
-        }
-
-        for ( var j = 1; j <= n; j++) {
-            for ( var i = 0; i <= (n - j); i++) {
-                q[i][j] = new /* :NAMESPACE */Point((1 - t) * q[i][j - 1].x + t * q[i + 1][j - 1].x, (1 - t) * q[i][j - 1].y + t * q[i + 1][j - 1].y);
-            }
-        }
-        // Arrays für die Punkte der geteilten Kontrollpolygone C1, C2)
-        var c1 = [];
-        var c2 = [];
-
-        for ( var i = 0; i < n + 1; i++) {
-            c1[i] = q[0][i];
-            c2[i] = q[i][n - i];
-        }
-
-        if (iter >= 0) {
-            this.drawBezier(c1, resultArray, t, --iter);
-            this.drawBezier(c2, resultArray, t, --iter);
-        }
-        else {
-            for ( var i = 0; i < n; i++) {
-                resultArray.push(q[i][n - i]);
-            }
-        }
-    },
-
     route : function(conn)
     {
-        if (this.cheapRouter !== null && (conn.getSource().getParent().isMoving === true || conn.getTarget().getParent().isMoving === true)) {
-            this.cheapRouter.route(conn);
-            return;
+    	var i=0;
+		var fromPt  = conn.getStartPoint();
+		var fromDir = this.getStartDirection(conn);
+
+		var toPt  = conn.getEndPoint();
+		var toDir = this.getEndDirection(conn);
+
+		// calculate the lines between the two points.
+		//
+		this._route(conn, toPt, toDir, fromPt, fromDir);
+
+ 	    // calculate the path string for the SVG rendering
+ 	    //
+        var ps = conn.getPoints();
+        var last=null;
+        var current=null;
+        var next=null;
+        var insert=null;
+        var sign=0;
+        for(i=0; i<(ps.getSize()-1);i++){
+        	current = ps.get(i);
+        	next = ps.get(i+1);
+        	if(last!==null){
+        		// VERTICAL insert
+        		//
+        		if(last.getX()===current.getX()){
+        			insert = current.clone();
+        			
+        			sign = Math.sign((current.getY()-last.getY()));
+        			current.translate(0,10*sign);
+        			
+        			sign = Math.sign((current.getX()-next.getX()));
+      				insert.translate(10*sign,0);
+      				ps.insertElementAt(insert,i);
+      				i++;
+        		}
+        		// HORIZONTAL insert
+        		//
+        		else if(last.getY()===current.getY()){
+        			      			
+        		}
+        	}
+        	last = current;
         }
 
-        var pointList = [];
-        var fromPt = conn.getStartPoint();
-        var toPt = conn.getEndPoint();
-
-        // create the Manhattan line stroke
-        //
-        this._route(pointList, conn, toPt, this.getEndDirection(conn), fromPt, this.getStartDirection(conn));
-        var resultList = [];
-        // create the Bezier spline from the ManhattanLineStroke
-        //
-        this.drawBezier(pointList, resultList, 0.5, this.iteration);
-        for ( var i = 0; i < resultList.length; i++) {
-            conn.addPoint(resultList[i]);
+        var path = ["M",fromPt.x," ",fromPt.y,"R"];
+        for( i=0;i<ps.getSize();i++){
+              p = ps.get(i);
+              path.push(p.x, ", ", p.y," ");
         }
-        conn.addPoint(toPt);
-    },
-
-    /**
-     * @private
-     */
-    _route : function(pointList, /* :Connection */conn,/* :Point */fromPt, /* :int */fromDir, /* :Point */toPt, /* :int */
-            toDir)
-    {
-        var TOL = 0.1;
-        var TOLxTOL = 0.01;
-        var MINDIST = 90;
-
-        // fromPt is an x,y to start from.
-        // fromDir is an angle that the first link must
-        //
-        var UP = 0;
-        var RIGHT = 1;
-        var DOWN = 2;
-        var LEFT = 3;
-
-        var xDiff = fromPt.x - toPt.x;
-        var yDiff = fromPt.y - toPt.y;
-        var point;
-        var dir;
-
-        if (((xDiff * xDiff) < (TOLxTOL)) && ((yDiff * yDiff) < (TOLxTOL))) {
-            pointList.push(new graphiti.geo.Point(toPt.x, toPt.y));
-            return;
-        }
-
-        if (fromDir === LEFT) {
-            if ((xDiff > 0) && ((yDiff * yDiff) < TOL) && (toDir === RIGHT)) {
-                point = toPt;
-                dir = toDir;
-            }
-            else {
-                if (xDiff < 0) {
-                    point = new /* :NAMESPACE */Point(fromPt.x - MINDIST, fromPt.y);
-                }
-                else if (((yDiff > 0) && (toDir === DOWN)) || ((yDiff < 0) && (toDir === UP))) {
-                    point = new /* :NAMESPACE */Point(toPt.x, fromPt.y);
-                }
-                else if (fromDir === toDir) {
-                    var pos = Math.min(fromPt.x, toPt.x) - MINDIST;
-                    point = new /* :NAMESPACE */Point(pos, fromPt.y);
-                }
-                else {
-                    point = new /* :NAMESPACE */Point(fromPt.x - (xDiff / 2), fromPt.y);
-                }
-
-                if (yDiff > 0) {
-                    dir = UP;
-                }
-                else {
-                    dir = DOWN;
-                }
-            }
-        }
-        else if (fromDir === RIGHT) {
-            if ((xDiff < 0) && ((yDiff * yDiff) < TOL) && (toDir == LEFT)) {
-                point = toPt;
-                dir = toDir;
-            }
-            else {
-                if (xDiff > 0) {
-                    point = new /* :NAMESPACE */Point(fromPt.x + MINDIST, fromPt.y);
-                }
-                else if (((yDiff > 0) && (toDir === DOWN)) || ((yDiff < 0) && (toDir === UP))) {
-                    point = new /* :NAMESPACE */Point(toPt.x, fromPt.y);
-                }
-                else if (fromDir === toDir) {
-                    var pos = Math.max(fromPt.x, toPt.x) + MINDIST;
-                    point = new /* :NAMESPACE */Point(pos, fromPt.y);
-                }
-                else {
-                    point = new /* :NAMESPACE */Point(fromPt.x - (xDiff / 2), fromPt.y);
-                }
-
-                if (yDiff > 0)
-                    dir = UP;
-                else
-                    dir = DOWN;
-            }
-        }
-        else if (fromDir === DOWN) {
-            if (((xDiff * xDiff) < TOL) && (yDiff < 0) && (toDir === UP)) {
-                point = toPt;
-                dir = toDir;
-            }
-            else {
-                if (yDiff > 0) {
-                    point = new /* :NAMESPACE */Point(fromPt.x, fromPt.y + MINDIST);
-                }
-                else if (((xDiff > 0) && (toDir === RIGHT)) || ((xDiff < 0) && (toDir === LEFT))) {
-                    point = new /* :NAMESPACE */Point(fromPt.x, toPt.y);
-                }
-                else if (fromDir === toDir) {
-                    var pos = Math.max(fromPt.y, toPt.y) + MINDIST;
-                    point = new /* :NAMESPACE */Point(fromPt.x, pos);
-                }
-                else {
-                    point = new /* :NAMESPACE */Point(fromPt.x, fromPt.y - (yDiff / 2));
-                }
-
-                if (xDiff > 0)
-                    dir = LEFT;
-                else
-                    dir = RIGHT;
-            }
-        }
-        else if (fromDir === UP) {
-            if (((xDiff * xDiff) < TOL) && (yDiff > 0) && (toDir === DOWN)) {
-                point = toPt;
-                dir = toDir;
-            }
-            else {
-                if (yDiff < 0) {
-                    point = new /* :NAMESPACE */Point(fromPt.x, fromPt.y - MINDIST);
-                }
-                else if (((xDiff > 0) && (toDir === RIGHT)) || ((xDiff < 0) && (toDir === LEFT))) {
-                    point = new /* :NAMESPACE */Point(fromPt.x, toPt.y);
-                }
-                else if (fromDir === toDir) {
-                    var pos = Math.min(fromPt.y, toPt.y) - MINDIST;
-                    point = new /* :NAMESPACE */Point(fromPt.x, pos);
-                }
-                else {
-                    point = new /* :NAMESPACE */Point(fromPt.x, fromPt.y - (yDiff / 2));
-                }
-
-                if (xDiff > 0)
-                    dir = LEFT;
-                else
-                    dir = RIGHT;
-            }
-        }
-        this._route(pointList, conn, point, dir, toPt, toDir);
-        pointList.push(fromPt);
+        conn.svgPathString = path.join("");
+        
+        console.log( conn.svgPathString );
     }
+
+
 });
