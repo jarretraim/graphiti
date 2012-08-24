@@ -26,6 +26,9 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
       this.scaleX = 1;
       this.scaleY = 1;
       
+      this.offsetX = 0;
+      this.offsetY = 0;
+
       this._super( width, height);
 
       this.setStroke(0);

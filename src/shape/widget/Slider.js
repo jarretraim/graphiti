@@ -166,6 +166,10 @@ graphiti.shape.widget.Slider = graphiti.shape.widget.Widget.extend({
         attributes.fill= "90-"+this.bgColor.getHashStyle()+":5-"+this.bgColor.lighter(0.3).getHashStyle()+":95";
         attributes.fill= "90-"+this.bgColor.getHashStyle()+":5-"+this.bgColor.lighter(0.3).getHashStyle()+":95";
         attributes.stroke = this.bgColor.darker(0.1).getHashStyle();
+
+        this.offsetX = 0;
+        this.offsetY = 0;
+
         this._super(attributes);
     }
 });

@@ -10,7 +10,9 @@
  */
 graphiti.layout.connection.DirectRouter = graphiti.layout.connection.ConnectionRouter.extend({
 
-	/**
+    NAME : "graphiti.layout.connection.DirectRouter",
+
+    /**
 	 * @constructor 
 	 * Creates a new Router object
 	 */

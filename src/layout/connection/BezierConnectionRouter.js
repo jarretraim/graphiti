@@ -3,9 +3,12 @@
  * 
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.layout.connection.ConnectionRouter
+ * @extends graphiti.layout.connection.ManhattanConnectionRouter
  */
 graphiti.layout.connection.BezierConnectionRouter = graphiti.layout.connection.ManhattanConnectionRouter.extend({
+
+	NAME : "graphiti.layout.connection.BezierConnectionRouter",
+
     /**
      * @constructor Creates a new Router object
      */

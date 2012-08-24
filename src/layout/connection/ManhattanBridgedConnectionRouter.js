@@ -1,6 +1,6 @@
 
 /**
- * @class graphiti.layout.connection.ManhattanConnectionRouter
+ * @class graphiti.layout.connection.ManhattanBridgedConnectionRouter
  * Provides a {@link graphiti.Connection} with an orthogonal route between the Connection's source 
  * and target anchors.
  * 
@@ -10,6 +10,7 @@
  * @extends  graphiti.layout.connection.ManhattanConnectionRouter
  */
 graphiti.layout.connection.ManhattanBridgedConnectionRouter = graphiti.layout.connection.ManhattanConnectionRouter.extend({
+    NAME : "graphiti.layout.connection.ManhattanBridgedConnectionRouter",
 
 	BRIDE_HORIZONTAL_LR : " r 0 0 3 -4 7 -4 10 0 13 0 ", // Left to right
     BRIDE_HORIZONTAL_RL : " r 0 0 -3 -4 -7 -4 -10 0 -13 0 ", // right to left

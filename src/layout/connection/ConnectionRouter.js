@@ -6,6 +6,7 @@
  * @author Andreas Herz
  */
 graphiti.layout.connection.ConnectionRouter = Class.extend({
+    NAME : "graphiti.layout.connection.ConnectionRouter",
 
 	/**
 	 * @constructor 

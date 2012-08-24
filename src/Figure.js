@@ -420,7 +420,7 @@ graphiti.Figure = Class.extend({
      * Sub classes can override this method to implement additional stuff. Don't forget to call
      * the super implementation via <code>this._super();</code>
      * 
-     * @private
+     * @template
      **/
     onDragEnd : function()
     {

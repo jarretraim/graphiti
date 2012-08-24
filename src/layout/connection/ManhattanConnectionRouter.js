@@ -10,7 +10,8 @@
  * @extends  graphiti.layout.connection.ConnectionRouter
  */
 graphiti.layout.connection.ManhattanConnectionRouter = graphiti.layout.connection.ConnectionRouter.extend({
- 
+    NAME : "graphiti.layout.connection.ManhattanConnectionRouter",
+
 	MINDIST : 20,
 	TOL     : 0.1,
 	TOLxTOL : 0.01,

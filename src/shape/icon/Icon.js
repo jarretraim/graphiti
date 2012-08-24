@@ -1,15 +1,6 @@
 
 /**
- * @class graphiti.shape.icon.StopSign
-
- * See the example:
- *
- *     @example preview small frame
- *     
- *     var oval =  new graphiti.shape.icon.StopSign();
- *     oval.setDimension(150,100);
- *     canvas.addFigure(oval,50,10);
- *     
+ * @class graphiti.shape.icon.Icon
  * @inheritable
  * @author Andreas Herz
  * @extends graphiti.VectorFigure
@@ -46,7 +37,6 @@ graphiti.shape.icon.Icon = graphiti.SetFigure.extend({
         // redirect the bgColor to the inner set and not to the outer container
         //
         attributes.fill="none";
-        
         if(this.svgNodes!==null) {
             this.svgNodes.attr({fill: this.bgColor.getHashStyle(), stroke:"none"});
         }
