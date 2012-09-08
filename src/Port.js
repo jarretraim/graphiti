@@ -46,6 +46,9 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
         this.setStroke(1);
         this.setColor(this.DEFAULT_BORDER_COLOR);
         this.setSelectable(false);
+
+        // set the default css class for the port
+        this.setCssClass("port hide");
     
         // avoid "undefined" values. This breaks the code on iOS.
         if(typeof name ==="undefined"){
@@ -59,8 +62,6 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
         //
         this.value = null; 
     },
-
-    
 
     /**
      * @method

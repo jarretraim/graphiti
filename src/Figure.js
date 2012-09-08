@@ -66,10 +66,33 @@ graphiti.Figure = Class.extend({
         this.originalAlpha = this.alpha;
         this.ox = 0;
         this.oy = 0;
-         
+
+        // used to set the css class in the various create shape methods
+        //
+        this.cssClass = null;
+
         // listener for movement. required for Ports or property panes in the UI
         //
         this.moveListener = new graphiti.util.ArrayList();
+    },
+
+    /**
+     * @method
+     *  Sets the CSS class for this element.
+     *
+     * @param {String} the css class for this element.
+     */
+    setCssClass: function(klass) {
+      this.cssClass = klass;
+    },
+
+
+    /**
+     * @method
+     *  Return the CSS class for this element.
+     */
+    getCssClass: function() {
+      return this.cssClass;
     },
     
     /**
