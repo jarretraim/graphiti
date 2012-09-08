@@ -132,7 +132,7 @@ graphiti.Canvas = Class.extend(
        
         // SnapTo status var's
         //
-        this.snapToGridHelper = null;
+        this.snapToGridFlag = null;
         this.snapToGeometryHelper = null;
 
         this.verticalSnapToHelperLine = null;
@@ -589,12 +589,7 @@ graphiti.Canvas = Class.extend(
      **/
     setSnapToGrid:function( flag)
     {
-      if(flag===true){
-       this.snapToGridHelper = new graphiti.SnapToGrid(this);
-      }
-      else{
-       this.snapToGridHelper = null;
-      }
+      this.snapToGridFlag = flag;
     },
 
     /**
@@ -605,7 +600,7 @@ graphiti.Canvas = Class.extend(
      **/
     getSnapToGrid:function()
     {
-      return this.snapToGridHelper !== null;
+      return this.snapToGridFlag;
     },
 
     /**
@@ -726,16 +721,12 @@ graphiti.Canvas = Class.extend(
              return result.getTopLeft();
           }
        }
-       else if(this.snapToGridHelper!==null)
-       {
-          snapPoint = figure.getSnapToGridAnchor();
-          pos.x= pos.x+snapPoint.x;
-          pos.y= pos.y+snapPoint.y;
-          
-          result = new graphiti.geo.Point(pos.x,pos.y);
-          this.snapToGridHelper.snapPoint(0,pos,result);
-          result.x= result.x-snapPoint.x;
-          result.y= result.y-snapPoint.y;
+       else if(this.snapToGridFlag)
+       {        
+          /* TODO: Move the 20 to a configuration setting */
+          /* TODO: Use the snap point? */
+          result = new graphiti.geo.Point(Raphael.snapTo(20, pos.x), 
+            Raphael.snapTo(20, pos.y));
           return result;
        }
 
