@@ -68,10 +68,6 @@ graphiti.HybridPort = graphiti.Port.extend({
        //
        if(request.getPolicy() === graphiti.command.CommandType.CONNECT) {
            
-         if(request.source.getParent().getId() === request.target.getParent().getId()){
-            return null;
-         }    
-
          if (request.source instanceof graphiti.InputPort) {
             // This is the difference to the InputPort implementation of createCommand.
             return new graphiti.command.CommandConnect(request.canvas, request.target, request.source);

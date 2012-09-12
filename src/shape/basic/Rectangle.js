@@ -76,7 +76,14 @@ graphiti.shape.basic.Rectangle = graphiti.VectorFigure.extend({
      */
     createShapeElement : function()
     {
-       return this.canvas.paper.rect(this.getX(),this.getY(),this.getWidth(), this.getHeight());
+       var r = this.canvas.paper.rect(this.getX(),this.getY(),
+                                      this.getWidth(), this.getHeight());
+
+       if (this.getCssClass()) {
+        r.node.setAttribute("class", this.getCssClass());
+       }
+
+       return r;
     },
 
     /**

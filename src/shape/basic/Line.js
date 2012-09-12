@@ -96,7 +96,13 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
     **/
    createShapeElement:function()
    {
-     return this.canvas.paper.path("M"+this.getStartX()+" "+this.getStartY()+"L"+this.getEndX()+" "+this.getEndY());
+      var s = this.canvas.paper.path("M"+this.getStartX()+" "+this.getStartY()+"L"+this.getEndX()+" "+this.getEndY());
+
+      if (this.getCssClass())  {
+        s.node.setAttribute("class", this.getCssClass());    
+      }
+      
+      return s; 
    },
 
    /**

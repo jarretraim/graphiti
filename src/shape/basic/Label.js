@@ -80,9 +80,10 @@ graphiti.shape.basic.Label= graphiti.SetFigure.extend({
         // style the label
         var lattr = {};
         lattr.text = this.text;
-        lattr.x = this.padding;
+        //lattr.x = this.padding;
+        lattr.x = (this.getWidth()) / 2;
         lattr.y = this.getHeight()/2;
-        lattr["text-anchor"] = "start";
+        lattr["text-anchor"] = "middle";
         lattr["font-size"] = this.fontSize;
         lattr.fill = "#" + this.fontColor.hex();
         this.svgNodes.attr(lattr);
