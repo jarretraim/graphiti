@@ -644,6 +644,16 @@ graphiti.Figure = Class.extend({
 
     /**
      * @method
+     * The center of the figure as calculated by 1/2 the width and height.
+     *
+     * @type {Number} 
+     */
+    getCenter:function() {
+      return new graphiti.geo.Point(Math.round(this.width/2), Math.round(this.height/2));
+    },
+
+    /**
+     * @method
      * The current width of the figure.
      * 
      * @type {Number}

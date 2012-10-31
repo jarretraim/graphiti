@@ -74,7 +74,11 @@ graphiti.Canvas = Class.extend(
             appendTo:"body",
             stack:"body",
             zIndex: 27000,
-            helper:"clone",
+            cursor: "pointer",
+            cursorAt: { left: 16, top: 16 },
+            helper: function(event) {
+                return $(event.currentTarget).find('.toolbar_icon').first().clone();
+            },
             drag: $.proxy(function(event, ui){
                 event = this._getEvent(event);
                 var pos = this.fromDocumentToCanvasCoordinate(event.clientX, event.clientY);
