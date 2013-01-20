@@ -1,33 +1,46 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.node.Node
+ * @class draw2d.shape.node.Node
  * 
- * A Node is the base class for all figures which can have {@link graphiti.Port}s. A {@link graphiti.Port} is the
- * anchor for a {@link graphiti.Connection} line.<br><br>A {@link graphiti.Port} is a green dot which can 
+ * A Node is the base class for all figures which can have {@link draw2d.Port}s. A {@link draw2d.Port} is the
+ * anchor for a {@link draw2d.Connection} line.<br><br>A {@link draw2d.Port} is a green dot which can 
  * be dragged and dropped over another port.<br>
- * 
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.Figure 
+ * @extends draw2d.Figure 
  */
-graphiti.shape.node.Node = graphiti.Figure.extend({
+draw2d.shape.node.Node = draw2d.Figure.extend({
  
-	NAME : "graphiti.shape.node.Node",
+	NAME : "draw2d.shape.node.Node",
 
-    /**
+   /**
      * @constructor
      * Creates a new Node element which are not assigned to any canvas.
-     */
-    init: function( ) {
-      this.bgColor   = new  graphiti.util.Color(255,255,255);
-      this.lineColor = new  graphiti.util.Color(128,128,255);
-      this.lineStroke=1;
+     * 
+     * @param {Number} [width] initial width of the shape
+     * @param {Number} [height] initial height of the shape
+    */
+    init: function( width, height ) {
+      this.bgColor   = new  draw2d.util.Color(255,255,255);
+      this.lineColor = new  draw2d.util.Color(128,128,255);
+      this.color     = new  draw2d.util.Color(128,128,128);
       
-      this.inputPorts = new graphiti.util.ArrayList();
-      this.outputPorts= new graphiti.util.ArrayList();
-      this.hybridPorts= new graphiti.util.ArrayList();
+      this.inputPorts = new draw2d.util.ArrayList();
+      this.outputPorts= new draw2d.util.ArrayList();
+      this.hybridPorts= new draw2d.util.ArrayList();
       
-      this._super();
+      this._super( width, height);
+    },
+    
+
+    onDoubleClick:function(){
+        var w = this.getWidth();
+        var h = this.getHeight();
+        this.setRotationAngle((this.getRotationAngle()+90)%360);
+        this.setDimension(h,w);
     },
     
 
@@ -35,7 +48,7 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      * @method
      * Return all ports of the node.
      *
-     * @return  {graphiti.util.ArrayList}
+     * @return  {draw2d.util.ArrayList}
      **/
     getPorts: function()
     {
@@ -51,7 +64,7 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      * @method
      * Return all input ports of the node.
      *
-     * @return {graphiti.util.ArrayList}
+     * @return {draw2d.util.ArrayList}
      **/
     getInputPorts: function()
     {
@@ -64,7 +77,7 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      * @method
      * Return all output ports of the node.
      *
-     * @return {graphiti.util.ArrayList}
+     * @return {draw2d.util.ArrayList}
      **/
     getOutputPorts: function()
     {
@@ -79,7 +92,7 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      *
      * 
      * @param {String} portName The name of the port to return.
-     * @return {graphiti.Port} Returns the port with the hands over name or null.
+     * @return {draw2d.Port} Returns the port with the hands over name or null.
      **/
     getPort: function( portName)
     {
@@ -113,7 +126,7 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      *
      * 
      * @param {String/Number} portName The name or numeric index of the port to return.
-     * @return {graphiti.InputPort} Returns the port with the hands over name or null.
+     * @return {draw2d.InputPort} Returns the port with the hands over name or null.
      **/
     getInputPort: function( portName)
     {
@@ -136,7 +149,7 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      * Return the output port with the corresponding name.
      *
      * @param {String/Number} portName The name or the numeric index of the port to return.
-     * @return {graphiti.OutputPort} Returns the port with the hands over name or null.
+     * @return {draw2d.OutputPort} Returns the port with the hands over name or null.
      **/
     getOutputPort: function( portName)
     {
@@ -160,7 +173,7 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      *
      * 
      * @param {String/Number} portName The name or numeric index of the port to return.
-     * @return {graphiti.InputPort} Returns the port with the hands over name or null.
+     * @return {draw2d.InputPort} Returns the port with the hands over name or null.
      **/
     getHybridPort: function( portName)
     {
@@ -182,27 +195,27 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      * @method
      * Add a port to this node at the given position.<br>
      *
-     * @param {graphiti.Port} port The new port to add.
-     * @param {graphiti.layout.locator.Locator} locator The layouter for the port.
+     * @param {draw2d.Port} port The new port to add.
+     * @param {draw2d.layout.locator.Locator} locator The layouter for the port.
      **/
     addPort: function(port, locator)
     {
-        if(!(port instanceof graphiti.Port)){
-            throw "Argument is not typeof 'graphiti.Port'. \nFunction: graphiti.shape.node.Node#addPort";
+        if(!(port instanceof draw2d.Port)){
+            throw "Argument is not typeof 'draw2d.Port'. \nFunction: draw2d.shape.node.Node#addPort";
         }
         
         
-        if (port instanceof graphiti.InputPort) {
+        if (port instanceof draw2d.InputPort) {
             this.inputPorts.add(port);
         }
-        else if(port instanceof graphiti.OutputPort){
+        else if(port instanceof draw2d.OutputPort){
             this.outputPorts.add(port);
         }
-        else if(port instanceof graphiti.HybridPort){
+        else if(port instanceof draw2d.HybridPort){
             this.hybridPorts.add(port);
         }
 
-        if((typeof locator !== "undefined") && (locator instanceof graphiti.layout.locator.Locator)){
+        if((typeof locator !== "undefined") && (locator instanceof draw2d.layout.locator.Locator)){
             port.setLocator(locator);
         }
         
@@ -222,7 +235,7 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      * @method
      * Removes a port and all related connections from this node.<br>
      *
-     * @param {graphiti.Port} port The port to remove.
+     * @param {draw2d.Port} port The port to remove.
      **/
     removePort : function(port)
     {
@@ -248,7 +261,7 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
      * method to create its own type of ports.
      * 
      * @param {String} type the type of the requested port. possible ["input", "output"]
-     * @param {graphiti.layout.locator.Locator} [locator] the layouter to use for this port
+     * @param {draw2d.layout.locator.Locator} [locator] the layouter to use for this port
      * @template
      */
     createPort: function(type, locator){
@@ -257,15 +270,15 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
         
     	switch(type){
     	case "input":
-    		newPort= new graphiti.InputPort(name);
+    		newPort= new draw2d.InputPort();
     		count = this.inputPorts.getSize();
     		break;
     	case "output":
-    		newPort= new graphiti.OutputPort(name);
+    		newPort= new draw2d.OutputPort();
             count = this.outputPorts.getSize();
     		break;
         case "hybrid":
-            newPort= new graphiti.HybridPort(name);
+            newPort= new draw2d.HybridPort();
             count = this.hybridPorts.getSize();
             break;
     	default:
@@ -281,8 +294,14 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
     	return newPort;
     },
     
+    /**
+     * @method
+     * Return all connections related to this node.
+     * 
+     * @returns {draw2d.util.ArrayList}
+     */
     getConnections: function(){
-        var connections = new graphiti.util.ArrayList();
+        var connections = new draw2d.util.ArrayList();
         var ports = this.getPorts();
         for(var i=0; i<ports.getSize(); i++)
         {
@@ -306,8 +325,7 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
     {
         var oldCanvas = this.canvas;
         this._super(canvas);
-        var canvas =  this.canvas;
-        
+       
         var ports = this.getPorts();
         if (oldCanvas !== null) {
             ports.each(function(i,port){
@@ -328,7 +346,6 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
                 port.setCanvas(null);
             });
         }
-        
     },
     
     
@@ -344,7 +361,7 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
 
         // make no sense to layout the ports if we not part
         // of the canvas
-        if(this.shape==null){
+        if(this.shape===null){
             return;
         }
         
@@ -363,11 +380,29 @@ graphiti.shape.node.Node = graphiti.Figure.extend({
         });
     },
 
+    setRotationAngle: function(angle){
+    	this._super(angle);
+        
+        // layout the ports
+        //
+        this.outputPorts.each(function(i, port){
+            port.locator.relocate(i,port);
+        });
+        
+        this.inputPorts.each(function(i, port){
+            port.locator.relocate(i,port);
+        });
+        
+        this.hybridPorts.each(function(i, port){
+            port.locator.relocate(i,port);
+        });
+    },
+    
     /**
      * @method
      * Called if the value of any port has been changed
      * 
-     * @param {graphiti.Port} relatedPort
+     * @param {draw2d.Port} relatedPort
      * @template
      */
     onPortValueChanged: function(relatedPort){

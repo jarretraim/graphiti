@@ -1,13 +1,16 @@
-/**
- * @class graphiti.OutputPort
- * A OutputPort is the start anchor for a {@link graphiti.Connection}.
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************//**
+ * @class draw2d.OutputPort
+ * A OutputPort is the start anchor for a {@link draw2d.Connection}.
  * 
  * @author Andreas Herz
- * @extends graphiti.Port
+ * @extends draw2d.Port
  */ 
-graphiti.OutputPort = graphiti.Port.extend({
+draw2d.OutputPort = draw2d.Port.extend({
 
-    NAME : "graphiti.OutputPort",
+    NAME : "draw2d.OutputPort",
 
     /**
      * @constructor
@@ -21,29 +24,29 @@ graphiti.OutputPort = graphiti.Port.extend({
        
         // responsive for the arrangement of the port 
         // calculates the x/y coordinates in relation to the parent node
-        this.locator=new graphiti.layout.locator.OutputPortLocator();
+        this.locator=new draw2d.layout.locator.OutputPortLocator();
     },
 
     
     /**
      * @inheritdoc
      * 
-     * @param {graphiti.Figure} figure The figure which is currently dragging
-     * @return {Boolean} true if this figure accepts the dragging figure for a drop operation
+     * @param {draw2d.Figure} figure The figure which is currently dragging
+     * @return {draw2d.Figure} the figure which should receive the drop event or null if the element didnt want a drop event
      */
     onDragEnter : function(figure)
     {
     	// Ports accepts only InputPorts as DropTarget
     	//
-        if (figure instanceof graphiti.InputPort) {
+        if (figure instanceof draw2d.InputPort) {
             return this._super(figure);
         }
         
-        if (figure instanceof graphiti.HybridPort) {
+        if (figure instanceof draw2d.HybridPort) {
             return this._super(figure);
         }
         
-        return false;
+        return null;
     },
     
     /**
@@ -54,10 +57,10 @@ graphiti.OutputPort = graphiti.Port.extend({
     {
 	  // Ports accepts only InputPorts as DropTarget
 	  //
-      if(figure instanceof graphiti.InputPort){
+      if(figure instanceof draw2d.InputPort){
         this._super( figure);
       }
-      else if(figure instanceof graphiti.HybridPort){
+      else if(figure instanceof draw2d.HybridPort){
         this._super( figure);
       }
     },
@@ -65,26 +68,26 @@ graphiti.OutputPort = graphiti.Port.extend({
     /**
      * @inheritdoc
      *
-     * @param {graphiti.command.CommandType} request describes the Command being requested
-     * @return {graphiti.command.Command} null or a valid command
+     * @param {draw2d.command.CommandType} request describes the Command being requested
+     * @return {draw2d.command.Command} null or a valid command
      **/
     createCommand:function(request)
     {
        // Connect request between two ports
        //
-       if(request.getPolicy() === graphiti.command.CommandType.CONNECT)
+       if(request.getPolicy() === draw2d.command.CommandType.CONNECT)
        {
          if(request.source.getParent().getId() === request.target.getParent().getId()){
             return null;
          }
     
-         if(request.source instanceof graphiti.InputPort){
+         if(request.source instanceof draw2d.InputPort){
             // This is the different to the InputPort implementation of createCommand.
-            return new graphiti.command.CommandConnect(request.canvas,request.target,request.source);
+            return new draw2d.command.CommandConnect(request.canvas,request.target,request.source);
          }
-         if(request.source instanceof graphiti.HybridPort){
+         if(request.source instanceof draw2d.HybridPort){
              // This is the different to the InputPort implementation of createCommand.
-             return new graphiti.command.CommandConnect(request.canvas,request.target,request.source);
+             return new draw2d.command.CommandConnect(request.canvas,request.target,request.source);
          }
     
          return null;

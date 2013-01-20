@@ -1,20 +1,23 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.command.CommandResize
+ * @class draw2d.command.CommandResize
  * Resize command for figures. Can be execute/undo/redo via a CommandStack.
  *
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.command.Command
+ * @extends draw2d.command.Command
  */
-graphiti.command.CommandResize = graphiti.command.Command.extend({
-    NAME : "graphiti.command.CommandResize", 
+draw2d.command.CommandResize = draw2d.command.Command.extend({
+    NAME : "draw2d.command.CommandResize", 
 
     /**
      * @constructor
      * Create a new resize Command objects which can be execute via the CommandStack.
      *
-     * @param {graphiti.Figure} figure the figure to resize
+     * @param {draw2d.Figure} figure the figure to resize
      * @param {Number} [width] the current width
      * @param {Number} [height] the current height
      */

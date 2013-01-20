@@ -1,41 +1,44 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.analog.VoltageSupplyHorizontal
+ * @class draw2d.shape.analog.VoltageSupplyHorizontal
  * 
  * See the example:
  *
  *     @example preview small frame
  *     
- *     var figure =  new graphiti.shape.analog.VoltageSupplyHorizontal();
+ *     var figure =  new draw2d.shape.analog.VoltageSupplyHorizontal();
  *     canvas.addFigure(figure,10,10);
  *     
  *     
- * @extends graphiti.SVGFigure
+ * @extends draw2d.SVGFigure
  */
-graphiti.shape.analog.VoltageSupplyHorizontal = graphiti.SVGFigure.extend({
+draw2d.shape.analog.VoltageSupplyHorizontal = draw2d.SVGFigure.extend({
 
-    NAME:"graphiti.shape.analog.VoltageSupplyHorizontal",
+    NAME:"draw2d.shape.analog.VoltageSupplyHorizontal",
     
     // custom locator for the special design of the Input area
-    MyInputPortLocator : graphiti.layout.locator.Locator.extend({
+    MyInputPortLocator : draw2d.layout.locator.PortLocator.extend({
         init:function( ){
           this._super();
         },    
         relocate:function(index, figure){
             var h = figure.getParent().getHeight();
-            figure.setPosition(0, h/2);
+            this.applyConsiderRotation(figure,0, h/2);
         }
     }),
     
     // custom locator for the special design of the Output area
-    MyOutputPortLocator : graphiti.layout.locator.Locator.extend({
+    MyOutputPortLocator : draw2d.layout.locator.PortLocator.extend({
         init:function( ){
           this._super();
         },    
         relocate:function(index, figure){
             var w = figure.getParent().getWidth();
             var h = figure.getParent().getHeight();
-            figure.setPosition(w, h/2);
+            this.applyConsiderRotation(figure,w, h/2);
         }
     }),
 

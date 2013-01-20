@@ -1,15 +1,18 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.layout.mesh.ProposedMeshChange
+ * @class draw2d.layout.mesh.ProposedMeshChange
  * Change proposal for grid/mesh layout changes.
  *
  * @author Andreas Herz
  */
-graphiti.layout.mesh.ProposedMeshChange = Class.extend({
+draw2d.layout.mesh.ProposedMeshChange = Class.extend({
 
 	/**
 	 * @constructor 
-	 * Createschange object.
+	 * Creates change object.
 	 */
     init: function(figure, x, y){
     	this.figure = figure;
@@ -21,7 +24,7 @@ graphiti.layout.mesh.ProposedMeshChange = Class.extend({
      * @method
      * Return the related figure.
      * 
-     * @return {graphiti.Figure} the figure to the related change proposal
+     * @return {draw2d.Figure} the figure to the related change proposal
      */
     getFigure:function( )
     {

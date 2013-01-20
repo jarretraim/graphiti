@@ -1,16 +1,19 @@
-/**
- * @class graphiti.geo.Rectangle
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************//**
+ * @class draw2d.geo.Rectangle
  * 
  * Util class for geometrie handling.
  * 
  * @inheritable
  * @author Andreas Herz
  * 
- * @extends graphiti.geo.Point
+ * @extends draw2d.geo.Point
  */
-graphiti.geo.Rectangle = graphiti.geo.Point.extend({
+draw2d.geo.Rectangle = draw2d.geo.Point.extend({
 
-    NAME : "graphiti.geo.Rectangle",
+    NAME : "draw2d.geo.Rectangle",
     
     /**
      * @constructor 
@@ -55,7 +58,7 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 	 * @param {Number} dw  Amount by which width is to be resized
 	 * @param {Number} dh  Amount by which height is to be resized
 	 * 
-	 * @return  {graphiti.geo.Rectangle} The method return the object itself
+	 * @return  {draw2d.geo.Rectangle} The method return the object itself
 	 **/
 	resize:function(/*:int*/ dw, /*:int*/ dh)
 	{
@@ -65,20 +68,47 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 	  return this;
 	},
 	
-	/**
+    /**
+     * @method
+     * Scale this Rectangle by the values supplied as input and returns this for 
+     * convenience. This Rectangle's width will become this.width + dw. This 
+     * Rectangle's height will become this.height + dh. The top left corner moves
+     * -dw/2, -dh/2
+     * <br>
+     * The method return the object itself. This allows you to do command chaining, where 
+     * you can perform multiple methods on the same elements.
+     *
+     *
+     * @param {Number} dw  Amount by which width is to be resized
+     * @param {Number} dh  Amount by which height is to be resized
+     * 
+     * @return  {draw2d.geo.Rectangle} The method return the object itself
+     **/
+    scale:function( dw, dh)
+    {
+        
+      this.w +=(dw);
+      this.h +=(dh);
+      this.x -=(dw/2);
+      this.y -=(dh/2);
+      this.adjustBoundary();
+      return this;
+    },
+    
+    /**
 	 * Sets the parameters of this Rectangle from the Rectangle passed in and
 	 * returns this for convenience.<br>
 	 * <br>
 	 * The method return the object itself. This allows you to do command chaining, where 
 	 * you can perform multiple methods on the same elements.
 	 *
-	 * @param {graphiti.geo.Rectangle} Rectangle providing the bounding values
+	 * @param {draw2d.geo.Rectangle} Rectangle providing the bounding values
 	 * 
-	 * @return  {graphiti.geo.Rectangle} The method return the object itself
+	 * @return  {draw2d.geo.Rectangle} The method return the object itself
 	 */
 	setBounds:function( rect)
 	{
-	    this.setPosition(rect,x,rect,y);
+	    this.setPosition(rect.x,rect.y);
 
 	    this.w = rect.w;
 	    this.h = rect.h;
@@ -142,7 +172,18 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
       this.adjustBoundary();
       return this;
     },	
-	
+    
+    /**
+     * @method
+     * The x coordinate of the left corner.
+     * 
+     * @return {Number}
+     **/
+    getLeft:function()
+    {
+      return this.x;
+    },
+    
 	/**
 	 * @method
 	 * The x coordinate of the right corner.
@@ -154,7 +195,18 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 	  return this.x+this.w;
 	},
 	
-	/**
+    /**
+     * @method
+     * The y coordinate of the top.
+     * 
+     *@return {Number}
+     **/
+    getTop:function()
+    {
+      return this.y;
+    },
+    
+    /**
 	 * @method
 	 * The y coordinate of the bottom.
 	 * 
@@ -169,66 +221,66 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 	 * @method
 	 * The top left corner of the dimension object.
 	 * 
-	 * @return {graphiti.geo.Point} a new point objects which holds the coordinates
+	 * @return {draw2d.geo.Point} a new point objects which holds the coordinates
 	 **/
 	getTopLeft:function()
 	{
-	  return new graphiti.geo.Point(this.x,this.y);
+	  return new draw2d.geo.Point(this.x,this.y);
 	},
 	
     /**
      * @method
      * The top center coordinate of the dimension object.
      * 
-     * @return {graphiti.geo.Point} a new point objects which holds the coordinates
+     * @return {draw2d.geo.Point} a new point objects which holds the coordinates
      **/
     getTopCenter:function()
     {
-      return new graphiti.geo.Point(this.x+(this.w/2),this.y);
+      return new draw2d.geo.Point(this.x+(this.w/2),this.y);
     },
 
     /**
 	 * @method
 	 * The top right corner of the dimension object.
 	 * 
-	 * @return {graphiti.geo.Point} a new point objects which holds the coordinates
+	 * @return {draw2d.geo.Point} a new point objects which holds the coordinates
 	 **/
 	getTopRight:function()
 	{
-	  return new graphiti.geo.Point(this.x+this.w,this.y);
+	  return new draw2d.geo.Point(this.x+this.w,this.y);
 	},
 		
 	/**
 	 * @method
 	 * The bottom left corner of the dimension object.
 	 * 
-	 * @return {graphiti.geo.Point} a new point objects which holds the coordinates
+	 * @return {draw2d.geo.Point} a new point objects which holds the coordinates
 	 **/
 	getBottomLeft:function()
 	{
-	  return new graphiti.geo.Point(this.x,this.y+this.h);
+	  return new draw2d.geo.Point(this.x,this.y+this.h);
 	},
 	
 	/**
      * @method
      * The bottom center coordinate of the dimension object.
      * 
-     * @return {graphiti.geo.Point} a new point objects which holds the coordinates
+     * @return {draw2d.geo.Point} a new point objects which holds the coordinates
      **/
     getBottomCenter:function()
     {
-      return new graphiti.geo.Point(this.x+(this.w/2),this.y+this.h);
+      return new draw2d.geo.Point(this.x+(this.w/2),this.y+this.h);
     },
     
 	/**
 	 * @method
 	 * The center of the dimension object
 	 * 
-	 * @return {graphiti.geo.Point} a new point which holds the center of the object
+	 * @return {draw2d.geo.Point} a new point which holds the center of the object
 	 **/
 	getCenter:function()
 	{
-	  return new graphiti.geo.Point(this.x+this.w/2,this.y+this.h/2);
+	  return new draw2d.geo.Point(this.x+this.w/2,this.y+this.h/2);
 	},
 	
 	
@@ -236,24 +288,41 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 	 * @method
 	 * Bottom right corner of the object
 	 * 
-	 * @return {graphiti.geo.Point} a new point which holds the bottom right corner
+	 * @return {draw2d.geo.Point} a new point which holds the bottom right corner
 	 **/
 	getBottomRight:function()
 	{
-	  return new graphiti.geo.Point(this.x+this.w,this.y+this.h);
+	  return new draw2d.geo.Point(this.x+this.w,this.y+this.h);
 	},
 	
+	/**
+	 * @method
+	 * Return all points of the rectangle as array. Starting at topLeft and the
+	 * clockwise.
+	 * 
+	 * @return {draw2d.util.ArrayList} the points starting at top/left and the clockwiese
+	 */
+	getPoints:function()
+	{
+	    var result = new draw2d.util.ArrayList();
+        result.add(this.getTopLeft());
+        result.add(this.getTopRight());
+        result.add(this.getBottomRight());
+        result.add(this.getBottomLeft());
+
+        return result;
+	},
 	
 	/**
 	 * @method
 	 * Return a new rectangle which fits into this rectangle. <b>ONLY</b> the x/y coordinates
 	 * will be changed. Not the dimension of the given rectangle.
 	 * 
-	 * @param {graphiti.geo.Rectangle} rect the rectangle to adjust
+	 * @param {draw2d.geo.Rectangle} rect the rectangle to adjust
 	 * @return the new shifted rectangle
 	 */
 	moveInside: function(rect){
-	    var newRect = new graphiti.geo.Rectangle(rect.x,rect.y,rect.w,rect.h);
+	    var newRect = new draw2d.geo.Rectangle(rect.x,rect.y,rect.w,rect.h);
 	    // shift the coordinate right/down if coordinate not inside the rect
 	    //
 	    newRect.x= Math.max(newRect.x,this.x);
@@ -282,10 +351,10 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 	
 	/**
 	 * @method
-	 * Return the minimum distance of this rectangle to the given {@link graphiti.geo.Point} or 
-	 * {link graphiti.geo.Rectangle}.
+	 * Return the minimum distance of this rectangle to the given {@link draw2d.geo.Point} or 
+	 * {link draw2d.geo.Rectangle}.
 	 * 
-	 * @param {graphiti.geo.Point} pointOrRectangle the reference point/rectangle for the distance calculation
+	 * @param {draw2d.geo.Point} pointOrRectangle the reference point/rectangle for the distance calculation
 	 */
 	getDistance: function (pointOrRectangle){
 		var cx = this.x;
@@ -298,7 +367,7 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 		var ow = 1;
 		var oh = 1;
 		
-		if(pointOrRectangle instanceof graphiti.geo.Rectangle){
+		if(pointOrRectangle instanceof draw2d.geo.Rectangle){
 			ow = pointOrRectangle.getWidth();
 			oh = pointOrRectangle.getHeight();
 		}
@@ -374,14 +443,133 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
 				return -((cx + cw) - ox);
 		}
 
-		throw "Unknown data type of parameter for distance calculation in graphiti.geo.Rectangle.getDistnace(..)";
+		throw "Unknown data type of parameter for distance calculation in draw2d.geo.Rectangle.getDistnace(..)";
 	},
 	
+    
+    /**
+     * @method
+     * Determin Octant
+     *
+     *    0 | 1 | 2
+     *    __|___|__
+     *    7 | 8 | 3
+     *    __|___|__
+     *    6 | 5 | 4
+     *
+     * @param r1
+     * @param r2
+
+     * @returns {Number}
+     */
+    determineOctant: function( r2){
+        var ox = this.x;
+        var oy = this.y;
+        var ow = this.w;
+        var oh = this.h;
+        
+        var cx = r2.x;
+        var cy = r2.y;
+        var cw = r2.w;
+        var ch = r2.h;
+        var oct =0;
+
+        if(cx + cw <= ox){
+            if((cy + ch) <= oy){
+                oct = 0;
+            }
+            else if(cy >= (oy + oh)){
+                oct = 6;
+            }
+            else{
+                oct = 7;
+            }
+        }
+        else if(cx >= ox + ow){
+            if(cy + ch <= oy){
+                oct = 2;
+            }
+            else if(cy >= oy + oh){
+                oct = 4;
+            }
+            else{
+                oct = 3;
+            }
+        }
+        else if(cy + ch <= oy){
+            oct = 1;
+        }
+        else if(cy >= oy + oh){
+            oct = 5;
+        }
+        else{
+            oct= 8;
+        }
+        
+        return oct;
+    },
+  
+    
+    /**
+     * @method
+     * Returns the direction the point <i>p</i> is in relation to the given rectangle.
+     * Util method for inherit router implementations.
+     * 
+     * <p>
+     * Possible values:
+     * <ul>
+     *   <li>up -&gt; 0</li>
+     *   <li>right -&gt; 1</li>
+     *   <li>down -&gt; 2</li>
+     *   <li>left -&gt; 3</li>
+     * </ul>
+     * <p>
+     * 
+     * @param {draw2d.geo.Point} p the point in relation to the given rectangle
+     * 
+     * @return {Number} the direction from <i>r</i> to <i>p</i>
+     */
+    getDirection:function(p) 
+    {
+        var r= this;
+        
+        //  up     -> 0
+        //  right  -> 1
+        //  down   -> 2
+        //  left   -> 3
+       var distance = Math.abs(r.x - p.x);
+       var direction = 3;
+    
+       var i=Math.abs(r.y - p.y);
+       if (i <= distance) 
+       {
+          distance = i;
+          direction = 0;
+       }
+    
+       i = Math.abs(r.getBottom() - p.y);
+       if (i <= distance) 
+       {
+          distance = i;
+          direction = 2;
+       }
+    
+       i = Math.abs(r.getRight() - p.x);
+       if (i < distance) 
+       {
+          distance = i;
+          direction = 1;
+       }
+    
+       return direction;
+    },
+    
+    
 	/**
 	 * @method
 	 * Compares two Dimension objects
 	 * 
-	 * @param {graphiti.geo.Rectangle} o
+	 * @param {draw2d.geo.Rectangle} o
 	 *@return {Boolean}
 	 **/
 	equals:function( o)
@@ -393,16 +581,37 @@ graphiti.geo.Rectangle = graphiti.geo.Point.extend({
      * @method
      * Detect whenever the hands over coordinate is inside the figure.
      *
-     * @param {Number} iX
+     * @param {Number/draw2d.geo.Point} iX
      * @param {Number} iY
      * @returns {Boolean}
      */
     hitTest : function ( iX , iY)
     {
+    	if(iX instanceof draw2d.geo.Point){
+    		iY = iX.y;
+    		iX = iX.x;
+    	}
         var iX2 = this.x + this.getWidth();
         var iY2 = this.y + this.getHeight();
         return (iX >= this.x && iX <= iX2 && iY >= this.y && iY <= iY2);
     },
+    
+    /**
+     * @method
+     * return true if the this rectangle inside the hand over rectangle
+     * 
+     *
+     * @param {draw2d.geo.Rectangle} rect
+     * @returns {Boolean}
+     */
+    isInside : function ( rect)
+    {
+       	return    rect.hitTest(this.getTopLeft()) 
+    	       && rect.hitTest(this.getTopRight())
+    	       && rect.hitTest(this.getBottomLeft()) 
+    	       && rect.hitTest(this.getBottomRight());
+    },
+    
     
     toJSON : function(){
         return  { 

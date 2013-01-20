@@ -1,6 +1,9 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.ResizeHandle
+ * @class draw2d.ResizeHandle
  * The Resizehandles for Figures.
 
  * <pre>
@@ -18,74 +21,39 @@
  * </pre>
  * 
  * @author Andreas Herz
- * @extends graphiti.shape.basic.Rectangle
+ * @extends draw2d.shape.basic.Rectangle
  */
-graphiti.ResizeHandle = graphiti.shape.basic.Rectangle.extend({
-    NAME : "graphiti.ResizeHandle",
+draw2d.ResizeHandle = draw2d.shape.basic.Rectangle.extend({
+    NAME : "draw2d.ResizeHandle",
 
-    DEFAULT_COLOR : "#99ccff",
+    DEFAULT_COLOR : "#00bdee",
     
     /**
      * @constructor
      * Creates a new figure element which are not assigned to any canvas.
      *
-     * @param {graphiti.Canvas} canvas the related canvas element
+     * @param {draw2d.Canvas} canvas the related canvas element
      * @param {Number} type the type of the ResizeHandle.
      */
-    init: function( canvas, type) {
+    init: function( figure , type) {
  
       this._super();
-      
-      if(graphiti.isTouchDevice){
-          this.setDimension(15,15);
-      }
-      else{
-          this.setDimension(8,8);
-      }
-          
+
+      // required in the SelectionEditPolicy to indicate the type of figure
+      // which the user clicks
+      this.isResizeHandle=true;
+    
+      this.owner = figure;
       this.type = type;
-      this.canvas = canvas;
       this.command = null;
       this.commandMove=null;
       this.commandResize=null;
       
-      var offset= this.getWidth();
-      var offset2 = offset/2;
-      
-      switch(this.type)
-      {
-        case 1:
-          this.setSnapToGridAnchor(new graphiti.geo.Point(offset,offset));
-          break;
-        case 2:
-          this.setSnapToGridAnchor(new graphiti.geo.Point(offset2,offset));
-          break;
-        case 3:
-          this.setSnapToGridAnchor(new graphiti.geo.Point(0,offset));
-          break;
-        case 4:
-          this.setSnapToGridAnchor(new graphiti.geo.Point(0,offset2));
-          break;
-        case 5:
-          this.setSnapToGridAnchor(new graphiti.geo.Point(0,0));
-          break;
-        case 6:
-          this.setSnapToGridAnchor(new graphiti.geo.Point(offset2,0));
-          break;
-        case 7:
-          this.setSnapToGridAnchor(new graphiti.geo.Point(offset,0));
-          break;
-        case 8:
-          this.setSnapToGridAnchor(new graphiti.geo.Point(offset,offset2));
-          break;
-        case 9:
-          this.setSnapToGridAnchor(new graphiti.geo.Point(offset2,offset2));
-          break;
-      }
-      
+      this.setDimension();
+
       this.setBackgroundColor(this.DEFAULT_COLOR);
-      this.setColor("#000000");
-      this.setStroke(0.5);
+      this.setColor("#7A7A7A");
+      this.setStroke(1);
       this.setSelectable(false);
       this.setRadius(0);
     },
@@ -93,32 +61,57 @@ graphiti.ResizeHandle = graphiti.shape.basic.Rectangle.extend({
 
     /**
      * @method
+     *
+     * @param asPrimarySelection
+     * @private
+     */
+    select: function(asPrimarySelection){
+        // it is not possible to select a resize handle. This makes no sense
+        // return silently without any action
+    },
+    
+    /**
+     * @method
+     * 
+     * @private
+     */
+    unselect: function(){
+        // it is not possible to unselect a resize handle. This makes no sense
+        // return silently without any action
+    },
+    
+    
+    /**
+     * @method
      * The edge of the rectangle for the snapTo mechanism.
      * 
      * @return
      */
+
     getSnapToDirection:function()
     {
       switch(this.type)
       {
         case 1:
-         return graphiti.SnapToHelper.NORTH_WEST;
+         return draw2d.SnapToHelper.NORTH_WEST;
         case 2:
-         return graphiti.SnapToHelper.NORTH;
+         return draw2d.SnapToHelper.NORTH;
         case 3:
-         return graphiti.SnapToHelper.NORTH_EAST;
+         return draw2d.SnapToHelper.NORTH_EAST;
         case 4:
-         return graphiti.SnapToHelper.EAST;
+         return draw2d.SnapToHelper.EAST;
         case 5:
-         return graphiti.SnapToHelper.SOUTH_EAST;
+         return draw2d.SnapToHelper.SOUTH_EAST;
         case 6:
-         return graphiti.SnapToHelper.SOUTH;
+         return draw2d.SnapToHelper.SOUTH;
         case 7:
-         return graphiti.SnapToHelper.SOUTH_WEST;
+         return draw2d.SnapToHelper.SOUTH_WEST;
         case 8:
-         return graphiti.SnapToHelper.WEST;
+         return draw2d.SnapToHelper.WEST;
         case 9:
-         return graphiti.SnapToHelper.NSEW;
+         return draw2d.SnapToHelper.NSEW;
+        default :
+         return draw2d.SnapToHelper.EAST;
       }
     },
     
@@ -142,10 +135,8 @@ graphiti.ResizeHandle = graphiti.shape.basic.Rectangle.extend({
         this.ox = this.getAbsoluteX();
         this.oy = this.getAbsoluteY();
 
-        var figure = this.getCanvas().getCurrentSelection();
-
-        this.commandMove = figure.createCommand(new graphiti.command.CommandType(graphiti.command.CommandType.MOVE));
-        this.commandResize = figure.createCommand(new graphiti.command.CommandType(graphiti.command.CommandType.RESIZE));
+        this.commandMove = this.owner.createCommand(new draw2d.command.CommandType(draw2d.command.CommandType.MOVE));
+        this.commandResize = this.owner.createCommand(new draw2d.command.CommandType(draw2d.command.CommandType.RESIZE));
 
         return true;
     },
@@ -154,6 +145,7 @@ graphiti.ResizeHandle = graphiti.shape.basic.Rectangle.extend({
     /**
      * @method 
      * Called by the framework if the figure is moved by user interaction.
+     * 
      * @param {Number} dx the move x offset
      * @param {Number} dy the move y offset
      * 
@@ -162,7 +154,7 @@ graphiti.ResizeHandle = graphiti.shape.basic.Rectangle.extend({
     onDrag : function(dx, dy)
     {
         if (this.isDraggable() === false) {
-            return false;
+            return;
         }
 
         var oldX = this.getAbsoluteX();
@@ -174,7 +166,7 @@ graphiti.ResizeHandle = graphiti.shape.basic.Rectangle.extend({
         var diffX = this.getAbsoluteX() - oldX;
         var diffY = this.getAbsoluteY() - oldY;
 
-        var obj = this.getCanvas().getCurrentSelection();
+        var obj = this.owner;
         var objPosX = obj.getAbsoluteX();
         var objPosY = obj.getAbsoluteY();
         var objWidth = obj.getWidth();
@@ -211,7 +203,6 @@ graphiti.ResizeHandle = graphiti.shape.basic.Rectangle.extend({
             obj.setPosition(objPosX + (objWidth - obj.getWidth()), objPosY);
             break;
         }
-        this.canvas.moveResizeHandles(obj);
     },
 
     /**
@@ -226,26 +217,24 @@ graphiti.ResizeHandle = graphiti.shape.basic.Rectangle.extend({
             return;
         }
 
-        var figure = this.canvas.getCurrentSelection();
-
         // An non draggable resizeHandle doesn't create a move/resize command.
         // This happens if the selected figure has set the "nonResizeable" flag.
         //
         if (this.commandMove !== null) {
-            this.commandMove.setPosition(figure.getX(), figure.getY());
+            this.commandMove.setPosition(this.owner.getX(), this.owner.getY());
             this.canvas.getCommandStack().execute(this.commandMove);
             this.commandMove = null;
         }
 
         if (this.commandResize !== null) {
-            this.commandResize.setDimension(figure.getWidth(), figure.getHeight());
+            this.commandResize.setDimension(this.owner.getWidth(), this.owner.getHeight());
             this.canvas.getCommandStack().execute(this.commandResize);
             this.commandResize = null;
         }
 
         this.canvas.hideSnapToHelperLines();
     },
-    
+
     /**
      * Set the position of the object.<br>
      * The ResizeHandle overrides the Figure.setPosition method. The base
@@ -258,31 +247,93 @@ graphiti.ResizeHandle = graphiti.shape.basic.Rectangle.extend({
     setPosition:function(x ,y )
     {
       // don't call base implementation. Base implementation will show ResizeHandles...but I'm the ResizeHandle
-      this.x = x;
-      this.y = y;
+    if(x instanceof draw2d.geo.Point){
+        this.x = x.x;
+        this.y = x.y;
+     }
+     else{
+        this.x= x;
+        this.y= y;
+     }
       
       this.repaint();
     },
     
+ 
+    /**
+     * @method
+     * Set the new dimension of the the ResizeHandle. IF you didn't pass any width/height the best default fo rthe
+     * platform will be used.
+     * 
+     * @param {Number} [width] new width of the resize handle
+     * @param {Number} [height] new width of the resize handle
+     */
+    setDimension: function(width, height)
+    {
+    	if(typeof height !=="undefined"){
+    		this._super(width, height);
+    	}
+    	else{
+	        if(draw2d.isTouchDevice){
+	        	this._super(15,15);
+	        }
+	        else{
+	        	this._super(8,8);
+	        }
+    	}
+    	
+        var offset= this.getWidth();
+        var offset2 = offset/2;
+        
+        switch(this.type)
+        {
+          case 1:
+            this.setSnapToGridAnchor(new draw2d.geo.Point(offset,offset));
+            break;
+          case 2:
+            this.setSnapToGridAnchor(new draw2d.geo.Point(offset2,offset));
+            break;
+          case 3:
+            this.setSnapToGridAnchor(new draw2d.geo.Point(0,offset));
+            break;
+          case 4:
+            this.setSnapToGridAnchor(new draw2d.geo.Point(0,offset2));
+            break;
+          case 5:
+            this.setSnapToGridAnchor(new draw2d.geo.Point(0,0));
+            break;
+          case 6:
+            this.setSnapToGridAnchor(new draw2d.geo.Point(offset2,0));
+            break;
+          case 7:
+            this.setSnapToGridAnchor(new draw2d.geo.Point(offset,0));
+            break;
+          case 8:
+            this.setSnapToGridAnchor(new draw2d.geo.Point(offset,offset2));
+            break;
+          case 9:
+            this.setSnapToGridAnchor(new draw2d.geo.Point(offset2,offset2));
+            break;
+        }
+        
+    },
     
     /**
      * @method
      * Show the ResizeHandle and add it to the canvas.<br>
      * Additional bring it in to the front of other figures.
      *
-     * @param {graphiti.Canvas} canvas the canvas to use
+     * @param {draw2d.Canvas} canvas the canvas to use
      * @param {Number} x the x-positin
      * @param {Number} y the y-position
      **/
-    show:function(canvas, x, y)
+    show:function(canvas)
     {
       // don't call the parent function. The parent functions delete this object
       // and a resize handle can't be deleted.
-      if(this.shape===null) {
-         this.setCanvas(canvas);
-      }
-     
-      this.setPosition(x,y);
+      this.setCanvas(canvas);
+    
+      this.canvas.resizeHandles.add(this);
       this.shape.toFront();
     },
     
@@ -299,10 +350,39 @@ graphiti.ResizeHandle = graphiti.shape.basic.Rectangle.extend({
         return;
       }
         
+      this.canvas.resizeHandles.remove(this);
       this.setCanvas(null);
     },
     
+    /**
+     * @inheritdoc
+     * 
+     * @param attributes
+     */
+    repaint:function(attributes)
+    {
+        if(this.repaintBlocked===true || this.shape===null){
+            return;
+        }
+
+        if(typeof attributes === "undefined"){
+            attributes= {};
+        }
+        
+        // a port did have the 0/0 coordinate i the center and not in the top/left corner
+        //
+        if(this.getAlpha()<0.9){
+            attributes.fill="#e6e6e8";
+        }
+        else{
+            attributes.fill = "90-#b8c8ec-#e6e6e8";
+        }
+        
+         
+        this._super(attributes);
+    },
     
+
     /**
      * @method
      * return true if the element can be used in combination with the 

@@ -1,24 +1,33 @@
-
-/**
- * @class graphiti.Figure
- * A lightweight graphical object. Figures are rendered to a {graphiti.Canvas} object.
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************//**
+ * @class draw2d.Figure
+ * A lightweight graphical object. Figures are rendered to a {@link draw2d.Canvas} object.
  * 
  * @inheritable
  * @author Andreas Herz
  */
-graphiti.Figure = Class.extend({
+draw2d.Figure = Class.extend({
     
-	NAME : "graphiti.Figure",
+	NAME : "draw2d.Figure",
     
 	MIN_TIMER_INTERVAL: 50, // minimum timer interval in milliseconds
 	
     /**
      * @constructor
      * Creates a new figure element which are not assigned to any canvas.
+     * 
+     * @param {Number} [width] initial width of the shape
+     * @param {Number} [height] initial height of the shape
      */
-    init: function( ) {
-        this.id = graphiti.util.UUID.create();
-
+    init: function( width, height ) {
+        this.id = draw2d.util.UUID.create();
+        
+        // required in the SelectionEditPolicy to indicate the type of figure
+        // which the user clicks
+        this.isResizeHandle=false;
+        
         // for undo/redo operation. It holds the command during a drag/drop operation
         // and execute it on the CommandStack if the user drop the figure.
         this.command = null;
@@ -27,7 +36,9 @@ graphiti.Figure = Class.extend({
         this.shape  = null;
         
         // possible decorations ( e.g. a Label) of the Connection
-        this.children = new graphiti.util.ArrayList();
+        // children are fixed bounded the figure. Most of the events of the child will bee
+        // routed to the parent
+        this.children = new draw2d.util.ArrayList();
             
         // behavior flags
         //
@@ -35,58 +46,106 @@ graphiti.Figure = Class.extend({
         this.deleteable = true;
         this.resizeable = true;
         this.draggable = true;
+        this.visible = true;
+        
         this.canSnapToHelper = true;
-        this.snapToGridAnchor = new graphiti.geo.Point(0,0);    // hot spot for snap to grid  
-        this.editPolicy = new graphiti.util.ArrayList(); // List<graphiti.layout.constraint.EditPolicy)
+        this.snapToGridAnchor = new draw2d.geo.Point(0,0);    // hot spot for snap to grid  
+        this.editPolicy = new draw2d.util.ArrayList();
         
         // timer for animation or automatic update
+        //
         this.timerId = -1;
         this.timerInterval = 0;
         
         // possible parent of the figure. 
-        //
+        // @see: this.children
         this.parent = null;
         
         // appearance, position and dim properties
         //
         this.x = 0;
         this.y = 0;
-        
         this.minHeight = 5;
         this.minWidth = 5;
+        this.rotationAngle = 0;
         
-        this.width  = this.getMinWidth();
-        this.height = this.getMinHeight();
+        if(typeof height !== "undefined"){
+            this.width  = width;
+            this.height = height;
+        }
+        else{
+           this.width  = this.getMinWidth();
+           this.height = this.getMinHeight();
+        }
         this.alpha = 1.0;
         
-        // status flags for the Drag&Drop operation handling
-        //
+        // internal status flags for the Drag&Drop operation handling and other stuff
+        // 
         this.isInDragDrop =false;
         this.isMoving = false;
         this.originalAlpha = this.alpha;
         this.ox = 0;
         this.oy = 0;
-
-        // used to set the css class in the various create shape methods
-        //
-        this.cssClass = null;
-
+        this.repaintBlocked=false;
+        this.selectionHandles = new draw2d.util.ArrayList();
+        
         // listener for movement. required for Ports or property panes in the UI
         //
-        this.moveListener = new graphiti.util.ArrayList();
-    },
+        this.moveListener = new draw2d.util.ArrayList();
 
+        
+        this.installEditPolicy(new draw2d.policy.figure.RectangleSelectionFeedbackPolicy());
+    },
+    
     /**
      * @method
-     *  Sets the CSS class for this element.
-     *
-     * @param {String} the css class for this element.
+     * Add the figure to the current selection and propagate this to all edit policies.
+     * 
+     * @param {boolean} [isPrimarySelection] true if the element should be the primary selection
+     * @final
+     */
+    select: function(asPrimarySelection){
+        if(typeof asPrimarySelection==="undefined"){
+            asPrimarySelection=true;
+        }
+     
+        // apply all EditPolicy for select Operations
+        //
+        this.editPolicy.each($.proxy(function(i,e){
+              if(e instanceof draw2d.policy.figure.SelectionFeedbackPolicy){
+                  e.onSelect(this.canvas, this,asPrimarySelection);
+              }
+        },this));
+    },
+    
+    /**
+     * @method
+     * Unselect the figure and propagete this event to all edit policies.
+     * 
+     * @final
+     **/
+    unselect:function()
+    {
+        // apply all EditPolicy for select Operations
+        //
+        this.editPolicy.each($.proxy(function(i,e){
+              if(e instanceof draw2d.policy.figure.SelectionFeedbackPolicy){
+                  e.onUnselect(this.canvas, this);
+              }
+        },this));
+    },
+    
+    /**
+     * @method
+     * Add the figure to the current selection and propagate this to all edit policies.
+     * 
+     * @param {boolean} [isPrimarySelection] true if the element should be the primary selection
+     * @final
      */
     setCssClass: function(klass) {
       this.cssClass = klass;
     },
-
-
+    
     /**
      * @method
      *  Return the CSS class for this element.
@@ -95,13 +154,15 @@ graphiti.Figure = Class.extend({
       return this.cssClass;
     },
     
+
     /**
      * @method
      * Return the UUID of this element. 
      * 
      * @return {String}
      */
-    getId: function(){
+    getId: function()
+    {
        return this.id; 
     },
     
@@ -111,7 +172,8 @@ graphiti.Figure = Class.extend({
      * 
      * @param {String} id the new id for this figure
      */
-    setId: function(id){
+    setId: function(id)
+    {
         this.id = id; 
     },
     
@@ -119,7 +181,7 @@ graphiti.Figure = Class.extend({
      * @method
      * Set the canvas element of this figures.
      * 
-     * @param {graphiti.Canvas} canvas the new parent of the figure or null
+     * @param {draw2d.Canvas} canvas the new parent of the figure or null
      */
     setCanvas: function( canvas )
     {
@@ -127,6 +189,7 @@ graphiti.Figure = Class.extend({
       // was already drawn
       if(canvas===null && this.shape!==null)
       {
+         this.unselect();
          this.shape.remove();
          this.shape=null;
       }
@@ -141,23 +204,22 @@ graphiti.Figure = Class.extend({
     	  this.stopTimer();
       }
       else{
-    	  if(this.timerInterval>0){
+    	  if(this.timerInterval>= this.MIN_TIMER_INTERVAL){
               this.startTimer(this.timerInterval);
     	  }
       }
       
-      for(var i=0; i<this.children.getSize();i++){
-          var entry = this.children.get(i);
-          entry.figure.setCanvas(canvas);
-      }
-
+      this.children.each(function(i,e){
+          e.figure.setCanvas(canvas);
+      });
+      
      },
      
      /**
       * @method
       * Return the current assigned canvas container.
       * 
-      * @return {graphiti.Canvas}
+      * @return {draw2d.Canvas}
       */
      getCanvas:function()
      {
@@ -171,7 +233,8 @@ graphiti.Figure = Class.extend({
       * 
       * @param {Number} milliSeconds
       */
-     startTimer: function(milliSeconds){
+     startTimer: function(milliSeconds)
+     {
     	 this.stopTimer();
     	 this.timerInterval = Math.max(this.MIN_TIMER_INTERVAL, milliSeconds);
     	 
@@ -185,7 +248,8 @@ graphiti.Figure = Class.extend({
       * Stop the internal timer.
       * 
       */
-     stopTimer: function(){
+     stopTimer: function()
+     {
     	if(this.timerId>=0){
   		  window.clearInterval(this.timerId);
 		  this.timerId=-1;
@@ -199,7 +263,8 @@ graphiti.Figure = Class.extend({
       * 
       * @template
       */
-     onTimer: function(){
+     onTimer: function()
+     {
     	
      },
      
@@ -208,11 +273,25 @@ graphiti.Figure = Class.extend({
       * task or group of related tasks. This also allows editing behavior to be selectively reused across 
       * different figure implementations. Also, behavior can change dynamically, such as when the layouts 
       * or routing methods change.
-      * Example for limited DragDrop behaviour can be a graphiti.layout.constraint.RegionConstriantPolicy.
+      * Example for limited DragDrop behavior can be a draw2d.layout.constraint.RegionConstriantPolicy.
       * 
-      * @param {graphiti.policy.EditPolicy} policy
+      * @aside example buildin_selection_feedback
+      * @param {draw2d.policy.EditPolicy} policy
       */
-     installEditPolicy: function(policy){
+     installEditPolicy: function(policy)
+     {
+         // it is only possible to install one SelectionFeedbackPolicy at once
+         //
+         if(policy instanceof draw2d.policy.figure.SelectionFeedbackPolicy){
+             this.editPolicy.grep($.proxy(function(p){
+                 var stay = !(p instanceof draw2d.policy.figure.SelectionFeedbackPolicy); 
+                 if(!stay){
+                     p.onUninstall(this);
+                 }
+                 return stay;
+             },this));
+         }
+         policy.onInstall(this);
          this.editPolicy.add(policy);
      },
      
@@ -222,8 +301,8 @@ graphiti.Figure = Class.extend({
       * operations. It's only a decorator for the connection.<br>
       * Mainly for labels or other fancy decorations :-)
       *
-      * @param {graphiti.Figure} figure the figure to add as decoration to the connection.
-      * @param {graphiti.layout.locator.Locator} locator the locator for the child. 
+      * @param {draw2d.Figure} figure the figure to add as decoration to the connection.
+      * @param {draw2d.layout.locator.Locator} locator the locator for the child. 
      **/
      addFigure : function(child, locator)
      {
@@ -233,11 +312,7 @@ graphiti.Figure = Class.extend({
          child.setSelectable(false);
          child.setParent(this);
          
-         var entry = {};
-         entry.figure = child;
-         entry.locator = locator;
-
-         this.children.add(entry);
+         this.children.add({figure:child, locator:locator});
          
          if(this.canvas!==null){
              child.setCanvas(this.canvas);
@@ -251,7 +326,7 @@ graphiti.Figure = Class.extend({
       * Return all children/decorations of this shape
       */
      getChildren : function(){
-         var shapes = new graphiti.util.ArrayList();
+         var shapes = new draw2d.util.ArrayList();
          this.children.each(function(i,e){
              shapes.add(e.figure);
          });
@@ -268,7 +343,7 @@ graphiti.Figure = Class.extend({
          this.children.each(function(i,e){
              e.figure.setCanvas(null);
          });
-         this.children= new graphiti.util.ArrayList();
+         this.children= new draw2d.util.ArrayList();
          this.repaint();
      },
      
@@ -319,18 +394,35 @@ graphiti.Figure = Class.extend({
              attributes = {};
          }
 
+         if(this.visible===true){
+        	 this.shape.show();
+         }
+         else{
+        	 this.shape.hide();
+        	 return;
+         }
+         
+         
          // enrich with common properties
          attributes.opacity = this.alpha;
-         
-        this.shape.attr(attributes);
-        
+
+         this.shape.attr(attributes);
+
+         this.applyTransformation();
+
         // Relocate all children of the figure.
         // This means that the Locater can calculate the new Position of the child.
         //
-        for(var i=0; i<this.children.getSize();i++) {
-            var entry = this.children.get(i);
-            entry.locator.relocate(i, entry.figure);
-        }
+        this.children.each(function(i,e){
+            e.locator.relocate(i, e.figure);
+        });
+        
+     },
+     
+     /**
+      * @private
+      */
+     applyTransformation:function(){
      },
      
      /**
@@ -362,12 +454,21 @@ graphiti.Figure = Class.extend({
       this.isMoving = false;
       this.originalAlpha = this.getAlpha();
 
-      this.command = this.createCommand(new graphiti.command.CommandType(graphiti.command.CommandType.MOVE));
+      this.command = this.createCommand(new draw2d.command.CommandType(draw2d.command.CommandType.MOVE));
 
       if(this.command!==null){
          this.ox = this.x;
          this.oy = this.y;
          this.isInDragDrop =true;
+         
+         // notify all installed policies
+         //
+         this.editPolicy.each($.proxy(function(i,e){
+             if(e instanceof draw2d.policy.figure.DragDropEditPolicy){
+                 e.onDragStart(this.canvas, this);
+             }
+         },this));
+
          return true;
       }
       
@@ -389,8 +490,8 @@ graphiti.Figure = Class.extend({
       // apply all EditPolicy for DragDrop Operations
       //
       this.editPolicy.each($.proxy(function(i,e){
-            if(e.getRole()===graphiti.policy.EditPolicy.Role.PRIMARY_DRAG_ROLE){
-                var newPos = e.apply(this,this.ox+dx,this.oy+dy);
+            if(e instanceof draw2d.policy.figure.DragDropEditPolicy){
+                var newPos = e.adjustPosition(this,this.ox+dx,this.oy+dy);
                 dx = newPos.x-this.ox;
                 dy = newPos.y-this.oy;
             }
@@ -404,7 +505,7 @@ graphiti.Figure = Class.extend({
       //
       if(this.getCanSnapToHelper())
       {
-        var p = new graphiti.geo.Point(this.x,this.y);
+        var p = new draw2d.geo.Point(this.x,this.y);
         p = this.getCanvas().snapToHelper(this, p);
         this.x = p.x;
         this.y = p.y;
@@ -413,6 +514,13 @@ graphiti.Figure = Class.extend({
       
       this.setPosition(this.x, this.y);
       
+      // notify all installed policies
+      //
+      this.editPolicy.each($.proxy(function(i,e){
+          if(e instanceof draw2d.policy.figure.DragDropEditPolicy){
+              e.onDrag(this.canvas, this);
+          }
+      },this));
 
       // enable the alpha blending of the first real move of the object
       //
@@ -437,6 +545,7 @@ graphiti.Figure = Class.extend({
         
     },
     
+    
     /**
      * @method
      * Will be called after a drag and drop action.<br>
@@ -455,9 +564,18 @@ graphiti.Figure = Class.extend({
       this.command.setPosition(this.x, this.y);
       this.isInDragDrop = false;
 
-      this.canvas.commandStack.execute(this.command);
+      this.canvas.getCommandStack().execute(this.command);
       this.command = null;
       this.isMoving = false;
+      
+      // notify all installed policies
+      //
+      this.editPolicy.each($.proxy(function(i,e){
+          if(e instanceof draw2d.policy.figure.DragDropEditPolicy){
+              e.onDragEnd(this.canvas, this);
+          }
+      },this));
+
       this.fireMoveEvent();
     },
 
@@ -465,21 +583,21 @@ graphiti.Figure = Class.extend({
      * @method
      * Called by the framework during drag&drop operations.
      * 
-     * @param {graphiti.Figure} figure The figure which is currently dragging
+     * @param {draw2d.Figure} figure The figure which is currently dragging
      * 
-     * @return {Boolean} true if this port accepts the dragging port for a drop operation
+     * @return {draw2d.Figure} the figure which should receive the drop event or null if the element didnt want a drop event
      * @template
      **/
     onDragEnter : function( draggedFigure )
     {
-    	return false;
+    	return null;
     },
  
     /**
      * @method
      * Called if the DragDrop object leaving the current hover figure.
      * 
-     * @param {graphiti.Figure} figure The figure which is currently dragging
+     * @param {draw2d.Figure} figure The figure which is currently dragging
      * @template
      **/
     onDragLeave:function( draggedFigure )
@@ -491,7 +609,7 @@ graphiti.Figure = Class.extend({
      * @method
      * Called if the user drop this element onto the dropTarget
      * 
-     * @param {graphiti.Figure} dropTarget The drop target.
+     * @param {draw2d.Figure} dropTarget The drop target.
      * @private
      **/
     onDrop:function(dropTarget)
@@ -526,6 +644,7 @@ graphiti.Figure = Class.extend({
      * Called when a user dbl clicks on the element
      * 
      * @template
+     * @aside example interaction_dblclick
      */
     onDoubleClick: function(){
     },
@@ -536,62 +655,124 @@ graphiti.Figure = Class.extend({
      * Called when a user clicks on the element.
      * 
      * @template
+     * @aside example interaction_click
      */
     onClick: function(){
     },
    
     /**
      * @method
+     * called by the framework if the figure should show the contextmenu.</br>
+     * The strategy to show the context menu depends on the plattform. Either loooong press or
+     * right click with the mouse.
+     * 
+     * @param {Number} x the x-coordinate to show the menu
+     * @param {Number} y the y-coordinate to show the menu
+     * @since 1.1.0
+     * @template
+     */
+    onContextMenu:function(x,y){
+
+    },
+
+    /**
+     * @method
      * Set the alpha blending of this figure. 
      *
-     * @template
      * @param {Number} percent Value between [0..1].
+     * @template
      **/
     setAlpha:function( percent)
     {
+      percent = Math.min(1,Math.max(0,parseFloat(percent)));
       if(percent===this.alpha){
          return;
       }
 
-      this.alpha = percent;
+      this.alpha =percent;
       this.repaint();
     },
 
         
     /**
-     * @method Return the alpha blending of the figure
-     * @return {Number}
+     * @method 
+     * Return the alpha blending of the figure
+     * 
+     * @return {Number} the current alpha blending
      */
     getAlpha : function()
     {
         return this.alpha;
     },
     
+    
     /**
      * @method
-     * Return true if the figure visible and part of the canvas.
+     * set the rotation angle in degree [0..356]<br>
+     * <br>
+     * <b>NOTE: this method is pre alpha and not for production.</b>
+     * <br>
+     * @param {Number} angle the rotation angle in degree
+     */
+    setRotationAngle: function(angle){
+        this.rotationAngle = angle;
+        
+
+        // Update the resize handles if the user change the position of the element via an API call.
+        //
+        this.editPolicy.each($.proxy(function(i,e){
+            if(e instanceof draw2d.policy.figure.DragDropEditPolicy){
+                e.moved(this.canvas, this);
+            }
+        },this));
+
+        this.repaint();
+    },
+    
+    getRotationAngle : function(){
+        return this.rotationAngle;
+    },
+    
+    /**
+     * @method
+     * Show/hide the element. The element didn't receive any mouse events (click, dblclick) if you hide the
+     * figure.
+     * 
+     * @param {Boolean} flag
+     * @since 1.1.0
+     */
+    setVisible: function(flag){
+    	this.visible = !!flag;
+    	
+    	this.repaint();
+    },
+    
+    /**
+     * @method
+     * Return true if the figure visible.
      * 
      * @return {Boolean}
+     * @since 1.1.0
      */
     isVisible: function(){
-        return this.shape!==null;
+        return this.visible && this.shape!==null;
     },
     
     /**
      * @method
      * Return the current z-index of the element. Currently this is an expensive method. The index will be calculated
-     * all the time. Cacheing is not implemented at the moment.
+     * all the time. Caching is not implemented at the moment.
      * 
      * @return {Number}
      */
     getZOrder: function(){
-        if(this.shape==null){
+        if(this.shape===null){
             return -1;
         }
         
         var i = 0;
         var child = this.shape.node;
-        while( (child = child.previousSibling) != null ) {
+        while( (child = child.previousSibling) !== null ) {
           i++;
         }
         return i;
@@ -602,12 +783,12 @@ graphiti.Figure = Class.extend({
      * Set the flag if this object can snap to grid or geometry.
      * A window of dialog should set this flag to false.
      * 
-     * @param {boolean} flag The snap to grid/geometry enable flag.
+     * @param {Boolean} flag The snap to grid/geometry enable flag.
      *
      **/
-    setCanSnapToHelper:function(/*:boolean */flag)
+    setCanSnapToHelper:function(flag)
     {
-      this.canSnapToHelper = flag;
+      this.canSnapToHelper = !!flag;
     },
 
     /**
@@ -624,7 +805,7 @@ graphiti.Figure = Class.extend({
 
     /**
      *
-     * @return {graphiti.geo.Point}
+     * @return {draw2d.geo.Point}
      **/
     getSnapToGridAnchor:function()
     {
@@ -635,7 +816,7 @@ graphiti.Figure = Class.extend({
      * @method
      * Set the hot spot for all snapTo### operations.
      * 
-     * @param {graphiti.geo.Point} point
+     * @param {draw2d.geo.Point} point
      **/
     setSnapToGridAnchor:function(point)
     {
@@ -649,7 +830,7 @@ graphiti.Figure = Class.extend({
      * @type {Number} 
      */
     getCenter:function() {
-      return new graphiti.geo.Point(Math.round(this.width/2), Math.round(this.height/2));
+      return new draw2d.geo.Point(Math.round(this.width/2), Math.round(this.height/2));
     },
 
     /**
@@ -693,7 +874,7 @@ graphiti.Figure = Class.extend({
      * @param {Number} w
      */
     setMinWidth: function(w){
-      this.minWidth = w;
+      this.minWidth = parseFloat(w);
     },
     
     /**
@@ -714,7 +895,7 @@ graphiti.Figure = Class.extend({
      * @param {Number} h
      */
     setMinHeight:function(h){
-        this.minHeight = h;
+        this.minHeight =parseFloat(h);
     },
     
     /**
@@ -749,7 +930,8 @@ graphiti.Figure = Class.extend({
     getAbsoluteX :function()
     {
         if(this.parent===null){
-            return this.x;
+            // provide some good defaults if the figure not placed
+            return this.x||0;
         }
         return this.x + this.parent.getAbsoluteX();  
     },
@@ -764,33 +946,33 @@ graphiti.Figure = Class.extend({
     getAbsoluteY :function()
     {
         if(this.parent ===null){
-            return this.y;
+            // provide some good defaults of the figure not placed
+            return this.y||0;
         }
         return this.y + this.parent.getAbsoluteY();  
     },
 
 
-    
     /**
      * @method
      * Returns the absolute y-position of the port.
      *
-     * @type {graphiti.geo.Point}
+     * @type {draw2d.geo.Point}
      **/
     getAbsolutePosition:function()
     {
-      return new graphiti.geo.Point(this.getAbsoluteX(), this.getAbsoluteY());
+      return new draw2d.geo.Point(this.getAbsoluteX(), this.getAbsoluteY());
     },
     
     /**
      * @method
      * Returns the absolute y-position of the port.
      *
-     * @return {graphiti.geo.Rectangle}
+     * @return {draw2d.geo.Rectangle}
      **/
     getAbsoluteBounds:function()
     {
-      return new graphiti.geo.Rectangle(this.getAbsoluteX(), this.getAbsoluteY(),this.getWidth(),this.getHeight());
+      return new draw2d.geo.Rectangle(this.getAbsoluteX(), this.getAbsoluteY(),this.getWidth(),this.getHeight());
     },
     
 
@@ -798,22 +980,41 @@ graphiti.Figure = Class.extend({
      * @method
      * Set the position of the object.
      *
-     * @param {Number} x The new x coordinate of the figure
-     * @param {Number} y The new y coordinate of the figure 
+     * @param {Number/draw2d.geo.Point} x The new x coordinate of the figure
+     * @param {Number} [y] The new y coordinate of the figure 
      **/
     setPosition:function(x , y )
     {
-      this.x= x;
-      this.y= y;
-
+       if(x instanceof draw2d.geo.Point){
+          this.x = x.x;
+          this.y = x.y;
+       }
+       else{
+          this.x= x;
+          this.y= y;
+       }
       this.repaint();
 
       // Update the resize handles if the user change the position of the element via an API call.
       //
-      if(this.canvas!==null && this.canvas.getCurrentSelection()===this){
-         this.canvas.moveResizeHandles(this);
-      }
+      this.editPolicy.each($.proxy(function(i,e){
+          if(e instanceof draw2d.policy.figure.DragDropEditPolicy){
+              e.moved(this.canvas, this);
+          }
+      },this));
+
       this.fireMoveEvent();
+    },
+    
+    /**
+     * @method
+     * Get the current position of the figure 
+     * 
+     * @return {draw2d.geo.Point}
+     * @since 2.0.0
+     */
+    getPosition: function(){
+        return new draw2d.geo.Point(this.x, this.y);
     },
     
     /**
@@ -838,18 +1039,32 @@ graphiti.Figure = Class.extend({
      **/
     setDimension:function(w, h)
     {
-      this.width = Math.max(this.getMinWidth(),w);
-      this.height= Math.max(this.getMinHeight(),h);
-      
-      this.repaint();
-      
-      this.fireMoveEvent();
+    	w = parseFloat(w);
+    	h = parseFloat(h);
+        // apply all EditPolicy for DragDrop Operations
+        //
+        this.editPolicy.each($.proxy(function(i,e){
+              if(e instanceof draw2d.policy.figure.DragDropEditPolicy){
+                  var newDim = e.adjustDimension(this,w,h);
+                  w = newDim.w;
+                  h = newDim.h;
+              }
+        },this));
 
-      // Update the resize handles if the user change the dimension via an API call
-      //
-      if(this.canvas!==null && this.canvas.getCurrentSelection()===this)  {
-         this.canvas.moveResizeHandles(this);
-      }
+		this.width = Math.max(this.getMinWidth(),w);
+		this.height= Math.max(this.getMinHeight(),h);
+		  
+		this.repaint();
+		  
+		this.fireMoveEvent();
+		
+		// Update the resize handles if the user change the position of the element via an API call.
+		//
+		this.editPolicy.each($.proxy(function(i,e){
+		   if(e instanceof draw2d.policy.figure.DragDropEditPolicy){
+		       e.moved(this.canvas, this);
+		   }
+		},this));
     },
 
 
@@ -857,28 +1072,30 @@ graphiti.Figure = Class.extend({
      * @method
      * Return the bounding box of the figure in absolute position to the canvas.
      * 
-     * @return {graphiti.geo.Rectangle}
+     * @return {draw2d.geo.Rectangle}
      **/
     getBoundingBox:function()
     {
-      return new graphiti.geo.Rectangle(this.getAbsoluteX(),this.getAbsoluteY(),this.getWidth(),this.getHeight());
+      return new draw2d.geo.Rectangle(this.getAbsoluteX(),this.getAbsoluteY(),this.getWidth(),this.getHeight());
     },
 
     /**
      * @method
      * Detect whenever the hands over coordinate is inside the figure.
-     *
+     * The default implementation is a simple bounding box test. 
+     * 
      * @param {Number} iX
      * @param {Number} iY
+     * @param {Number} [corona]
+     * 
      * @returns {Boolean}
      */
-    hitTest : function ( iX , iY)
+    hitTest : function ( iX , iY, corona)
     {
-        var x = this.getAbsoluteX();
-        var y = this.getAbsoluteY();
-        var iX2 = x + this.getWidth();
-        var iY2 = y + this.getHeight();
-        return (iX >= x && iX <= iX2 && iY >= y && iY <= iY2);
+        if(typeof corona === "number"){
+            return this.getBoundingBox().scale(corona,corona).hitTest(iX,iY);
+        }
+        return this.getBoundingBox().hitTest(iX,iY);
     },
 
 
@@ -890,7 +1107,7 @@ graphiti.Figure = Class.extend({
      **/
     setDraggable:function(flag)
     {
-      this.draggable= flag;
+      this.draggable= !!flag;
     },
 
     /**
@@ -925,7 +1142,7 @@ graphiti.Figure = Class.extend({
      **/
     setResizeable:function(flag)
     {
-      this.resizeable=flag;
+      this.resizeable=!!flag;
     },
 
     /**
@@ -949,7 +1166,7 @@ graphiti.Figure = Class.extend({
      **/
     setSelectable:function(flag)
     {
-      this.selectable=flag;
+      this.selectable=!!flag;
     },
 
     /**
@@ -984,7 +1201,7 @@ graphiti.Figure = Class.extend({
      **/
     setDeleteable:function(flag)
     {
-      this.deleteable = flag;
+      this.deleteable = !!flag;
     },
 
     /**
@@ -992,7 +1209,7 @@ graphiti.Figure = Class.extend({
      * Set the parent of this figure.
      * Don't call them manually.
 
-     * @param {graphiti.Figure} parent The new parent of this figure
+     * @param {draw2d.Figure} parent The new parent of this figure
      * @private
      **/
     setParent:function( parent)
@@ -1004,7 +1221,7 @@ graphiti.Figure = Class.extend({
      * @method
      * Get the parent of this figure.
      *
-     * @return {graphiti.Figure}
+     * @return {draw2d.Figure}
      **/
     getParent:function()
     {
@@ -1033,12 +1250,12 @@ graphiti.Figure = Class.extend({
      * @method
      * Remove the hands over figure from notification queue.
      *
-     * @param {graphiti.Figure} figure The figure to remove the monitor
+     * @param {draw2d.Figure} figure The figure to remove the monitor
      *
      **/
     detachMoveListener:function(figure) 
     {
-      if(figure===null || this.moveListener===null){
+      if(figure===null){
         return;
       }
 
@@ -1066,7 +1283,7 @@ graphiti.Figure = Class.extend({
      * @method
      * Fired if a figure is moving.
      *
-     * @param {graphiti.Figure} figure The figure which has changed its position
+     * @param {draw2d.Figure} figure The figure which has changed its position
      * @template
      */
     onOtherFigureIsMoving:function(figure){
@@ -1076,8 +1293,8 @@ graphiti.Figure = Class.extend({
      * @method
      * Returns the Command to perform the specified Request or null.
       *
-     * @param {graphiti.command.CommandType} request describes the Command being requested
-     * @return {graphiti.command.Command} null or a Command
+     * @param {draw2d.command.CommandType} request describes the Command being requested
+     * @return {draw2d.command.Command} null or a Command
      **/
     createCommand:function( request)
     {
@@ -1085,28 +1302,28 @@ graphiti.Figure = Class.extend({
           return null;
       }
       
-      if(request.getPolicy() === graphiti.command.CommandType.MOVE)
+      if(request.getPolicy() === draw2d.command.CommandType.MOVE)
       {
         if(!this.isDraggable()){
           return null;
         }
-        return new graphiti.command.CommandMove(this);
+        return new draw2d.command.CommandMove(this);
       }
 
-      if(request.getPolicy() === graphiti.command.CommandType.DELETE)
+      if(request.getPolicy() === draw2d.command.CommandType.DELETE)
       {
         if(!this.isDeleteable()){
            return null;
         }
-        return new graphiti.command.CommandDelete(this);
+        return new draw2d.command.CommandDelete(this);
       }
       
-      if(request.getPolicy() === graphiti.command.CommandType.RESIZE)
+      if(request.getPolicy() === draw2d.command.CommandType.RESIZE)
       {
         if(!this.isResizeable()){
            return null;
         }
-        return new graphiti.command.CommandResize(this);
+        return new draw2d.command.CommandResize(this);
       }
       
       return null;
@@ -1155,8 +1372,8 @@ graphiti.Figure = Class.extend({
         if(typeof memento.height !== "undefined"){
             this.height= memento.height;
         }
-    }
-    
+    }  
 
 });
+
 

@@ -1,21 +1,24 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.icon.Clock
+ * @class draw2d.shape.icon.Clock
 
  * See the example:
  *
  *     @example preview small frame
  *     
- *     var icon =  new graphiti.shape.icon.Clock();
+ *     var icon =  new draw2d.shape.icon.Clock();
  *     icon.setDimension(50,50);
  *     canvas.addFigure(icon,50,10);
  *     
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.shape.icon.Icon
+ * @extends draw2d.shape.icon.Icon
  */
-graphiti.shape.icon.Clock = graphiti.shape.icon.Icon.extend({
-    NAME : "graphiti.shape.icon.Clock",
+draw2d.shape.icon.Clock = draw2d.shape.icon.Icon.extend({
+    NAME : "draw2d.shape.icon.Clock",
 
     /**
      * 

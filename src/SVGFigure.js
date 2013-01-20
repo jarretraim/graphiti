@@ -1,15 +1,18 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.SVGFigure
+ * @class draw2d.SVGFigure
  * Abstract class which can handle plain SVG content. Inherit class must override the method
  * <code>getSVG()</code>.
  * 
  * @author Andreas Herz
- * @extends graphiti.shape.basic.Rectangle
+ * @extends draw2d.shape.basic.Rectangle
  */
-graphiti.SVGFigure = graphiti.SetFigure.extend({
+draw2d.SVGFigure = draw2d.SetFigure.extend({
     
-    NAME : "graphiti.SVGFigure",
+    NAME : "draw2d.SVGFigure",
 
     /**
      * @constructor
@@ -29,7 +32,6 @@ graphiti.SVGFigure = graphiti.SetFigure.extend({
 		return this.importSVG(this.canvas, this.getSVG());
 	},
     
-	
     /**
      * @private
      */
@@ -124,7 +126,7 @@ graphiti.SVGFigure = graphiti.SetFigure.extend({
             case 'text':
               shape = canvas.paper.text();
               attr["text-anchor"] = "start";
-              attr.y= parseInt(attr.y)+shape.getBBox().height/2;
+              attr.y= parseInt(attr.y,10)+shape.getBBox().height/2;
               break;
           }
           if(shape!==null){

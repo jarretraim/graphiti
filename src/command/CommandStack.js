@@ -1,10 +1,13 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.command.CommandStack
+ * @class draw2d.command.CommandStack
  * Stack for undo/redo operations
  */
-graphiti.command.CommandStack = Class.extend({
-    NAME : "graphiti.command.CommandStack", 
+draw2d.command.CommandStack = Class.extend({
+    NAME : "draw2d.command.CommandStack", 
 
 
     /**
@@ -16,7 +19,8 @@ graphiti.command.CommandStack = Class.extend({
        this.undostack = [];
        this.redostack = [];
        this.maxundo = 50;
-       this.eventListeners = new graphiti.util.ArrayList();
+       this.transactionCommand = null;
+       this.eventListeners = new draw2d.util.ArrayList();
     },
     
  
@@ -43,17 +47,20 @@ graphiti.command.CommandStack = Class.extend({
     {
        this.undostack = [];
        this.redostack = [];
+
+       // fire an empty command to inform all listener that the stack has been changed
+       this.notifyListeners(new draw2d.command.Command(), draw2d.command.CommandStack.POST_EXECUTE);
     },
     
     /**
      * @method
      * 
      * Executes the specified Command if possible. Prior to executing the command, a
-     * graphiti.command.CommandStackEvent for {@link #PRE_EXECUTE} will be fired to event listeners. 
+     * draw2d.command.CommandStackEvent for {@link #PRE_EXECUTE} will be fired to event listeners. 
      * Similarly, after attempting to execute the command, an event for {@link #POST_EXECUTE}
      * will be fired.
      *
-     * @param {graphiti.command.Command} command The command to execute.
+     * @param {draw2d.command.Command} command The command to execute.
      * 
      **/
     execute:function(command)
@@ -70,7 +77,15 @@ graphiti.command.CommandStack = Class.extend({
        if(command.canExecute()===false)
           return;
     
-       this.notifyListeners(command, graphiti.command.CommandStack.PRE_EXECUTE);
+       // A command stack transaction is open.
+       // The execution will be postpone until the transaction will commit
+       //
+       if(this.transactionCommand!==null){
+           this.transactionCommand.add(command);
+           return;
+       }
+       
+       this.notifyListeners(command, draw2d.command.CommandStack.PRE_EXECUTE);
     
        this.undostack.push(command);
        command.execute();
@@ -86,7 +101,36 @@ graphiti.command.CommandStack = Class.extend({
        {
           this.undostack = this.undostack.slice(this.undostack.length-this.maxundo);
        }
-       this.notifyListeners(command, graphiti.command.CommandStack.POST_EXECUTE);
+       this.notifyListeners(command, draw2d.command.CommandStack.POST_EXECUTE);
+    },
+    
+    /**
+     * @method
+     * Opens a transaction for further multiple transactions. If you execute a trnasaction all
+     * {@ #execute} calls will be ignored until you commit the current transaction.
+     * 
+     * @private
+     */
+    startTransaction: function(){
+        this.transactionCommand = new draw2d.command.CommandCollection();
+    },
+    
+    /**
+     * @method
+     * Commit the running transaction. All commands between the start/end of a transaction
+     * can be undo/redo in a single step.
+     * 
+     * @private
+     * 
+     */
+    commitTransaction: function(){
+        if(this.transactionCommand===null){
+            return;//silently
+        }
+        
+        var cmd = this.transactionCommand;
+        this.transactionCommand =null;
+        this.execute(cmd);
     },
     
     /**
@@ -99,10 +143,10 @@ graphiti.command.CommandStack = Class.extend({
        var command = this.undostack.pop();
        if(command)
        {
-          this.notifyListeners(command, graphiti.command.CommandStack.PRE_UNDO);
+          this.notifyListeners(command, draw2d.command.CommandStack.PRE_UNDO);
           this.redostack.push(command);
           command.undo();
-          this.notifyListeners(command, graphiti.command.CommandStack.POST_UNDO);
+          this.notifyListeners(command, draw2d.command.CommandStack.POST_UNDO);
        }
     },
     
@@ -117,10 +161,10 @@ graphiti.command.CommandStack = Class.extend({
     
        if(command)
        {
-          this.notifyListeners(command, graphiti.command.CommandStack.PRE_REDO);
+          this.notifyListeners(command, draw2d.command.CommandStack.PRE_REDO);
           this.undostack.push(command);
           command.redo();
-          this.notifyListeners(command, graphiti.command.CommandStack.POST_REDO);
+          this.notifyListeners(command, draw2d.command.CommandStack.POST_REDO);
        }
     },
     
@@ -192,11 +236,11 @@ graphiti.command.CommandStack = Class.extend({
      * @method
      * Adds a listener to the command stack, which will be notified whenever a command has been processed on the stack.
      * 
-     * @param {graphiti.command.CommandStackEventListener} listener the listener to add.
+     * @param {draw2d.command.CommandStackEventListener} listener the listener to add.
      */
     addEventListener:function( listener)
     {
-        if(listener instanceof graphiti.command.CommandStackEventListener){
+        if(listener instanceof draw2d.command.CommandStackEventListener){
           this.eventListeners.add(listener);
         }
         else if(typeof listener.stackChanged ==="function"){
@@ -206,7 +250,7 @@ graphiti.command.CommandStack = Class.extend({
           this.eventListeners.add( {  stackChanged : listener });
         }
         else{
-          throw "Object doesn't implement required callback interface [graphiti.command.CommandStackListener]";
+          throw "Object doesn't implement required callback interface [draw2d.command.CommandStackListener]";
         }
     },
     
@@ -214,7 +258,7 @@ graphiti.command.CommandStack = Class.extend({
      * @method
      * Removes a listener from the command stack.
      * 
-     * @param {graphiti.command.CommandStackEventListener} listener the listener to remove.
+     * @param {draw2d.command.CommandStackEventListener} listener the listener to remove.
      */
     removeEventListener:function(listener)
     {
@@ -232,13 +276,13 @@ graphiti.command.CommandStack = Class.extend({
      * Notifies command stack event listeners that the command stack has changed to the
      * specified state.
      * 
-     * @param {graphiti.command.Command} command the command
+     * @param {draw2d.command.Command} command the command
      * @param {Number} state the current stack state
      *
      **/
     notifyListeners:function(command,  state)
     {
-      var event = new graphiti.command.CommandStackEvent(this, command, state);
+      var event = new draw2d.command.CommandStackEvent(this, command, state);
       var size = this.eventListeners.getSize();
       for (var i = 0; i < size; i++)
          this.eventListeners.get(i).stackChanged(event);
@@ -247,19 +291,21 @@ graphiti.command.CommandStack = Class.extend({
 
 
 /** Constant indicating notification prior to executing a command (value is 1).*/
-graphiti.command.CommandStack.PRE_EXECUTE=1;
+draw2d.command.CommandStack.PRE_EXECUTE=1;
 /** Constant indicating notification prior to redoing a command (value is 2).*/
-graphiti.command.CommandStack.PRE_REDO=2;
+draw2d.command.CommandStack.PRE_REDO=2;
 /** Constant indicating notification prior to undoing a command (value is 4).*/
-graphiti.command.CommandStack.PRE_UNDO=4;
+draw2d.command.CommandStack.PRE_UNDO=4;
 /**  Constant indicating notification after a command has been executed (value is 8).*/
-graphiti.command.CommandStack.POST_EXECUTE=8;
+draw2d.command.CommandStack.POST_EXECUTE=8;
 /** Constant indicating notification after a command has been redone (value is 16).*/
-graphiti.command.CommandStack.POST_REDO=16;
+draw2d.command.CommandStack.POST_REDO=16;
 /** Constant indicating notification after a command has been undone (value is 32).*/
-graphiti.command.CommandStack.POST_UNDO=32;
+draw2d.command.CommandStack.POST_UNDO=32;
+/** Constant indicating notification after the stack has been (re)init (value is 64).*/
+draw2d.command.CommandStack.POST_INIT=64;
 
-graphiti.command.CommandStack.POST_MASK = graphiti.command.CommandStack.POST_EXECUTE | graphiti.command.CommandStack.POST_UNDO | graphiti.command.CommandStack.POST_REDO;
-graphiti.command.CommandStack.PRE_MASK  = graphiti.command.CommandStack.PRE_EXECUTE  | graphiti.command.CommandStack.PRE_UNDO  |graphiti.command.CommandStack.PRE_REDO;
+draw2d.command.CommandStack.POST_MASK = draw2d.command.CommandStack.POST_EXECUTE | draw2d.command.CommandStack.POST_UNDO | draw2d.command.CommandStack.POST_REDO;
+draw2d.command.CommandStack.PRE_MASK  = draw2d.command.CommandStack.PRE_EXECUTE  | draw2d.command.CommandStack.PRE_UNDO  |draw2d.command.CommandStack.PRE_REDO;
 
 

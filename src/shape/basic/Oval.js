@@ -1,6 +1,9 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.basic.Oval
+ * @class draw2d.shape.basic.Oval
  * Oval figure.
  * 
  * 
@@ -8,16 +11,16 @@
  *
  *     @example preview small frame
  *     
- *     var oval =  new graphiti.shape.basic.Oval();
+ *     var oval =  new draw2d.shape.basic.Oval();
  *     oval.setDimension(150,100);
  *     canvas.addFigure(oval,50,10);
  *     
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.VectorFigure
+ * @extends draw2d.VectorFigure
  */
-graphiti.shape.basic.Oval = graphiti.VectorFigure.extend({
-    NAME : "graphiti.shape.basic.Oval",
+draw2d.shape.basic.Oval = draw2d.VectorFigure.extend({
+    NAME : "draw2d.shape.basic.Oval",
 
     /**
      * 
@@ -28,8 +31,8 @@ graphiti.shape.basic.Oval = graphiti.VectorFigure.extend({
      */
     init: function(width,height ) {
         this._super( );
-        this.setBackgroundColor(new graphiti.util.Color(200,255,120));
-        
+        this.setBackgroundColor("#C02B1D");
+        this.setColor("#1B1B1B");
         if((typeof height ==="number") &&(typeof width === "number")){
             this.setDimension(width,height);
         }

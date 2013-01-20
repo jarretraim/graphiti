@@ -1,19 +1,22 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.basic.LineEndResizeHandle
+ * @class draw2d.shape.basic.LineEndResizeHandle
  * Selection handle for connections and normal lines.
  * 
  * TODO: Split the LineEndResizeHandle to ConnectionEndResizeHandle and LineEndResizeHandle!!!!
  *
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.shape.basic.LineResizeHandle 
+ * @extends draw2d.shape.basic.LineResizeHandle 
  */
-graphiti.shape.basic.LineEndResizeHandle = graphiti.shape.basic.LineResizeHandle.extend({
-    NAME : "graphiti.shape.basic.LineEndResizeHandle",
+draw2d.shape.basic.LineEndResizeHandle = draw2d.shape.basic.LineResizeHandle.extend({
+    NAME : "draw2d.shape.basic.LineEndResizeHandle",
 
-    init: function( canvas) {
-        this._super(canvas);
+    init: function( figure) {
+        this._super(figure);
     },
 
     
@@ -21,17 +24,11 @@ graphiti.shape.basic.LineEndResizeHandle = graphiti.shape.basic.LineResizeHandle
      * @method
      * Return the Port below the ResizeHandle
      * 
-     * @return {graphiti.Port}
+     * @return {draw2d.Port}
      */
     getRelatedPort:function()
     {
-       var line = this.getCanvas().getCurrentSelection();
-       
-       if(line instanceof graphiti.Connection){
-         return line.getTarget();
-       }
-         
-      return null;
+         return this.owner.getTarget();
     },
     
     /**
@@ -40,15 +37,9 @@ graphiti.shape.basic.LineEndResizeHandle = graphiti.shape.basic.LineResizeHandle
      * 
      * @returns
      */
-    getOppositeSidePort:function()
+    getOppositePort:function()
     {
-       var line = this.getCanvas().getCurrentSelection();
-       
-       if(line instanceof graphiti.Connection){
-         return line.getSource();
-       }
-         
-      return null;
+         return this.owner.getSource();
     },
     
  
@@ -68,13 +59,11 @@ graphiti.shape.basic.LineEndResizeHandle = graphiti.shape.basic.LineResizeHandle
       var diffX = oldX-this.getX();
       var diffY = oldY-this.getY();
     
-      var line = this.getCanvas().getCurrentSelection();
+      var objPos = this.owner.getEndPoint();
     
-      var objPos = line.getEndPoint();
-    
-      line.setEndPoint(objPos.x-diffX, objPos.y-diffY);
-      line.isMoving = true;
-      this.detachMoveListener(line);
+      this.owner.setEndPoint(objPos.x-diffX, objPos.y-diffY);
+      this.owner.isMoving = true;
+      this.detachMoveListener(this.owner);
       
       return true;
     },
@@ -85,11 +74,10 @@ graphiti.shape.basic.LineEndResizeHandle = graphiti.shape.basic.LineResizeHandle
      **/
     onDrop:function( dropTarget)
     {
-      var line = this.getCanvas().getCurrentSelection();
-      line.isMoving=false;
+    	this.owner.isMoving=false;
       
-      if(line instanceof graphiti.Connection && this.command !==null){
-         this.command.setNewPorts(line.getSource(),dropTarget);
+      if(this.owner instanceof draw2d.Connection && this.command !==null){
+         this.command.setNewPorts(this.owner.getSource(),dropTarget);
          this.getCanvas().getCommandStack().execute(this.command);
       }
       this.command = null;

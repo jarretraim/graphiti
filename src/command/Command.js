@@ -1,16 +1,22 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.command.Command
+ * @class draw2d.command.Command
  * 
- * Generic support class for the undo/redo concept within graphiti.
- * All add,drag&drop,delete operations should be execute via Commands and the related CommandStack.
- *
+ * Commands are passed around throughout editing. They are used to encapsulate and combine 
+ * changes to the application's model. An application has a single command stack. Commands must
+ * be executed using the command stack rather than directly calling execute.
+ * <br> 
+ * This is requried for a deneric support for the undo/redo concept within draw2d.<br>
+ * 
  * @inheritable
  * @author Andreas Herz
  */
-graphiti.command.Command = Class.extend({
+draw2d.command.Command = Class.extend({
 
-    NAME : "graphiti.command.Command", 
+    NAME : "draw2d.command.Command", 
 
     /**
      * @constructor

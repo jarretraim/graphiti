@@ -1,12 +1,15 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.util.ArrayList
+ * @class draw2d.util.ArrayList
  * An ArrayList stores a variable number of objects. This is similar to making an array of 
  * objects, but with an ArrayList, items can be easily added and removed from the ArrayList 
  * and it is resized dynamically. This can be very convenient, but it's slower than making
  * an array of objects when using many elements. 
  */
-graphiti.util.ArrayList = Class.extend({
+draw2d.util.ArrayList = Class.extend({
 
     /**
      * @constructor
@@ -26,7 +29,7 @@ graphiti.util.ArrayList = Class.extend({
       * @method
       * Reverses the order of the elements in the ArrayList. The array will be modified!
       * 
-     * @return {graphiti.util.ArrayList} self
+     * @return {draw2d.util.ArrayList} self
       */
      reverse:function()
      {
@@ -132,7 +135,7 @@ graphiti.util.ArrayList = Class.extend({
      * Adds a element at the end of the Vector.
      *
      * @param {Object} obj the object to add
-     * @return {graphiti.util.ArrayList} self
+     * @return {draw2d.util.ArrayList} self
      */
      add:function(obj)
      {
@@ -145,16 +148,38 @@ graphiti.util.ArrayList = Class.extend({
         return this;
      },
 
+     /**
+      * @method
+      * 
+      * The method removes items from an array as necessary so that all remaining items pass a 
+      * provided test. The test is a function that is passed an array item and the index of the 
+      * item within the array. Only if the test returns true will the item stay in the array.
+      * 
+      * @param {Function} func the filter function
+      * @return {draw2d.util.ArrayList} self
+      * @chainable
+      * @since 2.0.0
+      */
+     grep: function(func){
+         this.data = $.grep(this.data, func);
+         this.data = $.grep(this.data, function(e){
+             return (typeof e !=="undefined");
+         });
+         this.size = this.data.length;
+ 
+         return this;
+     },
+     
     /**
      * @method
      * Add all elements into this array.
      *
-     * @param {graphiti.util.ArrayList} list
-     * @return {graphiti.util.ArrayList} self
+     * @param {draw2d.util.ArrayList} list
+     * @return {draw2d.util.ArrayList} self
      */
      addAll:function(list)
      {
-        if(!(list instanceof graphiti.util.ArrayList)){
+        if(!(list instanceof draw2d.util.ArrayList)){
           throw "Unable to handle unknown object type in ArrayList.addAll";
         }
 
@@ -164,7 +189,28 @@ graphiti.util.ArrayList = Class.extend({
         }
         return this;
      },
-    
+
+     /**
+      * @method
+      * You can use the Array list as Stack as well. this is the pop method to remove one element
+      * at the top of the stack.
+      * 
+      * @returns
+      */
+     pop:function() {
+         return this.removeElementAt(this.getSize() - 1);
+     },
+     
+     /**
+      * @method
+      * Push one element at the top of the stack/array
+      * 
+      * @param path
+      */
+     push: function( path) {
+         this.add(path);
+     },
+     
      /**
       * @method
       * Remove the element from the list
@@ -190,7 +236,7 @@ graphiti.util.ArrayList = Class.extend({
      * @param {Object} obj the object to insert.
      * @param {Number} index the insert position.
      * 
-     * @return {graphiti.util.ArrayList} self
+     * @return {draw2d.util.ArrayList} self
     */
      insertElementAt:function(obj, index) 
      {
@@ -220,12 +266,12 @@ graphiti.util.ArrayList = Class.extend({
      {
         var element = this.data[index];
     
-        for(var i=index; i<(this.getSize()-1); i++)
+        for(var i=index; i<(this.size-1); i++)
         {
            this.data[i] = this.data[i+1];
         }
     
-        this.data[this.getSize()-1] = null;
+        this.data[this.size-1] = null;
         this.size--;
         
         return element;
@@ -233,18 +279,16 @@ graphiti.util.ArrayList = Class.extend({
 
     /**
      * @method
-     * removes all elements in the Vector
+     * removes all given elements in the Vector
      * 
-     * @return {graphiti.util.ArrayList} self
+     * @param {draw2d.util.ArrayList} elements The elements to remove
+     * @return {draw2d.util.ArrayList} self
      */
-     removeAllElements:function()
+     removeAll:function(elements)
      {
-        this.size = 0;
-    
-        for (var i=0; i<this.data.length; i++) 
-        {
-           this.data[i] = null;
-        }
+         $.each(elements, $.proxy(function(i,e){
+             this.remove(e);
+         },this));
         
         return this;
      },
@@ -310,7 +354,7 @@ graphiti.util.ArrayList = Class.extend({
      {
         // nothing to do
         if(this.data.length == this.size)
-           return;
+           return this;
     
         var temp = new Array(this.getSize());
     
@@ -330,7 +374,7 @@ graphiti.util.ArrayList = Class.extend({
       * 
       * @param {String} the fieldname for the sorting
       * 
-      * @return {graphiti.util.ArrayList} self
+      * @return {draw2d.util.ArrayList} self
       */
      sort:function(f) 
      {
@@ -368,11 +412,11 @@ graphiti.util.ArrayList = Class.extend({
       * @method
       * copies the contents of a Vector to another Vector returning the new Vector.
       * 
-      * @returns {graphiti.util.ArrayList} the new ArrayList
+      * @returns {draw2d.util.ArrayList} the new ArrayList
       */
      clone:function() 
      {
-        var newVector = new graphiti.util.ArrayList(this.size);
+        var newVector = new draw2d.util.ArrayList(this.size);
     
         for (var i=0; i<this.size; i++) {
            newVector.add(this.data[i]);
@@ -391,12 +435,13 @@ graphiti.util.ArrayList = Class.extend({
       */
       each:function(func) 
       {
+          /*
          if(typeof func !== "function"){
              throw "parameter must type of 'function'";
          }
-         
-         var s= this.getSize();
-         for (var i=0; i<s; i++) 
+         */
+//         var s= this.getSize();
+         for (var i=0; i<this.size; i++) 
          {
             if(func(i, this.data[i])===false)
                 break;
@@ -437,6 +482,6 @@ graphiti.util.ArrayList = Class.extend({
 
 });
 
-graphiti.util.ArrayList.EMPTY_LIST = new graphiti.util.ArrayList();
+draw2d.util.ArrayList.EMPTY_LIST = new draw2d.util.ArrayList();
 
 

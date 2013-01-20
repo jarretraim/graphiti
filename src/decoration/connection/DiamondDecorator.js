@@ -1,14 +1,48 @@
-/**
- * @class graphiti.decoration.connection.DiamondDecorator
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************//**
+ * @class draw2d.decoration.connection.DiamondDecorator
+ * See the example:
+ *
+ *     @example preview small frame
+ *     
+ *     // create and add two nodes which contains Ports (In and OUT)
+ *     //
+ *     var start = new draw2d.shape.node.Start();
+ *     var end   = new draw2d.shape.node.End();
+        
+ *     // ...add it to the canvas 
+ *     canvas.addFigure( start, 50,50);
+ *     canvas.addFigure( end, 230,80);
+ *          
+ *     // Create a Connection and connect the Start and End node
+ *     //
+ *     var c = new draw2d.Connection();
+ *     
+ *     // toggle from ManhattenRouter to DirectRouter to show the rotation of decorations
+ *     c.setRouter(new draw2d.layout.connection.DirectRouter());
+ *      
+ *     // Set the endpoint decorations for the connection
+ *     //
+ *     c.setSourceDecorator(new draw2d.decoration.connection.DiamondDecorator());
+ *     c.setTargetDecorator(new draw2d.decoration.connection.DiamondDecorator());   
+ *     // Connect the endpoints with the start and end port
+ *     //
+ *     c.setSource(start.getOutputPort(0));
+ *     c.setTarget(end.getInputPort(0));
+ *           
+ *     // and finally add the connection to the canvas
+ *     canvas.addFigure(c);
  * 
  * 
  * @inheritable
  * @author Andreas Herz
- * @extend graphiti.decoration.connection.Decorator
+ * @extend draw2d.decoration.connection.Decorator
  */
-graphiti.decoration.connection.DiamondDecorator = graphiti.decoration.connection.Decorator.extend({
+draw2d.decoration.connection.DiamondDecorator = draw2d.decoration.connection.Decorator.extend({
 
-	NAME : "graphiti.decoration.connection.DiamondDecorator",
+	NAME : "draw2d.decoration.connection.DiamondDecorator",
 
 	/**
 	 * @constructor 
@@ -24,7 +58,7 @@ graphiti.decoration.connection.DiamondDecorator = graphiti.decoration.connection
 	/**
 	 * Draw a filled diamond decoration.
 	 * 
-	 * It's not your work to rotate the arrow. The graphiti do this job for you.
+	 * It's not your work to rotate the arrow. The draw2d do this job for you.
 	 * 
 	 * @param {Raphael} paper the raphael paper object for the paint operation 
 	 **/
@@ -40,7 +74,7 @@ graphiti.decoration.connection.DiamondDecorator = graphiti.decoration.connection
 		st.push(
 	        paper.path(path.join(""))
 		);
-		st.attr({fill:this.backgroundColor.getHashStyle()});
+		st.attr({fill:this.backgroundColor.hash()});
 		return st;
 	}
 	

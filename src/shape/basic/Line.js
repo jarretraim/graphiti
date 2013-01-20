@@ -1,6 +1,9 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.basic.Line
+ * @class draw2d.shape.basic.Line
  * The base class for all visible elements inside a canvas.
  * 
  * See the example:
@@ -9,7 +12,7 @@
  *     
  *     // Create the line and modify the start/end after inserting them into 
  *     // the canvas
- *     var line1 =  new graphiti.shape.basic.Line();
+ *     var line1 =  new draw2d.shape.basic.Line();
  *     line1.setStartPoint(30,30);
  *     line1.setEndPoint(100,80);
  *       
@@ -17,19 +20,19 @@
  *     
  *     // Create the line with a given start/end coordinate in the constructor
  *     //
- *     var line2 = new graphiti.shape.basic.Line(20,80,200,150);
+ *     var line2 = new draw2d.shape.basic.Line(20,80,200,150);
  *     line2.setStroke(3);
  *     line2.setColor("#1d1dff");
  *     canvas.addFigure(line2);
  *     
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.Figure
+ * @extends draw2d.Figure
  */
-graphiti.shape.basic.Line = graphiti.Figure.extend({
-    NAME : "graphiti.shape.basic.Line",
+draw2d.shape.basic.Line = draw2d.Figure.extend({
+    NAME : "draw2d.shape.basic.Line",
 
-    DEFAULT_COLOR : new graphiti.util.Color(0,0,0),
+    DEFAULT_COLOR : new draw2d.util.Color(0,0,0),
     
     /**
      * @constructor
@@ -42,6 +45,7 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
      * 
      */
     init: function(startX, startY, endX, endY ) {
+        
         // for performance reasons if we made some bulk changes to the object
         // For this case we can block the repaint and enable it after the bulk
         // Update of the properties
@@ -52,6 +56,8 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
         this.isGlowing = false;
         this.lineColor = this.DEFAULT_COLOR;
         this.stroke=1;
+
+        this.dasharray = null;//can be one of: [ÒÓ, Ò-Ó, Ò.Ó, Ò-.Ó, Ò-..Ó, Ò. Ó, Ò- Ó, Ò--Ó, Ò- .Ó, Ò--.Ó, Ò--..Ó] 
         
         if(typeof endY ==="number"){
             this.startX = startX;
@@ -70,12 +76,25 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
 
         this._super();
         
+        // create the selections handles/decorations
+        this.installEditPolicy(new draw2d.policy.figure.LineSelectionFeedbackPolicy());
 
         this.setSelectable(true);
         this.setDeleteable(true);
    },
       
-
+   /**
+    * @method
+    * 
+    * experimental only.
+    * @param dash
+    * @private
+    */
+   setDashArray: function(dash){
+       this.dasharray = dash;
+   },
+   
+   
    /**
     * @method
     * Set the width for the click hit test of this line.
@@ -131,7 +150,11 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
     	   attributes["stroke-width"]=this.stroke;
        }
        
-        this._super(attributes);
+       if(this.dasharray!==null){
+           attributes["stroke-dasharray"]=this.dasharray;
+       }
+       
+       this._super(attributes);
    },
    
    /**
@@ -151,7 +174,7 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
 		   this._lineColor = this.lineColor;
 		   this._stroke = this.stroke;
 		   
-	       this.setColor(new graphiti.util.Color("#3f72bf"));
+	       this.setColor( draw2d.util.Color("#3f72bf"));
 	       this.setStroke(parseInt(this.stroke*4));
 	   }
 	   else{
@@ -192,15 +215,15 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
     * Set the color of the line.
     * This method fires a <i>document dirty</i> event.
     * 
-    * @param {graphiti.util.Color} color The new color of the line.
+    * @param {draw2d.util.Color} color The new color of the line.
     **/
    setColor:function( color)
    {
-     if(color instanceof graphiti.util.Color){
+     if(color instanceof draw2d.util.Color){
          this.lineColor = color;
      }
      else if(typeof color === "string"){
-         this.lineColor = new graphiti.util.Color(color);
+         this.lineColor = new draw2d.util.Color(color);
      }
      else{
          // set good default
@@ -213,7 +236,7 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
     * @method
     * Return the current paint color.
     * 
-    * @return {graphiti.util.Color} The paint color of the line.
+    * @return {draw2d.util.Color} The paint color of the line.
     **/
    getColor:function()
    {
@@ -237,7 +260,13 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
      this.startX = x;
      this.startY = y;
      this.repaint();
-   },
+
+     this.editPolicy.each($.proxy(function(i,e){
+         if(e instanceof draw2d.policy.figure.DragDropEditPolicy){
+             e.moved(this.canvas, this);
+         }
+     },this));
+  },
 
    /**
     * Set the end point of the line.
@@ -255,7 +284,13 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
      this.endX = x;
      this.endY = y;
      this.repaint();
-   },
+
+     this.editPolicy.each($.proxy(function(i,e){
+         if(e instanceof draw2d.policy.figure.DragDropEditPolicy){
+             e.moved(this.canvas, this);
+         }
+     },this));
+ },
 
    /**
     * @method
@@ -283,11 +318,11 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
     * @method
     * Return the start point.
     * 
-    * @return {graphiti.geo.Point}
+    * @return {draw2d.geo.Point}
     **/
    getStartPoint:function()
    {
-     return new graphiti.geo.Point(this.startX,this.startY);
+     return new draw2d.geo.Point(this.startX,this.startY);
    },
 
 
@@ -317,16 +352,16 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
     * @method
     * Return the end point.
     * 
-    * @return {graphiti.geo.Point}
+    * @return {draw2d.geo.Point}
     **/
    getEndPoint:function()
    {
-     return new graphiti.geo.Point(this.endX,this.endY);
+     return new draw2d.geo.Point(this.endX,this.endY);
    },
 
    
    getSegments: function(){
-       var result = new graphiti.util.ArrayList();
+       var result = new draw2d.util.ArrayList();
        result.add({start: this.getStartPoint(), end: this.getendPoint()});
        return result;
    },
@@ -353,18 +388,18 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
     * Returns the angle of the line in degree
     *
     * <pre>
-    *                                 270°
+    *                                 270Â°
     *                               |
     *                               |
     *                               |
     *                               |
-    * 180° -------------------------+------------------------> +X
-    *                               |                        0°
+    * 180Â° -------------------------+------------------------> +X
+    *                               |                        0Â°
     *                               |
     *                               |
     *                               |
     *                               V +Y
-    *                              90°
+    *                              90Â°
     * </pre>
     * @return {Number}
     **/
@@ -395,25 +430,25 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
     * @method
     * Returns the Command to perform the specified Request or null.
     *
-    * @param {graphiti.command.CommandType} request describes the Command being requested
-    * @return {graphiti.command.Command} null or a Command
+    * @param {draw2d.command.CommandType} request describes the Command being requested
+    * @return {draw2d.command.Command} null or a Command
     **/
    createCommand:function( request)
    {
-     if(request.getPolicy() === graphiti.command.CommandType.MOVE)
+     if(request.getPolicy() === draw2d.command.CommandType.MOVE)
      {
        var x1 = this.getStartX();
        var y1 = this.getStartY();
        var x2 = this.getEndX();
        var y2 = this.getEndY();
-       return new graphiti.command.CommandMoveLine(this,x1,y1,x2,y2);
+       return new draw2d.command.CommandMoveLine(this,x1,y1,x2,y2);
      }
-     if(request.getPolicy() === graphiti.command.CommandType.DELETE)
+     if(request.getPolicy() === draw2d.command.CommandType.DELETE)
      {
         if(this.isDeleteable()===false){
            return null;
         }
-        return new graphiti.command.CommandDelete(this);
+        return new draw2d.command.CommandDelete(this);
      }
      return null;
    },
@@ -430,11 +465,11 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
     **/
    hitTest: function( px, py)
    {
-     return graphiti.shape.basic.Line.hit(this.corona, this.startX,this.startY, this.endX, this.endY, px,py);
+     return draw2d.shape.basic.Line.hit(this.corona, this.startX,this.startY, this.endX, this.endY, px,py);
    },
    
    intersection: function (other){
-       var result = new graphiti.util.ArrayList();
+       var result = new draw2d.util.ArrayList();
        
        // empty result. the lines are equal...infinit array
        if(other === this){
@@ -446,26 +481,66 @@ graphiti.shape.basic.Line = graphiti.Figure.extend({
        
        segments1.each(function(i, s1){
            segments2.each(function(j, s2){
-               var p= graphiti.shape.basic.Line.intersection(s1.start, s1.end, s2.start, s2.end);
+               var p= draw2d.shape.basic.Line.intersection(s1.start, s1.end, s2.start, s2.end);
                if(p!==null){
                    result.add(p);
                }
            });
        });
        return result;
+   },
+   
+   
+   /**
+    * @method 
+    * Return an objects with all important attributes for XML or JSON serialization
+    * 
+    * @returns {Object}
+    */
+   getPersistentAttributes : function()
+   {
+       var memento = this._super();
+       delete memento.x;
+       delete memento.y;
+       delete memento.width;
+       delete memento.height;
+
+       memento.stroke = this.stroke;
+       memento.color  = this.getColor().hash();
+       
+       return memento;
+   },
+   
+   /**
+    * @method 
+    * Read all attributes from the serialized properties and transfer them into the shape.
+    * 
+    * @param {Object} memento
+    * @returns 
+    */
+   setPersistentAttributes : function(memento)
+   {
+       this._super(memento);
+
+       if(typeof memento.stroke !=="undefined"){
+           this.setStroke(parseInt(memento.stroke));
+       }
+       if(typeof memento.color !=="undefined"){
+           this.setColor(memento.color);
+       }
    }
 });
 
 
 /**
  * 
- * @param {graphiti.geo.Point} a1
- * @param {graphiti.geo.Point} a2
- * @param {graphiti.geo.Point} b1
- * @param {graphiti.geo.Point} b2
+ * @param {draw2d.geo.Point} a1
+ * @param {draw2d.geo.Point} a2
+ * @param {draw2d.geo.Point} b1
+ * @param {draw2d.geo.Point} b2
  * @returns
  */
-graphiti.shape.basic.Line.intersection = function(a1, a2, b1, b2) {
+draw2d.shape.basic.Line.intersection = function(a1, a2, b1, b2) {
     var result;
     
     var ua_t = (b2.x - b1.x) * (a1.y - b1.y) - (b2.y - b1.y) * (a1.x - b1.x);
@@ -478,7 +553,7 @@ graphiti.shape.basic.Line.intersection = function(a1, a2, b1, b2) {
 
 //        if ( 0 <= ua && ua <= 1 && 0 <= ub && ub <= 1 ) {
         if ( 0 < ua && ua < 1 && 0 < ub && ub < 1 ) {
-            result = new graphiti.geo.Point(parseInt(a1.x + ua * (a2.x - a1.x)), parseInt(a1.y + ua * (a2.y - a1.y)));
+            result = new draw2d.geo.Point(parseInt(a1.x + ua * (a2.x - a1.x)), parseInt(a1.y + ua * (a2.y - a1.y)));
         } else {
             result = null;// No Intersection;
         }
@@ -508,7 +583,7 @@ graphiti.shape.basic.Line.intersection = function(a1, a2, b1, b2) {
  * @param {Number} px x coordinate of the point to test
  * @param {Number} py y coordinate of the point to test
  **/
-graphiti.shape.basic.Line.hit= function( coronaWidth, X1, Y1,  X2,  Y2, px, py)
+draw2d.shape.basic.Line.hit= function( coronaWidth, X1, Y1,  X2,  Y2, px, py)
 {
   // Adjust vectors relative to X1,Y1
   // X2,Y2 becomes relative vector from X1,Y1 to end of segment

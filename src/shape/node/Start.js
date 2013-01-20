@@ -1,6 +1,9 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.node.Start
+ * @class draw2d.shape.node.Start
  * 
  * A generic Node which has an OutputPort. Mainly used for demo and examples.
  * 
@@ -8,18 +11,18 @@
  *
  *     @example preview small frame
  *     
- *     var figure =  new graphiti.shape.node.Start();
+ *     var figure =  new draw2d.shape.node.Start();
  *     figure.setColor("#3d3d3d");
  *     
  *     canvas.addFigure(figure,50,10);
  *     
- * @extends graphiti.shape.basic.Rectangle
+ * @extends draw2d.shape.basic.Rectangle
  */
-graphiti.shape.node.Start = graphiti.shape.basic.Rectangle.extend({
+draw2d.shape.node.Start = draw2d.shape.basic.Rectangle.extend({
 
-    NAME : "graphiti.shape.node.Start",
+    NAME : "draw2d.shape.node.Start",
 
-	DEFAULT_COLOR : new graphiti.util.Color("#4D90FE"),
+	DEFAULT_COLOR : new draw2d.util.Color("#4D90FE"),
 
 	init : function()
     {

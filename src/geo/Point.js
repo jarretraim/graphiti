@@ -1,10 +1,13 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.geo.Point Util class for geometrie handling.
+ * @class draw2d.geo.Point Util class for geometrie handling.
  */
-graphiti.geo.Point = Class.extend({
+draw2d.geo.Point = Class.extend({
 
-    NAME : "graphiti.geo.Point",
+    NAME : "draw2d.geo.Point",
     
     /**
      * @constructor 
@@ -14,8 +17,10 @@ graphiti.geo.Point = Class.extend({
      */
     init : function(x, y)
     {
-        this.x = parseInt(x);
-        this.y = parseInt(y);
+        this.x = parseFloat(x);
+        this.y = parseFloat(y);
+//        this.x = parseInt(x);
+//        this.y = parseInt(y);
 
         // limit for the maxi/minimum boundary of this rectangle
         // It is not possible that the rect leave the boundary if set.
@@ -30,9 +35,10 @@ graphiti.geo.Point = Class.extend({
      * @method
      * Set the boundary of the rectangle. If set, the rectangle is always inside
      * the boundary. A setX or setY will always be adjusted.
+     * 
      */
     setBoundary:function(bx, by, bw, bh){
-        if(bx instanceof graphiti.geo.Rectangle){
+        if(bx instanceof draw2d.geo.Rectangle){
             this.bx = bx.x;
             this.by = bx.y;
             this.bw = bx.w;
@@ -45,6 +51,8 @@ graphiti.geo.Point = Class.extend({
             this.bh = bh;
         }
         this.adjustBoundary();
+
+        return this;
     },
     
 
@@ -58,6 +66,8 @@ graphiti.geo.Point = Class.extend({
         }
         this.x = Math.min(Math.max(this.bx, this.x), this.bw);
         this.y = Math.min(Math.max(this.by, this.y), this.bh);
+        
+        return this;
     },
     
     /**
@@ -71,13 +81,14 @@ graphiti.geo.Point = Class.extend({
      * @param {Number} dx  Shift along X axis
      * @param {Number} dy  Shift along Y axis
      * 
-     * @return  {graphiti.geo.Rectangle} The method return the object itself
+     * @return  {draw2d.geo.Rectangle} The method return the object itself
      **/
     translate:function( dx,  dy)
     {
       this.x +=dx;
       this.y +=dy;
       this.adjustBoundary();
+      
       return this;
     },
         
@@ -113,6 +124,8 @@ graphiti.geo.Point = Class.extend({
     {
         this.x = x;
         this.adjustBoundary();
+        
+        return this;
     },
 
     /**
@@ -125,17 +138,19 @@ graphiti.geo.Point = Class.extend({
     {
         this.y = y;
         this.adjustBoundary();
+        
+        return this;
     },
 
     /**
      * @method
      * Set the new x/y coordinates of this point
      * 
-     * @param {Number|graphiti.geo.Point} x
+     * @param {Number|draw2d.geo.Point} x
      * @param {Number} [y]
      */
     setPosition:function(x,y){
-    	if(x instanceof graphiti.geo.Point){
+    	if(x instanceof draw2d.geo.Point){
      	   this.x=x.x;
     	   this.y=x.y;
     	}
@@ -144,14 +159,16 @@ graphiti.geo.Point = Class.extend({
     	   this.y=y;
     	}
         this.adjustBoundary();
+
+        return this;
     },
     
     /**
      * @method 
      * Calculates the relative position of the specified Point to this Point.
      * 
-     * @param {graphiti.geo.Point} p The reference Point
-     * @return {graphiti.geo.PositionConstants} NORTH, SOUTH, EAST, or WEST, as defined in {@link graphiti.geo.PositionConstants}
+     * @param {draw2d.geo.Point} p The reference Point
+     * @return {draw2d.geo.PositionConstants} NORTH, SOUTH, EAST, or WEST, as defined in {@link draw2d.geo.PositionConstants}
      */
     getPosition : function(p)
     {
@@ -160,19 +177,19 @@ graphiti.geo.Point = Class.extend({
         if (Math.abs(dx) > Math.abs(dy))
         {
             if (dx < 0)
-                return graphiti.geo.PositionConstants.WEST;
-            return graphiti.geo.PositionConstants.EAST;
+                return draw2d.geo.PositionConstants.WEST;
+            return draw2d.geo.PositionConstants.EAST;
         }
         if (dy < 0)
-            return graphiti.geo.PositionConstants.NORTH;
-        return graphiti.geo.PositionConstants.SOUTH;
+            return draw2d.geo.PositionConstants.NORTH;
+        return draw2d.geo.PositionConstants.SOUTH;
     },
 
     /**
      * @method 
      * Compares two points and return [true] if x and y are equals.
      * 
-     * @param {graphiti.geo.Point} p the point to compare with
+     * @param {draw2d.geo.Point} p the point to compare with
      * @return boolean
      */
     equals : function(p)
@@ -184,8 +201,7 @@ graphiti.geo.Point = Class.extend({
      * @method 
      * Return the distance between this point and the hands over.
      * 
-     * @param {graphiti.geo.Point}
-     *            p the point to use
+     * @param {draw2d.geo.Point} other the point to use
      * @return {Number}
      */
     getDistance : function(other)
@@ -197,12 +213,12 @@ graphiti.geo.Point = Class.extend({
      * @method 
      * Return a new Point translated with the x/y values of the hands over point.
      * 
-     * @param {graphiti.geo.Point} other the offset to add for the new point.
-     * @return {graphiti.geo.Point} The new translated point.
+     * @param {draw2d.geo.Point} other the offset to add for the new point.
+     * @return {draw2d.geo.Point} The new translated point.
      */
     getTranslated : function(other)
     {
-        return new graphiti.geo.Point(this.x + other.x, this.y + other.y);
+        return new draw2d.geo.Point(this.x + other.x, this.y + other.y);
     },
 
     /**
@@ -240,7 +256,7 @@ graphiti.geo.Point = Class.extend({
      */
     clone : function()
     {
-       return new graphiti.geo.Point(this.x,this.y);
+       return new draw2d.geo.Point(this.x,this.y);
     }
     
 });

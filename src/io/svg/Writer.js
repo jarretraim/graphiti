@@ -1,13 +1,16 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 
 /**
- * @class graphiti.io.svg.Writer
+ * @class draw2d.io.svg.Writer
  * 
  * Serialize the canvas document into a SVG document.
  * 
  *      // Create a SVG writer and convert the canvas into a SVG document.
  *      //
- *      var writer = new graphiti.io.svg.Writer();
+ *      var writer = new draw2d.io.svg.Writer();
  *      var svg = writer.marshal(canvas);
  *      
  *      // insert the svg string into a DIV for preview or post
@@ -16,9 +19,9 @@
  *
  * 
  * @author Andreas Herz
- * @extends graphiti.io.Writer
+ * @extends draw2d.io.Writer
  */
-graphiti.io.svg.Writer = graphiti.io.Writer.extend({
+draw2d.io.svg.Writer = draw2d.io.Writer.extend({
     
     init:function(){
         this._super();
@@ -28,7 +31,7 @@ graphiti.io.svg.Writer = graphiti.io.Writer.extend({
      * @method
      * Export the content of the canvas into SVG. The SVG document can be loaded with Inkscape or any other SVG Editor.
      * 
-      * @param {graphiti.Canvas} canvas
+      * @param {draw2d.Canvas} canvas
      * @returns {String} the SVG document
      */
     marshal: function(canvas){
@@ -38,7 +41,7 @@ graphiti.io.svg.Writer = graphiti.io.Writer.extend({
                      .replace(/>\s+/g, ">")
                      .replace(/\s+</g, "<");
         svg = this.formatXml(svg);
-        svg = svg.replace(/<desc>.*<\/desc>/g,"<desc>Create with graphiti JS graph library and RaphaelJS</desc>");
+        svg = svg.replace(/<desc>.*<\/desc>/g,"<desc>Create with draw2d JS graph library and RaphaelJS</desc>");
         
         canvas.setCurrentSelection(s);
         return svg;

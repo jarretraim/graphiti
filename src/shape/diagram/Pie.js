@@ -1,6 +1,9 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.diagram.Pie
+ * @class draw2d.shape.diagram.Pie
  * 
  * Small data pie chart.
  * 
@@ -8,13 +11,13 @@
  *
  *     @example preview small frame
  *     
- *     var pie = new graphiti.shape.diagram.Pie(80,80);
+ *     var pie = new draw2d.shape.diagram.Pie(80,80);
  *     pie.setData([30,60,122,4]);
  *     canvas.addFigure( pie,100,60);
  *     
- * @extends graphiti.shape.diagram.Diagram
+ * @extends draw2d.shape.diagram.Diagram
  */
-graphiti.shape.diagram.Pie = graphiti.shape.diagram.Diagram.extend({
+draw2d.shape.diagram.Pie = draw2d.shape.diagram.Diagram.extend({
     
     COLORS: ['#00A8F0', '#b9dd69', '#f3546a', '#4DA74D', '#9440ED'],
     TWO_PI : Math.PI * 2,
@@ -57,7 +60,7 @@ graphiti.shape.diagram.Pie = graphiti.shape.diagram.Diagram.extend({
             var angle = this.TWO_PI * this.data[i];
             var color = this.COLORS[i%length];
             var seg = this.drawSegment(radius, angle, offsetAngle, 0.1);
-            seg.attr({stroke: "#" + this.color.hex(),fill:color/* "#" + this.bgColor.hex()*/});
+            seg.attr({stroke: this.color.hash(),fill:color});
             pie.push(seg);
             offsetAngle += angle;
         }
@@ -81,7 +84,7 @@ graphiti.shape.diagram.Pie = graphiti.shape.diagram.Diagram.extend({
             this.svgNodes.remove();
             this.svgNodes = this.createSet();
         }
-        
+                
         this.repaint();
     },
 
@@ -102,7 +105,10 @@ graphiti.shape.diagram.Pie = graphiti.shape.diagram.Diagram.extend({
 
       path += "L "+radius+" "+radius;
       return this.getCanvas().paper.path(path);
+    },
+    
+    applyTransformation:function(){
+       this.svgNodes.transform("T" + this.getAbsoluteX() + "," + this.getAbsoluteY());
     }
     
-
 });

@@ -1,11 +1,14 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.layout.mesh.MeshLayouter
+ * @class draw2d.layout.mesh.MeshLayouter
  * Layouter for a mesh or grid. 
  *
  * @author Andreas Herz
  */
-graphiti.layout.mesh.MeshLayouter = Class.extend({
+draw2d.layout.mesh.MeshLayouter = Class.extend({
 
 	/**
 	 * @constructor 
@@ -19,14 +22,14 @@ graphiti.layout.mesh.MeshLayouter = Class.extend({
      * Return a changes list for an existing mesh/canvas to ensure that the element to insert 
      * did have enough space.
      * 
-     * @param {graphiti.Canvas} canvas the canvas to use for the analytic
-     * @param {graphiti.Figure} figure The figure to add to the exising canvas
+     * @param {draw2d.Canvas} canvas the canvas to use for the analytic
+     * @param {draw2d.Figure} figure The figure to add to the exising canvas
      * 
      * 
-     * @return {graphiti.util.ArrayList} a list of changes to apply if the user want to insert he figure.
+     * @return {draw2d.util.ArrayList} a list of changes to apply if the user want to insert he figure.
      */
     add:function( canvas, figure)
     {
-    	return new graphiti.util.ArrayList();
+    	return new draw2d.util.ArrayList();
     }
 });

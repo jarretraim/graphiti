@@ -1,21 +1,24 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.icon.Users
+ * @class draw2d.shape.icon.Users
 
  * See the example:
  *
  *     @example preview small frame
  *     
- *     var icon =  new graphiti.shape.icon.Users();
+ *     var icon =  new draw2d.shape.icon.Users();
  *     icon.setDimension(50,50);
  *     canvas.addFigure(icon,50,10);
  *     
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.shape.icon.Icon
+ * @extends draw2d.shape.icon.Icon
  */
-graphiti.shape.icon.Users = graphiti.shape.icon.Icon.extend({
-    NAME : "graphiti.shape.icon.Users",
+draw2d.shape.icon.Users = draw2d.shape.icon.Icon.extend({
+    NAME : "draw2d.shape.icon.Users",
 
     /**
      * 

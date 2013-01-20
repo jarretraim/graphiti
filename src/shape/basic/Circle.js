@@ -1,7 +1,10 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 
 /**
- * @class graphiti.shape.basic.Circle
+ * @class draw2d.shape.basic.Circle
  * A circle figure with basic background and stroke API. <br>
  * A circle can not be streched. <strong>The aspect ration is always 1:1</strong>.
  * 
@@ -9,7 +12,7 @@
  *
  *     @example preview small frame
  *     
- *     var shape =  new graphiti.shape.basic.Circle();
+ *     var shape =  new draw2d.shape.basic.Circle();
  *     shape.setStroke(3);
  *     shape.setColor("#3d3d3d");
  *     shape.setBackgroundColor("#3dff3d");
@@ -18,11 +21,11 @@
  *     
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.shape.basic.Oval
+ * @extends draw2d.shape.basic.Oval
  */
-graphiti.shape.basic.Circle = graphiti.shape.basic.Oval.extend({
+draw2d.shape.basic.Circle = draw2d.shape.basic.Oval.extend({
     
-    NAME : "graphiti.shape.basic.Circle", 
+    NAME : "draw2d.shape.basic.Circle", 
     
     /**
      * @constructor
@@ -66,8 +69,7 @@ graphiti.shape.basic.Circle = graphiti.shape.basic.Oval.extend({
      *
      * @return {boolean} Returns always false. It is not possible to strech a circle.
      */
-    isStrechable:function()
-    {
+    isStrechable:function(){
       return false;
     }
 

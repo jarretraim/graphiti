@@ -1,15 +1,18 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.SetFigure
+ * @class draw2d.SetFigure
  * 
  * A SetFigure is a composition of different SVG elements.
  * 
  * @author Andreas Herz
- * @extends graphiti.shape.basic.Rectangle
+ * @extends draw2d.shape.basic.Rectangle
  */
-graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
+draw2d.SetFigure = draw2d.shape.basic.Rectangle.extend({
     
-    NAME : "graphiti.SetFigure",
+    NAME : "draw2d.SetFigure",
 
     /**
      * @constructor
@@ -25,9 +28,6 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
       
       this.scaleX = 1;
       this.scaleY = 1;
-      
-      this.offsetX = 0;
-      this.offsetY = 0;
 
       this._super( width, height);
 
@@ -39,7 +39,7 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
      * @method
      * Set/Reset the canvas for the element.
      * 
-     * @param {graphiti.Canvas} canvas the canvas to use
+     * @param {draw2d.Canvas} canvas the canvas to use
      */
     setCanvas: function( canvas )
     {
@@ -53,6 +53,8 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
       this._super(canvas);
      },
  
+     
+     
     /**
      * @method
      * propagate all attributes like color, stroke,... to the shape element and
@@ -77,31 +79,35 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
             attributes = {};
         }
 
-        if (this.svgNodes !== null) {
-            if (this.automaticResizeInnerContent() === true && this.isResizeable()===true) {
-                this.svgNodes.transform("s"+this.scaleX+","+this.scaleY+","+this.getAbsoluteX()+","+this.getAbsoluteY()+ " t"
-                        + (this.getAbsoluteX()-this.offsetX) + "," + (this.getAbsoluteY()-this.offsetY));
-            }
-            else {
-                this.svgNodes.transform("t" + (this.getAbsoluteX()-this.offsetX) + "," + (this.getAbsoluteY()-this.offsetY));
-            }
+        if(this.visible===true){
+            this.svgNodes.show();
         }
-
+        else{
+            this.svgNodes.hide();
+        }
+        
         this._super(attributes);
     },
 
+
     /**
-     * @method
-     * Indicates whenever a SetFigure should automaticly resize the inner set/svg with a transformation
-     * if the user resize the shape. This is not always the wante behaviour (see Slider).
-     * 
-     * @returns {Boolean}
+     * @private
      */
-    automaticResizeInnerContent:function()
-    {
-      return true;
+    applyTransformation:function(){
+        var s = 
+        	"S"+this.scaleX+","+this.scaleY+",0,0 "+
+        	"R"+this.rotationAngle+","+parseInt(this.getWidth()/2)+","+parseInt(this.getHeight()/2)+
+        	"T" + this.getAbsoluteX() + "," + this.getAbsoluteY()+
+            "";
+    	this.svgNodes.transform(s);
+        if(this.getRotationAngle()=== 90|| this.getRotationAngle()===270){
+            var before  = this.svgNodes.getBBox(true);
+            var ratio = before.height/before.width;
+            var reverseRatio = before.width/before.height;
+            var rs = "...S"+ratio+","+reverseRatio+","+(this.getAbsoluteX() +this.getWidth()/2)+","+(this.getAbsoluteY() +this.getHeight()/2);
+        	this.svgNodes.transform(rs);
+        }
     },
-    
     
     /**
      * @private
@@ -116,21 +122,17 @@ graphiti.SetFigure = graphiti.shape.basic.Rectangle.extend({
        var bb = this.svgNodes.getBBox();
        this.originalWidth = bb.width;
        this.originalHeight= bb.height;
-
-       this.offsetX = bb.x;
-       this.offsetY = bb.y;
-       
+      
        return shape;
     },
     
     /**
      * @method
-     * Override this method to add your own SVG elements. Ssee {@link graphiti.shape.basic.Label} as example.
+     * Override this method to add your own SVG elements. See {@link draw2d.shape.basic.Label} as example.
      * 
      * @template
      */
-    createSet: function()
-    {
+    createSet: function(){
     	return this.canvas.paper.set(); // return empty set as default;
     }
    

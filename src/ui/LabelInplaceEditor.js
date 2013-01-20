@@ -1,13 +1,16 @@
-/**
- * @class graphiti.ui.LabelInplaceEditor
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************//**
+ * @class draw2d.ui.LabelInplaceEditor
  * 
- * Inplace editor for graphiti.shape.base.Label 
+ * Inplace editor for draw2d.shape.base.Label 
  * 
   * @author Andreas Herz
- * @extends graphiti.ui.LabelEditor
+ * @extends draw2d.ui.LabelEditor
 */
 
-graphiti.ui.LabelInplaceEditor =  graphiti.ui.LabelEditor.extend({
+draw2d.ui.LabelInplaceEditor =  draw2d.ui.LabelEditor.extend({
     
     /**
      * @constructor
@@ -21,7 +24,7 @@ graphiti.ui.LabelInplaceEditor =  graphiti.ui.LabelEditor.extend({
      * @method
      * Trigger the edit of the label text.
      * 
-     * @param {graphiti.shape.basic.Label} label the label to edit
+     * @param {draw2d.shape.basic.Label} label the label to edit
      */
     start: function( label){
         this.label = label;

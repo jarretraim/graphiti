@@ -1,15 +1,18 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.VectorFigure
- * The base class for all vector based figures like {@link graphiti.shape.basic.Rectangle}  or {@link graphiti.shape.basic.Oval} 
+ * @class draw2d.VectorFigure
+ * The base class for all vector based figures like {@link draw2d.shape.basic.Rectangle}  or {@link draw2d.shape.basic.Oval} 
  * inside a canvas.
  * 
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.shape.node.Node
+ * @extends draw2d.shape.node.Node
  */
-graphiti.VectorFigure = graphiti.shape.node.Node.extend({
-    NAME : "graphiti.VectorFigure",
+draw2d.VectorFigure = draw2d.shape.node.Node.extend({
+    NAME : "draw2d.VectorFigure",
 
     /**
      * @constructor
@@ -18,14 +21,41 @@ graphiti.VectorFigure = graphiti.shape.node.Node.extend({
      */
     init : function()
     {
-        this.bgColor =  new graphiti.util.Color(100, 100, 100);
-        this.color = new graphiti.util.Color(0, 0, 0);
         this.stroke = 1;
-
+        
+        // memento for the stroke if we reset the glow effect of this shape
+        //
+        this.strokeBeforeGlow = this.stroke;
+        this.glowIsActive = false;
+        
         this._super();
     },
       
-
+    
+    /**
+     * @method
+     * Highlight the element or remove the highlighting
+     * 
+     * @param {Boolean} flag indicates glow/noGlow
+     * @template
+     */
+    setGlow: function(flag){
+        
+        if(flag === this.glowIsActive) {
+            // nothing todo
+            return;
+        }
+        
+        this.glowIsActive = flag;
+        if(flag===true){
+            this.strokeBeforeGlow = this.getStroke();
+            this.setStroke(this.strokeBeforeGlow*2.5);
+        }
+        else {
+            this.setStroke(this.strokeBeforeGlow);
+        }
+    },
+    
    /**
     * @method
     * propagate all attributes like color, stroke,... to the shape element
@@ -72,15 +102,15 @@ graphiti.VectorFigure = graphiti.shape.node.Node.extend({
     * Set the new background color of the figure. It is possible to hands over
     * <code>null</code> to set the background transparent.
     *
-    * @param {graphiti.util.Color} color The new background color of the figure
+    * @param {draw2d.util.Color} color The new background color of the figure
     **/
     setBackgroundColor : function(color)
     {
-        if (color instanceof graphiti.util.Color) {
+        if (color instanceof draw2d.util.Color) {
             this.bgColor = color;
         }
         else if (typeof color === "string") {
-            this.bgColor = new graphiti.util.Color(color);
+            this.bgColor = new draw2d.util.Color(color);
         }
         else {
             this.bgColor = null;
@@ -93,7 +123,7 @@ graphiti.VectorFigure = graphiti.shape.node.Node.extend({
     * @method
     * The current used background color.
     * 
-    * @return {graphiti.util.Color}
+    * @return {draw2d.util.Color}
     */
    getBackgroundColor:function()
    {
@@ -118,7 +148,7 @@ graphiti.VectorFigure = graphiti.shape.node.Node.extend({
     * 
     * @type {Number}
     **/
-   getLineWidth:function( )
+   getStroke:function( )
    {
      return this.stroke;
    },
@@ -128,19 +158,19 @@ graphiti.VectorFigure = graphiti.shape.node.Node.extend({
     * Set the color of the line.
     * This method fires a <i>document dirty</i> event.
     * 
-    * @param {graphiti.util.Color} color The new color of the line.
+    * @param {draw2d.util.Color} color The new color of the line.
     **/
    setColor:function( color)
    {
-     if(color instanceof graphiti.util.Color){
+     if(color instanceof draw2d.util.Color){
          this.color = color;
      }
      else if(typeof color === "string"){
-         this.color = new graphiti.util.Color(color);
+         this.color = new draw2d.util.Color(color);
      }
      else{
          // set good default
-         this.color = new graphiti.util.Color(0,0,0);
+         this.color = new draw2d.util.Color(0,0,0);
      }
      this.repaint();
    },
@@ -149,7 +179,7 @@ graphiti.VectorFigure = graphiti.shape.node.Node.extend({
     * @method
     * The current used forground color
     * 
-    * @returns {graphiti.util.Color}
+    * @returns {draw2d.util.Color}
     */
    getColor:function()
    {

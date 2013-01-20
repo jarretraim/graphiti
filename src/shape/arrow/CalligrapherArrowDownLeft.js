@@ -1,23 +1,26 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.arrow.CalligrapherArrowDownLeft
+ * @class draw2d.shape.arrow.CalligrapherArrowDownLeft
  * Hand drawn arrow which points down left
  * 
  * See the example:
  *
  *     @example preview small frame
  *     
- *     var figure =  new graphiti.shape.arrow.CalligrapherArrowDownLeft();
+ *     var figure =  new draw2d.shape.arrow.CalligrapherArrowDownLeft();
  *     figure.setColor("#3d3d3d");
  *     
  *     canvas.addFigure(figure,10,10);
  *     
  *     
- * @extends graphiti.SVGFigure
+ * @extends draw2d.SVGFigure
  */
-graphiti.shape.arrow.CalligrapherArrowDownLeft = graphiti.SVGFigure.extend({
+draw2d.shape.arrow.CalligrapherArrowDownLeft = draw2d.SVGFigure.extend({
    
-    NAME:"graphiti.shape.arrow.CalligrapherArrowDownLeft",
+    NAME:"draw2d.shape.arrow.CalligrapherArrowDownLeft",
 
     /**
      * @constructor

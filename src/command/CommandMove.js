@@ -1,28 +1,31 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.command.CommandMove
+ * @class draw2d.command.CommandMove
  * 
  * Command for the movement of figures.
  *
  * @inheritable
  * @author Andreas Herz
  * 
- * @extends graphiti.command.Command
+ * @extends draw2d.command.Command
  */
-graphiti.command.CommandMove = graphiti.command.Command.extend({
-    NAME : "graphiti.command.CommandMove", 
+draw2d.command.CommandMove = draw2d.command.Command.extend({
+    NAME : "draw2d.command.CommandMove", 
   
     /**
      * @constructor
      * Create a new Command objects which can be execute via the CommandStack.
      *
-     * @param {graphiti.Figure} figure the figure to move
+     * @param {draw2d.Figure} figure the figure to move
      * @param {Number} [x] the current x position
      * @param {Number} [y] the current y position
      */
     init : function(figure, x, y)
     {
-        this._super("Move Figure");
+        this._super("Figure moved");
         this.figure = figure;
         if (typeof x === "undefined")
         {

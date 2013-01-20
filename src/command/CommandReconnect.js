@@ -1,23 +1,26 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.command.CommandReconnect
+ * @class draw2d.command.CommandReconnect
  * 
- * Reconnects two ports. This command is used during the DragDrop operation of a graphiti.Connection.
+ * Reconnects two ports. This command is used during the DragDrop operation of a draw2d.Connection.
  *
  * @inheritable
  * @author Andreas Herz
  * 
- * @extends graphiti.command.Command
+ * @extends draw2d.command.Command
  */
-graphiti.command.CommandReconnect = graphiti.command.Command.extend({
-    NAME : "graphiti.command.CommandReconnect", 
+draw2d.command.CommandReconnect = draw2d.command.Command.extend({
+    NAME : "draw2d.command.CommandReconnect", 
 
 
     /**
      * @constructor
      * Create a new Command objects which can be execute via the CommandStack.
      *
-     * @param {graphiti.Connection} con the related Connection which is currently in the drag&drop operation
+     * @param {draw2d.Connection} con the related Connection which is currently in the drag&drop operation
      */
     init : function(con){
        this.con      = con;
@@ -45,8 +48,8 @@ graphiti.command.CommandReconnect = graphiti.command.Command.extend({
      * @method
      * The new ports to use during the execute of this command.
      * 
-     * @param {graphiti.Port} source
-     * @param {graphiti.Port} target
+     * @param {draw2d.Port} source
+     * @param {draw2d.Port} target
      */
     setNewPorts:function(source,  target)
     {
@@ -71,11 +74,7 @@ graphiti.command.CommandReconnect = graphiti.command.Command.extend({
      **/
     cancel:function()
     {
-       var start  = this.con.sourceAnchor.getLocation(this.con.targetAnchor.getReferencePoint());
-       var end    = this.con.targetAnchor.getLocation(this.con.sourceAnchor.getReferencePoint());
-       this.con.setStartPoint(start.x,start.y);
-       this.con.setEndPoint(end.x,end.y);
-       this.con.getCanvas().showLineResizeHandles(this.con);
+       this.con.calculatePath();
        this.con.setRouter(this.oldRouter);
     },
     
@@ -89,8 +88,6 @@ graphiti.command.CommandReconnect = graphiti.command.Command.extend({
       this.con.setSource(this.oldSourcePort);
       this.con.setTarget(this.oldTargetPort);
       this.con.setRouter(this.oldRouter);
-      if(this.con.getCanvas().getCurrentSelection()==this.con)
-         this.con.getCanvas().showLineResizeHandles(this.con);
     },
     
     /** 
@@ -103,8 +100,6 @@ graphiti.command.CommandReconnect = graphiti.command.Command.extend({
       this.con.setSource(this.newSourcePort);
       this.con.setTarget(this.newTargetPort);
       this.con.setRouter(this.oldRouter);
-      if(this.con.getCanvas().getCurrentSelection()==this.con)
-         this.con.getCanvas().showLineResizeHandles(this.con);
     }
 
 });

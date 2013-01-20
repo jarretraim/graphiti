@@ -1,16 +1,49 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.layout.connection.DirectRouter
+ * @class draw2d.layout.connection.DirectRouter
  * Router for direct connections between two ports. Beeline
+ * 
+ * See the example:
+ *
+ *     @example preview small frame
+ *     
+ *     // Override the default connection type. This is used during drag&drop operations of ports.
+ *     //
+ *     draw2d.Connection.createConnection=function(sourcePort, targetPort){
+ *        // return my special kind of connection
+ *        var con = new draw2d.Connection();
+ *        con.setRouter(new draw2d.layout.connection.DirectRouter());
+ *        return con;
+ *     };
+ *     
+ *     // create and add two nodes which contains Ports (In and OUT)
+ *     //
+ *     var start = new draw2d.shape.node.Start();
+ *     var end   = new draw2d.shape.node.End();
+        
+ *     // ...add it to the canvas 
+ *     canvas.addFigure( start, 50,50);
+ *     canvas.addFigure( end, 230,80);
+ *          
+ *     // first Connection
+ *     //
+ *     var c = draw2d.Connection.createConnection();
+ *     c.setSource(start.getOutputPort(0));
+ *     c.setTarget(end.getInputPort(0));
+ *     canvas.addFigure(c);
+ * 
  * 
  * @inheritable
  * @author Andreas Herz
  * 
- * @extends  graphiti.layout.connection.ConnectionRouter
+ * @extends  draw2d.layout.connection.ConnectionRouter
  */
-graphiti.layout.connection.DirectRouter = graphiti.layout.connection.ConnectionRouter.extend({
+draw2d.layout.connection.DirectRouter = draw2d.layout.connection.ConnectionRouter.extend({
 
-    NAME : "graphiti.layout.connection.DirectRouter",
+    NAME : "draw2d.layout.connection.DirectRouter",
 
     /**
 	 * @constructor 
@@ -32,7 +65,7 @@ graphiti.layout.connection.DirectRouter = graphiti.layout.connection.ConnectionR
      * @method
      * Routes the Connection in air line (beeline).
      * 
-     * @param {graphiti.Connection} connection The Connection to route
+     * @param {draw2d.Connection} connection The Connection to route
      */
     route:function( connection)
     {

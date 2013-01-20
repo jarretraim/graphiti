@@ -1,24 +1,23 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.ConnectionAnchor
- *  An object to which a {@link graphiti.Connection} will be anchored.
+ * @class draw2d.layout.anchor.ConnectionAnchor
+ *  An object to which a {@link draw2d.Connection} will be anchored.
  *  
  * @inheritable
  * @author Andreas Herz
  */
-graphiti.ConnectionAnchor = Class.extend({
-    NAME : "graphiti.ConnectionAnchor",
+draw2d.layout.anchor.ConnectionAnchor = Class.extend({
+    NAME : "draw2d.layout.anchor.ConnectionAnchor",
 
     /**
      * @constructor
      * 
-     * @param {graphiti.Figure} owner the figure to use for the anchor calculation 
+     * @param {draw2d.Figure} [owner] the figure to use for the anchor calculation 
      */
     init:function(owner){
-    	if(typeof owner ==="undefined"){
-    		throw "Missing parameter for 'owner' in ConnectionAnchor";
-    	}
-    	
         this.owner = owner;
     },
 
@@ -32,7 +31,7 @@ graphiti.ConnectionAnchor = Class.extend({
      */
     getLocation:function(reference)
     {
-       // return the center of the owner.
+       // return the center of the owner/port.
        return this.getReferencePoint();
     },
     
@@ -40,7 +39,7 @@ graphiti.ConnectionAnchor = Class.extend({
      * @method
      * Returns the Figure that contains this ConnectionAnchor.
      * 
-     * @return {graphiti.Figure} The Figure that contains this ConnectionAnchor
+     * @return {draw2d.Figure} The Figure that contains this ConnectionAnchor
      */
     getOwner:function()
     {
@@ -51,7 +50,7 @@ graphiti.ConnectionAnchor = Class.extend({
      * @method
      * Set the owner of the Anchor.
      * 
-     * @param {graphiti.Figure} owner the new owner of the anchor locator
+     * @param {draw2d.Figure} owner the new owner of the anchor locator
      */
     setOwner:function( owner)
     {
@@ -66,7 +65,7 @@ graphiti.ConnectionAnchor = Class.extend({
      * Returns the bounds of this Anchor's owner.  Subclasses can override this method
      * to adjust the box. Maybe you return the box of the port parent (the parent figure)
      *
-     * @return {graphiti.geo.Rectangle} The bounds of this Anchor's owner
+     * @return {draw2d.geo.Rectangle} The bounds of this Anchor's owner
      */
     getBox:function()
     {
@@ -78,7 +77,7 @@ graphiti.ConnectionAnchor = Class.extend({
      * Returns the reference point for this anchor in absolute coordinates. This might be used
      * by another anchor to determine its own location.
      * 
-     * @return {graphiti.geo.Point} The reference Point
+     * @return {draw2d.geo.Point} The reference Point
      */
     getReferencePoint:function()
     {

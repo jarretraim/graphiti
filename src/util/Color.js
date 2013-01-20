@@ -1,13 +1,15 @@
-
-/**
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************//**
  * @class
- * Util class to handle colors in the graphiti enviroment.
+ * Util class to handle colors in the draw2d enviroment.
  * 
  *      // Create a new Color with RGB values
- *      var color = new graphiti.util.Color(127,0,0);
+ *      var color = new draw2d.util.Color(127,0,0);
  * 
  *      // of from a hex string
- *      var color2 = new graphiti.util.Color("#f00000");
+ *      var color2 = new draw2d.util.Color("#f00000");
  *     
  *      // Create a little bit darker color 
  *      var darkerColor = color.darker(0.2); // 20% darker
@@ -17,7 +19,7 @@
  *      var fontColor = color.getIdealTextColor();
  *     
  */
-graphiti.util.Color = Class.extend({
+draw2d.util.Color = Class.extend({
 
     /**
      * @constructor
@@ -28,7 +30,7 @@ graphiti.util.Color = Class.extend({
      * @param {Number} blue 
      */
     init: function( red, green, blue) {
-
+    
       if(typeof green == "undefined")
       {
         var rgb = this.hex2rgb(red);
@@ -58,11 +60,14 @@ graphiti.util.Color = Class.extend({
     /**
      * @method
      * Convert the color object into a HTML CSS representation
-     * @return {String} the color in rgb(##,##,##) representation
+     * 
+     * @deprecated
+     * @return {String} the color in #RRGGBB representation
+     * @private
      **/
     getHashStyle:function()
     {
-      return "#"+this.hex();
+      return this.hash();
     },
     
     
@@ -105,13 +110,13 @@ graphiti.util.Color = Class.extend({
      * @method
      * Returns the ideal Text Color. Useful for font color selection by a given background color.
      *
-     * @return {graphiti.util.Color} The <i>ideal</i> inverse color.
+     * @return {draw2d.util.Color} The <i>ideal</i> inverse color.
      **/
     getIdealTextColor:function()
     {
        var nThreshold = 105;
        var bgDelta = (this.red * 0.299) + (this.green * 0.587) + (this.blue * 0.114);
-       return (255 - bgDelta < nThreshold) ? new  graphiti.util.Color(0,0,0) : new  graphiti.util.Color(255,255,255);
+       return (255 - bgDelta < nThreshold) ? new  draw2d.util.Color(0,0,0) : new  draw2d.util.Color(255,255,255);
     },
     
     
@@ -136,6 +141,17 @@ graphiti.util.Color = Class.extend({
       return(this.int2hex(this.red)+this.int2hex(this.green)+this.int2hex(this.blue)); 
     },
     
+    
+    /**
+     * @method
+     * Convert the color object into a HTML CSS representation
+     * @return {String} the color in #RRGGBB representation
+     **/
+    hash:function()
+    {
+        return "#"+this.hex();
+    },
+    
     /**
      * @private
      */
@@ -150,7 +166,7 @@ graphiti.util.Color = Class.extend({
      * Returns a darker color of the given one. The original color is unchanged.
      * 
      * @param {Number} fraction  Darkness fraction between [0..1].
-     * @return{graphiti.util.Color}        Darker color.
+     * @return{draw2d.util.Color}        Darker color.
      */
     darker:function(fraction)
     {
@@ -162,7 +178,7 @@ graphiti.util.Color = Class.extend({
        if (green < 0) green = 0; else if (green > 255) green = 255;
        if (blue  < 0) blue  = 0; else if (blue  > 255) blue  = 255;
     
-       return new graphiti.util.Color(red, green, blue);
+       return new draw2d.util.Color(red, green, blue);
     },
     
     
@@ -171,7 +187,7 @@ graphiti.util.Color = Class.extend({
      * Make a color lighter. The original color is unchanged.
      * 
      * @param {Number} fraction  Darkness fraction between [0..1].
-     * @return {graphiti.util.Color} Lighter color.
+     * @return {draw2d.util.Color} Lighter color.
      */
     lighter:function( fraction)
     {
@@ -183,6 +199,24 @@ graphiti.util.Color = Class.extend({
         if (green < 0) green = 0; else if (green > 255) green = 255;
         if (blue  < 0) blue  = 0; else if (blue  > 255) blue  = 255;
     
-        return new graphiti.util.Color(red, green, blue);
+        return new draw2d.util.Color(red, green, blue);
+    },
+    
+    /**
+     * @method
+     * Return a new color wich is faded to the given color.
+     * @param {draw2d.util.Color} color
+     * @param {Number} pc the fade percentage in [0..1]
+     * @returns {draw2d.util.Color}
+     * 
+     * @since 2.1.0
+     */
+    fadeTo: function(color, pc){
+
+        var r= Math.floor(this.red+(pc*(color.red-this.red)) + .5);
+        var g= Math.floor(this.green+(pc*(color.green-this.green)) + .5);
+        var b= Math.floor(this.blue+(pc*(color.blue-this.blue)) + .5);
+
+        return new draw2d.util.Color(r,g,b);   
     }
 });

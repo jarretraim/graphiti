@@ -1,15 +1,18 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.io.json.Reader
+ * @class draw2d.io.json.Reader
  * Read a JSON data and import them into the canvas. The JSON must be generated with the
- * {@link graphiti.io.json.Writer}.
+ * {@link draw2d.io.json.Writer}.
  * 
- *      // Load a standard graphiti JSON object into the canvas
+ *      // Load a standard draw2d JSON object into the canvas
  *      //
  *      var jsonDocument = 
  *          [
   *           {
- *              "type": "graphiti.shape.basic.Oval",
+ *              "type": "draw2d.shape.basic.Oval",
  *              "id": "5b4c74b0-96d1-1aa3-7eca-bbeaed5fffd7",
  *              "x": 237,
  *              "y": 236,
@@ -17,7 +20,7 @@
  *              "height": 38
  *            },
  *            {
- *              "type": "graphiti.shape.basic.Rectangle",
+ *              "type": "draw2d.shape.basic.Rectangle",
  *              "id": "354fa3b9-a834-0221-2009-abc2d6bd852a",
  *              "x": 225,
  *              "y": 97,
@@ -28,13 +31,13 @@
  *          ];
  *      // unmarshal the JSON document into the canvas
  *      // (load)
- *      var reader = new graphiti.io.json.Reader();
+ *      var reader = new draw2d.io.json.Reader();
  *      reader.unmarshal(canvas, jsonDocument);
  *      
  * 
- * @extends graphiti.io.Reader
+ * @extends draw2d.io.Reader
  */
-graphiti.io.json.Reader = graphiti.io.Reader.extend({
+draw2d.io.json.Reader = draw2d.io.Reader.extend({
     
     init: function(){
         this._super();
@@ -45,7 +48,7 @@ graphiti.io.json.Reader = graphiti.io.Reader.extend({
      * 
      * Restore the canvas from a given JSON object.
      * 
-     * @param {graphiti.Canvas} canvas the canvas to restore
+     * @param {draw2d.Canvas} canvas the canvas to restore
      * @param {Object} document the json object to load.
      */
     unmarshal: function(canvas, json){
@@ -72,5 +75,16 @@ graphiti.io.json.Reader = graphiti.io.Reader.extend({
             o.setPersistentAttributes(element);
             canvas.addFigure(o);
         });
+        
+        // recalculate all crossings and repaint the connections with 
+        // possible crossing decoration
+        canvas.calculateConnectionIntersection();
+        canvas.getLines().each(function(i,line){
+            line.svgPathString=null;
+            line.repaint();
+        });
+        canvas.linesToRepaintAfterDragDrop = canvas.getLines().clone();
+        
+
     }
 });

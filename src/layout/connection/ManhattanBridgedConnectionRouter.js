@@ -1,16 +1,19 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.layout.connection.ManhattanBridgedConnectionRouter
- * Provides a {@link graphiti.Connection} with an orthogonal route between the Connection's source 
+ * @class draw2d.layout.connection.ManhattanBridgedConnectionRouter
+ * Provides a {@link draw2d.Connection} with an orthogonal route between the Connection's source 
  * and target anchors.
  * 
  * @inheritable
  * @author Andreas Herz
  * 
- * @extends  graphiti.layout.connection.ManhattanConnectionRouter
+ * @extends  draw2d.layout.connection.ManhattanConnectionRouter
  */
-graphiti.layout.connection.ManhattanBridgedConnectionRouter = graphiti.layout.connection.ManhattanConnectionRouter.extend({
-    NAME : "graphiti.layout.connection.ManhattanBridgedConnectionRouter",
+draw2d.layout.connection.ManhattanBridgedConnectionRouter = draw2d.layout.connection.ManhattanConnectionRouter.extend({
+    NAME : "draw2d.layout.connection.ManhattanBridgedConnectionRouter",
 
 	BRIDE_HORIZONTAL_LR : " r 0 0 3 -4 7 -4 10 0 13 0 ", // Left to right
     BRIDE_HORIZONTAL_RL : " r 0 0 -3 -4 -7 -4 -10 0 -13 0 ", // right to left
@@ -27,7 +30,7 @@ graphiti.layout.connection.ManhattanBridgedConnectionRouter = graphiti.layout.co
 	 * @method
 	 * Layout the hands over connection in a manhattan like layout
 	 * 
-	 * @param {graphiti.Connection} conn
+	 * @param {draw2d.Connection} conn the connection to layout
 	 */
 	route : function(conn) {
 		var fromPt  = conn.getStartPoint();
@@ -70,8 +73,9 @@ graphiti.layout.connection.ManhattanBridgedConnectionRouter = graphiti.layout.co
 			}
 
 			intersectionForCalc.each(function(ii, interP) {
-				if (graphiti.shape.basic.Line.hit(1, oldP.x, oldP.y, p.x, p.y, interP.x, interP.y) === true) {
+				if (draw2d.shape.basic.Line.hit(1, oldP.x, oldP.y, p.x, p.y, interP.x, interP.y) === true) {
 					// we draw only horizontal bridges. Just a design decision
+					//
 					if (p.y === interP.y) {
 						path.push(" L", parseInt((interP.x - bridgeWidth)), " ", parseInt(interP.y));
 						path.push(bridgeCode);

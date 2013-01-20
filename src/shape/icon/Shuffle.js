@@ -1,21 +1,24 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.icon.Shuffle
+ * @class draw2d.shape.icon.Shuffle
 
  * See the example:
  *
  *     @example preview small frame
  *     
- *     var icon =  new graphiti.shape.icon.Shuffle();
+ *     var icon =  new draw2d.shape.icon.Shuffle();
  *     icon.setDimension(50,50);
  *     canvas.addFigure(icon,50,10);
  *     
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.shape.icon.Icon
+ * @extends draw2d.shape.icon.Icon
  */
-graphiti.shape.icon.Shuffle = graphiti.shape.icon.Icon.extend({
-    NAME : "graphiti.shape.icon.Shuffle",
+draw2d.shape.icon.Shuffle = draw2d.shape.icon.Icon.extend({
+    NAME : "draw2d.shape.icon.Shuffle",
 
     /**
      * 

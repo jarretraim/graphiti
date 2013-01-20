@@ -1,18 +1,21 @@
-/**
- * @class graphiti.layout.locator.Locator
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************//**
+ * @class draw2d.layout.locator.Locator
  * 
  * Controls the location of an IFigure. 
  *
  * @author Andreas Herz
  */
-graphiti.layout.locator.Locator= Class.extend({
-    NAME : "graphiti.layout.locator.Locator",
+draw2d.layout.locator.Locator= Class.extend({
+    NAME : "draw2d.layout.locator.Locator",
    
     /**
      * @constructor
      * Initial Constructor
      * 
-     * @param {graphiti.Figure} [parentShape] the parent or owner of the child 
+     * @param {draw2d.Figure} [parentShape] the parent or owner of the child 
      */
     init:function(parentShape )
     {
@@ -23,10 +26,9 @@ graphiti.layout.locator.Locator= Class.extend({
      * @method
      * Returns the associated owner of the locator
      *
-     * @return {graphiti.Figure}
+     * @return {draw2d.Figure}
      **/
-    getParent:function()
-    {
+    getParent:function(){
        return this.parent;
     },
     
@@ -35,24 +37,22 @@ graphiti.layout.locator.Locator= Class.extend({
      * @method
      * Set the associated owner of the locator
      *
-     * @param {graphiti.Figure} parentShape
+     * @param {draw2d.Figure} parentShape
      **/
-    setParent:function(parentShape)
-    {
+    setParent:function(parentShape){
         this.parent= parentShape;
     },
     
     /**
      * @method
-     * Controls the location of an I{@link graphiti.Figure} 
+     * Controls the location of an I{@link draw2d.Figure} 
      *
      * @param {Number} index child index of the figure
-     * @param {graphiti.Figure} figure the figure to control
+     * @param {draw2d.Figure} figure the figure to control
      * 
      * @template
      **/
-    relocate:function(index, figure)
-    {
+    relocate:function(index, figure){
     	
     }
 });

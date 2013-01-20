@@ -1,13 +1,16 @@
-/**
- * @class graphiti.decoration.connection.Decorator 
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************//**
+ * @class draw2d.decoration.connection.Decorator 
  * 
  * 
  * @inheritable
  * @author Andreas Herz
  */
-graphiti.decoration.connection.Decorator = Class.extend({
+draw2d.decoration.connection.Decorator = Class.extend({
 
-	NAME : "graphiti.decoration.connection.Decorator",
+	NAME : "draw2d.decoration.connection.Decorator",
 
 	/**
 	 * @constructor 
@@ -20,8 +23,8 @@ graphiti.decoration.connection.Decorator = Class.extend({
         if(typeof height === "undefined" || height<1)
           this.height = 15;
         
-		this.color = new graphiti.util.Color(0, 0, 0);
-		this.backgroundColor = new  graphiti.util.Color(250, 250, 250);
+		this.color = new draw2d.util.Color(0, 0, 0);
+		this.backgroundColor = new  draw2d.util.Color(250, 250, 250);
 	},
 
 	/**
@@ -53,7 +56,7 @@ graphiti.decoration.connection.Decorator = Class.extend({
 	 * @method
 	 * Set the stroke color for the decoration
 	 * 
-	 * @param {graphiti.util.Color} c
+	 * @param {draw2d.util.Color} c
 	 */
 	setColor : function(c) {
 		this.color = c;
@@ -63,7 +66,7 @@ graphiti.decoration.connection.Decorator = Class.extend({
 	 * @method
 	 * Set the background color for the decoration
 	 * 
-	 * @param {graphiti.util.Color} c
+	 * @param {draw2d.util.Color} c
 	 */
 	setBackgroundColor : function(c) {
 		this.backgroundColor = c;

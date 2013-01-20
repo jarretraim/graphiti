@@ -1,15 +1,18 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.command.CommandStackEvent
+ * @class draw2d.command.CommandStackEvent
  * Event class which will be fired for every CommandStack operation. Required for CommandStackListener.
  */
-graphiti.command.CommandStackEvent = Class.extend({
-    NAME : "graphiti.command.CommandStackEvent", 
+draw2d.command.CommandStackEvent = Class.extend({
+    NAME : "draw2d.command.CommandStackEvent", 
 
     /**
      * @constructor
      * Create a new CommandStack objects which can be execute via the CommandStack.
-     * @param {graphiti.command.Command} command the related command
+     * @param {draw2d.command.Command} command the related command
      * @param {Number} details the current state of the command execution
      * 
      */
@@ -25,7 +28,7 @@ graphiti.command.CommandStackEvent = Class.extend({
      * @method
      * Return the corresponding stack of the event.
      * 
-     * @return {graphiti.command.CommandStack}
+     * @return {draw2d.command.CommandStack}
      **/
     getStack:function()
     {
@@ -37,7 +40,7 @@ graphiti.command.CommandStackEvent = Class.extend({
      * @method
      * Returns null or a Command if a command is relevant to the current event.
      * 
-     * @return {graphiti.command.Command}
+     * @return {draw2d.command.Command}
      **/
     getCommand:function()
     {
@@ -47,7 +50,7 @@ graphiti.command.CommandStackEvent = Class.extend({
     /**
      * @method
      * Returns an integer identifying the type of event which has occurred.
-     * Defined by {@link graphiti.command.CommandStack}.
+     * Defined by {@link draw2d.command.CommandStack}.
      * 
      * @return {Number}
      **/
@@ -55,6 +58,7 @@ graphiti.command.CommandStackEvent = Class.extend({
     {
        return this.details;
     },
+    
     
     /**
      * @method
@@ -64,7 +68,7 @@ graphiti.command.CommandStackEvent = Class.extend({
      **/
     isPostChangeEvent:function()
     {
-       return 0 != (this.getDetails() & graphiti.command.CommandStack.POST_MASK);
+       return 0 != (this.getDetails() & draw2d.command.CommandStack.POST_MASK);
     },
     
     /**
@@ -75,6 +79,6 @@ graphiti.command.CommandStackEvent = Class.extend({
      **/
     isPreChangeEvent:function()
     {
-       return 0 != (this.getDetails() & graphiti.command.CommandStack.PRE_MASK);
+       return 0 != (this.getDetails() & draw2d.command.CommandStack.PRE_MASK);
     }
 });

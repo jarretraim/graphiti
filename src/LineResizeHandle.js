@@ -1,38 +1,69 @@
-/**
- * @class graphiti.shape.basic.LineResizeHandle
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************//**
+ * @class draw2d.shape.basic.LineResizeHandle
  * Base class for selection handle for connections and normal lines.
  * 
  *
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.shape.basic.Circle
+ * @extends draw2d.shape.basic.Circle
  */
-graphiti.shape.basic.LineResizeHandle = graphiti.shape.basic.Circle.extend({
-    NAME : "graphiti.shape.basic.LineResizeHandle",
+draw2d.shape.basic.LineResizeHandle = draw2d.shape.basic.Circle.extend({
+    NAME : "draw2d.shape.basic.LineResizeHandle",
 
-    init : function(type)
+    init : function(figure)
     {
         this._super();
-
-        if (graphiti.isTouchDevice) {
+        this.owner = figure;
+        // required in the SelectionEditPolicy to indicate the type of figure
+        // which the user clicks
+        this.isResizeHandle=true;
+         
+        if (draw2d.isTouchDevice) {
             this.setDimension(20, 20);
         }
         else {
             this.setDimension(10, 10);
         }
 
-        this.setBackgroundColor(new graphiti.util.Color(0, 255, 0));
-        this.currentTarget = null;
-
+        this.setBackgroundColor("#00bdee");
+        this.setColor("#7A7A7A");
+        this.setStroke(1);
         this.setSelectable(false);
+    //    this.setRadius(0);
+
+        this.currentTarget = null;
     },
 
+    /**
+     * @method
+     *
+     * @param asPrimarySelection
+     * @private
+     */
+    select: function(asPrimarySelection){
+        // it is not possible to select a resize handle. This makes no sense
+        // return silently without any action
+    },
+    
+    /**
+     * @method
+     * 
+     * @private
+     */
+    unselect: function(){
+        // it is not possible to unselect a resize handle. This makes no sense
+        // return silently without any action
+    },
+    
     /**
      * @method
      * Return the port below the ResizeHandle.
      * 
      * @template
-     * @return {graphiti.Port}
+     * @return {draw2d.Port}
      */
     getRelatedPort:function()
     {
@@ -40,6 +71,19 @@ graphiti.shape.basic.LineResizeHandle = graphiti.shape.basic.Circle.extend({
     },
     
 
+    /**
+     * @method
+     * Return the port of the other side of the related connection.
+     * 
+     * @template
+     * @return {draw2d.Port}
+     */
+    getOppositePort:function()
+    {
+      return null;
+    },
+    
+    
     /**
      * @method
      * Trigger the repaint of the element
@@ -56,9 +100,15 @@ graphiti.shape.basic.LineResizeHandle = graphiti.shape.basic.Circle.extend({
             attributes= {};
         }
         
+        if(this.getAlpha()<0.9){
+            attributes.fill="#b4e391";
+        }
+        else{
+            attributes.fill="r(.4,.3)#b4e391-#61c419:60-#299a0b";
+        }
+        
         // a port did have the 0/0 coordinate i the center and not in the top/left corner
         //
-       attributes.fill="r(.4,.3)#b4e391-#61c419:60-#299a0b";
         
        this._super(attributes);
     },
@@ -76,7 +126,7 @@ graphiti.shape.basic.LineResizeHandle = graphiti.shape.basic.Circle.extend({
         this.ox = this.x;
         this.oy = this.y;
 
-        this.command = this.getCanvas().getCurrentSelection().createCommand(new graphiti.command.CommandType(graphiti.command.CommandType.MOVE_BASEPOINT));
+        this.command = this.getCanvas().getCurrentSelection().createCommand(new draw2d.command.CommandType(draw2d.command.CommandType.MOVE_BASEPOINT));
 
         return true;
     },
@@ -94,8 +144,7 @@ graphiti.shape.basic.LineResizeHandle = graphiti.shape.basic.Circle.extend({
     {
         this.setPosition(this.ox + dx, this.oy + dy);
 
-        var port = this.getOppositeSidePort();
-        var isDropTarget = this.currentTarget !== null;
+        var port = this.getOppositePort();
 
         target = port.getDropTarget(this.getX(), this.getY(), null);
 
@@ -104,22 +153,17 @@ graphiti.shape.basic.LineResizeHandle = graphiti.shape.basic.Circle.extend({
 
             if (this.currentTarget !== null) {
                 this.currentTarget.onDragLeave(port);
-                this.getCanvas().getCurrentSelection().setGlow(false);
+                this.currentTarget.setGlow(false);
+//                this.getCanvas().getCurrentSelection().setGlow(false);
             }
 
             if (target !== null) {
-                isDropTarget = target.onDragEnter(port);
-                this.getCanvas().getCurrentSelection().setGlow(isDropTarget);
+                this.currentTarget = target.onDragEnter(port);
+                if(this.currentTarget!==null){
+                    this.currentTarget.setGlow(true);
+                }
+        //        this.getCanvas().getCurrentSelection().setGlow(this.currentTarget!==null);
             }
-        }
-
-        // mark the possible drop target
-        //
-        if (isDropTarget === true) {
-            this.currentTarget = target;
-        }
-        else {
-            this.currentTarget = null;
         }
 
         return true;
@@ -136,13 +180,14 @@ graphiti.shape.basic.LineResizeHandle = graphiti.shape.basic.Circle.extend({
             return false;
         }
   
-        var port = this.getOppositeSidePort();
+        var port = this.getOppositePort();
         if (port !== null) {
             if (this.currentTarget !== null) {
                 
                 this.onDrop(this.currentTarget);
                 this.currentTarget.onDragLeave(port);
-                this.getCanvas().getCurrentSelection().setGlow(false);
+                this.currentTarget.setGlow(false);
+//                this.getCanvas().getCurrentSelection().setGlow(false);
                 this.currentTarget = null;
             }
         }
@@ -150,7 +195,7 @@ graphiti.shape.basic.LineResizeHandle = graphiti.shape.basic.Circle.extend({
         // A Connection is stuck to the corresponding ports. So we must reset the position
         // to the origin port if we doesn't drop the ResizeHandle on a other port.
         //
-        if (this.getCanvas().getCurrentSelection() instanceof graphiti.Connection) {
+        if (this.getCanvas().getCurrentSelection() instanceof draw2d.Connection) {
             if (this.command !== null) {
                 this.command.cancel();
             }
@@ -181,7 +226,7 @@ graphiti.shape.basic.LineResizeHandle = graphiti.shape.basic.Circle.extend({
      **/
     supportsSnapToHelper:function()
     {
-      if(this.getCanvas().getCurrentSelection() instanceof graphiti.Connection){
+      if(this.getCanvas().getCurrentSelection() instanceof draw2d.Connection){
         return false;
       }
         
@@ -193,7 +238,7 @@ graphiti.shape.basic.LineResizeHandle = graphiti.shape.basic.Circle.extend({
      * Show the ResizeHandle and add it to the canvas.<br>
      * Additional bring it in to the front of other figures.
      *
-     * @param {graphiti.Canvas} canvas the canvas to use
+     * @param {draw2d.Canvas} canvas the canvas to use
      * @param {Number} x the x-position
      * @param {Number} y the y-position
      **/
@@ -201,12 +246,10 @@ graphiti.shape.basic.LineResizeHandle = graphiti.shape.basic.Circle.extend({
     {
       // don't call the parent function. The parent functions delete this object
       // and a resize handle can't be deleted.
-      if(this.shape===null) {
-         this.setCanvas(canvas);
-      }
-      
+      this.setCanvas(canvas);
       this.setPosition(x,y);
       this.shape.toFront();
+      this.canvas.resizeHandles.add(this);
     },
     
     /**
@@ -221,7 +264,8 @@ graphiti.shape.basic.LineResizeHandle = graphiti.shape.basic.Circle.extend({
       if(this.shape===null){
         return;
       }
-        
+      
+      this.canvas.resizeHandles.remove(this);
       this.setCanvas(null);
     },
     

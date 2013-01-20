@@ -1,24 +1,27 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.node.End
+ * @class draw2d.shape.node.End
  * A simple Node which has a InputPort. Mainly used for demo and examples.
  * 
  * See the example:
  *
  *     @example preview small frame
  *     
- *     var figure =  new graphiti.shape.node.End();
+ *     var figure =  new draw2d.shape.node.End();
  *     figure.setColor("#3d3d3d");
  *     
  *     canvas.addFigure(figure,50,10);
  *     
- * @extends graphiti.shape.basic.Rectangle
+ * @extends draw2d.shape.basic.Rectangle
  */
-graphiti.shape.node.End = graphiti.shape.basic.Rectangle.extend({
+draw2d.shape.node.End = draw2d.shape.basic.Rectangle.extend({
 
-    NAME : "graphiti.shape.node.End",
+    NAME : "draw2d.shape.node.End",
 
-    DEFAULT_COLOR : new graphiti.util.Color("#4D90FE"),
+    DEFAULT_COLOR : new draw2d.util.Color("#4D90FE"),
 	
     init : function()
     {

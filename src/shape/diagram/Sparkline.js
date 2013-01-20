@@ -1,6 +1,9 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.diagram.Sparkline
+ * @class draw2d.shape.diagram.Sparkline
  * 
  * Small data line diagram.
  * 
@@ -13,14 +16,14 @@
  *       testData.push(Math.floor(Math.random() * 100));
  *     }
  *     
- *     var sparkline = new graphiti.shape.diagram.Sparkline();
+ *     var sparkline = new draw2d.shape.diagram.Sparkline();
  *     sparkline.setData(testData);
  *   
  *     canvas.addFigure( sparkline,100,60);
  *     
- * @extends graphiti.shape.diagram.Diagram
+ * @extends draw2d.shape.diagram.Diagram
  */
-graphiti.shape.diagram.Sparkline = graphiti.shape.diagram.Diagram.extend({
+draw2d.shape.diagram.Sparkline = draw2d.shape.diagram.Diagram.extend({
     
     init: function( width, height){
         this.min = 0;

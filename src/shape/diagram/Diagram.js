@@ -1,11 +1,14 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.diagram.Diagram
+ * @class draw2d.shape.diagram.Diagram
  * Base class for all digrams.
  * 
- * @extends graphiti.SetFigure
+ * @extends draw2d.SetFigure
  */
-graphiti.shape.diagram.Diagram = graphiti.SetFigure.extend({
+draw2d.shape.diagram.Diagram = draw2d.SetFigure.extend({
     
     init: function( width, height){
         
@@ -38,7 +41,7 @@ graphiti.shape.diagram.Diagram = graphiti.SetFigure.extend({
             this.svgNodes = this.createSet();
         }
         
-        this.repaint();
+       this.repaint();
     },
 
     setDimension:function(w,h){
@@ -46,6 +49,7 @@ graphiti.shape.diagram.Diagram = graphiti.SetFigure.extend({
         this._super(w,h);
     },
 
+    
     /**
      * @method
      * Return the calculate width of the set. This calculates the bounding box of all elements.
@@ -84,5 +88,16 @@ graphiti.shape.diagram.Diagram = graphiti.SetFigure.extend({
         }
          
         this._super(attributes);
+    },
+    
+    applyTransformation:function(){
+        if (this.isResizeable()===true) {
+            this.svgNodes.transform("S"+this.scaleX+","+this.scaleY+","+this.getAbsoluteX()+","+this.getAbsoluteY()+ "t"+ this.getAbsoluteX() + "," + this.getAbsoluteY());
+        }
+        else {
+            this.svgNodes.transform("T" + this.getAbsoluteX() + "," + this.getAbsoluteY());
+        }
     }
+    
+
 });

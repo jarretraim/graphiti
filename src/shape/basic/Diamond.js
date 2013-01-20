@@ -1,14 +1,17 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.basic.Diamond
+ * @class draw2d.shape.basic.Diamond
  * A Diamond Figure.
  * 
  * See the example:
  *
  *     @example preview small frame
  *     
- *     var d1 =  new graphiti.shape.basic.Diamond();
- *     var d2 =  new graphiti.shape.basic.Diamond();
+ *     var d1 =  new draw2d.shape.basic.Diamond();
+ *     var d2 =  new draw2d.shape.basic.Diamond();
  *     
  *     canvas.addFigure(d1,10,10);
  *     canvas.addFigure(d2,100,10);
@@ -20,10 +23,10 @@
  *     canvas.setCurrentSelection(d2);
  *     
  * @author Andreas Herz
- * @extends graphiti.VectorFigure
+ * @extends draw2d.VectorFigure
  */
-graphiti.shape.basic.Diamond = graphiti.VectorFigure.extend({
-    NAME : "graphiti.shape.basic.Diamond",
+draw2d.shape.basic.Diamond = draw2d.VectorFigure.extend({
+    NAME : "draw2d.shape.basic.Diamond",
 
     /**
      * @constructor
@@ -33,8 +36,8 @@ graphiti.shape.basic.Diamond = graphiti.VectorFigure.extend({
     init: function( width, height) {
       this._super();
     
-      this.setBackgroundColor( new graphiti.util.Color(100,100,150));
-      this.setColor(new graphiti.util.Color(50,50,50));
+      this.setBackgroundColor("#00a3f6");
+      this.setColor("#1B1B1B");
 
       // set some good defaults
       //

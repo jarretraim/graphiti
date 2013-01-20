@@ -1,35 +1,38 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.analog.ResistorBridge
+ * @class draw2d.shape.analog.ResistorBridge
  * 
  * See the example:
  *
  *     @example preview small frame
  *     
- *     var figure =  new graphiti.shape.analog.ResistorBridge();
+ *     var figure =  new draw2d.shape.analog.ResistorBridge();
  *     canvas.addFigure(figure,10,10);
  *     
  *     
- * @extends graphiti.SVGFigure
+ * @extends draw2d.SVGFigure
  */
-graphiti.shape.analog.ResistorBridge = graphiti.SVGFigure.extend({
+draw2d.shape.analog.ResistorBridge = draw2d.SVGFigure.extend({
 
-    NAME:"graphiti.shape.analog.ResistorBridge",
+    NAME:"draw2d.shape.analog.ResistorBridge",
    
     // custom locator for the special design of the ResistorBridge Input area
-    MyInputPortLocator : graphiti.layout.locator.Locator.extend({
+    MyInputPortLocator : draw2d.layout.locator.PortLocator.extend({
         init:function( ){
           this._super();
         },    
         relocate:function(index, figure){
             var w = figure.getParent().getWidth();
             var h = figure.getParent().getHeight();
-            figure.setPosition(w/2+1, h*index);
+            this.applyConsiderRotation(figure,w/2+1, h*index);
         }
     }),
 
     // custom locator for the special design of the ResistorBridge Input area
-    MyOutputPortLocator : graphiti.layout.locator.Locator.extend({
+    MyOutputPortLocator : draw2d.layout.locator.PortLocator.extend({
         init:function( ){
           this._super();
         },    
@@ -37,7 +40,7 @@ graphiti.shape.analog.ResistorBridge = graphiti.SVGFigure.extend({
             var w = figure.getParent().getWidth();
             var h = figure.getParent().getHeight();
             
-            figure.setPosition(w*(index-2), h/2);
+            this.applyConsiderRotation(figure,w*(index-2), h/2);
         }
     }),
 

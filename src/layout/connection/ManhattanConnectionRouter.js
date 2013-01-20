@@ -1,21 +1,54 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.layout.connection.ManhattanConnectionRouter
- * Provides a {@link graphiti.Connection} with an orthogonal route between the Connection's source 
+ * @class draw2d.layout.connection.ManhattanConnectionRouter
+ * Provides a {@link draw2d.Connection} with an orthogonal route between the Connection's source 
  * and target anchors.
+ * 
+ * See the example:
+ *
+ *     @example preview small frame
+ *     
+ *     // Override the default connection type. This is used during drag&drop operations of ports.
+ *     //
+ *     draw2d.Connection.createConnection=function(sourcePort, targetPort){
+ *        // return my special kind of connection
+ *        var con = new draw2d.Connection();
+ *        con.setRouter(new draw2d.layout.connection.ManhattanConnectionRouter());
+ *        return con;
+ *     };
+ *     
+ *     // create and add two nodes which contains Ports (In and OUT)
+ *     //
+ *     var start = new draw2d.shape.node.Start();
+ *     var end   = new draw2d.shape.node.End();
+        
+ *     // ...add it to the canvas 
+ *     canvas.addFigure( start, 50,50);
+ *     canvas.addFigure( end, 230,80);
+ *          
+ *     // first Connection
+ *     //
+ *     var c = draw2d.Connection.createConnection();
+ *     c.setSource(start.getOutputPort(0));
+ *     c.setTarget(end.getInputPort(0));
+ *     canvas.addFigure(c);
  * 
  * @inheritable
  * @author Andreas Herz
  * 
- * @extends  graphiti.layout.connection.ConnectionRouter
+ * @extends  draw2d.layout.connection.ConnectionRouter
  */
-graphiti.layout.connection.ManhattanConnectionRouter = graphiti.layout.connection.ConnectionRouter.extend({
-    NAME : "graphiti.layout.connection.ManhattanConnectionRouter",
+draw2d.layout.connection.ManhattanConnectionRouter = draw2d.layout.connection.ConnectionRouter.extend({
+    NAME : "draw2d.layout.connection.ManhattanConnectionRouter",
 
 	MINDIST : 20,
 	TOL     : 0.1,
 	TOLxTOL : 0.01,
-
+    TOGGLE_DIST : 5,
+    
 	/**
 	 * @constructor 
 	 * Creates a new Router object.
@@ -28,7 +61,7 @@ graphiti.layout.connection.ManhattanConnectionRouter = graphiti.layout.connectio
 	 * @method
 	 * Layout the hands over connection in a manhattan like layout
 	 * 
-	 * @param {graphiti.Connection} conn
+	 * @param {draw2d.Connection} conn
 	 */
 	route:function( conn)
 	{
@@ -59,10 +92,10 @@ graphiti.layout.connection.ManhattanConnectionRouter = graphiti.layout.connectio
 	 * Internal routing algorithm.
 	 * 
 	 * @private
-	 * @param {graphiti.Connection} conn
-	 * @param {graphiti.geo.Point} fromPt
+	 * @param {draw2d.Connection} conn
+	 * @param {draw2d.geo.Point} fromPt
 	 * @param {Number} fromDir
-	 * @param {graphiti.geo.Point} toPt
+	 * @param {draw2d.geo.Point} toPt
 	 * @param {Number} toDir
 	 */
 	_route:function( conn, fromPt, fromDir, toPt, toDir)
@@ -82,7 +115,7 @@ graphiti.layout.connection.ManhattanConnectionRouter = graphiti.layout.connectio
 	
 	   if (((xDiff * xDiff) < (this.TOLxTOL)) && ((yDiff * yDiff) < (this.TOLxTOL))) 
 	   {
-	      conn.addPoint(new graphiti.geo.Point(toPt.x, toPt.y));
+	      conn.addPoint(new draw2d.geo.Point(toPt.x, toPt.y));
 	      return;
 	   }
 	
@@ -97,20 +130,20 @@ graphiti.layout.connection.ManhattanConnectionRouter = graphiti.layout.connectio
 	      {
 	         if (xDiff < 0) 
 	         {
-	            point = new graphiti.geo.Point(fromPt.x - this.MINDIST, fromPt.y);
+	            point = new draw2d.geo.Point(fromPt.x - this.MINDIST, fromPt.y);
 	         }
 	         else if (((yDiff > 0) && (toDir === DOWN)) || ((yDiff < 0) && (toDir === UP))) 
 	         {
-	            point = new graphiti.geo.Point(toPt.x, fromPt.y);
+	            point = new draw2d.geo.Point(toPt.x, fromPt.y);
 	         }
 	         else if (fromDir == toDir)
 	         {
 	            var pos = Math.min(fromPt.x, toPt.x) - this.MINDIST;
-	            point = new graphiti.geo.Point(pos, fromPt.y);
+	            point = new draw2d.geo.Point(pos, fromPt.y);
 	         }
 	         else
 	         {
-	            point = new graphiti.geo.Point(fromPt.x - (xDiff / 2), fromPt.y);
+	            point = new draw2d.geo.Point(fromPt.x - (xDiff / 2), fromPt.y);
 	         }
 	
 	         if (yDiff > 0) 
@@ -134,20 +167,20 @@ graphiti.layout.connection.ManhattanConnectionRouter = graphiti.layout.connectio
 	      {
 	         if (xDiff > 0) 
 	         {
-	           point = new graphiti.geo.Point(fromPt.x + this.MINDIST, fromPt.y);
+	           point = new draw2d.geo.Point(fromPt.x + this.MINDIST, fromPt.y);
 	         } 
 	         else if (((yDiff > 0) && (toDir === DOWN)) || ((yDiff < 0) && (toDir === UP))) 
 	         {
-	            point = new graphiti.geo.Point(toPt.x, fromPt.y);
+	            point = new draw2d.geo.Point(toPt.x, fromPt.y);
 	         } 
 	         else if (fromDir === toDir) 
 	         {
 	            var pos = Math.max(fromPt.x, toPt.x) + this.MINDIST;
-	            point = new graphiti.geo.Point(pos, fromPt.y);
+	            point = new draw2d.geo.Point(pos, fromPt.y);
 	         } 
 	         else 
 	         {
-	               point = new graphiti.geo.Point(fromPt.x - (xDiff / 2), fromPt.y);
+	               point = new draw2d.geo.Point(fromPt.x - (xDiff / 2), fromPt.y);
 	         }
 	
 	         if (yDiff > 0)
@@ -171,20 +204,20 @@ graphiti.layout.connection.ManhattanConnectionRouter = graphiti.layout.connectio
 	      {
 	         if (yDiff > 0) 
 	         {
-	            point = new graphiti.geo.Point(fromPt.x, fromPt.y + this.MINDIST);
+	            point = new draw2d.geo.Point(fromPt.x, fromPt.y + this.MINDIST);
 	         } 
 	         else if (((xDiff > 0) && (toDir === RIGHT)) || ((xDiff < 0) && (toDir === LEFT))) 
 	         {
-	           point = new graphiti.geo.Point(fromPt.x, toPt.y);
+	           point = new draw2d.geo.Point(fromPt.x, toPt.y);
 	         } 
 	         else if (fromDir === toDir) 
 	         {
 	            var pos = Math.max(fromPt.y, toPt.y) + this.MINDIST;
-	            point = new graphiti.geo.Point(fromPt.x, pos);
+	            point = new draw2d.geo.Point(fromPt.x, pos);
 	         } 
 	         else 
 	         {
-	            point = new graphiti.geo.Point(fromPt.x, fromPt.y - (yDiff / 2));
+	            point = new draw2d.geo.Point(fromPt.x, fromPt.y - (yDiff / 2));
 	         }
 	
 	         if (xDiff > 0) 
@@ -208,20 +241,20 @@ graphiti.layout.connection.ManhattanConnectionRouter = graphiti.layout.connectio
 	      {
 	         if (yDiff < 0) 
 	         {
-	            point = new graphiti.geo.Point(fromPt.x, fromPt.y - this.MINDIST);
+	            point = new draw2d.geo.Point(fromPt.x, fromPt.y - this.MINDIST);
 	         } 
 	         else if (((xDiff > 0) && (toDir === RIGHT)) || ((xDiff < 0) && (toDir === LEFT))) 
 	         {
-	            point = new graphiti.geo.Point(fromPt.x, toPt.y);
+	            point = new draw2d.geo.Point(fromPt.x, toPt.y);
 	         } 
 	         else if (fromDir === toDir) 
 	         {
 	            var pos = Math.min(fromPt.y, toPt.y) - this.MINDIST;
-	            point = new graphiti.geo.Point(fromPt.x, pos);
+	            point = new draw2d.geo.Point(fromPt.x, pos);
 	         } 
 	         else 
 	         {
-	            point = new graphiti.geo.Point(fromPt.x, fromPt.y - (yDiff / 2));
+	            point = new draw2d.geo.Point(fromPt.x, fromPt.y - (yDiff / 2));
 	         }
 	
 	         if (xDiff > 0)

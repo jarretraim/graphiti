@@ -1,12 +1,15 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.io.Writer
+ * @class draw2d.io.Writer
  * Serialize the canvas to an external format. This is only a template/interface class.
  * Inherit classes must implement the export format.
  * 
  * @author Andreas Herz
  */
-graphiti.io.Writer = Class.extend({
+draw2d.io.Writer = Class.extend({
     
     /**
      * @constructor
@@ -22,7 +25,7 @@ graphiti.io.Writer = Class.extend({
      * content specific writer.
      * 
      * @template
-     * @param {graphiti.Canvas} canvas
+     * @param {draw2d.Canvas} canvas
      * @returns {Object}
      */
     marshal: function(canvas){

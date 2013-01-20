@@ -1,10 +1,10 @@
 /**
- * @class graphiti
+ * @class draw2d
  * global namespace declarations
  * 
  * @private
  */
-var graphiti = 
+var draw2d = 
 {
     geo: {
     },
@@ -16,6 +16,7 @@ var graphiti =
     },
     
     util : {
+    	spline: {}
     },
 
     shape : {
@@ -30,6 +31,9 @@ var graphiti =
     },
     
     policy : {
+        canvas:{},
+        port:{},
+        figure:{}
     },
     
     command : {
@@ -41,14 +45,15 @@ var graphiti =
     
     layout: {
         connection :{},
+	    anchor :{},
 	    mesh :{},
 	    locator: {}
     },
     
-    
     ui :{
     	
     },
+    
     
     isTouchDevice : (
             //Detect iPhone
@@ -61,8 +66,11 @@ var graphiti =
     
 };
 
-
-
+// avoid iPad bounce effect during DragDrop
+//
+document.ontouchmove = function(e){e.preventDefault();};
+// hide context menu
+document.oncontextmenu = function() {return false;};
 
 // hacking RaphaelJS to support groups of elements
 //
@@ -159,17 +167,9 @@ var graphiti =
     };
 })();
 
-var _errorStack_=[];
-function pushErrorStack(/*:Exception*/ e, /*:String*/ functionName)
-{
-  _errorStack_.push(functionName+"\n");
-  /*re*/throw e;
-}
-
 
 Math.sign = function()
 {
- if (this < 0) {return -1;};
+ if (this < 0) {return -1;}
  return 1;
 };
-

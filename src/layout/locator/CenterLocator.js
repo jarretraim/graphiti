@@ -1,6 +1,9 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.layout.locator.CenterLocator
+ * @class draw2d.layout.locator.CenterLocator
  * 
  * A CenterLocator is used to place figures in the center of a parent shape.
  *
@@ -12,25 +15,25 @@
  *
  *     // create a basic figure and add a Label/child via API call
  *     //
- *     var circle = new graphiti.shape.basic.Circle(120);
+ *     var circle = new draw2d.shape.basic.Circle(120);
  *     circle.setStroke(3);
  *     circle.setColor("#A63343");
  *     circle.setBackgroundColor("#E65159");
- *     circle.addFigure(new graphiti.shape.basic.Label("Center Label"), new graphiti.layout.locator.CenterLocator(circle));	
+ *     circle.addFigure(new draw2d.shape.basic.Label("Center Label"), new draw2d.layout.locator.CenterLocator(circle));	
  *     canvas.addFigure( circle, 100,50);
  *
  *     
  * @author Andreas Herz
- * @extend graphiti.layout.locator.Locator
+ * @extend draw2d.layout.locator.Locator
  */
-graphiti.layout.locator.CenterLocator= graphiti.layout.locator.Locator.extend({
-    NAME : "graphiti.layout.locator.CenterLocator",
+draw2d.layout.locator.CenterLocator= draw2d.layout.locator.Locator.extend({
+    NAME : "draw2d.layout.locator.CenterLocator",
     
     /**
      * @constructor
      * Constructs a locator with associated parent.
      * 
-     * @param {graphiti.Figure} parent the parent associated with the locator
+     * @param {draw2d.Figure} parent the parent associated with the locator
      */
     init: function(parent)
     {
@@ -43,14 +46,22 @@ graphiti.layout.locator.CenterLocator= graphiti.layout.locator.Locator.extend({
      * Relocates the given Figure.
      *
      * @param {Number} index child index of the target
-     * @param {graphiti.Figure} target The figure to relocate
+     * @param {draw2d.Figure} target The figure to relocate
      **/
     relocate:function(index, target)
     {
        var parent = this.getParent();
        var boundingBox = parent.getBoundingBox();
 
-       var targetBoundingBox = target.getBoundingBox();
-       target.setPosition(boundingBox.w/2-targetBoundingBox.w/2,boundingBox.h/2-(targetBoundingBox.h/2));
+       // TODO: instanceof is always a HACK. ugly. Redirect the call to the figure instead of 
+       // determine the position with a miracle.
+       //
+       if(target instanceof draw2d.shape.basic.Circle){
+           target.setPosition(boundingBox.w/2,boundingBox.h/2);
+       }
+       else{
+           var targetBoundingBox = target.getBoundingBox();
+           target.setPosition(boundingBox.w/2-targetBoundingBox.w/2,boundingBox.h/2-(targetBoundingBox.h/2));
+       }
     }
 });

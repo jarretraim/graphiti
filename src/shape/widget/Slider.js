@@ -1,22 +1,25 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.widget.Slider
+ * @class draw2d.shape.widget.Slider
  * See the example:
  *
  *     @example preview small frame
  *     
- *     var slider = new graphiti.shape.widget.Slider(120,20);
+ *     var slider = new draw2d.shape.widget.Slider(120,20);
  *     canvas.addFigure( slider,100,60);
  * 
- * @extends graphiti.shape.widget.Widget
+ * @extends draw2d.shape.widget.Widget
  */
-graphiti.shape.widget.Slider = graphiti.shape.widget.Widget.extend({
+draw2d.shape.widget.Slider = draw2d.shape.widget.Widget.extend({
     
-    NAME : "graphiti.shape.widget.Slider",
+    NAME : "draw2d.shape.widget.Slider",
     
-    DEFAULT_COLOR_THUMB : new graphiti.util.Color("#bddf69"),
-//    DEFAULT_COLOR_THUMB : new graphiti.util.Color("#54b0d0"),
-    DEFAULT_COLOR_BG : new graphiti.util.Color("#d3d3d3"),
+    DEFAULT_COLOR_THUMB : new draw2d.util.Color("#bddf69"),
+//    DEFAULT_COLOR_THUMB : new draw2d.util.Color("#54b0d0"),
+    DEFAULT_COLOR_BG : new draw2d.util.Color("#d3d3d3"),
     
     
     init: function( width, height){
@@ -27,7 +30,7 @@ graphiti.shape.widget.Slider = graphiti.shape.widget.Widget.extend({
         }
         
         this.currentValue = 0; // [0..100] 
-        this.slideBoundingBox = new graphiti.geo.Rectangle(0,0,10,20);
+        this.slideBoundingBox = new draw2d.geo.Rectangle(0,0,10,20);
 
         this._super( width, height);
         
@@ -124,11 +127,7 @@ graphiti.shape.widget.Slider = graphiti.shape.widget.Widget.extend({
         this.repaint();
         this.onValueChange(this.currentValue);
     },
-    
-    automaticResizeInnerContent:function()
-    {
-      return false;
-    },
+
     
     /**
      * 
@@ -136,7 +135,7 @@ graphiti.shape.widget.Slider = graphiti.shape.widget.Widget.extend({
      */
     repaint: function(attributes){
         
-        if (this.repaintBlocked===true || this.shape === null){
+        if (this.repaintBlocked === true || this.shape === null){
             return;
         }
 
@@ -152,24 +151,26 @@ graphiti.shape.widget.Slider = graphiti.shape.widget.Widget.extend({
 
         // update slider
         //
-        if(this.svgNodes!==null){
-            var attr = this.slideBoundingBox.toJSON();
-             attr.y = attr.y-5;
-             attr.height = attr.height+10;
-             attr.fill= this.getColor().getHashStyle();
-             attr.stroke = this.getColor().darker(0.2).getHashStyle();
-             attr.r = 4;
-            this.svgNodes.attr(attr);
-        }
+		if (this.svgNodes !== null) {
+			var attr = this.slideBoundingBox.toJSON();
+			attr.y = attr.y - 5;
+			attr.height = attr.height + 10;
+			attr.fill = this.getColor().hash();
+			attr.stroke = this.getColor().darker(0.2).hash();
+			attr.r = 4;
+			this.svgNodes.attr(attr);
+		}
  
         
-        attributes.fill= "90-"+this.bgColor.getHashStyle()+":5-"+this.bgColor.lighter(0.3).getHashStyle()+":95";
-        attributes.fill= "90-"+this.bgColor.getHashStyle()+":5-"+this.bgColor.lighter(0.3).getHashStyle()+":95";
-        attributes.stroke = this.bgColor.darker(0.1).getHashStyle();
-
-        this.offsetX = 0;
-        this.offsetY = 0;
+        attributes.fill= "90-"+this.bgColor.hash()+":5-"+this.bgColor.lighter(0.3).hash()+":95";
+        attributes.stroke = this.bgColor.darker(0.1).hash();
 
         this._super(attributes);
-    }
+    },
+    
+    applyTransformation:function(){
+        this.svgNodes.transform("T" + this.getAbsoluteX() + "," + this.getAbsoluteY());
+     }
+     
+
 });

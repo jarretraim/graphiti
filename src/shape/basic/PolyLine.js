@@ -1,16 +1,19 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.basic.PolyLine
+ * @class draw2d.shape.basic.PolyLine
  * 
  * A PolyLine is a line with more than 2 points.
  *
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.shape.basic.Line
+ * @extends draw2d.shape.basic.Line
  */
-graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
+draw2d.shape.basic.PolyLine = draw2d.shape.basic.Line.extend({
     
-	NAME : "graphiti.shape.basic.PolyLine",
+	NAME : "draw2d.shape.basic.PolyLine",
 
 
     /**
@@ -25,17 +28,13 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
       this.oldPoint=null;
     
       // all line segments with start/end as simple object member
-      this.lineSegments = new graphiti.util.ArrayList();
-      this.basePoints = new graphiti.util.ArrayList();
+      this.lineSegments = new draw2d.util.ArrayList();
+      this.basePoints = new draw2d.util.ArrayList();
       
       // all possible brides (line crossings)
-      this.bridges = new graphiti.util.ArrayList();
+      this.bridges = new draw2d.util.ArrayList();
 
       this._super();
-      
-      
-      this.setColor(new  graphiti.util.Color(0,0,115));
-      this.setStroke(1);
     },
     
     /**
@@ -86,8 +85,8 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
         // cleanup the routing cache
         //
         this.oldPoint=null;
-        this.lineSegments = new graphiti.util.ArrayList();
-        this.basePoints = new graphiti.util.ArrayList();
+        this.lineSegments = new draw2d.util.ArrayList();
+        this.basePoints = new draw2d.util.ArrayList();
     
         // Use the internal router
         //
@@ -103,11 +102,11 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
           return;
       }
       
-      if(this.svgPathString===null){
+      if(this.svgPathString===null || this.routingRequired===true){
           this.calculatePath();
       }
       
-      this._super({path:this.svgPathString});
+      this._super({path:this.svgPathString, "stroke-linejoin":"round"});
     },
     
 
@@ -115,21 +114,21 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
      * @method
      * Called by the framework during drag&drop operations.
      * 
-     * @param {graphiti.Figure} draggedFigure The figure which is currently dragging
+     * @param {draw2d.Figure} draggedFigure The figure which is currently dragging
      * 
-     * @return {Boolean} true if this port accepts the dragging port for a drop operation
+     * @return {draw2d.Figure} the figure which should receive the drop event or null if the element didnt want a drop event
      * @template
      **/
     onDragEnter : function( draggedFigure ){
     	this.setGlow(true);
-    	return true;
+    	return this;
     },
  
     /**
      * @method
      * Called if the DragDrop object leaving the current hover figure.
      * 
-     * @param {graphiti.Figure} draggedFigure The figure which is currently dragging
+     * @param {draw2d.Figure} draggedFigure The figure which is currently dragging
      * @template
      **/
     onDragLeave:function( draggedFigure ){
@@ -141,7 +140,7 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
      * @method
      * Returns the fulcrums of the connection
      *
-     * @return {graphiti.util.ArrayList} an graphiti.util.ArrayList of type graphiti.Point
+     * @return {draw2d.util.ArrayList} an draw2d.util.ArrayList of type draw2d.Point
      **/
     getPoints:function()
     {
@@ -152,7 +151,7 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
      * @method
      * Return all line segments of the polyline.
      * 
-     * @returns {graphiti.util.ArrayList}
+     * @returns {draw2d.util.ArrayList}
      */
     getSegments: function(){
         return this.lineSegments;
@@ -165,23 +164,24 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
      * @private
      *
      **/
-    addPoint:function(/*:graphiti.geo.Point*/ p)
+    addPoint:function(/*:draw2d.geo.Point*/ p)
     {
-      p = new graphiti.geo.Point(p.x, p.y);
+      p = new draw2d.geo.Point(p.x, p.y);
       this.basePoints.add(p);
+
       if(this.oldPoint!==null){
         // store the painted line segment for the "mouse selection test"
         // (required for user interaction)
         this.lineSegments.add({start: this.oldPoint, end:p});
       }
-      
+      this.svgPathString=null;
       this.oldPoint = p;
     },
 
     /**
-     * @see graphiti.Figure#onOtherFigureHasMoved
+     * @see draw2d.Figure#onOtherFigureHasMoved
      **/
-    onOtherFigureIsMoving:function(/*:graphiti.Figure*/ figure)
+    onOtherFigureIsMoving:function(/*:draw2d.Figure*/ figure)
     {
       this.repaintBlocked=true;
       this._super(figure);
@@ -205,7 +205,7 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
     {
       for(var i = 0; i< this.lineSegments.getSize();i++){
          var line = this.lineSegments.get(i);
-         if(graphiti.shape.basic.Line.hit(this.corona, line.start.x,line.start.y,line.end.x, line.end.y, px,py)){
+         if(draw2d.shape.basic.Line.hit(this.corona, line.start.x,line.start.y,line.end.x, line.end.y, px,py)){
            return true;
          }
       }
@@ -216,15 +216,15 @@ graphiti.shape.basic.PolyLine = graphiti.shape.basic.Line.extend({
      * @method
      * Returns the Command to perform the specified Request or null.
       *
-     * @param {graphiti.command.CommandType} request describes the Command being requested
-     * @return {graphiti.command.Command}
+     * @param {draw2d.command.CommandType} request describes the Command being requested
+     * @return {draw2d.command.Command}
      **/
     createCommand:function(request) 
     {
  
-      if(request.getPolicy() === graphiti.command.CommandType.DELETE){
+      if(request.getPolicy() === draw2d.command.CommandType.DELETE){
         if(this.isDeleteable()===true){
-          return new graphiti.command.CommandDelete(this);
+          return new draw2d.command.CommandDelete(this);
         }
       }
     

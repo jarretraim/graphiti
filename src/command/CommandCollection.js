@@ -1,6 +1,9 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.command.CommandCollection
+ * @class draw2d.command.CommandCollection
  * 
  * A CommandCollection works a a single command. You can add more than one
  * Command to this CommandCollection and execute/undo them onto the CommandStack as a
@@ -9,10 +12,10 @@
  * @inheritable
  * @author Andreas Herz
  * 
- * @extends graphiti.command.Command
+ * @extends draw2d.command.Command
  */
-graphiti.command.CommandCollection = graphiti.command.Command.extend({
-    NAME : "graphiti.command.CommandCollection", 
+draw2d.command.CommandCollection = draw2d.command.Command.extend({
+    NAME : "draw2d.command.CommandCollection", 
     
     /**
      * @constructor
@@ -23,7 +26,7 @@ graphiti.command.CommandCollection = graphiti.command.Command.extend({
      {
        this._super("Execute Commands");
        
-       this.commands = new graphiti.util.ArrayList();
+       this.commands = new draw2d.util.ArrayList();
     },
     
     
@@ -31,10 +34,10 @@ graphiti.command.CommandCollection = graphiti.command.Command.extend({
      * @method
      * Add a command to the collection.
      * 
-     * @param {graphiti.command.Command} command
+     * @param {draw2d.command.Command} command
      */
     add: function(command){
-    	this.command.add(command);
+    	this.commands.add(command);
     },
     
     /**
@@ -44,9 +47,9 @@ graphiti.command.CommandCollection = graphiti.command.Command.extend({
      **/
     execute:function()
     {
-    	for( var i=0; i< this.commands.getSize();i++){
-    		this.commands.get(i).execute();
-    	}
+    	this.commands.each(function(i,cmd){
+    	    cmd.execute();
+    	});
     },
     
     /**
@@ -56,9 +59,9 @@ graphiti.command.CommandCollection = graphiti.command.Command.extend({
      **/
     redo:function()
     {
-    	for( var i=0; i< this.commands.getSize();i++){
-    		this.commands.get(i).redo();
-    	}
+        this.commands.each(function(i,cmd){
+            cmd.redo();
+        });
     },
     
     /** 
@@ -68,8 +71,8 @@ graphiti.command.CommandCollection = graphiti.command.Command.extend({
      **/
     undo:function()
     {
-    	for( var i=0; i< this.commands.getSize();i++){
-    		this.commands.get(i).undo();
-    	}
+        this.commands.each(function(i,cmd){
+            cmd.undo();
+        });
     }
 });

@@ -1,21 +1,24 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.icon.NoMagnet
+ * @class draw2d.shape.icon.NoMagnet
 
  * See the example:
  *
  *     @example preview small frame
  *     
- *     var icon =  new graphiti.shape.icon.NoMagnet();
+ *     var icon =  new draw2d.shape.icon.NoMagnet();
  *     icon.setDimension(50,50);
  *     canvas.addFigure(icon,50,10);
  *     
  * @inheritable
  * @author Andreas Herz
- * @extends graphiti.shape.icon.Icon
+ * @extends draw2d.shape.icon.Icon
  */
-graphiti.shape.icon.NoMagnet = graphiti.shape.icon.Icon.extend({
-    NAME : "graphiti.shape.icon.NoMagnet",
+draw2d.shape.icon.NoMagnet = draw2d.shape.icon.Icon.extend({
+    NAME : "draw2d.shape.icon.NoMagnet",
 
     /**
      * 

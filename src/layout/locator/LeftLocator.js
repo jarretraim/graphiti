@@ -1,6 +1,9 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.layout.locator.LeftLocator
+ * @class draw2d.layout.locator.LeftLocator
  * 
  * A LeftLocator is used to place figures to the left of a parent shape.
  *
@@ -12,22 +15,22 @@
  *
  *     // create a basic figure and add a Label/child via API call
  *     //
- *     var start = new graphiti.shape.node.Start();
- *     start.addFigure(new graphiti.shape.basic.Label("Left Label"), new graphiti.layout.locator.LeftLocator(start));	
+ *     var start = new draw2d.shape.node.Start();
+ *     start.addFigure(new draw2d.shape.basic.Label("Left Label"), new draw2d.layout.locator.LeftLocator(start));	
  *     canvas.addFigure( start, 100,50);
  *
  *     
  * @author Andreas Herz
- * @extend graphiti.layout.locator.Locator
+ * @extend draw2d.layout.locator.Locator
  */
-graphiti.layout.locator.LeftLocator= graphiti.layout.locator.Locator.extend({
-    NAME : "graphiti.layout.locator.LeftLocator",
+draw2d.layout.locator.LeftLocator= draw2d.layout.locator.Locator.extend({
+    NAME : "draw2d.layout.locator.LeftLocator",
     
     /**
      * @constructor
      * Constructs a locator with associated parent.
      * 
-     * @param {graphiti.Figure} parent the parent associated with the locator
+     * @param {draw2d.Figure} parent the parent associated with the locator
      */
     init: function(parent)
     {
@@ -40,7 +43,7 @@ graphiti.layout.locator.LeftLocator= graphiti.layout.locator.Locator.extend({
      * Relocates the given Figure.
      *
      * @param {Number} index child index of the target
-     * @param {graphiti.Figure} target The figure to relocate
+     * @param {draw2d.Figure} target The figure to relocate
      **/
     relocate:function(index, target)
     {

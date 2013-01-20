@@ -1,19 +1,22 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.command.CommandAdd
+ * @class draw2d.command.CommandAdd
  * 
  * Command to add a figure with CommandStack support.
  * 
- * @extends graphiti.command.Command
+ * @extends draw2d.command.Command
  */
-graphiti.command.CommandAdd = graphiti.command.Command.extend({
+draw2d.command.CommandAdd = draw2d.command.Command.extend({
     
     /**
      * @constructor
      * Create a add command for the given figure.
      * 
-     * @param {graphiti.Canvas} canvas the canvas to use
-     * @param {graphiti.Figure} figure the figure to add
+     * @param {draw2d.Canvas} canvas the canvas to use
+     * @param {draw2d.Figure} figure the figure to add
      */
     init: function(canvas, figure, x,y)
     {

@@ -1,14 +1,49 @@
-/**
- * @class graphiti.decoration.connection.ArrowDecorator
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************//**
+ * @class draw2d.decoration.connection.ArrowDecorator
  * 
+ * See the example:
+ *
+ *     @example preview small frame
+ *     
+ *     // create and add two nodes which contains Ports (In and OUT)
+ *     //
+ *     var start = new draw2d.shape.node.Start();
+ *     var end   = new draw2d.shape.node.End();
+        
+ *     // ...add it to the canvas 
+ *     canvas.addFigure( start, 50,50);
+ *     canvas.addFigure( end, 230,80);
+ *          
+ *     // Create a Connection and connect the Start and End node
+ *     //
+ *     var c = new draw2d.Connection();
+ *     
+ *     // toggle from ManhattenRouter to DirectRouter to show the rotation of decorations
+ *     c.setRouter(new draw2d.layout.connection.DirectRouter());
+ *      
+ *     // Set the endpoint decorations for the connection
+ *     //
+ *     c.setSourceDecorator(new draw2d.decoration.connection.ArrowDecorator());
+ *     c.setTargetDecorator(new draw2d.decoration.connection.ArrowDecorator());   
+ *     // Connect the endpoints with the start and end port
+ *     //
+ *     c.setSource(start.getOutputPort(0));
+ *     c.setTarget(end.getInputPort(0));
+ *           
+ *     // and finally add the connection to the canvas
+ *     canvas.addFigure(c);
+ *     
  * 
  * @inheritable
  * @author Andreas Herz
- * @extend graphiti.decoration.connection.Decorator
+ * @extend draw2d.decoration.connection.Decorator
  */
-graphiti.decoration.connection.ArrowDecorator = graphiti.decoration.connection.Decorator.extend({
+draw2d.decoration.connection.ArrowDecorator = draw2d.decoration.connection.Decorator.extend({
 
-	NAME : "graphiti.decoration.connection.ArrowDecorator",
+	NAME : "draw2d.decoration.connection.ArrowDecorator",
 
 	/**
 	 * @constructor 
@@ -23,7 +58,7 @@ graphiti.decoration.connection.ArrowDecorator = graphiti.decoration.connection.D
 
 	/**
 	 * Draw a filled arrow decoration.
-	 * It's not your work to rotate the arrow. The graphiti do this job for you.
+	 * It's not your work to rotate the arrow. The draw2d do this job for you.
 	 * 
 	 * <pre>
 	 *                        ---+ [length , width/2]
@@ -47,7 +82,7 @@ graphiti.decoration.connection.ArrowDecorator = graphiti.decoration.connection.D
 		st.push(
 	        paper.path(path.join(""))
 		);
-        st.attr({fill:this.backgroundColor.getHashStyle()});
+        st.attr({fill:this.backgroundColor.hash()});
 		return st;
 	}
 });

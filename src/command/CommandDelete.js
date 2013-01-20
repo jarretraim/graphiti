@@ -1,21 +1,24 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.command.CommandDelete
+ * @class draw2d.command.CommandDelete
  * Command to remove a figure with CommandStack support.
  * 
- * @extends graphiti.command.Command
+ * @extends draw2d.command.Command
  */
-graphiti.command.CommandDelete = graphiti.command.Command.extend({
+draw2d.command.CommandDelete = draw2d.command.Command.extend({
     
     /**
      * @constructor
      * Create a delete command for the given figure.
      * 
-     * @param {graphiti.Figure} figure
+     * @param {draw2d.Figure} figure
      */
     init: function( figure)
     {
-       this._super("Delete Figure");
+       this._super("Figure deleted");
        this.parent   = figure.getParent();
        this.figure   = figure;
        this.canvas = figure.getCanvas();
@@ -40,7 +43,7 @@ graphiti.command.CommandDelete = graphiti.command.Command.extend({
     undo:function()
     {
         this.canvas.addFigure(this.figure);
-        if(this.figure instanceof graphiti.Connection)
+        if(this.figure instanceof draw2d.Connection)
            this.figure.reconnect();
     
         this.canvas.setCurrentSelection(this.figure);
@@ -61,9 +64,9 @@ graphiti.command.CommandDelete = graphiti.command.Command.extend({
     redo:function()
     {
         this.canvas.setCurrentSelection(null);
-        if(this.figure instanceof graphiti.shape.node.Node && this.connections===null)
+        if(this.figure instanceof draw2d.shape.node.Node && this.connections===null)
         {
-          this.connections = new graphiti.util.ArrayList();
+          this.connections = new draw2d.util.ArrayList();
           var ports = this.figure.getPorts();
           for(var i=0; i<ports.getSize(); i++)
           {
@@ -86,7 +89,7 @@ graphiti.command.CommandDelete = graphiti.command.Command.extend({
         this.canvas.removeFigure(this.figure);
     
        if(this.connections===null)
-          this.connections = new graphiti.util.ArrayList();
+          this.connections = new draw2d.util.ArrayList();
     
         // remove this figure from the parent 
         //

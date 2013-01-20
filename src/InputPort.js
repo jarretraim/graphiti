@@ -1,13 +1,16 @@
-/**
- * @class graphiti.InputPort
- * A OutputPort is the end anchor for a {@link graphiti.Connection}.
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************//**
+ * @class draw2d.InputPort
+ * A OutputPort is the end anchor for a {@link draw2d.Connection}.
  * 
  * @author Andreas Herz
- * @extend graphiti.Port
+ * @extend draw2d.Port
  */ 
-graphiti.InputPort = graphiti.Port.extend({
+draw2d.InputPort = draw2d.Port.extend({
 
-    NAME : "graphiti.InputPort",
+    NAME : "draw2d.InputPort",
 
     /**
      * @constructor
@@ -21,7 +24,7 @@ graphiti.InputPort = graphiti.Port.extend({
         
         // responsive for the arrangement of the port 
         // calculates the x/y coordinates in relation to the parent node
-        this.locator=new graphiti.layout.locator.InputPortLocator();
+        this.locator=new draw2d.layout.locator.InputPortLocator();
     },
 
     
@@ -31,29 +34,29 @@ graphiti.InputPort = graphiti.Port.extend({
     onDragEnter : function(figure)
     {
         // User drag&drop a normal port
-        if (figure instanceof graphiti.OutputPort) {
+        if (figure instanceof draw2d.OutputPort) {
             return this._super(figure);
         }
         // User drag&drop a normal port
-        if (figure instanceof graphiti.HybridPort) {
+        if (figure instanceof draw2d.HybridPort) {
             return this._super(figure);
         }
         
-        return false;
+        return null;
     },
     
     /**
      * @inheritdoc
      * 
-     * @param {graphiti.Figure} figure
+     * @param {draw2d.Figure} figure
      */
     onDragLeave:function( figure)
     {
-      if(figure instanceof graphiti.OutputPort){
+      if(figure instanceof draw2d.OutputPort){
         this._super( figure);
       }
       
-      else if(figure instanceof graphiti.HybridPort){
+      else if(figure instanceof draw2d.HybridPort){
           this._super( figure);
       }
     },
@@ -65,14 +68,14 @@ graphiti.InputPort = graphiti.Port.extend({
      * Inherited figures can override this method to return the own implementation
      * of the request.<br>
      *
-     * @param {graphiti.command.CommandType} request describes the Command being requested
-     * @return {graphiti.command.Command} null or a valid command
+     * @param {draw2d.command.CommandType} request describes the Command being requested
+     * @return {draw2d.command.Command} null or a valid command
      **/
     createCommand:function( request)
     {
        // Connect request between two ports
        //
-       if(request.getPolicy() ===graphiti.command.CommandType.CONNECT)
+       if(request.getPolicy() ===draw2d.command.CommandType.CONNECT)
        {
          // loopback not supported at the moment
          if(request.source.getParent().getId() === request.target.getParent().getId()){
@@ -80,14 +83,14 @@ graphiti.InputPort = graphiti.Port.extend({
          }
     
          // InputPort can only connect to an OutputPort. InputPort->InputPort make no sense
-         if(request.source instanceof graphiti.OutputPort){
+         if(request.source instanceof draw2d.OutputPort){
             // This is the different to the OutputPort implementation of createCommand
-            return new graphiti.command.CommandConnect(request.canvas,request.source,request.target);
+            return new draw2d.command.CommandConnect(request.canvas,request.source,request.target);
          }
          
-         if(request.source instanceof graphiti.HybridPort){
+         if(request.source instanceof draw2d.HybridPort){
              // This is the different to the OutputPort implementation of createCommand
-             return new graphiti.command.CommandConnect(request.canvas,request.source,request.target);
+             return new draw2d.command.CommandConnect(request.canvas,request.source,request.target);
          }
       
          return null;

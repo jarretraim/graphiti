@@ -1,7 +1,10 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 
 /**
- * @class graphiti.command.CommandType
+ * @class draw2d.command.CommandType
  * 
  * EditPolicies should determine an Figures editing capabilities. 
  * It is possible to implement an Figure such that it handles all editing 
@@ -13,9 +16,9 @@
  * 
  * @author Andreas Herz
  */
-graphiti.command.CommandType = Class.extend({
+draw2d.command.CommandType = Class.extend({
 	
-    NAME : "graphiti.command.CommandType",
+    NAME : "draw2d.command.CommandType",
 
     /**
      * @constructor
@@ -39,10 +42,11 @@ graphiti.command.CommandType = Class.extend({
     }
 });
  
-graphiti.command.CommandType.DELETE         = "DELETE";
-graphiti.command.CommandType.MOVE           = "MOVE";
-graphiti.command.CommandType.CONNECT        = "CONNECT";
-graphiti.command.CommandType.MOVE_BASEPOINT = "MOVE_BASEPOINT";
-graphiti.command.CommandType.RESIZE         = "RESIZE";
+draw2d.command.CommandType.DELETE         = "DELETE";
+draw2d.command.CommandType.MOVE           = "MOVE";
+draw2d.command.CommandType.CONNECT        = "CONNECT";
+draw2d.command.CommandType.MOVE_BASEPOINT = "MOVE_BASEPOINT";
+draw2d.command.CommandType.RESIZE         = "RESIZE";
+draw2d.command.CommandType.RESET          = "RESET";
 
 

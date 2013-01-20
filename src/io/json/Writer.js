@@ -1,13 +1,16 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 
 /**
- * @class graphiti.io.json.Writer
+ * @class draw2d.io.json.Writer
  * Serialize the canvas document into a JSON object which can be read from the corresponding
- * {@link graphiti.io.json.Reader}.
+ * {@link draw2d.io.json.Reader}.
  * 
  *      // Create a JSON writer and convert it into a JSON-String representation.
  *      //
- *      var writer = new graphiti.io.json.Writer();
+ *      var writer = new draw2d.io.json.Writer();
  *      var json = writer.marshal(canvas);
  *      
  *      // convert the json object into string repesentation
@@ -19,9 +22,9 @@
  *
  * 
  * @author Andreas Herz
- * @extends graphiti.io.Writer
+ * @extends draw2d.io.Writer
  */
-graphiti.io.json.Writer = graphiti.io.Writer.extend({
+draw2d.io.json.Writer = draw2d.io.Writer.extend({
     
     init:function(){
         this._super();
@@ -32,7 +35,7 @@ graphiti.io.json.Writer = graphiti.io.Writer.extend({
      * Export the content to the implemented data format. Inherit class implements
      * content specific writer.
      * 
-      * @param {graphiti.Canvas} canvas
+      * @param {draw2d.Canvas} canvas
      * @returns {Object}
      */
     marshal: function(canvas){

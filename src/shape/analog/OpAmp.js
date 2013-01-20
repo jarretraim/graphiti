@@ -1,30 +1,34 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.analog.OpAmp
+ * @class draw2d.shape.analog.OpAmp
  * Hand drawn arrow which points down left
  * 
  * See the example:
  *
  *     @example preview small frame
  *     
- *     var figure =  new graphiti.shape.analog.OpAmp();
+ *     var figure =  new draw2d.shape.analog.OpAmp();
  *     canvas.addFigure(figure,10,10);
  *     
  *     
- * @extends graphiti.SVGFigure
+ * @extends draw2d.SVGFigure
  */
-graphiti.shape.analog.OpAmp = graphiti.SVGFigure.extend({
+draw2d.shape.analog.OpAmp = draw2d.SVGFigure.extend({
 
-    NAME:"graphiti.shape.analog.OpAmp",
+    NAME:"draw2d.shape.analog.OpAmp",
     
-    // custom locator for the special deisgn of the OpAmp Input area
-    MyInputPortLocator : graphiti.layout.locator.Locator.extend({
+    // custom locator for the special design of the OpAmp Input area
+    MyInputPortLocator : draw2d.layout.locator.PortLocator.extend({
         init:function( ){
           this._super();
         },    
-        relocate:function(index, figure){
-            var gap = 19;
-            figure.setPosition(0, (8+gap*index)*figure.getParent().scaleY);
+        relocate:function(index, port){
+        	var parent = port.getParent();
+            var calcY = (8+19*index)*parent.scaleY;
+            this.applyConsiderRotation(port, 0, calcY);
         }
     }),
 
@@ -46,11 +50,11 @@ graphiti.shape.analog.OpAmp = graphiti.SVGFigure.extend({
         
         this.createPort("output");
     },
-    
 
+    
     getSVG: function(){
          return '<svg xmlns="http://www.w3.org/2000/svg" version="1.1">'+
-                 '<path d="m8.2627,0l0,35.36035l31.23926,-17.76025l-31.23926,-17.60011l0,0l0,0.00001zm2.27832,27.36719l4.08105,0m-2.10449,-2.20703l0,4.27979m2.26367,-21.35938l-4.15918,0"  stroke="#010101" fill="#ffffff"/>'+
+                 '<path d="m8.2627,0l0,35.36035l31.23926,-17.76025l-31.23926,-17.60011l0,0l0,0.00001zm2.27832,27.36719l4.08105,0m-2.10449,-2.20703l0,4.27979m2.26367,-21.35938l-4.15918,0"  stroke="#1B1B1B" fill="#ffffff"/>'+
                  '<line x1="0.53516"  y1="8"  x2="8.21191"  y2="8"  stroke="#010101"/>'+
                  '<line x1="39.14941" y1="18" x2="45.81055" y2="18" stroke="#010101" />'+
                  '<line x1="0.53516"  y1="27" x2="8.21191"  y2="27" stroke="#010101" />'+

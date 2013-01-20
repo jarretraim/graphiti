@@ -1,12 +1,15 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.io.Reader
+ * @class draw2d.io.Reader
  * Template class for general import of a document into the canvas.
  * 
  * @author andreas Herz
  */
 
-graphiti.io.Reader = Class.extend({
+draw2d.io.Reader = Class.extend({
     
     /**
      * @constructor
@@ -21,7 +24,7 @@ graphiti.io.Reader = Class.extend({
      * 
      * Restore the canvas from a given String.
      * 
-     * @param {graphiti.Canvas} canvas the canvas to restore
+     * @param {draw2d.Canvas} canvas the canvas to restore
      * @param {Object} document the document to read
      * @template
      */

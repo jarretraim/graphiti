@@ -1,17 +1,20 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.util.UUID
+ * @class draw2d.util.UUID
  * Generates a (pseudo) UUID's
  * 
  *      // a UUID in the format 
  *      // xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (8-4-4-4-12) 
- *      var id = graphiti.util.UUID.create();
+ *      var id = draw2d.util.UUID.create();
  * 
  * @author Andreas Herz
  * @constructor
  * @private
  */
-graphiti.util.UUID=function()
+draw2d.util.UUID=function()
 {
 };
 
@@ -25,7 +28,7 @@ graphiti.util.UUID=function()
  *
  * @returns {String} the  UUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (8-4-4-4-12) 
  **/
-graphiti.util.UUID.create=function()
+draw2d.util.UUID.create=function()
 {
   var segment=function() 
   {

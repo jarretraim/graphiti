@@ -1,23 +1,26 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.basic.Label
+ * @class draw2d.shape.basic.Label
  * Implements a simple text label.
  * 
  * See the example:
  *
  *     @example preview small frame
  *     
- *     var shape =  new graphiti.shape.basic.Label("This is a simple label");
+ *     var shape =  new draw2d.shape.basic.Label("This is a simple label");
  *          
  *     canvas.addFigure(shape,40,10);
  *     
  * @author Andreas Herz
  * 
- * @class graphiti.SetFigure
+ * @class draw2d.SetFigure
  */
-graphiti.shape.basic.Label= graphiti.SetFigure.extend({
+draw2d.shape.basic.Label= draw2d.SetFigure.extend({
 
-	NAME : "graphiti.shape.basic.Label",
+	NAME : "draw2d.shape.basic.Label",
 
     /**
      * @constructor
@@ -39,14 +42,17 @@ graphiti.shape.basic.Label= graphiti.SetFigure.extend({
         // appearance of the shape
         //
         this.fontSize = 12;
-        this.fontColor = new graphiti.util.Color("#080808");
+        //this.fontColor = new graphiti.util.Color("#339BB9");
         this.padding = 4;
         
+        // set the border width
         this.setStroke(1);
         
         // behavior of the shape
         //
         this.editor = null;
+        
+        this.installEditPolicy(new draw2d.policy.figure.AntSelectionFeedbackPolicy());
     },
     
     /** 
@@ -85,7 +91,12 @@ graphiti.shape.basic.Label= graphiti.SetFigure.extend({
         lattr.y = this.getHeight()/2;
         lattr["text-anchor"] = "middle";
         lattr["font-size"] = this.fontSize;
-        lattr.fill = "#" + this.fontColor.hex();
+        //lattr.fill = "#" + this.fontColor.hex();
+
+        if (this.getCssClass()) {
+            lattr["class"] = this.getCssClass;
+        }
+
         this.svgNodes.attr(lattr);
 
         this.offsetX = 0;
@@ -94,6 +105,18 @@ graphiti.shape.basic.Label= graphiti.SetFigure.extend({
         this._super(attributes);
     },
     
+    /**
+     * @private
+     */
+    applyTransformation:function(){
+        this.shape.transform(
+                "R"+
+                this.rotationAngle);
+        this.svgNodes.transform(
+                "R"+
+                this.rotationAngle+
+                "T" + this.getAbsoluteX() + "," + this.getAbsoluteY());
+    },
 
     
     /**
@@ -126,19 +149,19 @@ graphiti.shape.basic.Label= graphiti.SetFigure.extend({
      * @mehod
      * Set the color of the font.
      * 
-     * @param {graphiti.util.Color/String} color The new color of the line.
+     * @param {draw2d.util.Color/String} color The new color of the line.
      **/
     setFontColor:function( color)
     {
-      if(color instanceof graphiti.util.Color){
+      if(color instanceof draw2d.util.Color){
           this.fontColor = color;
       }
       else if(typeof color === "string"){
-          this.fontColor = new graphiti.util.Color(color);
+          this.fontColor = new draw2d.util.Color(color);
       }
       else{
           // set good default
-          this.fontColor = new graphiti.util.Color(0,0,0);
+          this.fontColor = new draw2d.util.Color(0,0,0);
       }
       this.repaint();
     },
@@ -147,7 +170,7 @@ graphiti.shape.basic.Label= graphiti.SetFigure.extend({
      * @method
      * The current used font color
      * 
-     * @returns {graphiti.util.Color}
+     * @returns {draw2d.util.Color}
      */
     getFontColor:function()
     {
@@ -179,11 +202,35 @@ graphiti.shape.basic.Label= graphiti.SetFigure.extend({
     
     /**
      * @method
+     * This value is relevant for the interactive resize of the figure.
+     *
+     * @return {Number} Returns the min. width of this object.
+     */
+    getMinWidth:function()
+    {
+        // the minimum width of a label is always the required width.
+        return this.getWidth();
+    },
+    
+    /**
+     * @method
+     * This value is relevant for the interactive resize of the figure.
+     *
+     * @return {Number} Returns the min. width of this object.
+     */
+    getMinHeight:function()
+    {
+        // the minimum height of a label is always the required height.
+        return this.getHeight();
+    },
+    
+    /**
+     * @method
      * Set an editor for the label. This can be a dialog or inplace editor for the 
      * Text.<br>
      * The editor will be activated if you doubleClick on the label.
      * 
-     * @param {graphiti.ui.LabelEditor} editor
+     * @param {draw2d.ui.LabelEditor} editor
      */
     installEditor: function( editor ){
       this.editor = editor;  
@@ -224,6 +271,16 @@ graphiti.shape.basic.Label= graphiti.SetFigure.extend({
     {
       this.text = text;
       
+      this.fireMoveEvent();
+      
+      // Update the resize handles if the user change the position of the element via an API call.
+      //
+      this.editPolicy.each($.proxy(function(i,e){
+         if(e instanceof draw2d.policy.figure.DragDropEditPolicy){
+             e.moved(this.canvas, this);
+         }
+      },this));
+      
       this.repaint();
     },
     
@@ -238,7 +295,7 @@ graphiti.shape.basic.Label= graphiti.SetFigure.extend({
 		if (this.shape === null) {
 			return 0;
 		}
-		return this.svgNodes.getBBox().width+2*this.padding;
+		return this.svgNodes.getBBox(true).width+2*this.padding;
 	},
     
     /**
@@ -253,8 +310,68 @@ graphiti.shape.basic.Label= graphiti.SetFigure.extend({
         if (this.shape === null) {
             return 0;
         }
-        return this.svgNodes.getBBox().height+2*this.padding;
-    }
+        return this.svgNodes.getBBox(true).height+2*this.padding;
+    },
+
+    hitTest: function(x, y) {
+        // rotate the box with the currectn matrix of the
+        // shape
+        var matrix = this.shape.matrix;
+        var points = this.getBoundingBox().getPoints();
+        points.each(function(i,point){
+            var x = matrix.x(point.x,point.y);
+            var y = matrix.y(point.x,point.y);
+            point.x=x;
+            point.y=y;
+        });
+
+        var polySides=4;
+        var i=0;
+        var j=polySides-1 ;
+        var oddNodes=false;
+
+        for (i=0; i<polySides; i++) {
+            var pi = points.get(i);
+            var pj = points.get(j);
+            if ((pi.y< y && pj.y>=y
+            ||   pj.y< y && pi.y>=y)
+            &&  (pi.x<=x || pj.x<=x)) {
+              if (pi.x+(y-pi.y)/(pj.y-pi.y)*(pj.x-pi.x)<x) {
+                oddNodes=!oddNodes; }}
+            j=i; }
+        return oddNodes; 
+     },
+     
+
+     /**
+      * @method 
+      * Return an objects with all important attributes for XML or JSON serialization
+      * 
+      * @returns {Object}
+      */
+     getPersistentAttributes : function()
+     {
+         var memento = this._super();
+         
+         memento.text = this.text;
+         
+         return memento;
+     },
+     
+     /**
+      * @method 
+      * Read all attributes from the serialized properties and transfer them into the shape.
+      * 
+      * @param {Object} memento
+      * @returns 
+      */
+     setPersistentAttributes : function(memento)
+     {
+         this._super(memento);
+         if(typeof memento.text !=="undefined"){
+             this.setText(memento.text);
+         }
+     }
 
 });
 

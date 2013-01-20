@@ -1,4 +1,7 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 // extending raphael with a polygon function
 Raphael.fn.polygon = function(pointString) {
   var poly  = ['M'],

@@ -1,24 +1,27 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.command.CommandConnect
+ * @class draw2d.command.CommandConnect
  * 
  * Connects two ports with a connection.
  *
  * @inheritable
  * @author Andreas Herz
  * 
- * @extends graphiti.command.Command
+ * @extends draw2d.command.Command
  */
-graphiti.command.CommandConnect = graphiti.command.Command.extend({
-    NAME : "graphiti.command.CommandConnect", 
+draw2d.command.CommandConnect = draw2d.command.Command.extend({
+    NAME : "draw2d.command.CommandConnect", 
     
     /**
      * @constructor
      * Create a new CommandConnect objects which can be execute via the CommandStack.
      *
-     * @param {graphiti.Canvas} canvas the canvas to user
-     * @param {graphiti.Port} source the source port for the connection to create
-     * @param {graphiti.Port} target the target port for the connection to create
+     * @param {draw2d.Canvas} canvas the canvas to user
+     * @param {draw2d.Port} source the source port for the connection to create
+     * @param {draw2d.Port} target the target port for the connection to create
      */
     init : function(canvas, source, target)
      {
@@ -41,8 +44,9 @@ graphiti.command.CommandConnect = graphiti.command.Command.extend({
      **/
     execute:function()
     {
-       if(this.connection===null)
-          this.connection = new graphiti.Connection();
+       if(this.connection===null){
+          this.connection = draw2d.Connection.createConnection(this.source, this.target);
+       }
        this.connection.setSource(this.source);
        this.connection.setTarget(this.target);
        this.canvas.addFigure(this.connection);

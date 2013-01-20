@@ -1,13 +1,16 @@
-/**
- * @class graphiti.HybridPort
- * A HybridPort can work as Input and as Output port in the same way for a {@link graphiti.Connection}.
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************//**
+ * @class draw2d.HybridPort
+ * A HybridPort can work as Input and as Output port in the same way for a {@link draw2d.Connection}.
  * 
  * @author Andreas Herz
- * @extends graphiti.Port
+ * @extends draw2d.Port
  */ 
-graphiti.HybridPort = graphiti.Port.extend({
+draw2d.HybridPort = draw2d.Port.extend({
 
-    NAME : "graphiti.HybridPort",
+    NAME : "draw2d.HybridPort",
 
     /**
      * @constructor
@@ -18,23 +21,27 @@ graphiti.HybridPort = graphiti.Port.extend({
     init : function(name)
     {
         this._super(name);
+
+        // responsive for the arrangement of the port 
+        // calculates the x/y coordinates in relation to the parent node
+        this.locator=new draw2d.layout.locator.InputPortLocator();
     },
 
     
     /**
      * @inheritdoc
      * 
-     * @param {graphiti.Figure} figure The figure which is currently dragging
-     * @return {Boolean} true if this figure accepts the dragging figure for a drop operation
+     * @param {draw2d.Figure} figure The figure which is currently dragging
+     * @return {draw2d.Figure} the figure which should receive the drop event or null if the element didnt want a drop event
      */
     onDragEnter : function(figure)
     {
     	// Accept any kind of port
-        if (figure instanceof graphiti.Port) {
+        if (figure instanceof draw2d.Port) {
             return this._super(figure);
         }
         
-        return false;
+        return null;
     },
     
     /**
@@ -45,12 +52,12 @@ graphiti.HybridPort = graphiti.Port.extend({
     {
 	  // Ports accepts only Ports as DropTarget
 	  //
-	  if(!(figure instanceof graphiti.Port)){
+	  if(!(figure instanceof draw2d.Port)){
 		 return;
 	  }
 
 	  // accept any kind of port
-      if(figure instanceof graphiti.Port){
+      if(figure instanceof draw2d.Port){
         this._super( figure);
       }
       
@@ -59,26 +66,30 @@ graphiti.HybridPort = graphiti.Port.extend({
     /**
      * @inheritdoc
      *
-     * @param {graphiti.command.CommandType} request describes the Command being requested
-     * @return {graphiti.command.Command} null or a valid command
+     * @param {draw2d.command.CommandType} request describes the Command being requested
+     * @return {draw2d.command.Command} null or a valid command
      **/
     createCommand:function(request)
     {
        // Connect request between two ports
        //
-       if(request.getPolicy() === graphiti.command.CommandType.CONNECT) {
+       if(request.getPolicy() === draw2d.command.CommandType.CONNECT) {
            
-         if (request.source instanceof graphiti.InputPort) {
+         if(request.source.getParent().getId() === request.target.getParent().getId()){
+            return null;
+         }    
+
+         if (request.source instanceof draw2d.InputPort) {
             // This is the difference to the InputPort implementation of createCommand.
-            return new graphiti.command.CommandConnect(request.canvas, request.target, request.source);
+            return new draw2d.command.CommandConnect(request.canvas, request.target, request.source);
          }
-         else if (request.source instanceof graphiti.OutputPort) {
+         else if (request.source instanceof draw2d.OutputPort) {
             // This is the different to the OutputPort implementation of createCommand
-            return new graphiti.command.CommandConnect(request.canvas, request.source, request.target);
+            return new draw2d.command.CommandConnect(request.canvas, request.source, request.target);
          }
-         else if (request.source instanceof graphiti.HybridPort) {
+         else if (request.source instanceof draw2d.HybridPort) {
             // This is the different to the OutputPort implementation of createCommand
-            return new graphiti.command.CommandConnect(request.canvas, request.source, request.target);
+            return new draw2d.command.CommandConnect(request.canvas, request.source, request.target);
          }
          
          return null;

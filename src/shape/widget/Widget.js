@@ -1,11 +1,14 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.widget.Widget
+ * @class draw2d.shape.widget.Widget
  * Base class for all diagrams.
  * 
- * @extends graphiti.SetFigure
+ * @extends draw2d.SetFigure
  */
-graphiti.shape.widget.Widget = graphiti.SetFigure.extend({
+draw2d.shape.widget.Widget = draw2d.SetFigure.extend({
     
     init: function( width, height){
         this._super( width, height);

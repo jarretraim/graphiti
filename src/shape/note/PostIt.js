@@ -1,6 +1,9 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.note.PostIt
+ * @class draw2d.shape.note.PostIt
  * 
  * Simple Post-it like figure with text. Can be used for annotations or documentation.
  * 
@@ -8,18 +11,18 @@
  *
  *     @example preview small frame
  *     
- *     var shape =  new graphiti.shape.note.PostIt("This is a simple sticky note");
+ *     var shape =  new draw2d.shape.note.PostIt("This is a simple sticky note");
  *     shape.setColor("#000000");
  *     shape.setPadding(20);
  *          
  *     canvas.addFigure(shape,40,10);
  *     
  * @author Andreas Herz
- * @extends graphiti.shape.basic.Label
+ * @extends draw2d.shape.basic.Label
  */
-graphiti.shape.note.PostIt= graphiti.shape.basic.Label.extend({
+draw2d.shape.note.PostIt= draw2d.shape.basic.Label.extend({
 
-	NAME : "graphiti.shape.note.PostIt",
+	NAME : "draw2d.shape.note.PostIt",
 
     /**
      * @constructor
@@ -32,10 +35,10 @@ graphiti.shape.note.PostIt= graphiti.shape.basic.Label.extend({
         this._super(text);
          
         this.setStroke(1);
-        this.setBackgroundColor("#3d3d3d");
+        this.setBackgroundColor("#5b5b5b");
         this.setColor("#FFFFFF");
-        this.setFontColor("#f0f0f0");
-        this.setFontSize(18);
+        this.setFontColor("#ffffff");
+        this.setFontSize(14);
         this.setPadding(5);
         this.setRadius(5);
        

@@ -1,14 +1,17 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.shape.basic.Rectangle
+ * @class draw2d.shape.basic.Rectangle
  * A Rectangle Figure.
  * 
  * See the example:
  *
  *     @example preview small frame
  *     
- *     var rect1 =  new graphiti.shape.basic.Rectangle();
- *     var rect2 =  new graphiti.shape.basic.Rectangle();
+ *     var rect1 =  new draw2d.shape.basic.Rectangle();
+ *     var rect2 =  new draw2d.shape.basic.Rectangle();
  *     
  *     canvas.addFigure(rect1,10,10);
  *     canvas.addFigure(rect2,100,10);
@@ -21,10 +24,10 @@
  *     canvas.setCurrentSelection(rect2);
  *     
  * @author Andreas Herz
- * @extends graphiti.VectorFigure
+ * @extends draw2d.VectorFigure
  */
-graphiti.shape.basic.Rectangle = graphiti.VectorFigure.extend({
-    NAME : "graphiti.shape.basic.Rectangle",
+draw2d.shape.basic.Rectangle = draw2d.VectorFigure.extend({
+    NAME : "draw2d.shape.basic.Rectangle",
 
     /**
      * @constructor
@@ -34,11 +37,12 @@ graphiti.shape.basic.Rectangle = graphiti.VectorFigure.extend({
     init: function( width, height) {
        // corner radius
        this.radius = 2;
-        
+       this.dasharray = null;//can be one of: [ÒÓ, Ò-Ó, Ò.Ó, Ò-.Ó, Ò-..Ó, Ò. Ó, Ò- Ó, Ò--Ó, Ò- .Ó, Ò--.Ó, Ò--..Ó] 
+       
       this._super();
 
-      this.setBackgroundColor( new graphiti.util.Color(100,100,100));
-      this.setColor(new graphiti.util.Color(50,50,50));
+      this.setBackgroundColor( new draw2d.util.Color(100,100,100));
+      this.setColor("#1B1B1B");
 
       // set some good defaults
       //
@@ -63,10 +67,28 @@ graphiti.shape.basic.Rectangle = graphiti.VectorFigure.extend({
             attributes = {};
         }
 
+        if(this.dasharray!==null){
+            attributes["stroke-dasharray"]=this.dasharray;
+        }
         attributes.width = this.getWidth();
         attributes.height = this.getHeight();
         attributes.r = this.radius;
         this._super(attributes);
+    },
+    
+    /**
+     * @private
+     */
+    applyTransformation:function(){
+        this.shape.transform(
+                "R"+
+                this.rotationAngle);
+        
+        if(this.getRotationAngle()=== 90|| this.getRotationAngle()===270){
+            var ratio = this.getHeight()/this.getWidth();
+            var rs = "...S"+ratio+","+1/ratio+","+(this.getAbsoluteX() +this.getWidth()/2)+","+(this.getAbsoluteY() +this.getHeight()/2);
+            this.shape.transform(rs);
+        }
     },
 
     /**
@@ -76,8 +98,10 @@ graphiti.shape.basic.Rectangle = graphiti.VectorFigure.extend({
      */
     createShapeElement : function()
     {
-       var r = this.canvas.paper.rect(this.getX(),this.getY(),
-                                      this.getWidth(), this.getHeight());
+	   var r = this.canvas.paper.rect(this.getAbsoluteX(),this.getAbsoluteY(),this.getWidth(), this.getHeight());
+
+       //var r = this.canvas.paper.rect(this.getX(),this.getY(),
+       //                               this.getWidth(), this.getHeight());
 
        if (this.getCssClass()) {
         r.node.setAttribute("class", this.getCssClass());
@@ -103,11 +127,20 @@ graphiti.shape.basic.Rectangle = graphiti.VectorFigure.extend({
      * 
      * @return {Number}
      */
-    getRadius:function(){
+    getRadius:function() {
         return this.radius;
     },
     
-    
+    /**
+     * @method
+     * 
+     * experimental only.
+     * @param dash
+     * @private
+     */
+    setDashArray: function(dash){
+        this.dasharray = dash;
+    },
     
     /**
      * @method 
@@ -115,8 +148,7 @@ graphiti.shape.basic.Rectangle = graphiti.VectorFigure.extend({
      * 
      * @returns {Object}
      */
-    getPersistentAttributes : function()
-    {
+    getPersistentAttributes : function(){
         var memento = this._super();
         
         memento.radius = this.radius;
@@ -131,11 +163,11 @@ graphiti.shape.basic.Rectangle = graphiti.VectorFigure.extend({
      * @param {Object} memento
      * @returns 
      */
-    setPersistentAttributes : function(memento)
-    {
+    setPersistentAttributes : function(memento) {
         this._super(memento);
         
-        if(typeof memento.radius ==="number"){
+        if(typeof memento.radius ==="number")
+        {
             this.radius = memento.radius;
         }
     }

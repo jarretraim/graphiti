@@ -1,12 +1,15 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.layout.mesh.ExplodeLayouter
- * Routes a {@link graphiti.Connection}, possibly using a constraint.
+ * @class draw2d.layout.mesh.ExplodeLayouter
+ * Routes a {@link draw2d.Connection}, possibly using a constraint.
  *
  * @author Andreas Herz
- * @extend graphiti.layout.mesh.MeshLayouter
+ * @extend draw2d.layout.mesh.MeshLayouter
  */
-graphiti.layout.mesh.ExplodeLayouter = graphiti.layout.mesh.MeshLayouter.extend({
+draw2d.layout.mesh.ExplodeLayouter = draw2d.layout.mesh.MeshLayouter.extend({
 
 	MIN_MARGIN : 40,
 	
@@ -22,13 +25,13 @@ graphiti.layout.mesh.ExplodeLayouter = graphiti.layout.mesh.MeshLayouter.extend(
      * Return a changes list for an existing mesh/canvas to ensure that the element to insert 
      * did have enough space.
      * 
-     * @param {graphiti.Canvas} canvas the canvas to use for the analytic
-     * @param {graphiti.Figure} figure The figure to add to the exising canvas
+     * @param {draw2d.Canvas} canvas the canvas to use for the analytic
+     * @param {draw2d.Figure} figure The figure to add to the exising canvas
      * @param {Number} x requested x-position for the figure
      * @param {Number} y requested y-position for the figure
      * 
      * 
-     * @return {graphiti.util.ArrayList} a list of changes to apply if the user want to insert he figure.
+     * @return {draw2d.util.ArrayList} a list of changes to apply if the user want to insert he figure.
      */
     add:function( canvas, figureToAdd)
     {
@@ -119,14 +122,14 @@ graphiti.layout.mesh.ExplodeLayouter = graphiti.layout.mesh.MeshLayouter.extend(
 
     	// calculate the adjustment for each figure
     	//
-    	var result = new graphiti.util.ArrayList();
+    	var result = new draw2d.util.ArrayList();
     	for( i=0; i< figures.getSize();i++){
     		figure = figures.get(i);
     		if(figure !== figureToAdd ){
 				oct = this.determineOctant(boundingBox, figure.getBoundingBox());
 				currentOctChanges = changes[oct];
 				if(currentOctChanges.x!==0 || currentOctChanges.y!==0){
-					result.add(new graphiti.layout.mesh.ProposedMeshChange(figure, currentOctChanges.x,currentOctChanges.y));
+					result.add(new draw2d.layout.mesh.ProposedMeshChange(figure, currentOctChanges.x,currentOctChanges.y));
 				}
     		}
     	}

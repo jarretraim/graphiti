@@ -1,15 +1,20 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.Port
- * A Port is the anchor for a {@link graphiti.Connection}. A {@link graphiti.Connection} must have a start and a end Port.
+ * @class draw2d.Port
+ * A port is an object that is used to establish a connection between a node and a {@link draw2d.Connection}. The port can 
+ * be placed anywhere within a node ( see {@link draw2d.layout.locator.PortLocator} for details)
+ * 
  * 
  * @author Andreas Herz
- * @extends graphiti.shape.basic.Circle
+ * @extends draw2d.shape.basic.Circle
  */ 
-graphiti.Port = graphiti.shape.basic.Circle.extend({
-    NAME : "graphiti.Port",
+draw2d.Port = draw2d.shape.basic.Circle.extend({
+    NAME : "draw2d.Port",
 
-    DEFAULT_BORDER_COLOR:new graphiti.util.Color(44, 83, 158),
+    DEFAULT_BORDER_COLOR:new draw2d.util.Color("#1B1B1B"),
     
     /**
      * @constructor
@@ -23,7 +28,7 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
         
         this._super();
         
-        if (graphiti.isTouchDevice) {
+        if (draw2d.isTouchDevice) {
             this.setDimension(25, 25);
         }
         else {
@@ -34,21 +39,20 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
         //
         this.ox = this.x;
         this.oy = this.y;
-        this.originalSnapToGrid = false;
-        this.originalSnapToGrid = false;
         this.coronaWidth = 5; // the corona width for the hitTest method. Usefull during drag&drop of ports. Better SnapTo behaviour.
         this.corona = null; // Circle
-        this.currentTarget = null; // Port
+        
+        // currentTarget can be differ from the currentTargetPort. In this case
+        // we must store booth of them for notifications hoverEnter/hoverLeft
+        this.currentTargetPort = null; // port
+        this.currentTarget = null; // Figure
 
         // visible representation
         //
-        this.setBackgroundColor(new graphiti.util.Color(100, 180, 100));
+        this.setBackgroundColor(new draw2d.util.Color(100, 180, 100));
         this.setStroke(1);
         this.setColor(this.DEFAULT_BORDER_COLOR);
         this.setSelectable(false);
-
-        // set the default css class for the port
-        this.setCssClass("port");
     
         // avoid "undefined" values. This breaks the code on iOS.
         if(typeof name ==="undefined"){
@@ -58,19 +62,79 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
             this.name = name;
         }
         
+        
+        this.connectionAnchor = new draw2d.layout.anchor.ConnectionAnchor(this);
+
         // for dynamic diagrams. A Port can have a value which is set by a connector
         //
         this.value = null; 
+        this.maxFanOut = Number.MAX_VALUE;
+        
+        this.setCanSnapToHelper(false);
+        
+        this.installEditPolicy(new draw2d.policy.port.IntrusivePortsFeedbackPolicy());
     },
 
+    /**
+     * @method
+     * set the maximal possible count of connections for this port
+     * 
+     * @param {Number} count
+     */
+    setMaxFanOut: function(count)
+    {
+        this.maxFanOut = Math.max(1,count);
+    },
+    
+    /**
+     * @method
+     * return the maximal possible connections (in+out) for this port.
+     * 
+     * @returns
+     */
+    getMaxFanOut: function()
+    {
+        return this.maxFanOut;
+    },
+    
+    /**
+     * @method
+     * Set the Anchor for this object. An anchor is responsible for the endpoint calculation
+     * of an connection. just visible representation.
+     *
+     * @param {draw2d.layout.anchor.ConnectionAnchor} [anchor] the new source anchor for the connection
+     **/
+    setConnectionAnchor:function( anchor)
+    {
+        // set some good defaults.
+        if(typeof anchor ==="undefined" || anchor===null)
+        {
+    		anchor = new draw2d.layout.anchor.ConnectionAnchor( );
+    	}
+    	
+        this.connectionAnchor = anchor;
+        this.connectionAnchor.setOwner(this);
+    },
+ 
+    getConnectionAnchorLocation:function(referencePoint)
+    {
+    	return this.connectionAnchor.getLocation(referencePoint);
+    },
+    
+    getConnectionAnchorReferencePoint:function()
+    {
+    	return this.connectionAnchor.getReferencePoint();
+    },
+ 
     /**
      * @method
      * Set the locator/layouter of the port. A locator is responsive for the x/y arrangement of the 
      * port in relation to the parent node.
      * 
-     * @param {graphiti.layout.locator.Locator} locator
+     * @param {draw2d.layout.locator.Locator} locator
      */
-    setLocator: function(locator){
+    setLocator: function(locator)
+    {
         this.locator = locator;
     },
     
@@ -81,7 +145,8 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
      *  
      * @param {Object} value the new value for the port 
      */
-    setValue:function(value){
+    setValue:function(value)
+    {
         this.value = value;
         if(this.getParent()!==null){
            this.getParent().onPortValueChanged(this);
@@ -94,7 +159,8 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
      * 
      * @returns {Object}
      */
-    getValue:function(){
+    getValue:function()
+    {
         return this.value;
     },
     
@@ -103,7 +169,8 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
       * 
       * @param attributes
       */
-     repaint:function(attributes){
+     repaint:function(attributes)
+     {
          if(this.repaintBlocked===true || this.shape===null){
              return;
          }
@@ -116,9 +183,17 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
          //
          attributes.cx = this.getAbsoluteX();
          attributes.cy = this.getAbsoluteY();
-         attributes.rx = this.width/4;
-         attributes.ry = this.width/4;
-         attributes.fill="r(.4,.3)#499bea-#207ce5:60-#207ce5";
+         attributes.rx = this.width/2;
+         attributes.ry = this.width/2;
+         attributes.cursor = "move";
+         
+         if(this.getAlpha()<0.9){
+             attributes.fill="#4f6870";
+         }
+         else{
+//             attributes.fill="r(.4,.3)#499bea-#207ce5:60-#207ce5";
+             attributes.fill = "90-#4f6870-#6d8c91";
+         }
          
          this._super(attributes);
      },
@@ -146,13 +221,13 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
 
     /**
      * @method
-     * Returns a {@link graphiti.util.ArrayList} of {@link graphiti.Connection}s of all related connections to this port.
+     * Returns a {@link draw2d.util.ArrayList} of {@link draw2d.Connection}s of all related connections to this port.
      *
-     * @type {graphiti.util.ArrayList}
+     * @type {draw2d.util.ArrayList}
      **/
     getConnections:function()
     {
-      var result = new graphiti.util.ArrayList();
+      var result = new draw2d.util.ArrayList();
     
       // Return all Connections which are bounded to this port
       // In this case this are all movement listener
@@ -161,7 +236,7 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
       for(var i=0;i<size;i++)
       {
         var target = this.moveListener.get(i);
-        if(target instanceof graphiti.Connection){
+        if(target instanceof draw2d.Connection){
            result.add(target);
         }
       }
@@ -172,7 +247,7 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
     /**
      * @method
      * Set the parent of this port.
-     * Call {@link graphiti.shape.node.Node#addPort} if you want to a port to node. Don't call this method directly.
+     * Call {@link draw2d.shape.node.Node#addPort} if you want to a port to node. Don't call this method directly.
      *
      * @private
      */
@@ -223,17 +298,21 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
      **/
     onDragStart : function()
     {
-        this.originalSnapToGrid = this.parent.getCanvas().getSnapToGrid();
-        this.originalSnapToGeometry = this.parent.getCanvas().getSnapToGeometry();
-        this.parent.getCanvas().setSnapToGrid(false);
-        this.parent.getCanvas().setSnapToGeometry(false);
-
         this.getShapeElement().toFront();
-        // dont't call the super method. This creates a command and this is not necessary for a port
+        // don't call the super method. This creates a command and this is not necessary for a port
         this.ox = this.x;
         this.oy = this.y;
 
-       return true;
+        
+        // notify all installed policies
+        //
+        this.editPolicy.each($.proxy(function(i,e){
+            if(e instanceof draw2d.policy.figure.DragDropEditPolicy){
+                e.onDragStart(this.canvas, this);
+            }
+        },this));
+
+        return true;
     },
     
     /**
@@ -247,21 +326,37 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
       this.isInDragDrop = true;
 
       this._super( dx, dy);
-      
-      this.parent.getCanvas().showConnectionLine(this.ox+this.getParent().getAbsoluteX(), this.oy+this.getParent().getAbsoluteY(), 
-                                                 this.getAbsoluteX(), this.getAbsoluteY());
 
       var target=this.getDropTarget(this.getAbsoluteX(),this.getAbsoluteY(), this);
       // the hovering element has been changed
       if(target!==this.currentTarget){
           if(this.currentTarget!==null){
               this.currentTarget.onDragLeave(this);
+              this.editPolicy.each($.proxy(function(i,e){
+                  if(e instanceof draw2d.policy.port.PortFeedbackPolicy){
+                      e.onHoverLeave(this.canvas, this, this.currentTarget);
+                  }
+              },this));
           }
+          
+          // possible hoverEnter event
+          //
           if(target!==null){
-              target.onDragEnter(this);
+              this.currentTarget= target.onDragEnter(this);
+              if(this.currentTarget!==null){
+            	  this.currentTargetPort = target;
+                  this.editPolicy.each($.proxy(function(i,e){
+                      if(e instanceof draw2d.policy.port.PortFeedbackPolicy){
+                          e.onHoverEnter(this.canvas, this, this.currentTarget);
+                      }
+                  },this));
+              }
           }
+          else{
+        	  this.currentTarget = null;
+          }
+          
       }
-      this.currentTarget=target;         
     },
     
     
@@ -270,13 +365,10 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
      **/
     onDragEnd:function()
     {
-      this.parent.getCanvas().setSnapToGrid(this.originalSnapToGrid );
-      this.parent.getCanvas().setSnapToGeometry( this.originalSnapToGeometry );
-      
       // Don't call the parent implementation. This will create an CommandMove object
       // and store them o the CommandStack for the undo operation. This makes no sense for a
       // port.
-      // graphiti.shape.basic.Rectangle.prototype.onDragEnd.call(this); DON'T call the super implementation!!!
+      // draw2d.shape.basic.Rectangle.prototype.onDragEnd.call(this); DON'T call the super implementation!!!
     
       this.setAlpha(1.0);
     
@@ -284,11 +376,25 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
       //
       this.setPosition(this.ox,this.oy);
     
-      // 2.) Remove the bounding line from the canvas
-      //
-      this.parent.getCanvas().hideConnectionLine();
       this.isInDragDrop =false;
       
+      
+      // notify all installed policies
+      //
+      if(this.currentTarget){
+	      this.editPolicy.each($.proxy(function(i,e){
+	          if(e instanceof draw2d.policy.port.PortFeedbackPolicy){
+	              e.onHoverLeave(this.canvas, this, this.currentTarget);
+	          }
+	      },this));
+      }
+      
+      this.editPolicy.each($.proxy(function(i,e){
+          if(e instanceof draw2d.policy.figure.DragDropEditPolicy){
+              e.onDragEnd(this.canvas, this);
+          }
+      },this));
+
       // Reset the drag&drop flyover information 
       //
       this.currentTarget = null;
@@ -297,70 +403,71 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
     /**
      * @method
      * 
-     * @param {graphiti.Figure} figure The figure which is currently dragging
+     * @param {draw2d.Figure} figure The figure which is currently dragging
      * 
-     * @return {Boolean} true if this port accepts the dragging port for a drop operation
+     * @return {draw2d.Figure} the figure which should receive the drop event or null if the element didnt want a drop event
      * @private
      **/
     onDragEnter : function( draggedFigure )
     {
     	// Ports accepts only Ports as DropTarget
     	//
-    	if(!(draggedFigure instanceof graphiti.Port)){
-    		return false;
+    	if(!(draggedFigure instanceof draw2d.Port)){
+    		return null;
+    	}
+    	
+    	// consider the max possible connections for this port
+    	//
+    	if(this.getConnections().getSize() >= this.maxFanOut){
+    	    return null;
     	}
     	
         // Create a CONNECT Command to determine if we can show a Corona. Only valid
         // dropTarget did have a corona
-        var request = new graphiti.command.CommandType(graphiti.command.CommandType.CONNECT);
+        var request = new draw2d.command.CommandType(draw2d.command.CommandType.CONNECT);
         request.canvas = this.parent.getCanvas();
         request.source = draggedFigure;
         request.target = this;
         var command = this.createCommand(request);
 
         if (command === null) {
-            return false;
+            return null;
         }
 
-        this.parent.getCanvas().connectionLine.setGlow(true);
-        this.setGlow(true);
-        return true;
+        return this;
     },
     
     /**
      * @method
      * 
-     * @param {graphiti.Figure} figure The figure which is currently dragging
+     * @param {draw2d.Figure} figure The figure which is currently dragging
      * @private
      **/
     onDragLeave:function( figure )
     {
 		// Ports accepts only Ports as DropTarget
 		//
-		if(!(figure instanceof graphiti.Port)){
+		if(!(figure instanceof draw2d.Port)){
 			return;
 		}
-		
-        this.parent.getCanvas().connectionLine.setGlow(false);
-        this.setGlow(false);
     },
     
     /**
      * @method
      * Called if the user drop this element onto the dropTarget
      * 
-     * @param {graphiti.Figure} dropTarget The drop target.
+     * @param {draw2d.Figure} dropTarget The drop target.
      * @private
      **/
     onDrop:function(dropTarget)
     {
     	// Ports accepts only Ports as DropTarget
     	//
-    	if(!(dropTarget instanceof graphiti.Port)){
+    	if(!(dropTarget instanceof draw2d.Port)){
     		return;
     	}
  
-    	var request = new graphiti.command.CommandType(graphiti.command.CommandType.CONNECT);
+    	var request = new draw2d.command.CommandType(draw2d.command.CommandType.CONNECT);
         request.canvas = this.parent.getCanvas();
         request.source = dropTarget;
         request.target = this;
@@ -377,7 +484,7 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
      * @method
      * Callback method of the movement of a figure
      * 
-     * @param {graphiti.Figure} figure The figure which has been moved
+     * @param {draw2d.Figure} figure The figure which has been moved
      **/
     onOtherFigureIsMoving:function( figure)
     {
@@ -392,7 +499,7 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
      * @method
      * Return the name of this port.
      *
-     * @see graphiti.shape.node.Node#getPort
+     * @see draw2d.shape.node.Node#getPort
      * @return {String}
      **/
     getName:function()
@@ -404,7 +511,7 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
      * @method
      * Set the name of this port.
      *
-     * @see graphiti.shape.node.Node#getPort
+     * @see draw2d.shape.node.Node#getPort
      * @param {String} name The new name of this port.
      **/
     setName:function( name)
@@ -439,7 +546,7 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
     {
       if(flag===true && this.corona===null)
       {
-    	  this.corona = new graphiti.Corona();
+    	  this.corona = new draw2d.Corona();
     	  this.corona.setDimension(this.getWidth()+(this.getCoronaWidth()*2),this.getWidth()+(this.getCoronaWidth()*2));
           this.corona.setPosition(this.getAbsoluteX()-this.getCoronaWidth()-this.getWidth()/2, this.getAbsoluteY()-this.getCoronaWidth()-this.getHeight()/2);
           
@@ -464,29 +571,30 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
     /**
      * @inheritdoc
      *
-     * @param {graphiti.command.CommandType} request describes the Command being requested
-     * @return {graphiti.command.Command} null or a valid command
+     * @param {draw2d.command.CommandType} request describes the Command being requested
+     * @return {draw2d.command.Command} null or a valid command
      **/
     createCommand:function(request)
     {
        // the port has its own implementation of the CommandMove
        //
-       if(request.getPolicy() ===graphiti.command.CommandType.MOVE)
+       if(request.getPolicy() === draw2d.command.CommandType.MOVE)
        {
          if(!this.isDraggable()){
             return null;
          }
-         return new graphiti.command.CommandMovePort(this);
+         return new draw2d.command.CommandMovePort(this);
        }
+       
        // Connect request between two ports
        //
-       if(request.getPolicy() ===graphiti.command.CommandType.CONNECT)
+       if(request.getPolicy() === draw2d.command.CommandType.CONNECT)
        {
          if(request.source.parent.id === request.target.parent.id){
             return null;
          }
          else{
-            return new graphiti.command.CommandConnect(request.canvas,request.source,request.target);
+            return new draw2d.command.CommandConnect(request.canvas,request.source,request.target);
          }
        }
     
@@ -513,35 +621,55 @@ graphiti.Port = graphiti.shape.basic.Circle.extend({
  
     /**
      * @method 
-     * Return a possible drop target which is under the hands over coordinate.
+     * Return a possible drop target which is under the hands over coordinate. This can be a 
      * 
      * @param {Number} x
      * @param {Number} y
-     * 
-     * @return {graphiti.Figure}
+     * @private
+     * @return {draw2d.Figure}
      */
     getDropTarget: function (x , y, portToIgnore)
     {
       for(var i=0;i<this.targets.getSize();i++)
       {
         var target = this.targets.get(i);
-        if (target.hitTest(x, y)===true && target!==portToIgnore)
+        if (target!==portToIgnore)
         {
-            return target;
+	        if (target.hitTest(x, y)===true)
+	        {
+	            return target;
+	        }
         }
       }
+      
       return null;
+    },
+    
+    /**
+     * @method 
+     * Return a possible drop target which is under the hands over coordinate. This can be a 
+     * 
+     * @param {Number} x
+     * @param {Number} y
+     * @private
+     * @return {draw2d.Figure}
+     */
+    getDropTargets: function ()
+    {
+      return this.targets.clone().grep($.proxy(function(element){
+	    	  return element!==this;
+	      },this));
     }
 });
 
 
 /**
- * @class graphiti.Corona
+ * @class draw2d.Corona
  * Glow effect for ports. Just for internal use.
  * 
- * @extend graphiti.shape.basic.Circle
+ * @extend draw2d.shape.basic.Circle
  */
-graphiti.Corona = graphiti.shape.basic.Circle.extend({
+draw2d.Corona = draw2d.shape.basic.Circle.extend({
 
     /**
      * @constructor
@@ -552,8 +680,8 @@ graphiti.Corona = graphiti.shape.basic.Circle.extend({
     {
         this._super();
         this.setAlpha(0.3);
-        this.setBackgroundColor(new  graphiti.util.Color(178,225,255));
-        this.setColor(new graphiti.util.Color(102,182,252));
+        this.setBackgroundColor(new  draw2d.util.Color(178,225,255));
+        this.setColor(new draw2d.util.Color(102,182,252));
     },
     
     /**

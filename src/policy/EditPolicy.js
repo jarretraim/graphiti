@@ -1,43 +1,50 @@
-
+/*****************************************
+ *   Library is under GPL License (GPL)
+ *   Copyright (c) 2012 Andreas Herz
+ ****************************************/
 /**
- * @class graphiti.policy.EditPolicy
+ * @class draw2d.policy.EditPolicy
  * 
+ * A pluggable contribution implementing a portion of an behavior. 
  *
+ *
+ * EditPolicies should determine an Canvas or figure editing capabilities. It is possible to implement 
+ * an figure such that it handles all editing responsibility. However, it is much more flexible 
+ * and object-oriented to use EditPolicies. Using policies, you can pick and choose the editing 
+ * behavior for an figure/canvas without being bound to its class hierarchy. Code management is easier. 
+ * 
+ * 
+ * This interface is not intended to be implemented by clients. Clients should inherit from {@link draw2d.policy.figure.SelectionFeedbackPolicy}
+ * or {@link draw2d.policy.canvas.SelectionPolicy}. 
+ * 
  * @author Andreas Herz
  */
-graphiti.policy.EditPolicy = Class.extend({
+draw2d.policy.EditPolicy = Class.extend({
 
+    NAME : "draw2d.policy.EditPolicy",
+    
     /**
      * @constructor 
-     * Creates a new Router object
+     * 
      */
     init: function(){
+    },
+
+    /**
+     * @method
+     * Called by the host if the policy has been installed.
+     * 
+     * @param {draw2d.Canvas/draw2d.Figure} host
+     */
+    onInstall: function( host){
     },
     
     /**
      * @method
-     * Return the role of the edit policy
+     * Called by the host if the policy has been uninstalled.
      * 
-     * @template
-     * @return the role of the policy.
+     * @param {draw2d.Canvas/draw2d.Figure} host
      */
-    getRole:function(){
-        
+    onUninstall: function( host){
     }
-    
 });
-
-/**
- * The key used to install a primary drag EditPolicy. 
- */
-graphiti.policy.EditPolicy.Role = 
-        { 
-           // The key used to install a primary drag EditPolicy.
-           PRIMARY_DRAG_ROLE : 0 ,
-           
-           // The key used to install a direct edit EditPolicy. 
-           DIRECT_EDIT_ROLE:1,
-           
-           // The key used to install a selection feedback EditPolicy. 
-           SELECTION_FEEDBACK_ROLE:2
-        };
