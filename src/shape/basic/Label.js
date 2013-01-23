@@ -46,7 +46,7 @@ draw2d.shape.basic.Label= draw2d.SetFigure.extend({
         this.padding = 4;
         
         // set the border width
-        this.setStroke(1);
+        this.setStroke(0);
         
         // behavior of the shape
         //
@@ -85,16 +85,17 @@ draw2d.shape.basic.Label= draw2d.SetFigure.extend({
         
         // style the label
         var lattr = {};
-        lattr.text = this.text;
+        lattr.text = this.text;        
         //lattr.x = this.padding;
         lattr.x = (this.getWidth()) / 2;
         lattr.y = this.getHeight()/2;
         lattr["text-anchor"] = "middle";
+
         lattr["font-size"] = this.fontSize;
-        //lattr.fill = "#" + this.fontColor.hex();
+        lattr.fill = "#" + this.fontColor.hex();
 
         if (this.getCssClass()) {
-            lattr["class"] = this.getCssClass;
+            lattr["class"] = this.getCssClass();
         }
 
         this.svgNodes.attr(lattr);
