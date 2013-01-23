@@ -48,10 +48,15 @@ draw2d.Port = draw2d.shape.basic.Circle.extend({
         this.currentTarget = null; // Figure
 
         // visible representation
-        //
-        this.setBackgroundColor(new draw2d.util.Color(100, 180, 100));
-        this.setStroke(1);
-        this.setColor(this.DEFAULT_BORDER_COLOR);
+        
+        // JDR: Commented out so we can use CSS to style these things
+        //this.setBackgroundColor(new draw2d.util.Color(100, 180, 100));
+        //this.setStroke(1);
+        //this.setColor(this.DEFAULT_BORDER_COLOR);
+
+        // JDR: Set the CSS class so we can hit these through CSS
+        this.setCssClass("port");
+        
         this.setSelectable(false);
     
         // avoid "undefined" values. This breaks the code on iOS.
