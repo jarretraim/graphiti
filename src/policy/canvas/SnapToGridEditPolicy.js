@@ -59,18 +59,22 @@ draw2d.policy.canvas.SnapToGridEditPolicy = draw2d.policy.canvas.SnapToEditPolic
      * @since 2.3.0
      */
     snap: function(canvas, figure, pos){
-        
-        var snapPoint = figure.getSnapToGridAnchor();
 
-        pos.x= pos.x+snapPoint.x;
-        pos.y= pos.y+snapPoint.y;
+        pos.x = Raphael.snapTo(this.GRID_WIDTH, pos.x); 
+        pos.y = Raphael.snapTo(this.GRID_WIDTH, pos.y);
+
+        // JDR - This doesn't seem to work correctly. Shapes don't line up.   
+        // var snapPoint = figure.getSnapToGridAnchor();
+
+        // pos.x= pos.x+snapPoint.x;
+        // pos.y= pos.y+snapPoint.y;
 
        
-        pos.x = this.grid*Math.floor(((pos.x + this.grid/2.0) / this.grid));
-        pos.y = this.grid*Math.floor(((pos.y + this.grid/2.0) / this.grid));
+        // pos.x = this.grid*Math.floor(((pos.x + this.grid/2.0) / this.grid));
+        // pos.y = this.grid*Math.floor(((pos.y + this.grid/2.0) / this.grid));
         
-        pos.x= pos.x-snapPoint.x;
-        pos.y= pos.y-snapPoint.y;
+        // pos.x= pos.x-snapPoint.x;
+        // pos.y= pos.y-snapPoint.y;
         
         return pos;
     },
