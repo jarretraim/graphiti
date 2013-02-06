@@ -48,7 +48,6 @@ draw2d.Canvas = Class.extend(
         this.html = $("#"+canvasId);
         this.initialWidth = this.getWidth();
         this.initialHeight = this.getHeight();
-        console.log( this.initialWidth );
         
         // avoid the "highlighting" in iPad, iPhone if the user tab/touch on the canvas.
         // .... I don't like this.
