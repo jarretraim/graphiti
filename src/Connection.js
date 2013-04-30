@@ -383,7 +383,7 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
             return null;
         }
         
-    	this.setGlow(true);
+//    	this.setGlow(true);
     	
     	return this;
     },
@@ -397,7 +397,7 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
      **/
     onDragLeave:function( draggedFigure )
     {
-    	this.setGlow(false);
+//    	this.setGlow(false);
     },
 
 
@@ -443,6 +443,7 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
     {
       if(this.sourcePort!==null){
         this.sourcePort.detachMoveListener(this);
+        this.sourcePort.onDisconnect(this);
       }
     
       this.sourcePort = port;
@@ -452,6 +453,8 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
       this.routingRequired = true;
       this.fireSourcePortRouteEvent();
       this.sourcePort.attachMoveListener(this);
+      if(this.canvas!==null)
+          this.sourcePort.onConnect(this);
       this.setStartPoint(port.getAbsoluteX(), port.getAbsoluteY());
     },
     
@@ -476,6 +479,7 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
     {
       if(this.targetPort!==null){
         this.targetPort.detachMoveListener(this);
+        this.targetPort.onDisconnect(this);
       }
     
       this.targetPort = port;
@@ -486,6 +490,8 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
       this.routingRequired = true;
       this.fireTargetPortRouteEvent();
       this.targetPort.attachMoveListener(this);
+      if(this.canvas!==null)
+         this.targetPort.onConnect(this);
       this.setEndPoint(port.getAbsoluteX(), port.getAbsoluteY());
     },
     
@@ -519,6 +525,28 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
            this.targetDecoratorNode.remove();
            this.targetDecoratorNode=null;
        }
+       
+       if(this.canvas===null){
+           if(this.sourcePort!==null){
+               this.sourcePort.detachMoveListener(this);
+               this.sourcePort.onDisconnect(this);
+           }
+           if(this.targetPort!==null){
+               this.targetPort.detachMoveListener(this);
+               this.targetPort.onDisconnect(this);
+           }
+       }
+       else{
+           if(this.sourcePort!==null){
+               this.sourcePort.attachMoveListener(this);
+               this.sourcePort.onConnect(this);
+           }
+           if(this.targetPort!==null){
+               this.targetPort.attachMoveListener(this);
+               this.targetPort.onConnect(this);
+           }
+       }
+
     },
 
     /**
@@ -530,6 +558,7 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
      **/
     onOtherFigureIsMoving:function( figure)
     {
+//        console.log(figure);
       if(figure===this.sourcePort){
         this.setStartPoint(this.sourcePort.getAbsoluteX(), this.sourcePort.getAbsoluteY());
       }
@@ -676,13 +705,21 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
     {
         var memento = this._super();
 
+        var parentNode = this.getSource().getParent();
+        while(parentNode.getParent()!==null){
+        	parentNode = parentNode.getParent();
+        }
         memento.source = {
-                  node:this.getSource().getParent().getId(),
+                  node:parentNode.getId(),
                   port: this.getSource().getName()
                 };
         
+        var parentNode = this.getTarget().getParent();
+        while(parentNode.getParent()!==null){
+        	parentNode = parentNode.getParent();
+        }
         memento.target = {
-                  node:this.getTarget().getParent().getId(),
+                  node:parentNode.getId(),
                   port:this.getTarget().getName()
                 };
         

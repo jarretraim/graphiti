@@ -27,6 +27,8 @@ var draw2d =
         diagram:{},
         analog:{},
         icon:{},
+        layout:{},
+        pert:{},
         widget:{}
     },
     

@@ -20,7 +20,7 @@ draw2d.command.CommandAdd = draw2d.command.Command.extend({
      */
     init: function(canvas, figure, x,y)
     {
-       this._super("Delete Figure");
+       this._super("Add Shape");
        this.figure = figure;
        this.canvas = canvas;
        this.x = x;

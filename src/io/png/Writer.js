@@ -35,7 +35,11 @@ draw2d.io.png.Writer = draw2d.io.Writer.extend({
         
         var svg = canvas.getHtmlContainer().html().replace(/>\s+/g, ">").replace(/\s+</g, "<");
 
+        // required for IE9 support. 
+        svg = svg.replace("<svg xmlns=\"http://www.w3.org/2000/svg\"", "<svg");
+
         var canvasDomNode = $('<canvas id="canvas" width="1000px" height="600px"></canvas>');
+
         $('body').append(canvasDomNode);
         canvg('canvas', svg, { ignoreMouse: true, ignoreAnimation: true});
 

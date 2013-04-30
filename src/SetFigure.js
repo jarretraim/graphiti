@@ -63,6 +63,7 @@ draw2d.SetFigure = draw2d.shape.basic.Rectangle.extend({
      **/
     repaint : function(attributes)
     {
+
         // repaint can be blocked during deserialization and if the shape
         // not part of any canvas.
         //
@@ -90,17 +91,18 @@ draw2d.SetFigure = draw2d.shape.basic.Rectangle.extend({
     },
 
 
+
     /**
      * @private
      */
     applyTransformation:function(){
         var s = 
         	"S"+this.scaleX+","+this.scaleY+",0,0 "+
-        	"R"+this.rotationAngle+","+parseInt(this.getWidth()/2)+","+parseInt(this.getHeight()/2)+
+        	"R"+this.rotationAngle+","+((this.getWidth()/2)|0)+","+((this.getHeight()/2)|0)+
         	"T" + this.getAbsoluteX() + "," + this.getAbsoluteY()+
             "";
     	this.svgNodes.transform(s);
-        if(this.getRotationAngle()=== 90|| this.getRotationAngle()===270){
+        if(this.rotationAngle===90 || this.rotationAngle===270){
             var before  = this.svgNodes.getBBox(true);
             var ratio = before.height/before.width;
             var reverseRatio = before.width/before.height;

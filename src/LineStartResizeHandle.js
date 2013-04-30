@@ -26,7 +26,10 @@ draw2d.shape.basic.LineStartResizeHandle = draw2d.shape.basic.LineResizeHandle.e
      */
     getRelatedPort:function()
     {
-       return this.owner.getSource();
+    	if(this.owner instanceof draw2d.Connection)
+    		return this.owner.getSource();
+    	
+    	return null;
     },
     
     /**
@@ -37,7 +40,10 @@ draw2d.shape.basic.LineStartResizeHandle = draw2d.shape.basic.LineResizeHandle.e
      */
     getOppositePort:function()
     {
+    	if(this.owner instanceof draw2d.Connection)
          return this.owner.getTarget();
+    	
+    	return null;
     },
     
     /**
@@ -66,7 +72,7 @@ draw2d.shape.basic.LineStartResizeHandle = draw2d.shape.basic.LineResizeHandle.e
     
     /**
      * @method
-     * Resizehandle has been drop on a InputPort/OutputPort.
+     * Resize handle has been drop on a InputPort/OutputPort.
      * 
      * @param {draw2d.Port} dropTarget
      **/

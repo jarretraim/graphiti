@@ -34,6 +34,7 @@ draw2d.shape.node.VerticalBus = draw2d.shape.node.Hub.extend({
             this.label.setRotationAngle(90);
         }
 
+        this.setConnectionDirStrategy(2);
         this.installEditPolicy(new draw2d.policy.figure.VBusSelectionFeedbackPolicy());
     },
     

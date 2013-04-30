@@ -30,6 +30,11 @@ draw2d.policy.canvas.FadeoutDecorationPolicy = draw2d.policy.canvas.DecorationPo
     onInstall: function(canvas){
         this.canvas = canvas;
         this.timerId = window.setInterval($.proxy(this.onTimer,this), 100);
+        
+        // initial hide all decorations after install of this policy
+        //
+        this.hidePortsCounter=1;
+        this.alpha = 0.1;
     },
     
     onUninstall: function(canvas){
@@ -57,11 +62,11 @@ draw2d.policy.canvas.FadeoutDecorationPolicy = draw2d.policy.canvas.DecorationPo
             },this));
        }
         else if(this.hidePortsCounter>0 && this.alpha!==1.0){
-            this.alpha = Math.min(1,this.alpha+0.1);
+            this.alpha =1;// Math.min(1,this.alpha+0.1);
             this.duringHide = false;
-            this.canvas.getAllPorts().each(function(i,port){
+            this.canvas.getAllPorts().each($.proxy(function(i,port){
                 port.setAlpha(this.alpha);
-            });
+            },this));
             this.canvas.getSelection().getAll().each($.proxy(function(i,figure){
                 figure.selectionHandles.each($.proxy(function(i,handle){
                     handle.setAlpha(this.alpha);

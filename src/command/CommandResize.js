@@ -23,7 +23,7 @@ draw2d.command.CommandResize = draw2d.command.Command.extend({
      */
     init : function(figure, width, height)
     {
-        this._super("Resize Figure");
+        this._super("Resize Shape");
         this.figure = figure;
         
         if (typeof width === "undefined")
@@ -47,8 +47,8 @@ draw2d.command.CommandResize = draw2d.command.Command.extend({
      **/
     setDimension:function( width, height)
     {
-       this.newWidth  = parseInt(width);
-       this.newHeight = parseInt(height);
+       this.newWidth  = width|0;
+       this.newHeight = height|0;
     },
 
     /**

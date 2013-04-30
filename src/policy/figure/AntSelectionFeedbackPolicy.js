@@ -47,6 +47,7 @@ draw2d.policy.figure.AntSelectionFeedbackPolicy = draw2d.policy.figure.Selection
             box.setBackgroundColor(null);
             box.setDashArray("- ");
             box.setColor("#00bdee");
+//            box.setRadius(figure.getRadius());
             box.hide= function(){
                 // IMPORTANT
                 // don't add/remove this rectangle to the canvas resizeHandles. This rect isn't responsible for any hitTest or

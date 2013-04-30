@@ -34,10 +34,10 @@ draw2d.layout.connection.ManhattanBridgedConnectionRouter = draw2d.layout.connec
 	 */
 	route : function(conn) {
 		var fromPt  = conn.getStartPoint();
-		var fromDir = this.getStartDirection(conn);
+		var fromDir = conn.getSource().getConnectionDirection(conn, conn.getTarget());
 
 		var toPt  = conn.getEndPoint();
-		var toDir = this.getEndDirection(conn);
+		var toDir = conn.getTarget().getConnectionDirection(conn, conn.getSource());
 
 		// calculate the lines between the two points.
 		//
@@ -51,9 +51,12 @@ draw2d.layout.connection.ManhattanBridgedConnectionRouter = draw2d.layout.connec
         var intersectionForCalc = intersectionsASC;
 		var i = 0;
 
+		// ATTENTION: we cast all x/y coordinates to int and add 0.5 to avoid subpixel rendering of
+		//            the connection. The 1px or 2px lines look much clearer that before with this technic.
+		//
 		var ps = conn.getPoints();
 		var p = ps.get(0);
-		var path = [ "M", parseInt(p.x), " ", parseInt(p.y) ];
+		var path = [ "M", (p.x|0)+0.5, " ", (p.y|0)+0.5 ];
 		var oldP = p;
 		for (i = 1; i < ps.getSize(); i++) {
 			p = ps.get(i);
@@ -77,14 +80,14 @@ draw2d.layout.connection.ManhattanBridgedConnectionRouter = draw2d.layout.connec
 					// we draw only horizontal bridges. Just a design decision
 					//
 					if (p.y === interP.y) {
-						path.push(" L", parseInt((interP.x - bridgeWidth)), " ", parseInt(interP.y));
+						path.push(" L", ((interP.x - bridgeWidth)|0)+0.5, " ", (interP.y|0)+0.5);
 						path.push(bridgeCode);
 					}
 				}
 
 			});
 
-			path.push(" L", parseInt(p.x), " ", parseInt(p.y));
+			path.push(" L", (p.x|0)+0.5, " ", (p.y|0)+0.5);
 			oldP = p;
 		}
 		conn.svgPathString = path.join("");

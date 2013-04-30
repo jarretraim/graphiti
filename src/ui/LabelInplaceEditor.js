@@ -6,7 +6,23 @@
  * 
  * Inplace editor for draw2d.shape.base.Label 
  * 
-  * @author Andreas Herz
+ *     @example preview small frame
+ *     
+ *     var label =  new draw2d.shape.basic.Label("Double Click on me");
+ *     
+ *     label.installEditor(new draw2d.ui.LabelInplaceEditor({
+ *        // called after the value has been set to the LabelFigure
+ *        onCommit: $.proxy(function(value){
+ *            alert("new value set to:"+value);
+ *        },this),
+ *        // called if the user abort the operation
+ *        onCancel: function(){
+ *        }
+ *     }));
+ *     
+ *     canvas.addFigure(label,50,10);
+ *     
+ * @author Andreas Herz
  * @extends draw2d.ui.LabelEditor
 */
 
@@ -16,8 +32,11 @@ draw2d.ui.LabelInplaceEditor =  draw2d.ui.LabelEditor.extend({
      * @constructor
      * @private
      */
-    init: function(){
+    init: function(listener){
         this._super();
+        
+        // register some default listener and override this with the handover one 
+        this.listener = $.extend({onCommit:function(){}, onCancel:function(){}},listener);
     },
     
     /**
@@ -102,6 +121,7 @@ draw2d.ui.LabelInplaceEditor =  draw2d.ui.LabelEditor.extend({
         this.html.fadeOut($.proxy(function(){
             this.html.remove();
             this.html = null;
+            this.listener.onCommit(this.label.getText());
         },this));
     },
     
@@ -117,7 +137,7 @@ draw2d.ui.LabelInplaceEditor =  draw2d.ui.LabelEditor.extend({
         this.html.fadeOut($.proxy(function(){
             this.html.remove();
             this.html = null;
-            
+            this.listener.onCancel();
         },this));
         
     }

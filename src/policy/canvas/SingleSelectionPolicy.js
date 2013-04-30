@@ -63,7 +63,7 @@ draw2d.policy.canvas.SingleSelectionPolicy =  draw2d.policy.canvas.SelectionPoli
         // check if the user click on a child shape. DragDrop and movement must redirect
         // to the parent
         // Exception: Port's
-        if((figure!==null && figure.getParent()!==null) && !(figure instanceof draw2d.Port)){
+        while((figure!==null && figure.getParent()!==null) && !(figure instanceof draw2d.Port)){
             figure = figure.getParent();
         }
 

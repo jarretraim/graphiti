@@ -25,6 +25,7 @@ draw2d.Port = draw2d.shape.basic.Circle.extend({
     init : function( name)
     {
         this.locator = null;
+        this.lighterBgColor =null;
         
         this._super();
         
@@ -89,6 +90,8 @@ draw2d.Port = draw2d.shape.basic.Circle.extend({
     setMaxFanOut: function(count)
     {
         this.maxFanOut = Math.max(1,count);
+        
+        return this;
     },
     
     /**
@@ -119,6 +122,8 @@ draw2d.Port = draw2d.shape.basic.Circle.extend({
     	
         this.connectionAnchor = anchor;
         this.connectionAnchor.setOwner(this);
+
+        return this;
     },
  
     getConnectionAnchorLocation:function(referencePoint)
@@ -131,6 +136,30 @@ draw2d.Port = draw2d.shape.basic.Circle.extend({
     	return this.connectionAnchor.getReferencePoint();
     },
  
+    
+    /**
+     * @method
+     * Returns the **direction** for the connection in relation to the given port and it's parent.
+     * 
+     * <p>
+     * Possible values:
+     * <ul>
+     *   <li>up -&gt; 0</li>
+     *   <li>right -&gt; 1</li>
+     *   <li>down -&gt; 2</li>
+     *   <li>left -&gt; 3</li>
+     * </ul>
+     * <p>
+     * 
+     * @param {draw2d.Connection} conn the related Connection
+     * @param {draw2d.Port} relatedPort the counterpart port
+     * @return {Number} the direction.
+     */
+    getConnectionDirection:function(conn, relatedPort)
+    {
+       return this.getParent().getBoundingBox().getDirection(this.getAbsolutePosition());
+    },
+    
     /**
      * @method
      * Set the locator/layouter of the port. A locator is responsive for the x/y arrangement of the 
@@ -141,12 +170,30 @@ draw2d.Port = draw2d.shape.basic.Circle.extend({
     setLocator: function(locator)
     {
         this.locator = locator;
+
+        return this;
     },
     
     
     /**
      * @method
-     * Set a value for the port. This is usefull for interactive/dynamic diagrams like circuits, simulator,...
+     * Set the new background color of the figure. It is possible to hands over
+     * <code>null</code> to set the background transparent.
+     *
+     * @param {draw2d.util.Color} color The new background color of the figure
+     **/
+     setBackgroundColor : function(color)
+     {
+        // delete cached colors. recalculated in the repaint method 
+        this._super(color);
+        this.lighterBgColor=this.bgColor.lighter(0.3).hash();;
+
+        return this;
+     },
+
+    /**
+     * @method
+     * Set a value for the port. This is useful for interactive/dynamic diagrams like circuits, simulator,...
      *  
      * @param {Object} value the new value for the port 
      */
@@ -156,6 +203,8 @@ draw2d.Port = draw2d.shape.basic.Circle.extend({
         if(this.getParent()!==null){
            this.getParent().onPortValueChanged(this);
         }
+
+        return this;
     },
     
     /**
@@ -189,15 +238,14 @@ draw2d.Port = draw2d.shape.basic.Circle.extend({
          attributes.cx = this.getAbsoluteX();
          attributes.cy = this.getAbsoluteY();
          attributes.rx = this.width/2;
-         attributes.ry = this.width/2;
+         attributes.ry = attributes.rx;
          attributes.cursor = "move";
          
          if(this.getAlpha()<0.9){
-             attributes.fill="#4f6870";
+             attributes.fill=this.bgColor.hash();
          }
          else{
-//             attributes.fill="r(.4,.3)#499bea-#207ce5:60-#207ce5";
-             attributes.fill = "90-#4f6870-#6d8c91";
+             attributes.fill = ["90",this.bgColor.hash(),this.lighterBgColor].join("-");
          }
          
          this._super(attributes);
@@ -235,8 +283,7 @@ draw2d.Port = draw2d.shape.basic.Circle.extend({
       var result = new draw2d.util.ArrayList();
     
       // Return all Connections which are bounded to this port
-      // In this case this are all movement listener
-    
+      // In this case this are all movement listener    
       var size= this.moveListener.getSize();
       for(var i=0;i<size;i++)
       {
@@ -303,11 +350,16 @@ draw2d.Port = draw2d.shape.basic.Circle.extend({
      **/
     onDragStart : function()
     {
+        // just allow the DragOperation i the port didn'T have reached the max fanOut
+        // limit.
+        if(this.getConnections().getSize() >= this.maxFanOut){
+            return false;
+        }
+        
         this.getShapeElement().toFront();
         // don't call the super method. This creates a command and this is not necessary for a port
         this.ox = this.x;
         this.oy = this.y;
-
         
         // notify all installed policies
         //
@@ -410,7 +462,7 @@ draw2d.Port = draw2d.shape.basic.Circle.extend({
      * 
      * @param {draw2d.Figure} figure The figure which is currently dragging
      * 
-     * @return {draw2d.Figure} the figure which should receive the drop event or null if the element didnt want a drop event
+     * @return {draw2d.Figure} the figure which should receive the drop event or null if the element didn't want a drop event
      * @private
      **/
     onDragEnter : function( draggedFigure )
@@ -425,8 +477,7 @@ draw2d.Port = draw2d.shape.basic.Circle.extend({
     	//
     	if(this.getConnections().getSize() >= this.maxFanOut){
     	    return null;
-    	}
-    	
+    	}    	
         // Create a CONNECT Command to determine if we can show a Corona. Only valid
         // dropTarget did have a corona
         var request = new draw2d.command.CommandType(draw2d.command.CommandType.CONNECT);
@@ -487,6 +538,28 @@ draw2d.Port = draw2d.shape.basic.Circle.extend({
 
     /**
      * @method
+     * Callback method if a new connection has created with this port
+     * 
+     * @param {draw2d.Connection} connection The connection which has been created
+     * @since 2.5.1
+     * @template
+     **/
+    onConnect: function(connection){
+    },
+    
+    /**
+     * @method
+     * Callback method if a new connection has created with this port
+     * 
+     * @param {draw2d.Connection} connection The connection which has been deleted
+     * @since 2.5.1
+     * @template
+     **/
+    onDisconnect: function(connection){
+    },
+    
+    /**
+     * @method
      * Callback method of the movement of a figure
      * 
      * @param {draw2d.Figure} figure The figure which has been moved
@@ -532,7 +605,7 @@ draw2d.Port = draw2d.shape.basic.Circle.extend({
      * @param {Number} iY
      * @returns {Boolean}
      */
-    hitTest:function (/*:int*/ iX ,/*:int*/ iY)
+    hitTest:function ( iX , iY)
     {
         var x = this.getAbsoluteX()-(this.coronaWidth*2)-this.getWidth()/2;
         var y = this.getAbsoluteY()-(this.coronaWidth*2)-this.getHeight()/2;
@@ -571,6 +644,8 @@ draw2d.Port = draw2d.shape.basic.Circle.extend({
     	  this.parent.getCanvas().removeFigure(this.corona);
     	  this.corona = null;
       }
+      
+      return this;
     },
     
     /**
@@ -702,5 +777,7 @@ draw2d.Corona = draw2d.shape.basic.Circle.extend({
         this.setDraggable(false);
         this.setResizeable(false);
         this.setSelectable(false);
+        
+        return this;
     }
 });

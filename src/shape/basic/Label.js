@@ -38,15 +38,24 @@ draw2d.shape.basic.Label= draw2d.SetFigure.extend({
     	else{
     		this.text = "";
     	}
-    	
+    	// for performance reasons
+        //
+        this.cachedWidth  = null;
+        this.cachedHeight = null;
+        this.cachedMinWidth  = null;
+        this.cachedMinHeight = null;
+        
         // appearance of the shape
         //
         this.fontSize = 12;
-        //this.fontColor = new graphiti.util.Color("#339BB9");
+        this.fontColor = new draw2d.util.Color("#080808");
         this.padding = 4;
+        this.bold = false;
         
-        // set the border width
-        this.setStroke(0);
+        
+        // set some good defaults
+        this.setStroke(1);
+        this.setDimension(10,10);
         
         // behavior of the shape
         //
@@ -79,29 +88,24 @@ draw2d.shape.basic.Label= draw2d.SetFigure.extend({
             return;
         }
 
-        if(typeof attributes === "undefined"){
-            attributes = {};
-        }
-        
+ // PERFORMANCE     Problem. Warum muss der Cache bei jedem zeichnen gelšscht werden....?
+ // Macht keinen Sinn. Andere Lšsung muss her. 
+ // Dummerweise zeichnen sich sonst die Labels nicht in der korrekte Breite
+        this.cachedWidth=null;
+        this.cachedHeight=null;
+        this.cachedMinWidth=null;
+        this.cachedMinHeight=null;
+
         // style the label
         var lattr = {};
-        lattr.text = this.text;        
-        //lattr.x = this.padding;
-        lattr.x = (this.getWidth()) / 2;
+        lattr.text = this.text;
+        lattr.x = this.padding;
         lattr.y = this.getHeight()/2;
-        lattr["text-anchor"] = "middle";
-
+        lattr["font-weight"] = (this.bold===true)?"bold":"normal";
+        lattr["text-anchor"] = "start";
         lattr["font-size"] = this.fontSize;
-        lattr.fill = "#" + this.fontColor.hex();
-
-        if (this.getCssClass()) {
-            lattr["class"] = this.getCssClass();
-        }
-
+        lattr.fill = this.fontColor.hash();
         this.svgNodes.attr(lattr);
-
-        this.offsetX = 0;
-        this.offsetY = 0;
 
         this._super(attributes);
     },
@@ -141,7 +145,25 @@ draw2d.shape.basic.Label= draw2d.SetFigure.extend({
      **/
     setFontSize: function( size)
     {
+      this.cachedMinWidth  = null;
+      this.cachedMinHeight = null;
       this.fontSize = size;
+      this.repaint();
+    },
+    
+
+    /**
+     * @method
+     * Set the label to <b>bold/b> or <b>normal</b> font weight.
+     *
+     * @param {Boolean} bold The bold flag for the label
+     * @since 2.4.1
+     **/
+    setBold: function( bold)
+    {
+      this.cachedMinWidth  = null;
+      this.cachedMinHeight = null;
+      this.bold = bold;
       this.repaint();
     },
     
@@ -186,6 +208,10 @@ draw2d.shape.basic.Label= draw2d.SetFigure.extend({
      **/
     setPadding: function( padding)
     {
+      this.cachedMinWidth  = null;
+      this.cachedMinHeight = null;
+      this.cachedWidth=null;
+      this.cachedHeight=null;
       this.padding = padding;
       this.repaint();
     },
@@ -195,10 +221,13 @@ draw2d.shape.basic.Label= draw2d.SetFigure.extend({
      * A Label did have "autosize". Do nothing at all.
      *
      **/
-    setDimension:function(/*:int*/ w, /*:int*/ h)
+    setDimension:function( w, h)
     {
-        // Don't call the _super method here.
-        // Dimension of a Label is autocalculated. "set" is not possible
+        // reset of the cache must stay here and in repaint!
+        this.cachedWidth=null;
+        this.cachedHeight=null;
+        
+        this._super(w,h);
     },
     
     /**
@@ -209,8 +238,15 @@ draw2d.shape.basic.Label= draw2d.SetFigure.extend({
      */
     getMinWidth:function()
     {
-        // the minimum width of a label is always the required width.
-        return this.getWidth();
+        if (this.shape === null) {
+            return 0;
+        }
+        
+        if(this.cachedMinWidth=== null){
+            this.cachedMinWidth=this.svgNodes.getBBox(true).width+2*this.padding+2*this.getStroke();
+        }
+        
+        return this.cachedMinWidth;
     },
     
     /**
@@ -221,10 +257,59 @@ draw2d.shape.basic.Label= draw2d.SetFigure.extend({
      */
     getMinHeight:function()
     {
-        // the minimum height of a label is always the required height.
-        return this.getHeight();
+        if (this.shape === null) {
+            return 0;
+        }
+        
+        if(this.cachedMinHeight=== null){
+            this.cachedMinHeight=this.svgNodes.getBBox(true).height+2*this.padding+2*this.getStroke();
+        }
+        
+        return this.cachedMinHeight;
     },
     
+    /**
+     * @method
+     * Return the calculate width of the set. This calculates the bounding box of all elements.
+     * 
+     * @returns the calculated width of the label
+     * @return {Number}
+     **/
+    getWidth : function() {
+        
+        if (this.shape === null) {
+            return 0;
+        }
+        
+        if(this.cachedWidth===null){
+            this.cachedWidth = Math.max(this.width, this.getMinWidth());
+        }
+        
+        
+        return this.cachedWidth;
+    },
+    
+    /**
+     * @method
+     * Return the calculated height of the set. This calculates the bounding box of all elements.
+     * 
+     * @returns the calculated height of the label
+     * @return {Number}
+     */
+    getHeight:function()
+    {
+        if (this.shape === null) {
+            return 0;
+        }
+        
+        if(this.cachedHeight===null){
+            this.cachedHeight = Math.max(this.height, this.getMinHeight());
+        }
+        
+        
+        return this.cachedHeight;
+    },
+
     /**
      * @method
      * Set an editor for the label. This can be a dialog or inplace editor for the 
@@ -268,12 +353,15 @@ draw2d.shape.basic.Label= draw2d.SetFigure.extend({
      * 
      * @param {String} text The new text for the label.
      **/
-    setText:function(/*:String*/ text )
+    setText:function( text )
     {
+      this.cachedWidth=null;
+      this.cachedHeight=null;
+      this.cachedMinWidth  = null;
+      this.cachedMinHeight = null;
       this.text = text;
       
-      this.fireMoveEvent();
-      
+      this.repaint();
       // Update the resize handles if the user change the position of the element via an API call.
       //
       this.editPolicy.each($.proxy(function(i,e){
@@ -281,41 +369,22 @@ draw2d.shape.basic.Label= draw2d.SetFigure.extend({
              e.moved(this.canvas, this);
          }
       },this));
+
+      this.fireResizeEvent();
       
-      this.repaint();
+      if(this.parent!==null)
+          this.parent.repaint();
     },
     
-    /**
-     * @method
-     * Return the calculate width of the set. This calculates the bounding box of all elements.
-     * 
-     * @returns the calculated width of the label
-     * @return {Number}
-     **/
-	getWidth : function() {
-		if (this.shape === null) {
-			return 0;
-		}
-		return this.svgNodes.getBBox(true).width+2*this.padding;
-	},
-    
-    /**
-     * @method
-     * Return the calculated height of the set. This calculates the bounding box of all elements.
-     * 
-	 * @returns the calculated height of the label
-	 * @return {Number}
-	 */
-    getHeight:function()
-    {
-        if (this.shape === null) {
-            return 0;
-        }
-        return this.svgNodes.getBBox(true).height+2*this.padding;
-    },
 
     hitTest: function(x, y) {
-        // rotate the box with the currectn matrix of the
+        // apply a simple bounding box test if the label isn'T rotated
+        //
+        if( this.rotationAngle === 0){
+            return this._super(x,y); 
+        }
+        
+        // rotate the box with the current matrix of the
         // shape
         var matrix = this.shape.matrix;
         var points = this.getBoundingBox().getPoints();

@@ -51,13 +51,18 @@ draw2d.policy.port.IntrusivePortsFeedbackPolicy = draw2d.policy.port.PortFeedbac
     	});
         this.tweenable = new Tweenable();
         this.tweenable.tween({
-          from:     { 'size': start  },
-          to:       { 'size': start*2 },
+          from:     { 'size': start/2  },
+          to:       { 'size': start },
           duration: 200,
           easing : "easeOutSine",
           step: function (params) {
               portsToGrow.each(function(i, element){
-                  element.setDimension(params.size, params.size);
+                  // IMPORTANT shortcut to avoid rendering errors!!
+                  // performance shortcut to avoid a lot of fireMoveEvent and recalculate/routing of all related connections
+                  // for each setDimension call. Additional the connection is following a port during Drag&Drop operation
+                  element.shape.attr({rx : params.size, ry :params.size});
+                  element.width = element.height = params.size*2;
+                  //element.setDimension(params.size, params.size);
               });
           }
         });
@@ -100,7 +105,12 @@ draw2d.policy.port.IntrusivePortsFeedbackPolicy = draw2d.policy.port.PortFeedbac
         this.tweenable.stop(false);
         this.tweenable = null;
     	figure.getDropTargets().each(function(i, element){
-    		element.setDimension(element.__beforeInflate, element.__beforeInflate);
+            // IMPORTANT shortcut to avoid rendering errors!!
+            // performance shortcut to avoid a lot of fireMoveEvent and recalculate/routing of all related connections
+    	    // for each setDimension call. Additional the connection is following a port during Drag&Drop operation
+    	    element.shape.attr({rx : element.__beforeInflate/2, ry :element.__beforeInflate/2});
+            element.width = element.height = element.__beforeInflate;
+    		//element.setDimension(element.__beforeInflate, element.__beforeInflate);
     	});
         this.connectionLine.setCanvas(null);
         this.connectionLine = null;

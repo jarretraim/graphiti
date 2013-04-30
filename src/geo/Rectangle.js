@@ -463,15 +463,23 @@ draw2d.geo.Rectangle = draw2d.geo.Point.extend({
      * @returns {Number}
      */
     determineOctant: function( r2){
-        var ox = this.x;
-        var oy = this.y;
-        var ow = this.w;
-        var oh = this.h;
         
+        var HISTERESE= 3; // Tolleranz um diese vermieden wird, dass der Octant "8" zurückgegeben wird
+        
+        var ox = this.x+HISTERESE;
+        var oy = this.y+HISTERESE;
+        var ow = this.w-(HISTERESE*2);
+        var oh = this.h-(HISTERESE*2);
+         
         var cx = r2.x;
         var cy = r2.y;
-        var cw = r2.w;
-        var ch = r2.h;
+        var cw = 2;
+        var ch = 2;
+        if(r2 instanceof draw2d.geo.Rectangle){
+            cw = r2.w;
+            ch = r2.h;
+        }
+ 
         var oct =0;
 
         if(cx + cw <= ox){
@@ -529,39 +537,45 @@ draw2d.geo.Rectangle = draw2d.geo.Point.extend({
      * 
      * @return {Number} the direction from <i>r</i> to <i>p</i>
      */
-    getDirection:function(p) 
+    getDirection:function(other) 
     {
-        var r= this;
-        
-        //  up     -> 0
-        //  right  -> 1
-        //  down   -> 2
-        //  left   -> 3
-       var distance = Math.abs(r.x - p.x);
-       var direction = 3;
-    
-       var i=Math.abs(r.y - p.y);
-       if (i <= distance) 
-       {
-          distance = i;
-          direction = 0;
-       }
-    
-       i = Math.abs(r.getBottom() - p.y);
-       if (i <= distance) 
-       {
-          distance = i;
-          direction = 2;
-       }
-    
-       i = Math.abs(r.getRight() - p.x);
-       if (i < distance) 
-       {
-          distance = i;
-          direction = 1;
-       }
-    
-       return direction;
+        var current = this.getTopLeft();
+        switch(this.determineOctant(other)){
+            case 0:
+                if((current.x-other.x)<(current.y-other.y))
+                    return 0;
+                return 3;
+            case 1:
+                return 0;
+            case 2:
+                current = this.getTopRight();
+                if((other.x-current.x)<(current.y-other.y))
+                    return 0;
+                return 1;
+            case 3:
+                return 1;
+            case 4:
+                current = this.getBottomRight();
+                if((other.x-current.x)<(other.y-current.y))
+                    return 2;
+                return 1;
+            case 5:
+                return 2;
+            case 6:
+                current = this.getBottomLeft();
+                if((current.x-other.x)<(other.y-current.y))
+                    return 2;
+                return 3;
+            case 7:
+                return 3;
+            case 8: 
+                if(other.y>this.y){
+                    return 2;
+                }
+                return 0;
+            
+        }
+        return 0;
     },
     
     
@@ -612,6 +626,22 @@ draw2d.geo.Rectangle = draw2d.geo.Point.extend({
     	       && rect.hitTest(this.getBottomRight());
     },
     
+    intersects: function (rect)
+    {
+        x11 = rect.x,
+        y11 = rect.y,
+        x12 = rect.x + rect.w,
+        y12 = rect.y + rect.h,
+        x21 = this.x,
+        y21 = this.y,
+        x22 = this.x + this.w,
+        y22 = this.y + this.h;
+  
+        x_overlap = Math.max(0, Math.min(x12,x22) - Math.max(x11,x21));
+        y_overlap = Math.max(0, Math.min(y12,y22) - Math.max(y11,y21));
+ 
+        return x_overlap*y_overlap!==0;
+    },
     
     toJSON : function(){
         return  { 

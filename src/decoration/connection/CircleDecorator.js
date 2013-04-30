@@ -63,7 +63,7 @@ draw2d.decoration.connection.CircleDecorator = draw2d.decoration.connection.Deco
 	paint:function(paper)
 	{
 		var shape= paper.circle(0, 0, this.width/2);
-        shape.attr({fill:this.backgroundColor.hash()});
+        shape.attr({fill:this.backgroundColor.hash(),stroke:this.color.hash()});
 		
 		return shape;
 	}

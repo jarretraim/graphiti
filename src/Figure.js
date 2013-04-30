@@ -89,9 +89,10 @@ draw2d.Figure = Class.extend({
         this.repaintBlocked=false;
         this.selectionHandles = new draw2d.util.ArrayList();
         
-        // listener for movement. required for Ports or property panes in the UI
+        // listener for movement/resize. required for Ports or property panes in the UI
         //
         this.moveListener = new draw2d.util.ArrayList();
+        this.resizeListener = new draw2d.util.ArrayList();
 
         
         this.installEditPolicy(new draw2d.policy.figure.RectangleSelectionFeedbackPolicy());
@@ -116,6 +117,8 @@ draw2d.Figure = Class.extend({
                   e.onSelect(this.canvas, this,asPrimarySelection);
               }
         },this));
+
+        return this;
     },
     
     /**
@@ -175,6 +178,8 @@ draw2d.Figure = Class.extend({
     setId: function(id)
     {
         this.id = id; 
+
+        return this;
     },
     
     /**
@@ -241,6 +246,8 @@ draw2d.Figure = Class.extend({
     	 if(this.canvas!==null){
     		 this.timerId = window.setInterval($.proxy(this.onTimer,this), this.timerInterval);
     	 }
+
+    	 return this;
      },
 
      /**
@@ -319,6 +326,8 @@ draw2d.Figure = Class.extend({
          }
          
          this.repaint();
+
+         return this;
      },
 
      /**
@@ -386,13 +395,10 @@ draw2d.Figure = Class.extend({
      **/
      repaint : function(attributes)
      {
-         if (this.repaintBlocked===true || this.shape === null){
-             return;
-         }
-
-         if(typeof attributes === "undefined" ){
-             attributes = {};
-         }
+// PERFORMANCE         
+//         if (this.repaintBlocked===true || this.shape === null){
+//             return;
+//         }
 
          if(this.visible===true){
         	 this.shape.show();
@@ -410,6 +416,10 @@ draw2d.Figure = Class.extend({
 
          this.applyTransformation();
 
+         /* moved to setDimension.
+          * Locator is only called if the dimension of the figure has been changed
+          * Performance
+          */
         // Relocate all children of the figure.
         // This means that the Locater can calculate the new Position of the child.
         //
@@ -435,6 +445,8 @@ draw2d.Figure = Class.extend({
      setGlow: function(flag){
     	 // do nothing in the base class. 
     	 // Subclasses must implement this method.
+
+         return this;
      },
      
 
@@ -510,7 +522,6 @@ draw2d.Figure = Class.extend({
         this.x = p.x;
         this.y = p.y;
       }
-
       
       this.setPosition(this.x, this.y);
       
@@ -585,7 +596,7 @@ draw2d.Figure = Class.extend({
      * 
      * @param {draw2d.Figure} figure The figure which is currently dragging
      * 
-     * @return {draw2d.Figure} the figure which should receive the drop event or null if the element didnt want a drop event
+     * @return {draw2d.Figure} the figure which should receive the drop event or null if the element didn't want a drop event
      * @template
      **/
     onDragEnter : function( draggedFigure )
@@ -691,6 +702,8 @@ draw2d.Figure = Class.extend({
 
       this.alpha =percent;
       this.repaint();
+
+      return this;
     },
 
         
@@ -727,6 +740,8 @@ draw2d.Figure = Class.extend({
         },this));
 
         this.repaint();
+
+        return this;
     },
     
     getRotationAngle : function(){
@@ -745,6 +760,8 @@ draw2d.Figure = Class.extend({
     	this.visible = !!flag;
     	
     	this.repaint();
+
+    	return this;
     },
     
     /**
@@ -789,6 +806,8 @@ draw2d.Figure = Class.extend({
     setCanSnapToHelper:function(flag)
     {
       this.canSnapToHelper = !!flag;
+
+      return this;
     },
 
     /**
@@ -875,6 +894,8 @@ draw2d.Figure = Class.extend({
      */
     setMinWidth: function(w){
       this.minWidth = parseFloat(w);
+
+      return this;
     },
     
     /**
@@ -886,6 +907,8 @@ draw2d.Figure = Class.extend({
     getMinHeight:function()
     {
       return this.minHeight;
+
+      return this;
     },
 
     /**
@@ -896,6 +919,8 @@ draw2d.Figure = Class.extend({
      */
     setMinHeight:function(h){
         this.minHeight =parseFloat(h);
+
+        return this;
     },
     
     /**
@@ -983,8 +1008,7 @@ draw2d.Figure = Class.extend({
      * @param {Number/draw2d.geo.Point} x The new x coordinate of the figure
      * @param {Number} [y] The new y coordinate of the figure 
      **/
-    setPosition:function(x , y )
-    {
+    setPosition : function(x, y) {
        if(x instanceof draw2d.geo.Point){
           this.x = x.x;
           this.y = x.y;
@@ -993,9 +1017,11 @@ draw2d.Figure = Class.extend({
           this.x= x;
           this.y= y;
        }
+        
       this.repaint();
 
-      // Update the resize handles if the user change the position of the element via an API call.
+        // Update the resize handles if the user change the position of the
+        // element via an API call.
       //
       this.editPolicy.each($.proxy(function(i,e){
           if(e instanceof draw2d.policy.figure.DragDropEditPolicy){
@@ -1004,6 +1030,8 @@ draw2d.Figure = Class.extend({
       },this));
 
       this.fireMoveEvent();
+
+        return this;
     },
     
     /**
@@ -1027,6 +1055,8 @@ draw2d.Figure = Class.extend({
     translate:function(dx , dy )
     {
     	this.setPosition(this.x+dx,this.y+dy);
+    	
+    	return this;
     },
     
     
@@ -1039,8 +1069,13 @@ draw2d.Figure = Class.extend({
      **/
     setDimension:function(w, h)
     {
-    	w = parseFloat(w);
-    	h = parseFloat(h);
+        w = Math.max(this.getMinWidth(),w);
+        h = Math.max(this.getMinHeight(),h);
+
+        if(this.width === w && this.height ===h){
+            return;
+        }
+
         // apply all EditPolicy for DragDrop Operations
         //
         this.editPolicy.each($.proxy(function(i,e){
@@ -1056,6 +1091,8 @@ draw2d.Figure = Class.extend({
 		  
 		this.repaint();
 		  
+        this.fireResizeEvent();
+        // just to be backward compatible....cost a lot of performance...still
 		this.fireMoveEvent();
 		
 		// Update the resize handles if the user change the position of the element via an API call.
@@ -1065,6 +1102,8 @@ draw2d.Figure = Class.extend({
 		       e.moved(this.canvas, this);
 		   }
 		},this));
+
+		return this;
     },
 
 
@@ -1108,6 +1147,8 @@ draw2d.Figure = Class.extend({
     setDraggable:function(flag)
     {
       this.draggable= !!flag;
+
+      return this;
     },
 
     /**
@@ -1143,6 +1184,8 @@ draw2d.Figure = Class.extend({
     setResizeable:function(flag)
     {
       this.resizeable=!!flag;
+
+      return this;
     },
 
     /**
@@ -1167,6 +1210,8 @@ draw2d.Figure = Class.extend({
     setSelectable:function(flag)
     {
       this.selectable=!!flag;
+
+      return this;
     },
 
     /**
@@ -1202,6 +1247,8 @@ draw2d.Figure = Class.extend({
     setDeleteable:function(flag)
     {
       this.deleteable = !!flag;
+
+      return this;
     },
 
     /**
@@ -1215,6 +1262,8 @@ draw2d.Figure = Class.extend({
     setParent:function( parent)
     {
       this.parent = parent;
+
+      return this;
     },
 
     /**
@@ -1235,6 +1284,72 @@ draw2d.Figure = Class.extend({
      * useful for Connectors and Layouter for router handling.
      *
      * @param {Object} listener the listener to call
+     * @since 2.5.1
+     **/
+     attachResizeListener:function(listener) {
+        if (listener === null) {
+            return;
+        }
+
+        this.resizeListener.add(listener);
+
+        return this;
+     },
+ 
+
+    /**
+     * @method
+     * Remove the hands over figure from notification queue.
+     *
+     * @param {draw2d.Figure} figure The figure to remove the monitor
+     * @since 2.5.1
+     **/
+    detachResizeListener:function(figure) 
+    {
+      if(figure===null){
+        return;
+      }
+
+      this.resizeListener.remove(figure);
+
+      return this;
+    },
+    
+    /**
+     * @method
+     * Called from the figure itself when any position changes happens. All listener
+     * will be informed.
+     * 
+     * @private
+     * @since 2.5.1
+     **/
+    fireResizeEvent: function()
+    {
+         this.resizeListener.each($.proxy(function(i, item){
+            item.onOtherFigureIsResizing(this);
+        },this));
+
+        return this;
+    },
+    
+    /**
+     * @method
+     * Fired if a figure is moving.
+     *
+     * @param {draw2d.Figure} figure The figure which has changed its position
+     * @template
+     * @since 2.5.1
+     */
+    onOtherFigureIsResizing:function(figure){
+    },
+    
+    /**
+     * @method
+     * Register the hands over object as a moveListener of this figure.<br>
+     * All position changes will be broadcast to all move listener. This is
+     * useful for Connectors and Layouter for router handling.
+     *
+     * @param {Object} listener the listener to call
      *
      **/
      attachMoveListener:function(listener) {
@@ -1242,7 +1357,11 @@ draw2d.Figure = Class.extend({
 			return;
 		}
 
+		if(!this.moveListener.contains(listener)){
 		this.moveListener.add(listener);
+		}
+
+		return this;
  	 },
  
 
@@ -1260,6 +1379,8 @@ draw2d.Figure = Class.extend({
       }
 
       this.moveListener.remove(figure);
+
+      return this;
     },
 
     /**
@@ -1277,6 +1398,7 @@ draw2d.Figure = Class.extend({
             item.onOtherFigureIsMoving(this);
         },this));
         
+        return this;
     },
     
     /**
@@ -1355,7 +1477,7 @@ draw2d.Figure = Class.extend({
      * Read all attributes from the serialized properties and transfer them into the shape.
      * 
      * @param {Object} memento
-     * @returns 
+     * @return
      */
     setPersistentAttributes : function(memento)
     {
@@ -1372,6 +1494,8 @@ draw2d.Figure = Class.extend({
         if(typeof memento.height !== "undefined"){
             this.height= memento.height;
         }
+
+        return this;
     }  
 
 });

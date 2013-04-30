@@ -24,13 +24,18 @@ draw2d.shape.node.Node = draw2d.Figure.extend({
      * @param {Number} [height] initial height of the shape
     */
     init: function( width, height ) {
-      this.bgColor   = new  draw2d.util.Color(255,255,255);
-      this.lineColor = new  draw2d.util.Color(128,128,255);
-      this.color     = new  draw2d.util.Color(128,128,128);
-      
+    
       this.inputPorts = new draw2d.util.ArrayList();
       this.outputPorts= new draw2d.util.ArrayList();
       this.hybridPorts= new draw2d.util.ArrayList();
+      
+      // Flags just for performance reasons
+      //
+      this.portRelayoutRequired = true;
+      
+      // just for performance reasons
+      //
+      this.cachedPorts = null;
       
       this._super( width, height);
     },
@@ -39,8 +44,12 @@ draw2d.shape.node.Node = draw2d.Figure.extend({
     onDoubleClick:function(){
         var w = this.getWidth();
         var h = this.getHeight();
+        // rotate in 90¡ increment steps..
         this.setRotationAngle((this.getRotationAngle()+90)%360);
+        // ..and toggle the orientation of the shape (portrait / landscape)
         this.setDimension(h,w);
+        
+        this.portRelayoutRequired=true;
     },
     
 
@@ -53,10 +62,18 @@ draw2d.shape.node.Node = draw2d.Figure.extend({
     getPorts: function()
     {
       // TODO: expensive! Find another solution.
-      return this.inputPorts
-             .clone()
-             .addAll(this.outputPorts)
-             .addAll(this.hybridPorts);
+      if(this.cachedPorts===null ){
+          this.cachedPorts = new draw2d.util.ArrayList();
+          this.cachedPorts.addAll(this.inputPorts);
+          this.cachedPorts.addAll(this.outputPorts);
+          this.cachedPorts.addAll(this.hybridPorts);
+          
+          this.children.each($.proxy(function(i,e){
+              this.cachedPorts.addAll( e.figure.getPorts());
+          },this));
+      }
+              
+      return this.cachedPorts;
     },
     
     
@@ -96,28 +113,17 @@ draw2d.shape.node.Node = draw2d.Figure.extend({
      **/
     getPort: function( portName)
     {
-        var i=0;
-        for ( i = 0; i < this.outputPorts.getSize(); i++) {
-            var port = this.outputPorts.get(i);
-            if (port.getName() === portName) {
-                return port;
+    	var port = null;
+    	
+        this.getPorts().each(function(i,e){
+            
+            if (e.getName() === portName) {
+                port = e;
+         		return false;
             }
-        }
-
-        for ( i = 0; i < this.inputPorts.getSize(); i++) {
-            var port = this.inputPorts.get(i);
-            if (port.getName() === portName) {
-                return port;
-            }
-        }
-          
-        for ( i = 0; i < this.hybridPorts.getSize(); i++) {
-            var port = this.hybridPorts.get(i);
-            if (port.getName() === portName) {
-                return port;
-            }
-        }
-         return null;
+        });
+        
+        return port;
     },
     
     /**
@@ -125,18 +131,18 @@ draw2d.shape.node.Node = draw2d.Figure.extend({
      * Return the input port with the corresponding name.
      *
      * 
-     * @param {String/Number} portName The name or numeric index of the port to return.
+     * @param {String/Number} portNameOrIndex The name or numeric index of the port to return.
      * @return {draw2d.InputPort} Returns the port with the hands over name or null.
      **/
-    getInputPort: function( portName)
+    getInputPort: function( portNameOrIndex)
     {
-        if(typeof portName === "number"){
-            return this.inputPorts.get(portName);
+        if(typeof portNameOrIndex === "number"){
+            return this.inputPorts.get(portNameOrIndex);
         }
         
         for ( var i = 0; i < this.inputPorts.getSize(); i++) {
             var port = this.inputPorts.get(i);
-            if (port.getName() === portName) {
+            if (port.getName() === portNameOrIndex) {
                 return port;
             }
         }
@@ -148,18 +154,18 @@ draw2d.shape.node.Node = draw2d.Figure.extend({
      * @method
      * Return the output port with the corresponding name.
      *
-     * @param {String/Number} portName The name or the numeric index of the port to return.
+     * @param {String/Number} portNameOrIndex The name or the numeric index of the port to return.
      * @return {draw2d.OutputPort} Returns the port with the hands over name or null.
      **/
-    getOutputPort: function( portName)
+    getOutputPort: function( portNameOrIndex)
     {
-        if(typeof portName === "number"){
-            return this.outputPorts.get(portName);
+        if(typeof portNameOrIndex === "number"){
+            return this.outputPorts.get(portNameOrIndex);
         }
         
          for ( var i = 0; i < this.outputPorts.getSize(); i++) {
             var port = this.outputPorts.get(i);
-            if (port.getName() === portName) {
+            if (port.getName() === portNameOrIndex) {
                 return port;
             }
         }
@@ -172,18 +178,18 @@ draw2d.shape.node.Node = draw2d.Figure.extend({
      * Return the input port with the corresponding name.
      *
      * 
-     * @param {String/Number} portName The name or numeric index of the port to return.
+     * @param {String/Number} portNameOrIndex The name or numeric index of the port to return.
      * @return {draw2d.InputPort} Returns the port with the hands over name or null.
      **/
-    getHybridPort: function( portName)
+    getHybridPort: function( portNameOrIndex)
     {
-        if(typeof portName === "number"){
-            return this.hybridPorts.get(portName);
+        if(typeof portNameOrIndex === "number"){
+            return this.hybridPorts.get(portNameOrIndex);
         }
         
         for ( var i = 0; i < this.hybridPorts.getSize(); i++) {
             var port = this.hybridPorts.get(i);
-            if (port.getName() === portName) {
+            if (port.getName() === portNameOrIndex) {
                 return port;
             }
         }
@@ -203,6 +209,9 @@ draw2d.shape.node.Node = draw2d.Figure.extend({
         if(!(port instanceof draw2d.Port)){
             throw "Argument is not typeof 'draw2d.Port'. \nFunction: draw2d.shape.node.Node#addPort";
         }
+
+        this.cachedPorts = null;
+        this.portRelayoutRequired=true;
         
         
         if (port instanceof draw2d.InputPort) {
@@ -239,6 +248,8 @@ draw2d.shape.node.Node = draw2d.Figure.extend({
      **/
     removePort : function(port)
     {
+        this.portRelayoutRequired=true;
+
         this.inputPorts.remove(port);
         this.outputPorts.remove(port);
         this.hybridPorts.remove(port);
@@ -323,6 +334,7 @@ draw2d.shape.node.Node = draw2d.Figure.extend({
      **/
     setCanvas : function(canvas)
     {
+
         var oldCanvas = this.canvas;
         this._super(canvas);
        
@@ -348,54 +360,16 @@ draw2d.shape.node.Node = draw2d.Figure.extend({
         }
     },
     
-    
-    /**
-     * @inheritdoc
-     *
-     * @param {Number} w The new width of the figure
-     * @param {Number} h The new height of the figure
-     **/
-    setDimension:function(w, h)
-    {
-        this._super(w,h);
-
-        // make no sense to layout the ports if we not part
-        // of the canvas
-        if(this.shape===null){
-            return;
-        }
-        
-        // layout the ports
-        //
-        this.outputPorts.each(function(i, port){
-            port.locator.relocate(i,port);
-        });
-        
-        this.inputPorts.each(function(i, port){
-            port.locator.relocate(i,port);
-        });
-        
-        this.hybridPorts.each(function(i, port){
-            port.locator.relocate(i,port);
-        });
-    },
-
     setRotationAngle: function(angle){
-    	this._super(angle);
+        this.portRelayoutRequired=true;
+        this._super(angle);
         
-        // layout the ports
-        //
-        this.outputPorts.each(function(i, port){
-            port.locator.relocate(i,port);
-        });
-        
-        this.inputPorts.each(function(i, port){
-            port.locator.relocate(i,port);
-        });
-        
-        this.hybridPorts.each(function(i, port){
-            port.locator.relocate(i,port);
-        });
+        this.layoutPorts();
+    },
+    
+    setDimension: function(w,h){
+        this.portRelayoutRequired=true;
+        this._super(w,h);
     },
     
     /**
@@ -407,6 +381,49 @@ draw2d.shape.node.Node = draw2d.Figure.extend({
      */
     onPortValueChanged: function(relatedPort){
     
-    }
+    },
+    
+    /**
+     * @method
+     * propagate all attributes like color, stroke,... to the shape element
+     * 
+     **/
+     repaint : function(attributes){
+         if (this.repaintBlocked===true || this.shape === null){
+             return;
+         }
+         this._super(attributes);
+         this.layoutPorts();
+     },
+     
+    /**
+     * @method
+     * 
+     * @private
+     */
+     layoutPorts: function(){
+
+         if(this.portRelayoutRequired===false){
+             return;//silently
+         }
+         this.portRelayoutRequired=false;
+         
+         // layout the ports
+         //
+         this.outputPorts.each(function(i, port){
+             port.locator.relocate(i,port);
+         });
+         
+         this.inputPorts.each(function(i, port){
+             port.locator.relocate(i,port);
+         });
+         
+         this.hybridPorts.each(function(i, port){
+             port.locator.relocate(i,port);
+         });
+     }
     
 });
+
+
+

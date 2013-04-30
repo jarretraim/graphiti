@@ -115,7 +115,47 @@ draw2d.ResizeHandle = draw2d.shape.basic.Rectangle.extend({
       }
     },
     
+    /**
+     * @method
+     * enrich the nomrla rectangle shape with the cursor information for resize
+     * 
+     * @inheritdoc
+     */
+    createShapeElement : function(){
+       var shape= this._super();
+       
+       switch(this.type)
+       {
+         case 1:
+          shape.attr({"cursor":"nw-resize"});
+          break;
+         case 2:
+             shape.attr({"cursor":"n-resize"});
+             break;
+         case 3:
+             shape.attr({"cursor":"ne-resize"});
+             break;
+         case 4:
+             shape.attr({"cursor":"e-resize"});
+             break;
+         case 5:
+             shape.attr({"cursor":"se-resize"});
+             break;
+         case 6:
+             shape.attr({"cursor":"s-resize"});
+             break;
+         case 7:
+             shape.attr({"cursor":"sw-resize"});
+             break;
+         case 8:
+             shape.attr({"cursor":"w-resize"});
+             break;
+       }
 
+       return shape;
+    },
+
+    
     /**
      * @method
      * Will be called if the drag and drop action beginns. You can return [false] if you

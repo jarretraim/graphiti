@@ -123,7 +123,7 @@ draw2d.shape.widget.Slider = draw2d.shape.widget.Widget.extend({
      * @param {Number} value values between [0..100]
      */
     setValue:function(value){
-        this.currentValue = Math.min(Math.max(0,parseInt(value)),100);
+        this.currentValue = Math.min(Math.max(0,(value|0)),100);
         this.repaint();
         this.onValueChange(this.currentValue);
     },
@@ -145,7 +145,7 @@ draw2d.shape.widget.Slider = draw2d.shape.widget.Widget.extend({
      
         // adjust the slider to the current value and the new dimension of the widget
         //
-        var thumbX = parseInt((this.slideBoundingBox.bw-this.slideBoundingBox.getWidth())/100*this.currentValue);
+        var thumbX = ((this.slideBoundingBox.bw-this.slideBoundingBox.getWidth())/100*this.currentValue)|0;
         this.slideBoundingBox.setX(thumbX);
 
 

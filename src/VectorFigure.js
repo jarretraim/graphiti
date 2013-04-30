@@ -22,6 +22,9 @@ draw2d.VectorFigure = draw2d.shape.node.Node.extend({
     init : function()
     {
         this.stroke = 1;
+        this.bgColor   = new  draw2d.util.Color(255,255,255);
+        this.lineColor = new  draw2d.util.Color(128,128,255);
+        this.color     = new  draw2d.util.Color(128,128,128);
         
         // memento for the stroke if we reset the glow effect of this shape
         //
@@ -42,8 +45,7 @@ draw2d.VectorFigure = draw2d.shape.node.Node.extend({
     setGlow: function(flag){
         
         if(flag === this.glowIsActive) {
-            // nothing todo
-            return;
+            return this;
         }
         
         this.glowIsActive = flag;
@@ -54,6 +56,8 @@ draw2d.VectorFigure = draw2d.shape.node.Node.extend({
         else {
             this.setStroke(this.strokeBeforeGlow);
         }
+        
+        return this;
     },
     
    /**
@@ -78,19 +82,14 @@ draw2d.VectorFigure = draw2d.shape.node.Node.extend({
                 attributes.stroke = "none";
             }
             else {
-                attributes.stroke = "#" + this.color.hex();
+                attributes.stroke = this.color.hash();
             }
         }
         
         attributes["stroke-width"] = this.stroke;
         
         if(typeof attributes.fill === "undefined"){
-           if(this.bgColor!==null){
-        	   attributes.fill = "#" + this.bgColor.hex();
-           }
-           else{
-               attributes.fill ="none";
-           }
+       	   attributes.fill = this.bgColor.hash();
         }
 
         this._super(attributes);
@@ -106,17 +105,11 @@ draw2d.VectorFigure = draw2d.shape.node.Node.extend({
     **/
     setBackgroundColor : function(color)
     {
-        if (color instanceof draw2d.util.Color) {
-            this.bgColor = color;
-        }
-        else if (typeof color === "string") {
             this.bgColor = new draw2d.util.Color(color);
-        }
-        else {
-            this.bgColor = null;
-        }
 
         this.repaint();
+        
+        return this;
     },
 
    /**
@@ -140,6 +133,8 @@ draw2d.VectorFigure = draw2d.shape.node.Node.extend({
    {
      this.stroke=w;
      this.repaint();
+     
+     return this;
    },
 
    /**
@@ -162,17 +157,10 @@ draw2d.VectorFigure = draw2d.shape.node.Node.extend({
     **/
    setColor:function( color)
    {
-     if(color instanceof draw2d.util.Color){
-         this.color = color;
-     }
-     else if(typeof color === "string"){
          this.color = new draw2d.util.Color(color);
-     }
-     else{
-         // set good default
-         this.color = new draw2d.util.Color(0,0,0);
-     }
      this.repaint();
+     
+     return this;
    },
 
    /**

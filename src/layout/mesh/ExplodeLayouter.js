@@ -104,7 +104,7 @@ draw2d.layout.mesh.ExplodeLayouter = draw2d.layout.mesh.MeshLayouter.extend({
         			case 8:
         				// overlapping
         				// we must determine the new distance with the border of the figures
-        				dis = parseInt(boundingBox.getBottomRight().getDistance(figure.getBoundingBox().getTopLeft()));
+        				dis = (boundingBox.getBottomRight().getDistance(figure.getBoundingBox().getTopLeft()))|0;
         				
         				changes[2].x =  Math.max(changes[2].x,this.MIN_MARGIN+dis);
         				changes[3].x =  Math.max(changes[3].x,this.MIN_MARGIN+dis);

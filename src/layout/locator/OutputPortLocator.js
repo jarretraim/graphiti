@@ -37,11 +37,6 @@ draw2d.layout.locator.OutputPortLocator = draw2d.layout.locator.PortLocator.exte
         var node = figure.getParent();
         var gap = node.getHeight()/(node.getOutputPorts().getSize()+1);
         this.applyConsiderRotation(figure, node.getWidth(), gap*(index+1));
-
-        //var w = node.getWidth();
-        //var h = node.getHeight();
-        //var gap = h/(node.getOutputPorts().getSize()+1);
-        //figure.setPosition(w, gap*(index+1));
     }
     
 });

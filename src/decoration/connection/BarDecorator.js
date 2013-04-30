@@ -57,9 +57,8 @@ draw2d.decoration.connection.BarDecorator = draw2d.decoration.connection.Decorat
 
 	/**
 	 * @method
-	 * Draw a filled diamond decoration.
+	 * Draw a bar decoration.
 	 * 
-	 * It's not your work to rotate the arrow. The draw2d do this job for you.
 	 * 
 	 * @param {Raphael} paper the raphael paper object for the paint operation 
 	 **/
@@ -72,7 +71,7 @@ draw2d.decoration.connection.BarDecorator = draw2d.decoration.connection.Decorat
 		st.push(
 	        paper.path(path.join(""))
 		);
-		st.attr({fill:this.backgroundColor.hash()});
+		st.attr({fill:this.backgroundColor.hash(),stroke:this.color.hash()});
 		return st;
 	}
 	

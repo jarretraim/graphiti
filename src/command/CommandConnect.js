@@ -49,6 +49,7 @@ draw2d.command.CommandConnect = draw2d.command.Command.extend({
        }
        this.connection.setSource(this.source);
        this.connection.setTarget(this.target);
+       
        this.canvas.addFigure(this.connection);
     },
     

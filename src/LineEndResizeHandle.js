@@ -28,7 +28,11 @@ draw2d.shape.basic.LineEndResizeHandle = draw2d.shape.basic.LineResizeHandle.ext
      */
     getRelatedPort:function()
     {
+    	if(this.owner instanceof draw2d.Connection){
          return this.owner.getTarget();
+    	}
+    	
+    	return null;
     },
     
     /**
@@ -39,7 +43,11 @@ draw2d.shape.basic.LineEndResizeHandle = draw2d.shape.basic.LineResizeHandle.ext
      */
     getOppositePort:function()
     {
+    	if(this.owner instanceof draw2d.Connection) {
          return this.owner.getSource();
+    	}
+    	
+    	return null;
     },
     
  

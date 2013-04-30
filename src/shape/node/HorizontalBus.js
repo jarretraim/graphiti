@@ -30,6 +30,8 @@ draw2d.shape.node.HorizontalBus = draw2d.shape.node.Hub.extend({
     {
         this._super(width,height,label);
         
+        this.setConnectionDirStrategy(1);
+
         this.installEditPolicy(new draw2d.policy.figure.HBusSelectionFeedbackPolicy());
     }
     

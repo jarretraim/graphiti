@@ -146,7 +146,7 @@ draw2d.shape.basic.LineResizeHandle = draw2d.shape.basic.Circle.extend({
 
         var port = this.getOppositePort();
 
-        target = port.getDropTarget(this.getX(), this.getY(), null);
+        var target = port!==null?port.getDropTarget(this.getX(), this.getY(), null): null;
 
         // the hovering element has been changed
         if (target !== this.currentTarget) {
@@ -154,7 +154,6 @@ draw2d.shape.basic.LineResizeHandle = draw2d.shape.basic.Circle.extend({
             if (this.currentTarget !== null) {
                 this.currentTarget.onDragLeave(port);
                 this.currentTarget.setGlow(false);
-//                this.getCanvas().getCurrentSelection().setGlow(false);
             }
 
             if (target !== null) {
@@ -162,7 +161,6 @@ draw2d.shape.basic.LineResizeHandle = draw2d.shape.basic.Circle.extend({
                 if(this.currentTarget!==null){
                     this.currentTarget.setGlow(true);
                 }
-        //        this.getCanvas().getCurrentSelection().setGlow(this.currentTarget!==null);
             }
         }
 
@@ -187,7 +185,6 @@ draw2d.shape.basic.LineResizeHandle = draw2d.shape.basic.Circle.extend({
                 this.onDrop(this.currentTarget);
                 this.currentTarget.onDragLeave(port);
                 this.currentTarget.setGlow(false);
-//                this.getCanvas().getCurrentSelection().setGlow(false);
                 this.currentTarget = null;
             }
         }
@@ -244,7 +241,7 @@ draw2d.shape.basic.LineResizeHandle = draw2d.shape.basic.Circle.extend({
      **/
     show:function(canvas, x, y)
     {
-      // don't call the parent function. The parent functions delete this object
+      // don't call the parent function. The parent functions make this object selectable/deleteable
       // and a resize handle can't be deleted.
       this.setCanvas(canvas);
       this.setPosition(x,y);

@@ -25,7 +25,7 @@ draw2d.command.CommandMove = draw2d.command.Command.extend({
      */
     init : function(figure, x, y)
     {
-        this._super("Figure moved");
+        this._super("Shape moved");
         this.figure = figure;
         if (typeof x === "undefined")
         {

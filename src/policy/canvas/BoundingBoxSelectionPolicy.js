@@ -11,7 +11,7 @@
  */
 draw2d.policy.canvas.BoundingboxSelectionPolicy =  draw2d.policy.canvas.SingleSelectionPolicy.extend({
 
-    NAME : "draw2d.policy.canvas.PanningSelectionPolicy",
+    NAME : "draw2d.policy.canvas.BoundingboxSelectionPolicy",
     
     /**
      * @constructor 
@@ -58,7 +58,7 @@ draw2d.policy.canvas.BoundingboxSelectionPolicy =  draw2d.policy.canvas.SingleSe
         var currentSelection = canvas.getSelection().getAll();
         
      	this._super(canvas, x,y);
-     	
+    	
      	// we click on an element which are not part of the current selection
      	// => reset the "old" current selection
      	if(this.mouseDownElement!==null && this.mouseDownElement.isResizeHandle===false && !currentSelection.contains(this.mouseDownElement)){
@@ -158,6 +158,18 @@ draw2d.policy.canvas.BoundingboxSelectionPolicy =  draw2d.policy.canvas.SingleSe
                     }
         		}
         	},this));
+         	
+         	var selection = canvas.getSelection();
+         	
+         	// adding connections to the selection of the source and target port part of the current selection
+            canvas.getLines().each($.proxy(function(i,line){
+                if(line instanceof draw2d.Connection){
+                    if(selection.contains(line.getSource().getParent()) && selection.contains(line.getTarget().getParent())){
+                        this.select(canvas,line,false);
+                    }
+                }
+            },this));
+         	
     	  this.boundingBoxFigure1.setCanvas(null);
        	  this.boundingBoxFigure1 = null;
       	  this.boundingBoxFigure2.setCanvas(null);

@@ -17,10 +17,8 @@ draw2d.geo.Point = Class.extend({
      */
     init : function(x, y)
     {
-        this.x = parseFloat(x);
-        this.y = parseFloat(y);
-//        this.x = parseInt(x);
-//        this.y = parseInt(y);
+        this.x = x;
+        this.y = y;
 
         // limit for the maxi/minimum boundary of this rectangle
         // It is not possible that the rect leave the boundary if set.

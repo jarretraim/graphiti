@@ -66,23 +66,25 @@ draw2d.layout.connection.ManhattanConnectionRouter = draw2d.layout.connection.Co
 	route:function( conn)
 	{
 	   var fromPt  = conn.getStartPoint();
-	   var fromDir = this.getStartDirection(conn);
+	   var fromDir = conn.getSource().getConnectionDirection(conn, conn.getTarget());
 	
 	   var toPt    = conn.getEndPoint();
-	   var toDir   = this.getEndDirection(conn);
+	   var toDir   = conn.getTarget().getConnectionDirection(conn, conn.getSource());
 	
 	   // calculate the lines between the two points.
 	   //
 	   this._route(conn,toPt, toDir, fromPt, fromDir);
 	   
 	   // calculate the path string for the SVG rendering
-	   //
+	   // Important: to avoid subpixel error rendering we add 0.5 to each coordinate
+	   //            With this offset the canvas can paint the line on a "full pixel" instead
+	   //            of subpixel rendering.
        var ps = conn.getPoints();
        var p = ps.get(0);
-       var path = ["M",p.x," ",p.y];
+       var path = ["M",(p.x|0)+0.5," ",(p.y|0)+0.5];
        for( var i=1;i<ps.getSize();i++){
              p = ps.get(i);
-             path.push("L", p.x, " ", p.y);
+             path.push("L", (p.x|0)+0.5, " ", (p.y|0)+0.5);
        }
        conn.svgPathString = path.join("");
 	},

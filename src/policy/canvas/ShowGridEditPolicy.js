@@ -3,19 +3,18 @@
  *   Copyright (c) 2012 Andreas Herz
  ****************************************/
 /**
- * @class draw2d.policy.canvas.SnapToGridEditPolicy
+ * @class draw2d.policy.canvas.ShowGridEditPolicy
  * 
- * A helper used to perform snapping to a grid, which is specified on the canvas via the various 
- * properties defined in this class. 
+ * Just to paint a grid in the background. 
  * 
  * 
  * @author Andreas Herz
  * 
  * @extends draw2d.policy.canvas.SnapToEditPolicy
  */
-draw2d.policy.canvas.SnapToGridEditPolicy = draw2d.policy.canvas.SnapToEditPolicy.extend({
+draw2d.policy.canvas.ShowGridEditPolicy = draw2d.policy.canvas.SnapToEditPolicy.extend({
 
-    NAME : "draw2d.policy.canvas.SnapToGridEditPolicy",
+    NAME : "draw2d.policy.canvas.ShowGridEditPolicy",
     
     GRID_COLOR  : "#e0e0f0",
     GRID_WIDTH  : 10,
@@ -30,7 +29,6 @@ draw2d.policy.canvas.SnapToGridEditPolicy = draw2d.policy.canvas.SnapToEditPolic
         this._super();
         this.canvas = null;
         this.lines = null;
-        
         if(grid){
             this.grid = grid;
         }
@@ -59,18 +57,6 @@ draw2d.policy.canvas.SnapToGridEditPolicy = draw2d.policy.canvas.SnapToEditPolic
      * @since 2.3.0
      */
     snap: function(canvas, figure, pos){
-
-        var snapPoint = figure.getSnapToGridAnchor();
-
-        pos.x= pos.x+snapPoint.x;
-        pos.y= pos.y+snapPoint.y;
-
-
-        pos.x = this.grid*Math.floor(((pos.x + this.grid/2.0) / this.grid));
-        pos.y = this.grid*Math.floor(((pos.y + this.grid/2.0) / this.grid));
-       
-        pos.x= pos.x-snapPoint.x;
-        pos.y= pos.y-snapPoint.y;
         
         return pos;
     },

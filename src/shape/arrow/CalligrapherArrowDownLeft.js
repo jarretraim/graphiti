@@ -51,7 +51,7 @@ draw2d.shape.arrow.CalligrapherArrowDownLeft = draw2d.SVGFigure.extend({
 
         
         if(this.svgNodes!==null){
-            this.svgNodes.attr({fill: "#"+this.color.hex()});
+            this.svgNodes.attr({fill: this.color.hash()});
         }
         
         this._super(attributes);

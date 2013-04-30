@@ -18,7 +18,7 @@ draw2d.command.CommandDelete = draw2d.command.Command.extend({
      */
     init: function( figure)
     {
-       this._super("Figure deleted");
+       this._super("Deleting Shape");
        this.parent   = figure.getParent();
        this.figure   = figure;
        this.canvas = figure.getCanvas();

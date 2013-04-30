@@ -39,6 +39,10 @@ draw2d.policy.figure.RectangleSelectionFeedbackPolicy = draw2d.policy.figure.Sel
         
         if(figure.selectionHandles.isEmpty())
         {
+            // Add a dotted line rectangle to the figure. Override the show/hide method of the standard
+            // figure to avoid adding these element to the hit test of the canvas. In this case the element
+            // is just visible but not part of the model or responsible for any drag/drop operation
+            //
             var box = new draw2d.shape.basic.Rectangle();
             box.setBackgroundColor(null);
             box.setDashArray("- ");
@@ -62,6 +66,8 @@ draw2d.policy.figure.RectangleSelectionFeedbackPolicy = draw2d.policy.figure.Sel
             };
             box.show(canvas);
 
+            // create standard Resize handles for the figure
+            //
             var r1= new draw2d.ResizeHandle(figure,1); // 1 = LEFT TOP
             var r2= new draw2d.ResizeHandle(figure,2); // 2 = CENTER_TOP
             var r3= new draw2d.ResizeHandle(figure,3); // 3 = RIGHT_TOP
@@ -71,6 +77,10 @@ draw2d.policy.figure.RectangleSelectionFeedbackPolicy = draw2d.policy.figure.Sel
             var r7= new draw2d.ResizeHandle(figure,7); // 7 = LEFT_BOTTOM
             var r8= new draw2d.ResizeHandle(figure,8); // 8 = LEFT_MIDDLE
 
+            // and add them to the figure. We need the reference to the ResizeHandles
+            // to remove the resize handles if the figure will be unselect. Just a simple
+            // refrence store
+            //
             figure.selectionHandles.add(r1);
             figure.selectionHandles.add(r2);
             figure.selectionHandles.add(r3);
@@ -80,16 +90,25 @@ draw2d.policy.figure.RectangleSelectionFeedbackPolicy = draw2d.policy.figure.Sel
             figure.selectionHandles.add(r7);
             figure.selectionHandles.add(r8);
             
+            // show the default top/left, top/right, bottom/right and bottom/left
+            // resize handles 
+            //
             r1.show(canvas);
             r3.show(canvas);
             r5.show(canvas);
             r7.show(canvas);
 
+            // The corner ResizeHandles are only draggable fi the figure is
+            // resizeable. But the Resize handles are visible
+            //
             r1.setDraggable(figure.isResizeable());
             r3.setDraggable(figure.isResizeable());
             r5.setDraggable(figure.isResizeable());
             r7.setDraggable(figure.isResizeable());
             
+            // change the look&feel of the corner resizehandles if the
+            // figure isn't resizeable
+            //
             if(figure.isResizeable()===true)
             {
               r1.setBackgroundColor(r1.DEFAULT_COLOR);
@@ -105,6 +124,8 @@ draw2d.policy.figure.RectangleSelectionFeedbackPolicy = draw2d.policy.figure.Sel
               r7.setBackgroundColor(null);
             }
 
+            // show only the additional resizehandles if the figure is resizeable
+            //
             if(figure.isStrechable() && figure.isResizeable())
             {
               r2.setDraggable(figure.isResizeable());
@@ -117,6 +138,10 @@ draw2d.policy.figure.RectangleSelectionFeedbackPolicy = draw2d.policy.figure.Sel
               r8.show(canvas);
             }
 
+            // add the reference of the "ant box" to the figure as well. But wee add them
+            // to the end of the array because inherit classes expect the resizehandles
+            // on index 0-7.
+            //
             figure.selectionHandles.add(box);
         }
         this.moved(canvas, figure);
@@ -124,7 +149,8 @@ draw2d.policy.figure.RectangleSelectionFeedbackPolicy = draw2d.policy.figure.Sel
   
     /**
      * @method
-     * Callback if the figure has been moved
+     * Callback if the figure has been moved. In this case we must update the position of the
+     * resize handles and the "ant" box.
      * 
      * @param figure
      * 

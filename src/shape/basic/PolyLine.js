@@ -91,6 +91,7 @@ draw2d.shape.basic.PolyLine = draw2d.shape.basic.Line.extend({
         // Use the internal router
         //
         this.router.route(this);
+        this.routingRequired=false;
     },
     
     /**
@@ -164,9 +165,11 @@ draw2d.shape.basic.PolyLine = draw2d.shape.basic.Line.extend({
      * @private
      *
      **/
-    addPoint:function(/*:draw2d.geo.Point*/ p)
+    addPoint:function(/*:draw2d.geo.Point*/ p, y)
     {
-      p = new draw2d.geo.Point(p.x, p.y);
+      if(typeof y!=="undefined"){
+          p = new draw2d.geo.Point(p, y);
+      }
       this.basePoints.add(p);
 
       if(this.oldPoint!==null){

@@ -25,13 +25,23 @@ draw2d.util.Color = Class.extend({
      * @constructor
      * Create a new Color object
      * 
-     * @param {Number} red 
+     * @param {Number|String|draw2d.util.Color} red 
      * @param {Number} green 
      * @param {Number} blue 
      */
     init: function( red, green, blue) {
     
-      if(typeof green == "undefined")
+      this.hashString = null;
+      
+      if(typeof red ==="undefined" || red===null){
+          this.hashString = "none";
+      }
+      else if(red instanceof draw2d.util.Color){
+          this.red = red.red;
+          this.green = red.green;
+          this.blue = red.blue;
+      }
+      else if(typeof green === "undefined")
       {
         var rgb = this.hex2rgb(red);
         this.red= rgb[0];
@@ -55,19 +65,6 @@ draw2d.util.Color = Class.extend({
     getHTMLStyle:function()
     {
       return "rgb("+this.red+","+this.green+","+this.blue+")";
-    },
-    
-    /**
-     * @method
-     * Convert the color object into a HTML CSS representation
-     * 
-     * @deprecated
-     * @return {String} the color in #RRGGBB representation
-     * @private
-     **/
-    getHashStyle:function()
-    {
-      return this.hash();
     },
     
     
@@ -149,7 +146,10 @@ draw2d.util.Color = Class.extend({
      **/
     hash:function()
     {
-        return "#"+this.hex();
+        if(this.hashString===null){
+            this.hashString= "#"+this.hex();
+        }
+        return this.hashString;
     },
     
     /**
@@ -170,6 +170,11 @@ draw2d.util.Color = Class.extend({
      */
     darker:function(fraction)
     {
+       // we can "darker" a undefined color. In this case we return the undefnied color itself
+       //
+       if(this.hashString==="none")
+           return this;
+        
        var red   = parseInt(Math.round (this.getRed()   * (1.0 - fraction)));
        var green = parseInt(Math.round (this.getGreen() * (1.0 - fraction)));
        var blue  = parseInt(Math.round (this.getBlue()  * (1.0 - fraction)));
@@ -191,6 +196,11 @@ draw2d.util.Color = Class.extend({
      */
     lighter:function( fraction)
     {
+        // we can "lighter" a undefined color. In this case we return the undefnied color itself
+        //
+        if(this.hashString==="none")
+            return this;
+        
         var red   = parseInt(Math.round (this.getRed()   * (1.0 + fraction)));
         var green = parseInt(Math.round (this.getGreen() * (1.0 + fraction)));
         var blue  = parseInt(Math.round (this.getBlue()  * (1.0 + fraction)));

@@ -23,6 +23,7 @@ draw2d.command.CommandReconnect = draw2d.command.Command.extend({
      * @param {draw2d.Connection} con the related Connection which is currently in the drag&drop operation
      */
     init : function(con){
+       this._super("Connecting Ports");
        this.con      = con;
        this.oldSourcePort  = con.getSource();
        this.oldTargetPort  = con.getTarget();

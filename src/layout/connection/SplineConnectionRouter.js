@@ -31,10 +31,10 @@ draw2d.layout.connection.SplineConnectionRouter = draw2d.layout.connection.Manha
     {
     	var i=0;
 		var fromPt  = conn.getStartPoint();
-		var fromDir = this.getStartDirection(conn);
+		var fromDir = conn.getSource().getConnectionDirection(conn, conn.getTarget());
 
 		var toPt  = conn.getEndPoint();
-		var toDir = this.getEndDirection(conn);
+		var toDir = conn.getTarget().getConnectionDirection(conn, conn.getSource());
 
 		// calculate the manhatten bend points between start/end.
 		//

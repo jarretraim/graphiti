@@ -83,15 +83,39 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
         this.setDeleteable(true);
    },
       
+   onDragEnd : function()
+   {
+	   this.setAlpha(this.originalAlpha);
+	   // Element ist zwar schon an seine Position, das Command muss aber trotzdem
+	   // in dem CommandStack gelegt werden damit das Undo funktioniert.
+	   //
+//	   this.command.setPosition(this.x, this.y);
+	   this.isInDragDrop = false;
+	   this.canvas.getCommandStack().execute(this.command);
+	   this.command = null;
+	   this.isMoving = false;
+	   // notify all installed policies
+	   //
+	   this.editPolicy.each($.proxy(function(i,e){
+	   if(e instanceof draw2d.policy.figure.DragDropEditPolicy){
+		   e.onDragEnd(this.canvas, this);
+	   }
+	   },this));
+	   this.fireMoveEvent();
+   },
+
    /**
     * @method
+    * Set the line style for this object.
     * 
     * experimental only.
-    * @param dash
-    * @private
+    * @param dash can be one of this [ÒÓ, Ò-Ó, Ò.Ó, Ò-.Ó, Ò-..Ó, Ò. Ó, Ò- Ó, Ò--Ó, Ò- .Ó, Ò--.Ó, Ò--..Ó] 
+    * @public
     */
    setDashArray: function(dash){
        this.dasharray = dash;
+       
+       return this;
    },
    
    
@@ -104,6 +128,8 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
    setCoronaWidth:function( width)
    {
       this.corona = width;
+      
+      return this;
    },
 
 
@@ -140,13 +166,13 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
        if(typeof attributes === "undefined"){
            attributes = {"stroke":"#"+this.lineColor.hex(),
                          "stroke-width":this.stroke,
-                         "path":"M"+this.getStartX()+" "+this.getStartY()+"L"+this.getEndX()+" "+this.getEndY()};
+                         "path":["M",this.getStartX(),this.getStartY(),"L",this.getEndX(),this.getEndY()].join(" ")};
        }
        else{
     	   if(typeof attributes.path ==="undefined"){
-    		   attributes.path ="M"+this.getStartX()+" "+this.getStartY()+"L"+this.getEndX()+" "+this.getEndY();
+    		   attributes.path =["M",this.getStartX(),this.getStartY(),"L",this.getEndX(),this.getEndY()].join(" ");
     	   }
-    	   attributes.stroke = "#"+this.lineColor.hex();
+    	   attributes.stroke = this.lineColor.hash();
     	   attributes["stroke-width"]=this.stroke;
        }
        
@@ -175,7 +201,7 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
 		   this._stroke = this.stroke;
 		   
 	       this.setColor( draw2d.util.Color("#3f72bf"));
-	       this.setStroke(parseInt(this.stroke*4));
+	       this.setStroke((this.stroke*4)|0);
 	   }
 	   else{
 	       this.setColor(this._lineColor);
@@ -183,6 +209,8 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
 	   }
 	   
 	   this.isGlowing = flag;
+	   
+	   return this;
    },
 
 
@@ -207,6 +235,8 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
      this.stroke=w;
      
      this.repaint();
+     
+     return this;
    },
 
 
@@ -219,17 +249,10 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
     **/
    setColor:function( color)
    {
-     if(color instanceof draw2d.util.Color){
-         this.lineColor = color;
-     }
-     else if(typeof color === "string"){
-         this.lineColor = new draw2d.util.Color(color);
-     }
-     else{
-         // set good default
-         this.lineColor = this.DEFAULT_COLOR;
-     }
+     this.lineColor = new draw2d.util.Color(color);
      this.repaint();
+     
+     return this;
    },
 
    /**
@@ -266,6 +289,8 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
              e.moved(this.canvas, this);
          }
      },this));
+     
+     return this;
   },
 
    /**
@@ -290,6 +315,8 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
              e.moved(this.canvas, this);
          }
      },this));
+     
+     return this;
  },
 
    /**
@@ -553,7 +580,7 @@ draw2d.shape.basic.Line.intersection = function(a1, a2, b1, b2) {
 
 //        if ( 0 <= ua && ua <= 1 && 0 <= ub && ub <= 1 ) {
         if ( 0 < ua && ua < 1 && 0 < ub && ub < 1 ) {
-            result = new draw2d.geo.Point(parseInt(a1.x + ua * (a2.x - a1.x)), parseInt(a1.y + ua * (a2.y - a1.y)));
+            result = new draw2d.geo.Point((a1.x + ua * (a2.x - a1.x))|0, (a1.y + ua * (a2.y - a1.y))|0);
         } else {
             result = null;// No Intersection;
         }

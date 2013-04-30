@@ -17,11 +17,13 @@ draw2d.util.ArrayList = Class.extend({
      * the default initial capacity.
      * 
      */
-    init: function( ) {
+    init: function( a) {
         this.increment = 10;
-        
         this.size = 0;
-        this.data = new Array(this.increment);        
+        this.data = new Array(this.increment); 
+        if(typeof a !=="undefined"){
+            $.each(a,$.proxy(function(i,e){this.add(e);},this));
+        }
     },
     
     

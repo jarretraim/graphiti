@@ -71,8 +71,12 @@ draw2d.command.CommandCollection = draw2d.command.Command.extend({
      **/
     undo:function()
     {
+        // execute the undo operation in reverse direction.
+        
+        this.commands.reverse();
         this.commands.each(function(i,cmd){
             cmd.undo();
         });
+        this.commands.reverse();
     }
 });

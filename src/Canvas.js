@@ -37,15 +37,20 @@ draw2d.Canvas = Class.extend(
 
     /**
      * @constructor
-     * Create a new canvas with the given HTML dom references.
+     * Create a new canvas with the given HTML DOM references.
      * 
      * @param {String} canvasId the id of the DOM element to use a parent container
      */
     init : function(canvasId)
     {
+        if ($.browser.msie  && parseInt($.browser.version, 10) === 8) {
+            this.fromDocumentToCanvasCoordinate = this._fromDocumentToCanvasCoordinate_IE8_HACK;
+        }
+        
         this.setScrollArea(document.body);
         this.canvasId = canvasId;
         this.html = $("#"+canvasId);
+        this.html.css({"cursor":"default"});
         this.initialWidth = this.getWidth();
         this.initialHeight = this.getHeight();
         
@@ -103,25 +108,20 @@ draw2d.Canvas = Class.extend(
         // Status handling
         //
         this.zoomFactor = 1.0; // range [0.001..10]
-        
-        
         this.selection  = new draw2d.Selection();
         this.currentDropTarget = null;
         this.isInExternalDragOperation=false;
+        this.currentHoverFigure = null;
 
         this.editPolicy = new draw2d.util.ArrayList();
-
-        // SnapTo status var's
-        //
-        this.snapToGridHelper = null;
-        this.snapToGeometryHelper = null;
 
         // internal document with all figures, ports, ....
         //
         this.figures     = new draw2d.util.ArrayList();
-        this.lines       = new draw2d.util.ArrayList();
+        this.lines       = new draw2d.util.ArrayList(); // crap - why are connections not just figures. Design by accident
         this.commonPorts = new draw2d.util.ArrayList();
         this.dropTargets = new draw2d.util.ArrayList();
+        
         // all visible resize handles which can be drag&drop around. Selection handles like AntRectangleSelectionFeedback
         // are not part of this collection
         this.resizeHandles = new draw2d.util.ArrayList();
@@ -132,6 +132,7 @@ draw2d.Canvas = Class.extend(
         this.selectionListeners = new draw2d.util.ArrayList();
 
         // The CommandStack for undo/redo operations
+        // 
         this.commandStack = new draw2d.command.CommandStack();
        
         // INTERSECTION/CROSSING handling for connections and lines
@@ -186,6 +187,27 @@ draw2d.Canvas = Class.extend(
             event = this._getEvent(event);
             if (this.mouseDown === false){
                var pos = this.fromDocumentToCanvasCoordinate(event.clientX, event.clientY);
+               // mouseEnter/mouseLeave events for Figures. Don't use the Raphael or DOM native functions.
+               // Raphael didn't work for Rectangle with transparent fill (events only fired for the border line)
+               // DOM didn't work well for lines. No eclipse area - you must hit the line exact to retrieve the event.
+               // In this case I implement my own stuff...again and again.
+               //
+               // don't break the main event loop if one element fires an error during enter/leave event.
+               try{
+	               var hover = this.getBestFigure(pos.x,pos.y);
+	               if(hover !== this.currentHoverFigure && this.currentHoverFigure!==null){
+	            	   this.currentHoverFigure.onMouseLeave();
+	               }
+	               if(hover !== this.currentHoverFigure && hover!==null){
+	            	   hover.onMouseEnter();
+	               }
+	               this.currentHoverFigure = hover;
+               }
+               catch(exc){
+            	   // just write it to the console
+            	   console.log(exc);
+               }
+
                this.editPolicy.each($.proxy(function(i,policy){
                    policy.onMouseMove(this,pos.x, pos.y);
                },this));
@@ -318,10 +340,6 @@ draw2d.Canvas = Class.extend(
         this.selection.clear();
         this.currentDropTarget = null;
         this.isInExternalDragOperation=false;
-        // SnapTo status var's
-        //
-        this.snapToGridHelper = null;
-        this.snapToGeometryHelper = null;
 
         // internal document with all figures, ports, ....
         //
@@ -383,7 +401,7 @@ draw2d.Canvas = Class.extend(
     /**
      * @method
      * 
-     * UnInstall a the selection and edit policy from the canvas.
+     * UnInstall the selection and edit policy from the canvas.
      * 
      * @since 2.2.0
      * @param {draw2d.policy.EditPolicy} policy
@@ -414,8 +432,8 @@ draw2d.Canvas = Class.extend(
         var _zoom = $.proxy(function(z){
             this.zoomFactor = Math.min(Math.max(0.01,z),10);
             
-            var viewBoxWidth  = parseInt(this.initialWidth*this.zoomFactor,10);
-            var viewBoxHeight = parseInt(this.initialHeight*this.zoomFactor,10);
+            var viewBoxWidth  = (this.initialWidth*this.zoomFactor)|0;
+            var viewBoxHeight = (this.initialHeight*this.zoomFactor)|0;
             
             this.paper.setViewBox(0, 0, viewBoxWidth, viewBoxHeight);
             
@@ -469,6 +487,12 @@ draw2d.Canvas = Class.extend(
                 (x - this.getAbsoluteX() + this.getScrollLeft())*this.zoomFactor,
                 (y - this.getAbsoluteY() + this.getScrollTop())*this.zoomFactor);
     },
+  
+    _fromDocumentToCanvasCoordinate_IE8_HACK : function(x, y) {
+            return new draw2d.geo.Point(
+                    (x - this.getAbsoluteX())*this.zoomFactor,
+                    (y - this.getAbsoluteY())*this.zoomFactor);
+    },
     
     /**
      * @method
@@ -501,14 +525,18 @@ draw2d.Canvas = Class.extend(
      * Return a common event object independed if we run on an iPad or desktop.
      * 
      * @param event
-     * @returns
+     * @return
      * @private
      */
     _getEvent:function(event){
-      if(event.originalEvent.touches && event.originalEvent.touches.length) {
-           return event.originalEvent.touches[0];
-      } else if(event.originalEvent.changedTouches && event.originalEvent.changedTouches.length) {
-           return event.originalEvent.changedTouches[0];
+      // check for iPad, Android touch events
+      //
+      if(typeof event.originalEvent !== "undefined"){  
+		  if(event.originalEvent.touches && event.originalEvent.touches.length) {
+		       return event.originalEvent.touches[0];
+		  } else if(event.originalEvent.changedTouches && event.originalEvent.changedTouches.length) {
+		       return event.originalEvent.changedTouches[0];
+		  }
       }
       return event;
     },
@@ -607,7 +635,7 @@ draw2d.Canvas = Class.extend(
 
     /**
      * @method
-     * Add a figure at the hands over x/y position.
+     * Add a figure at the given x/y coordinate.
      *
      * @param {draw2d.Figure} figure The figure to add.
      * @param {Number} [x] The x position.
@@ -726,14 +754,14 @@ draw2d.Canvas = Class.extend(
      **/
     getFigure:function(/*:String*/ id)
     {
-      for(var i=0; i<this.figures.getSize();i++)
-      {
-         var figure = this.figures.get(i);
-         if(figure.id==id){
+      var figure = null;
+      this.figures.each(function(i,e){
+          if(e.id===id){
+              figure=e;
+              return false;
+           }
+      });
             return figure;
-         }
-      }
-      return null;
     },
 
     /**
@@ -950,11 +978,26 @@ draw2d.Canvas = Class.extend(
         }
         
         // 3.) Check now the common objects
-        //
-        for ( i = 0; i < this.figures.getSize(); i++)
+        //     run from back to front to aware the z-oder of the figures
+        for ( i = (this.figures.getSize()-1); i >=0; i--)
         {
             var figure = this.figures.get(i);
-            if (figure.isVisible()===true && figure.hitTest(x, y) === true && figure !== figureToIgnore)
+            // check first a children of the figure
+            //
+            var checkRecursive = function(children){
+                children.each(function(i,e){
+                    checkRecursive(e.getChildren());
+                    if(result===null&&e.isVisible()===true && e.hitTest(x,y)===true){
+                        result = e;
+                    }
+                    return result===null; // break the each-loop if we found an element
+                });
+            };
+            checkRecursive( figure.getChildren());
+            
+            // ...and the figure itself
+            //
+            if (result ===null && figure.isVisible()===true && figure.hitTest(x, y) === true && figure !== figureToIgnore)
             {
                 if (result === null){
                     result = figure;
@@ -963,19 +1006,10 @@ draw2d.Canvas = Class.extend(
                     result = figure;
                 }
             }
-            else{
-                children= figure.getChildren();
-                children.each(function(i,e){
-                    if(e.isVisible()===true && e.hitTest(x,y)===true){
-                        result = e;
-                        return false; // break the each-loop
-                    }
-                    return true;
-                });
-            }
-        }
+
         if(result !==null){
             return result;
+            }
         }
         
         // 4.) Check the children of the lines as well

@@ -75,14 +75,14 @@ draw2d.decoration.connection.ArrowDecorator = draw2d.decoration.connection.Decor
 	paint:function(paper)
 	{
 		var st = paper.set();
-		var path = ["M0 0"];  
-		path.push(  "L", this.width, " ", -this.height/2); 
-		path.push(  "L", this.width, " ", this.height/2);
-		path.push(  "L0 0");
-		st.push(
-	        paper.path(path.join(""))
-		);
-        st.attr({fill:this.backgroundColor.hash()});
+		
+		st.push(paper.path(["M0 0" ,
+		                    "L", this.width, " ", -this.height/2,
+		                    "L", this.width, " ",  this.height/2, 
+		                    "L0 0"].join("")));
+		
+	    st.attr({fill:this.backgroundColor.hash(),stroke:this.color.hash()});
+
 		return st;
 	}
 });

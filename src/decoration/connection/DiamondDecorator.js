@@ -65,16 +65,17 @@ draw2d.decoration.connection.DiamondDecorator = draw2d.decoration.connection.Dec
 	paint:function(paper)
 	{
 		var st = paper.set();
-		var path = ["M", this.width/2," " , -this.height/2];  // Go to the top center..
-		path.push(  "L", this.width  , " ", 0);               // ...draw line to the right middle
-		path.push(  "L", this.width/2, " ", this.height/2);   // ...bottom center...
-		path.push(  "L", 0           , " ", 0);               // ...left middle...
-		path.push(  "L", this.width/2, " ", -this.height/2);  // and close the path
-		path.push(  "Z");
+
 		st.push(
-	        paper.path(path.join(""))
+	        paper.path(["M", this.width/2," " , -this.height/2,  // Go to the top center..
+	                    "L", this.width  , " ", 0,               // ...draw line to the right middle
+	                    "L", this.width/2, " ", this.height/2,   // ...bottom center...
+	                    "L", 0           , " ", 0,               // ...left middle...
+	                    "L", this.width/2, " ", -this.height/2,  // and close the path
+	                    "Z"].join(""))
 		);
-		st.attr({fill:this.backgroundColor.hash()});
+		
+		st.attr({fill:this.backgroundColor.hash(),stroke:this.color.hash()});
 		return st;
 	}
 	

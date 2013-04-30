@@ -45,8 +45,8 @@ draw2d.layout.locator.ManhattanMidpointLocator= draw2d.layout.locator.Connection
        var p1 = points.get(segmentIndex);
        var p2 = points.get(segmentIndex + 1);
     
-       var x = parseInt((p2.x - p1.x) / 2 + p1.x +5);
-       var y = parseInt((p2.y - p1.y) / 2 + p1.y +5);
+       var x = ((p2.x - p1.x) / 2 + p1.x +5)|0;
+       var y = ((p2.y - p1.y) / 2 + p1.y +5)|0;
     
        target.setPosition(x,y);
     }

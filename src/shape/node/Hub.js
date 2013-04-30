@@ -32,28 +32,36 @@ draw2d.shape.node.Hub = draw2d.shape.basic.Rectangle.extend({
 	 */
 	init : function(width, height, label)
     {
-	    this.label = null;
+ 	    this.label = null;
 	    
         this._super(width,height);
         
-        var port = this.createPort("hybrid", new draw2d.layout.locator.CenterLocator(this));
+        this.port = this.createPort("hybrid", new draw2d.layout.locator.CenterLocator(this));
+
+        this.CONNECTION_DIR_STRATEGY= [ $.proxy(function(conn, relatedPort){ return this.getParent().getBoundingBox().getDirection(relatedPort.getAbsolutePosition());},this.port),
+                                        $.proxy(function(conn, relatedPort){ return this.getAbsoluteY()>relatedPort.getAbsoluteY()?0:2;},this.port),
+                                        $.proxy(function(conn, relatedPort){ return this.getAbsoluteX()>relatedPort.getAbsoluteX()?3:1;},this.port)];
 
         // redirect the glow effect and the hitTest for the port to the parent node
         //
-        port.setGlow = $.proxy(this.setGlow,this);
-        port.hitTest = $.proxy(this.hitTest,this);
+        this.port.setGlow = $.proxy(this.setGlow,this);
+        this.port._orig_hitTest = this.port.hitTest;
+        this.port.hitTest = $.proxy(this.hitTest,this);
+       
         
         // provide a special connection anchor for this port. We use the bounding box of the
         // parent as connection border
         //
-        port.setConnectionAnchor(new draw2d.layout.anchor.ShortesPathConnectionAnchor(port));
-        port.setVisible(false);
+        this.port.setConnectionAnchor(new draw2d.layout.anchor.ShortesPathConnectionAnchor(this.port));
+        this.port.setVisible(false);
         
         // set some good defaults
         //
         if(typeof height ==="undefined"){
             this.setDimension(150, 50);
         }
+        
+        this.setConnectionDirStrategy(0);
         
         // set the border of the rectangle a little bit darker than the 
         // inner part
@@ -116,16 +124,73 @@ draw2d.shape.node.Hub = draw2d.shape.basic.Rectangle.extend({
          }
 
          if(typeof attributes === "undefined"){
-             attributes= {};
+             attributes = {};
          }
          
          // set some good defaults if the parent didn't
          if(typeof attributes.fill ==="undefined"){
-             attributes.fill="90-"+this.bgColor.hash()+":5-"+this.bgColor.lighter(0.3).hash()+":95";
-         }
+             if(this.bgColor!==null){
+                 attributes.fill="90-"+this.bgColor.hash()+":5-"+this.bgColor.lighter(0.3).hash()+":95";
+             }
+             else{
+                 attributes.fill ="none";
+             }
+        }
          
         this._super(attributes);
+     },
+     
+     /**
+      * @method
+      * Set the strategy for the connection direction calculation.<br>
+      * <br>
+      * 
+      * <ul>
+      * <li>0 - Use the best/shortest direction (UP/RIGHT/DOWN/LEFT) for the connection routing (default)
+      * <li>1 - Use UP/DOWN for the connection direction
+      * <li>2 - Use LEFT/RIGHT
+      * </ul>
+      * @param {Number} strategy the connection routing strategy to use
+      * @since 2.4.3
+      */
+     setConnectionDirStrategy: function(strategy){
+         switch(strategy){
+             case 0:
+             case 1:
+             case 2:
+                 this.port.getConnectionDirection= this.CONNECTION_DIR_STRATEGY[strategy];
+                 break;
+         }
+     },
+     
+     /**
+      * @method 
+      * Return an objects with all important attributes for XML or JSON serialization
+      * 
+      * @returns {Object}
+      */
+     getPersistentAttributes : function(){
+         var memento = this._super();
+         
+         memento.dirStrategy = this.CONNECTION_DIR_STRATEGY.indexOf(this.port.getConnectionDirection);
+         
+         return memento;
+     },
+     
+     /**
+      * @method 
+      * Read all attributes from the serialized properties and transfer them into the shape.
+      * 
+      * @param {Object} memento
+      * @returns 
+      */
+     setPersistentAttributes : function(memento) {
+         this._super(memento);
+         if(typeof memento.dirStrategy ==="number") {
+             this.setConnectionDirStrategy( memento.dirStrategy);
+         }
      }
+     
      
 
 });
