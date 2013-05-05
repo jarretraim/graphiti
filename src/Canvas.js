@@ -43,9 +43,10 @@ draw2d.Canvas = Class.extend(
      */
     init : function(canvasId)
     {
-        if ($.browser.msie  && parseInt($.browser.version, 10) === 8) {
-            this.fromDocumentToCanvasCoordinate = this._fromDocumentToCanvasCoordinate_IE8_HACK;
-        }
+        // JDR: This doesn't existing with jQuery 1.9.1
+        //if ($.browser.msie  && parseInt($.browser.version, 10) === 8) {
+        //    this.fromDocumentToCanvasCoordinate = this._fromDocumentToCanvasCoordinate_IE8_HACK;
+        // }
         
         this.setScrollArea(document.body);
         this.canvasId = canvasId;
