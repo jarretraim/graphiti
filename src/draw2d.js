@@ -29,6 +29,7 @@ var draw2d =
         icon:{},
         layout:{},
         pert:{},
+        state:{},
         widget:{}
     },
     

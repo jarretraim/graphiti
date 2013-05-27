@@ -132,7 +132,7 @@ draw2d.shape.pert.Activity = draw2d.shape.layout.VerticalLayout.extend({
       * Set the duration for the activity. This triggers a complete recalculation of the complete
       * diagram. No further calls are required
       *  
-      * @param {Float} duration the new Duration for the activity
+      * @param {Number} duration the new Duration for the activity
       */
      setDuration:function(duration){
          

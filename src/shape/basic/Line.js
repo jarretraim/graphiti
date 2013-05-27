@@ -110,7 +110,6 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
     * 
     * experimental only.
     * @param dash can be one of this [ÒÓ, Ò-Ó, Ò.Ó, Ò-.Ó, Ò-..Ó, Ò. Ó, Ò- Ó, Ò--Ó, Ò- .Ó, Ò--.Ó, Ò--..Ó] 
-    * @public
     */
    setDashArray: function(dash){
        this.dasharray = dash;
@@ -389,7 +388,7 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
    
    getSegments: function(){
        var result = new draw2d.util.ArrayList();
-       result.add({start: this.getStartPoint(), end: this.getendPoint()});
+       result.add({start: this.getStartPoint(), end: this.getEndPoint()});
        return result;
    },
    
@@ -560,6 +559,7 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
 
 
 /**
+ * see: http://en.wikipedia.org/wiki/Line-line_intersection
  * 
  * @param {draw2d.geo.Point} a1
  * @param {draw2d.geo.Point} a2
@@ -568,7 +568,7 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
  * @returns
  */
 draw2d.shape.basic.Line.intersection = function(a1, a2, b1, b2) {
-    var result;
+    var result=null;
     
     var ua_t = (b2.x - b1.x) * (a1.y - b1.y) - (b2.y - b1.y) * (a1.x - b1.x);
     var ub_t = (a2.x - a1.x) * (a1.y - b1.y) - (a2.y - a1.y) * (a1.x - b1.x);
@@ -578,20 +578,24 @@ draw2d.shape.basic.Line.intersection = function(a1, a2, b1, b2) {
         var ua = ua_t / u_b;
         var ub = ub_t / u_b;
 
-//        if ( 0 <= ua && ua <= 1 && 0 <= ub && ub <= 1 ) {
-        if ( 0 < ua && ua < 1 && 0 < ub && ub < 1 ) {
+        if ( 0 <= ua && ua <= 1 && 0 <= ub && ub <= 1 ) {
+//        if ( 0 < ua && ua < 1 && 0 < ub && ub < 1 ) {
             result = new draw2d.geo.Point((a1.x + ua * (a2.x - a1.x))|0, (a1.y + ua * (a2.y - a1.y))|0);
-        } else {
-            result = null;// No Intersection;
+            
+            // determine if the lines are crossing or just touching
+            //
+            result.justTouching=( 0 == ua || ua == 1 || 0 == ub || ub == 1 );
         }
-    } else {
+    }
+    /*
+    else {
         if ( ua_t == 0 || ub_t == 0 ) {
             result = null;// Coincident
         } else {
             result = null; // Parallel
         }
     }
-
+    */
     return result;
 };
 

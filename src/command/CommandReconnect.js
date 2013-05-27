@@ -75,7 +75,8 @@ draw2d.command.CommandReconnect = draw2d.command.Command.extend({
      **/
     cancel:function()
     {
-       this.con.calculatePath();
+        this.con.setSource(this.oldSourcePort);
+        this.con.setTarget(this.oldTargetPort);
        this.con.setRouter(this.oldRouter);
     },
     

@@ -4,13 +4,13 @@
  ****************************************/
 /**
  * @class draw2d.layout.connection.SketchBridgedConnectionRouter
- * <b>BETA VERSION. Not for production!!!<br></b>
+ * 
  * Provide a router which routes the connection in a hand drawn manner.
  * 
  * 
  * @inheritable
  * @author Andreas Herz
- * 
+ * @since 2.7.2
  * @extends  draw2d.layout.connection.MazeConnectionRouter
  */
 draw2d.layout.connection.SketchConnectionRouter = draw2d.layout.connection.MazeConnectionRouter.extend({

@@ -248,6 +248,36 @@ draw2d.geo.Point = Class.extend({
     
     /**
      * @method 
+     * substract the given point and return the new point.
+     * 
+     * @param that
+     * @returns {draw2d.geo.Point}
+     */
+    subtract:function(that)
+    {
+    	return new draw2d.geo.Point(this.x-that.x,this.y-that.y);
+    },
+    
+    
+    dot:function(that)
+    {
+    	return this.x*that.x+this.y*that.y;
+    },
+
+    cross:function(that)
+    {
+    	return this.x*that.y-this.y*that.x;
+    },
+
+    
+    lerp:function(that,t)
+    {
+    	return new draw2d.geo.Point(this.x+(that.x-this.x)*t,this.y+(that.y-this.y)*t);
+    },
+    
+
+    /**
+     * @method 
      * Clone the Point and return them
      * 
      * @returns 

@@ -60,6 +60,12 @@ draw2d.SVGFigure = draw2d.SetFigure.extend({
           var attr = { };
           var node = element.tagName;
           
+          // remove the namespace of the node if existing. This can happen in IE8
+          //
+          var index = node.indexOf(":");
+          if(index != -1)
+              node = node.substr(index+1);
+          
           // map some element to Raphael specifix attributes or ignore some unknown attributes
           //
           $(element.attributes).each(function() {

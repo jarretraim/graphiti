@@ -33,7 +33,6 @@ draw2d.command.Command = Class.extend({
      * @method
      * Returns a label of the Command. e.g. "move figure".
      *
-     * @final
      * @return {String} the label for this command
      **/
     getLabel:function()

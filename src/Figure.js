@@ -61,6 +61,9 @@ draw2d.Figure = Class.extend({
         // @see: this.children
         this.parent = null;
         
+        // generic handle for the JSON read/write of user defined data
+        this.userData = null;
+        
         // appearance, position and dim properties
         //
         this.x = 0;
@@ -136,7 +139,33 @@ draw2d.Figure = Class.extend({
                   e.onUnselect(this.canvas, this);
               }
         },this));
+
+        return this;
     },
+
+	 /**
+     * @method
+     * Allows a user to attach (or remove) data to an element, without needing to create a custom figure or shape.
+     * The data must be a valid JSON object.
+     * 
+     * @since 2.7.2
+     * @param {Object} object
+     */
+    setUserData: function(object){
+      this.userData = object;  
+    },
+
+    /**
+     * @method
+     * Returns any user data set previously on the given figure by setUserData.
+     * 
+     * @since 2.7.2
+     * @returns {Object}
+     */
+    getUserData: function(){
+        return this.userData;
+    },
+    
     
     /**
      * @method
@@ -594,7 +623,7 @@ draw2d.Figure = Class.extend({
      * @method
      * Called by the framework during drag&drop operations.
      * 
-     * @param {draw2d.Figure} figure The figure which is currently dragging
+     * @param {draw2d.Figure} draggedFigure The figure which is currently dragging
      * 
      * @return {draw2d.Figure} the figure which should receive the drop event or null if the element didn't want a drop event
      * @template
@@ -673,7 +702,7 @@ draw2d.Figure = Class.extend({
    
     /**
      * @method
-     * called by the framework if the figure should show the contextmenu.</br>
+     * called by the framework if the figure should show the contextmenu.<br>
      * The strategy to show the context menu depends on the plattform. Either loooong press or
      * right click with the mouse.
      * 
@@ -1466,7 +1495,8 @@ draw2d.Figure = Class.extend({
             x     : this.x,
             y     : this.y,
             width : this.width,
-            height: this.height
+            height: this.height,
+            userData: this.userData
         };
 
         return memento;
@@ -1493,6 +1523,10 @@ draw2d.Figure = Class.extend({
         
         if(typeof memento.height !== "undefined"){
             this.height= memento.height;
+        }
+        
+        if(typeof memento.userData !== "undefined"){
+            this.userData= memento.userData;
         }
 
         return this;

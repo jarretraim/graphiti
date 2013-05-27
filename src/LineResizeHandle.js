@@ -107,7 +107,7 @@ draw2d.shape.basic.LineResizeHandle = draw2d.shape.basic.Circle.extend({
             attributes.fill="r(.4,.3)#b4e391-#61c419:60-#299a0b";
         }
         
-        // a port did have the 0/0 coordinate i the center and not in the top/left corner
+        // a port did have the 0/0 coordinate in the center and not in the top/left corner
         //
         
        this._super(attributes);
@@ -189,6 +189,7 @@ draw2d.shape.basic.LineResizeHandle = draw2d.shape.basic.Circle.extend({
             }
         }
         
+        this.owner.isMoving=false;
         // A Connection is stuck to the corresponding ports. So we must reset the position
         // to the origin port if we doesn't drop the ResizeHandle on a other port.
         //

@@ -55,6 +55,7 @@ draw2d.layout.connection.ManhattanConnectionRouter = draw2d.layout.connection.Co
 	 * 
 	 */
     init: function(){
+        this._super();
     },
     
 	/**
@@ -67,8 +68,8 @@ draw2d.layout.connection.ManhattanConnectionRouter = draw2d.layout.connection.Co
 	{
 	   var fromPt  = conn.getStartPoint();
 	   var fromDir = conn.getSource().getConnectionDirection(conn, conn.getTarget());
-	
-	   var toPt    = conn.getEndPoint();
+
+       var toPt    = conn.getEndPoint();
 	   var toDir   = conn.getTarget().getConnectionDirection(conn, conn.getSource());
 	
 	   // calculate the lines between the two points.

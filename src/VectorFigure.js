@@ -149,7 +149,7 @@ draw2d.VectorFigure = draw2d.shape.node.Node.extend({
    },
 
    /**
-    * @mehod
+    * @me hod
     * Set the color of the line.
     * This method fires a <i>document dirty</i> event.
     * 

@@ -418,7 +418,7 @@ draw2d.util.ArrayList = Class.extend({
       */
      clone:function() 
      {
-        var newVector = new draw2d.util.ArrayList(this.size);
+        var newVector = new draw2d.util.ArrayList();
     
         for (var i=0; i<this.size; i++) {
            newVector.add(this.data[i]);

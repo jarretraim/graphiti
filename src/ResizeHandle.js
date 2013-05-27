@@ -428,8 +428,7 @@ draw2d.ResizeHandle = draw2d.shape.basic.Rectangle.extend({
      * return true if the element can be used in combination with the 
      * SnapToHelper feature.
      *
-     * @return boolean
-     * @public
+     * @return [boolean]
      **/
     supportsSnapToHelper:function()
     {

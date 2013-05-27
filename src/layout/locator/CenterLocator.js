@@ -56,7 +56,7 @@ draw2d.layout.locator.CenterLocator= draw2d.layout.locator.Locator.extend({
        // TODO: instanceof is always a HACK. ugly. Redirect the call to the figure instead of 
        // determine the position with a miracle.
        //
-       if(target instanceof draw2d.shape.basic.Circle){
+       if(target instanceof draw2d.Port){
            target.setPosition(boundingBox.w/2,boundingBox.h/2);
        }
        else{

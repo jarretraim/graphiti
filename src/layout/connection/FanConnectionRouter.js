@@ -54,13 +54,14 @@
  * @extends draw2d.layout.connection.DirectRouter
  */
 draw2d.layout.connection.FanConnectionRouter = draw2d.layout.connection.DirectRouter.extend({
-    NAME : "gdraw2d.layout.connection.FanConnectionRouter",
+    NAME : "draw2d.layout.connection.FanConnectionRouter",
 
     /**
      * @constructor Creates a new Router object.
      */
     init : function()
     {
+        this._super();
         
     },
 

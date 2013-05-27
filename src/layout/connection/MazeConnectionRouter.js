@@ -22,7 +22,9 @@ draw2d.layout.connection.MazeConnectionRouter = draw2d.layout.connection.Connect
 	 * 
 	 */
     init: function(){
-    	this.useSpline = false;
+        this._super();
+
+        this.useSpline = false;
     	this.useSimplify = true;
     	this.useSimplifyValue=2;
     	this.useDebug = false;

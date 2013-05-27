@@ -21,6 +21,21 @@
 draw2d.shape.basic.Label= draw2d.SetFigure.extend({
 
 	NAME : "draw2d.shape.basic.Label",
+    FONT_FALLBACK:  {
+      'Georgia'            :'Georgia, serif',
+      'Palatino Linotype'  :'"Palatino Linotype", "Book Antiqua", Palatino, serif',
+      'Times New Roman'    :'"Times New Roman", Times, serif',
+      'Arial'              :'Arial, Helvetica, sans-serif',
+      'Arial Black'        :'"Arial Black", Gadget, sans-serif',   
+      'Comic Sans MS'      :'"Comic Sans MS", cursive, sans-serif',    
+      'Impact'             :'Impact, Charcoal, sans-serif',
+      'Lucida Sans Unicode':'"Lucida Sans Unicode", "Lucida Grande", sans-serif',  
+      'Tahoma, Geneva'     :'Tahoma, Geneva, sans-seri',
+      'Trebuchet MS'       :'"Trebuchet MS", Helvetica, sans-serif',
+      'Verdana'            :'Verdana, Geneva, sans-serif',
+      'Courier New'        :'"Courier New", Courier, monospace',
+      'Lucida Console'     :'"Lucida Console", Monaco, monospace'},
+      
 
     /**
      * @constructor
@@ -49,11 +64,13 @@ draw2d.shape.basic.Label= draw2d.SetFigure.extend({
         //
         this.fontSize = 12;
         this.fontColor = new draw2d.util.Color("#080808");
+        this.fontFamily = null;
         this.padding = 4;
         this.bold = false;
         
         
         // set some good defaults
+        //
         this.setStroke(1);
         this.setDimension(10,10);
         
@@ -104,6 +121,9 @@ draw2d.shape.basic.Label= draw2d.SetFigure.extend({
         lattr["font-weight"] = (this.bold===true)?"bold":"normal";
         lattr["text-anchor"] = "start";
         lattr["font-size"] = this.fontSize;
+        if(this.fontFamily!==null){
+            lattr["font-family"] = this.fontFamily;
+        }
         lattr.fill = this.fontColor.hash();
         this.svgNodes.attr(lattr);
 
@@ -169,23 +189,14 @@ draw2d.shape.basic.Label= draw2d.SetFigure.extend({
     
     
     /**
-     * @mehod
+     * @method
      * Set the color of the font.
      * 
      * @param {draw2d.util.Color/String} color The new color of the line.
      **/
     setFontColor:function( color)
     {
-      if(color instanceof draw2d.util.Color){
-          this.fontColor = color;
-      }
-      else if(typeof color === "string"){
           this.fontColor = new draw2d.util.Color(color);
-      }
-      else{
-          // set good default
-          this.fontColor = new draw2d.util.Color(0,0,0);
-      }
       this.repaint();
     },
 
@@ -215,6 +226,56 @@ draw2d.shape.basic.Label= draw2d.SetFigure.extend({
       this.padding = padding;
       this.repaint();
     },
+    
+    /**
+     * @method
+     * Set the font family to use. If you use the <b>bold</b> font names the typical fallback 
+     * font are installed as well.
+     * 
+     * <b>Serif Fonts</b>
+     * <ul>
+     *  <li><b>Georgia</b>, serif   
+     *  <li><b>Palatino Linotype</b>, "Book Antiqua", Palatino, serif    
+     *  <li><b>Times New Roman</b>, Times, serif     
+     * </ul>
+     * 
+     * <b>Sans-Serif Fonts</b>
+     * <ul>
+     *  <li><b>Arial</b>, Helvetica, sans-serif    
+     *  <li><b>Arial Black</b>, Gadget, sans-serif   
+     *  <li><b>Comic Sans MS</b>, cursive, sans-serif    
+     *  <li><b>Impact, Charcoal</b>, sans-serif    
+     *  <li><b>Lucida Sans Unicode</b>, "Lucida Grande", sans-serif  
+     *  <li><b>Tahoma, Geneva</b>, sans-serif  
+     *  <li><b>Trebuchet MS</b>, Helvetica, sans-serif   
+     *  <li><b>Verdana</b>, Geneva, sans-serif     
+     * </ul>
+     * 
+     * <b>Monospace Fonts</b>
+     * <ul>
+     *  <li><b>Courier New</b>, Courier, monospace   
+     *  <li><b>Lucida Console</b>, Monaco, monospace
+     * </ul>
+     *
+     * @param {font} font The font to use
+     **/
+    setFontFamily: function( font)
+    {
+      this.cachedMinWidth  = null;
+      this.cachedMinHeight = null;
+      this.cachedWidth=null;
+      this.cachedHeight=null;
+      
+      // check for fallback
+      //
+      if(this.FONT_FALLBACK[font]!== "undefined"){
+          font=this.FONT_FALLBACK[font];
+      }
+      
+      this.fontFamily = font;
+      this.repaint();
+    },
+    
     
     /**
      * @method
@@ -424,6 +485,9 @@ draw2d.shape.basic.Label= draw2d.SetFigure.extend({
          var memento = this._super();
          
          memento.text = this.text;
+         memento.fontSize = this.fontSize;
+         memento.fontColor = this.fontColor.hash();
+         memento.fontFamily = this.fontFamily;
          
          return memento;
      },
@@ -440,6 +504,15 @@ draw2d.shape.basic.Label= draw2d.SetFigure.extend({
          this._super(memento);
          if(typeof memento.text !=="undefined"){
              this.setText(memento.text);
+         }
+         if(typeof memento.fontFamily !=="undefined"){
+             this.setFontFamily(memento.fontFamily);
+         }
+         if(typeof memento.fontSize !=="undefined"){
+             this.setFontSize(memento.fontSize);
+         }
+         if(typeof memento.fontColor !=="undefined"){
+             this.setFontColor(memento.fontColor);
          }
      }
 

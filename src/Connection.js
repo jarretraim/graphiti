@@ -256,12 +256,19 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
      **/
     setRouter:function(router)
     {
+      if(this.router !==null){
+          this.router.onUninstall(this);
+      }
+      
       if(typeof router ==="undefined" || router===null){
     	  this.router = new draw2d.layout.connection.NullRouter();
       }
       else{
     	  this.router = router;
       }
+      
+      this.router.onInstall(this);
+      
       this.routingRequired =true;
     
       // repaint the connection with the new router
@@ -327,10 +334,14 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
 	    // and rotate them as well
 	    //
 	    if(this.sourceDecoratorNode!==null){
-	  	  this.sourceDecoratorNode.transform("r"+this.getStartAngle()+"," + this.getStartX() + "," + this.getStartY()+" t" + this.getStartX() + "," + this.getStartY());
+	    	var start = this.getPoints().get(0);
+	  	    this.sourceDecoratorNode.transform("r"+this.getStartAngle()+"," + start.x + "," + start.y
+	  			                            +" t" + start.x + "," + start.y);
 	    }
         if(this.targetDecoratorNode!==null){
-            this.targetDecoratorNode.transform("r"+this.getEndAngle()+"," + this.getEndX() + "," + this.getEndY()+" t" + this.getEndX() + "," + this.getEndY());
+	    	var end = this.getPoints().getLastElement();
+            this.targetDecoratorNode.transform("r"+this.getEndAngle()+"," + end.x + "," + end.y
+            		                          +" t" + end.x + "," + end.y);
         }
 
     },
@@ -508,6 +519,21 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
     
     /**
      * @method
+     * Method returns true if the connection has at least one common port with the given connection.
+     * 
+     * @param {draw2d.Connection} other
+     * @returns {Boolean}
+     */
+    sharingPorts:function(other){
+        return this.sourcePort== other.sourcePort ||
+               this.sourcePort== other.targetPort ||
+               this.targetPort== other.sourcePort ||
+               this.targetPort== other.targetPort;
+    },
+
+    
+    /**
+     * @method
      * Set the canvas element of this figures.
      * 
      * @param {draw2d.Canvas} canvas the new parent of the figure or null
@@ -516,6 +542,7 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
     {
        this._super(canvas);
        
+
        if(this.sourceDecoratorNode!==null){
            this.sourceDecoratorNode.remove();
            this.sourceDecoratorNode=null;
@@ -527,6 +554,8 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
        }
        
        if(this.canvas===null){
+           this.router.onUninstall(this);
+           
            if(this.sourcePort!==null){
                this.sourcePort.detachMoveListener(this);
                this.sourcePort.onDisconnect(this);
@@ -537,6 +566,8 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
            }
        }
        else{
+           this.router.onInstall(this);
+           
            if(this.sourcePort!==null){
                this.sourcePort.attachMoveListener(this);
                this.sourcePort.onConnect(this);

@@ -31,9 +31,6 @@ draw2d.shape.basic.PolyLine = draw2d.shape.basic.Line.extend({
       this.lineSegments = new draw2d.util.ArrayList();
       this.basePoints = new draw2d.util.ArrayList();
       
-      // all possible brides (line crossings)
-      this.bridges = new draw2d.util.ArrayList();
-
       this._super();
     },
     

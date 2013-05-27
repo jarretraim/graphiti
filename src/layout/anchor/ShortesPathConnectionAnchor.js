@@ -40,7 +40,20 @@ draw2d.layout.anchor.ShortesPathConnectionAnchor = draw2d.layout.anchor.Connecti
 	 */
 	getLocation : function(ref) {
 		var r =  this.getOwner().getParent().getBoundingBox();
+	    var center = r.getCenter();
 	    
+		// check if we can calculate with a circle/line intersection
+		//
+		if(this.getOwner().getParent() instanceof draw2d.shape.basic.Oval){	
+			var result = this.getOwner().getParent().intersectionWithLine(ref,center);
+			if(result.getSize()==1){
+				return result.get(0);
+			}
+			else{
+			    console.log("error");
+			}
+		}
+		
 		/*    0 | 1 | 2
 	     *    __|___|__
 	     *    7 | 8 | 3

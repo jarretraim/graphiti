@@ -8,14 +8,7 @@
  * <strong>Usage</strong>
  *      <script type="text/javascript">
  *      
- *      // Draw2D callback if the lib has been loaded 
- *      // now you can run your own code...
- *      function draw2dLoaded()
- *      {
- *      
- *          document.ontouchmove = function(e) {
- *              e.preventDefault();
- *          };
+ *      $(window).load(function () {
  *          
  *          var canvas = new draw2d.Canvas("gfx_holder");
  *      
@@ -23,9 +16,7 @@
  *          var figure2 = new draw2d.shape.basic.Rectangle();
  *          canvas.addFigure(figure1,100,100);
  *          canvas.addFigure(figure2,120,150);
- *      
- *      };
- *      
+ *      });
  *      </script>
  *      
  * @inheritable
@@ -409,7 +400,7 @@ draw2d.Canvas = Class.extend(
      */
     uninstallEditPolicy: function(policy){
         if(!(policy instanceof draw2d.policy.EditPolicy)){
-            return; // silentyl
+            return; // silently
         }
         
         this.editPolicy.grep($.proxy(function(p){
@@ -767,8 +758,8 @@ draw2d.Canvas = Class.extend(
 
     /**
      * @method
-     * Return all intersections between the given line and all other
-     * lines in the canvas
+     * Return all intersections draw2d.geo.Point between the given line and all other
+     * lines in the canvas.
      * 
      * @param {draw2d.shape.basic.Line} line the line for the intersection test
      * @return {draw2d.util.ArrayList} 
@@ -777,11 +768,15 @@ draw2d.Canvas = Class.extend(
        var result = new draw2d.util.ArrayList();
        this.lineIntersections.each($.proxy(function(i, entry){
            if(entry.line ===line){
-               result.addAll(entry.intersection);
+               entry.intersection.each(function(i,p){
+                   result.add({x:p.x, y:p.y, justTouching:p.justTouching, other:entry.other});
+               });
            }
        },this));
        return result;
     },
+    
+
     
 
     /** 

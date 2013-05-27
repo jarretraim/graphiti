@@ -19,6 +19,8 @@ draw2d.layout.connection.SplineConnectionRouter = draw2d.layout.connection.Manha
      */
     init : function()
     {
+        this._super();
+
 //        this.spline = new draw2d.util.spline.CatmullRomSpline();
         this.spline = new draw2d.util.spline.CubicSpline();
 //        this.spline = new draw2d.util.spline.BezierSpline();
