@@ -164,6 +164,8 @@ draw2d.Canvas = Class.extend(
 
             event = this._getEvent(event);
 
+            this.calculateConnectionIntersection();
+
             this.mouseDown = false;
             var pos = this.fromDocumentToCanvasCoordinate(event.clientX, event.clientY);
             this.editPolicy.each($.proxy(function(i,policy){
@@ -345,8 +347,14 @@ draw2d.Canvas = Class.extend(
         // INTERSECTION/CROSSING handling for connections and lines
         //
         this.linesToRepaintAfterDragDrop =  new draw2d.util.ArrayList();
-        
         this.lineIntersections = new draw2d.util.ArrayList();
+        
+        // Inform all listener that the selection has been cleanup. Normally this will be done
+        // by the edit policies of the canvas..but exceptional this is done in the clear method as well -
+        // Design flaw.
+        this.selectionListeners.each(function(i,w){
+            w.onSelectionChanged(null);
+        });
     },
     
     /**

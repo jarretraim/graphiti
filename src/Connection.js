@@ -121,6 +121,7 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
 
       this.setColor("#1B1B1B");
       this.setStroke(1);
+      this.setCssClass("stroke");
     },
     
 
@@ -337,11 +338,15 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
 	    	var start = this.getPoints().get(0);
 	  	    this.sourceDecoratorNode.transform("r"+this.getStartAngle()+"," + start.x + "," + start.y
 	  			                            +" t" + start.x + "," + start.y);
+	  	    
+	  	    // propagate the color and the opacity to the decoration as well
+	  	  this.sourceDecoratorNode.attr({"stroke":"#"+this.lineColor.hex(), opacity:this.alpha});
 	    }
         if(this.targetDecoratorNode!==null){
 	    	var end = this.getPoints().getLastElement();
             this.targetDecoratorNode.transform("r"+this.getEndAngle()+"," + end.x + "," + end.y
             		                          +" t" + end.x + "," + end.y);
+            this.targetDecoratorNode.attr({"stroke":"#"+this.lineColor.hex(), opacity:this.alpha});
         }
 
     },

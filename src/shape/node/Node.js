@@ -302,6 +302,8 @@ draw2d.shape.node.Node = draw2d.Figure.extend({
     	// relayout the ports
     	this.setDimension(this.width,this.height);
     	
+        this.layoutPorts();
+
     	return newPort;
     },
     

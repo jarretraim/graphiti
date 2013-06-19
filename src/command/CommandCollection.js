@@ -42,6 +42,27 @@ draw2d.command.CommandCollection = draw2d.command.Command.extend({
     
     /**
      * @method
+     * Returns [true] if the command can be execute and the execution of the
+     * command modifies the model. e.g.: a CommandMove with [startX,startX] == [endX,endY] should
+     * return false. The execution of this Command doesn't modify the model.
+     *
+     * @return boolean
+     **/
+    canExecute:function()
+    {
+        // We ask all cmd's if they make any changes.
+        // Keep in mind: the command will be execute if at least ONE command return [true]!!!!
+        // doesn't matter if the other commands return [false].
+        // The method should be renamed into: modifiesTheModel()....design flaw.
+        var canExec = false;
+        this.commands.each(function(i,cmd){
+            canExec = canExec|| cmd.canExecute();
+        });
+        return canExec;
+    },
+    
+    /**
+     * @method
      * Execute the command the first time
      * 
      **/

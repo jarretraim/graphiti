@@ -96,18 +96,8 @@ draw2d.shape.basic.Rectangle = draw2d.VectorFigure.extend({
      * 
      * @inheritdoc
      */
-    createShapeElement : function()
-    {
-	   var r = this.canvas.paper.rect(this.getAbsoluteX(),this.getAbsoluteY(),this.getWidth(), this.getHeight());
-
-       //var r = this.canvas.paper.rect(this.getX(),this.getY(),
-       //                               this.getWidth(), this.getHeight());
-
-       if (this.getCssClass()) {
-        r.node.setAttribute("class", this.getCssClass());
-       }
-
-       return r;
+    createShapeElement : function(){
+       return this.canvas.paper.rect(this.getAbsoluteX(),this.getAbsoluteY(),this.getWidth(), this.getHeight());
     },
 
     /**

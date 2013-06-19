@@ -140,13 +140,7 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
     **/
    createShapeElement:function()
    {
-      var s = this.canvas.paper.path("M"+this.getStartX()+" "+this.getStartY()+"L"+this.getEndX()+" "+this.getEndY());
-
-      if (this.getCssClass())  {
-        s.node.setAttribute("class", this.getCssClass());    
-      }
-      
-      return s; 
+     return this.canvas.paper.path("M"+this.getStartX()+" "+this.getStartY()+"L"+this.getEndX()+" "+this.getEndY());
    },
 
    /**

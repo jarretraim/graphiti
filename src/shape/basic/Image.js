@@ -23,10 +23,36 @@ draw2d.shape.basic.Image = draw2d.shape.node.Node.extend({
      */
     init : function(path,  width, height)
     {
-        this._super(width, height);
         this.path = path;
+        this._super(width, height);
     },
       
+
+    /**
+     * @method
+     * Set the image path attribute of the Image shape and repaint them.
+     * The path can be relative or absolute
+     * 
+     * @param path
+     * @since 2.8.0
+     */
+    setPath: function(path){
+        this.path = path;
+        this.repaint();
+        
+        return this;
+    },
+      
+    /**
+     * @method
+     * Return the image path attribute of the shape.
+     * 
+     * @returns {String}
+     * @since 2.8.0
+     */
+    getPath: function(){
+        return this.path;
+    },
 
    /**
     * @method
@@ -46,6 +72,7 @@ draw2d.shape.basic.Image = draw2d.shape.node.Node.extend({
         attributes.y = this.getAbsoluteY();
         attributes.width = this.getWidth();
         attributes.height = this.getHeight();
+        attributes.src = this.path;
         
         this._super(attributes);
     },
@@ -58,8 +85,38 @@ draw2d.shape.basic.Image = draw2d.shape.node.Node.extend({
     createShapeElement : function()
     {
        return this.canvas.paper.image(this.path,this.getX(),this.getY(),this.getWidth(), this.getHeight());
-    }
+    },
+    
 
+    /**
+     * @method 
+     * Return an objects with all important attributes for XML or JSON serialization
+     * 
+     * @returns {Object}
+     */
+    getPersistentAttributes : function()
+    {
+        var memento = this._super();
+        
+        memento.path = this.path;
+        
+        return memento;
+    },
+    
+    /**
+     * @method 
+     * Read all attributes from the serialized properties and transfer them into the shape.
+     * 
+     * @param {Object} memento
+     * @returns 
+     */
+    setPersistentAttributes : function(memento)
+    {
+        this._super(memento);
+        if(typeof memento.path !=="undefined"){
+            this.setPath(memento.path);
+    }
+    }
 
 });
 

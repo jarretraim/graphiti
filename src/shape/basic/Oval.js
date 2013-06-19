@@ -49,15 +49,7 @@ draw2d.shape.basic.Oval = draw2d.VectorFigure.extend({
    {
      var halfW = this.getWidth()/2;
      var halfH = this.getHeight()/2;
-
-      var e = this.canvas.paper.ellipse(this.getAbsoluteX()+halfW, 
-                                        this.getAbsoluteY()+halfH, halfW, halfH);
-        
-      if (this.getCssClass())  {
-          e.node.setAttribute("class", this.getCssClass());    
-      }
-      
-      return e;
+     return this.canvas.paper.ellipse(this.getAbsoluteX()+halfW, this.getAbsoluteY()+halfH, halfW, halfH);
    },
 
    /**

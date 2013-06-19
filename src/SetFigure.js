@@ -53,6 +53,34 @@ draw2d.SetFigure = draw2d.shape.basic.Rectangle.extend({
       this._super(canvas);
      },
  
+     /**
+      * @method
+      * Set the css class if the node.
+      * 
+      * @param {String} cssClass the new css class name of the node
+      * @since 2.9.0
+      */
+     setCssClass: function(cssClass)
+     {
+         this._super(cssClass);
+         
+         if(this.svgNodes===null){
+             return this;
+         }
+         
+         if(this.cssClass===null){
+             this.svgNodes.forEach(function(e){
+                 e.node.removeAttribute("class");
+             });
+         }
+         else{
+             this.svgNodes.forEach(function(e){
+                 e.node.setAttribute("class", cssClass);
+             });
+         }
+                 
+         return this;
+     },
      
      
     /**
@@ -120,6 +148,17 @@ draw2d.SetFigure = draw2d.shape.basic.Rectangle.extend({
        // The "set" must always be on top.
        var shape= this.canvas.paper.rect(this.getX(),this.getY(),this.getWidth(), this.getHeight());
        this.svgNodes = this.createSet();
+       
+       // check if the element is a "set" or a simple raphael shape. otherwise we wrap them into a set 
+       //
+       if(typeof this.svgNodes.forEach==="undefined"){
+           var set = this.canvas.paper.set();
+           set.push(this.svgNodes);
+           this.svgNodes = set;
+       }
+       
+       // propagate the CSS style to all set elements
+       this.setCssClass(this.cssClass);
        
        var bb = this.svgNodes.getBBox();
        this.originalWidth = bb.width;

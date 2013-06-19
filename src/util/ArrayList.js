@@ -177,17 +177,27 @@ draw2d.util.ArrayList = Class.extend({
      * Add all elements into this array.
      *
      * @param {draw2d.util.ArrayList} list
+     * @param {boolean} [avoidDuplicates] checks whenever the new elements exists before insert if the parameter is to [true] 
+     * 
      * @return {draw2d.util.ArrayList} self
      */
-     addAll:function(list)
+     addAll:function(list, avoidDuplicates)
      {
         if(!(list instanceof draw2d.util.ArrayList)){
           throw "Unable to handle unknown object type in ArrayList.addAll";
         }
-
-        for (var i=0;i<list.getSize(); i++)
-        {
-           this.add(list.get(i));
+        var _this=this; // just to avoid $.proxy;
+        if(typeof avoidDuplicates==="undefined" || avoidDuplicates===false){
+            list.each(function(i,e){
+                _this.add(e); 
+            });
+        }
+        else{
+            list.each(function(i,e){
+                if(!_this.contains(e)){
+                    _this.add(e); 
+                }
+            });
         }
         return this;
      },

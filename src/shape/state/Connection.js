@@ -50,6 +50,9 @@ draw2d.shape.state.Connection = draw2d.Connection.extend({
     {
         this.label.setText(text);
         
+        // hide the label if no text available
+        this.label.setVisible(!(text===null || text ===""));
+        
         return this;
     },
     

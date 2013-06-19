@@ -45,9 +45,9 @@ draw2d.command.Command = Class.extend({
      * @method
      * Returns [true] if the command can be execute and the execution of the
      * command modifies the model. e.g.: a CommandMove with [startX,startX] == [endX,endY] should
-     * return false. Rhe execution of this Command doesn't modify the model.
+     * return false. The execution of this Command doesn't modify the model.
      *
-     * @return boolean
+     * @return {boolean} return try if the command modify the model or make any relevant changes
      **/
     canExecute:function()
     {

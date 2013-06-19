@@ -25,7 +25,7 @@ draw2d.VectorFigure = draw2d.shape.node.Node.extend({
         this.bgColor   = new  draw2d.util.Color(255,255,255);
         this.lineColor = new  draw2d.util.Color(128,128,255);
         this.color     = new  draw2d.util.Color(128,128,128);
-        
+           
         // memento for the stroke if we reset the glow effect of this shape
         //
         this.strokeBeforeGlow = this.stroke;
@@ -105,7 +105,7 @@ draw2d.VectorFigure = draw2d.shape.node.Node.extend({
     **/
     setBackgroundColor : function(color)
     {
-            this.bgColor = new draw2d.util.Color(color);
+        this.bgColor = new draw2d.util.Color(color);
 
         this.repaint();
         
@@ -157,7 +157,7 @@ draw2d.VectorFigure = draw2d.shape.node.Node.extend({
     **/
    setColor:function( color)
    {
-         this.color = new draw2d.util.Color(color);
+     this.color = new draw2d.util.Color(color);
      this.repaint();
      
      return this;

@@ -71,6 +71,7 @@ draw2d.Figure = Class.extend({
         this.minHeight = 5;
         this.minWidth = 5;
         this.rotationAngle = 0;
+        this.cssClass = null;
         
         if(typeof height !== "undefined"){
             this.width  = width;
@@ -165,28 +166,7 @@ draw2d.Figure = Class.extend({
     getUserData: function(){
         return this.userData;
     },
-    
-    
-    /**
-     * @method
-     * Add the figure to the current selection and propagate this to all edit policies.
-     * 
-     * @param {boolean} [isPrimarySelection] true if the element should be the primary selection
-     * @final
-     */
-    setCssClass: function(klass) {
-      this.cssClass = klass;
-    },
-    
-    /**
-     * @method
-     *  Return the CSS class for this element.
-     */
-    getCssClass: function() {
-      return this.cssClass;
-    },
-    
-
+       
     /**
      * @method
      * Return the UUID of this element. 
@@ -208,6 +188,108 @@ draw2d.Figure = Class.extend({
     {
         this.id = id; 
 
+        return this;
+    },
+    
+
+    /**
+     * @method
+     * Return the css styling class name of the element.
+     * 
+     * @return {String}
+     */
+    getCssClass: function()
+    {
+       return this.cssClass; 
+    },
+    
+    /**
+     * @method
+     * Set the css class if the node.
+     * 
+     * @param {String} cssClass the new css class name of the node
+     * @since 2.9.0
+     */
+    setCssClass: function(cssClass)
+    {
+        this.cssClass = cssClass===null?null:$.trim(cssClass);
+        
+        if(this.shape===null){
+            return this;
+        }
+        
+        if(this.cssClass===null){
+            this.shape.node.removeAttribute("class");
+        }
+        else{
+            this.shape.node.setAttribute("class", this.cssClass);
+        }
+                
+        return this;
+    },
+    
+    /**
+     * @method
+     * The method will return true if the class is assigned to the element, even if other classes also are.
+     * 
+     * @param {String} className the class name to check
+     * @since 2.9.0
+     */
+    hasCssClass: function(className) {
+        if(this.cssClass===null){
+            return false;
+        }
+        
+        return new RegExp(' ' + $.trim(className) + ' ').test(' ' + this.cssClass + ' ');
+    },
+
+    /**
+     * @method
+     * It's important to note that this method does not replace a class. It simply adds the class, 
+     * appending it to any which may already be assigned to the elements.
+     * 
+     * @param {String} className
+     * @since 2.9.0
+     */
+    addCssClass: function( className) {
+        className = $.trim(className);
+        if (!this.hasCssClass( className)) {
+            if(this.cssClass===null){
+                this.setCssClass(className);
+            }
+            else{
+                this.setCssClass(this.cssClass + ' ' + className);
+            }
+        }
+        
+        return this;
+    },
+
+    removeCssClass:function(className) {
+        className = $.trim(className);
+        var newClass = ' ' + this.cssClass.replace( /[\t\r\n]/g, ' ') + ' ';
+        if (this.hasCssClass(className)) {
+            while (newClass.indexOf(' ' + className + ' ') >= 0 ) {
+                newClass = newClass.replace(' ' + className + ' ', ' ');
+            }
+            this.setCssClass( newClass.replace(/^\s+|\s+$/g, ''));
+        }
+        
+        return this;
+    },
+    
+    toggleCssClass:function( className) {
+        className = $.trim(className);
+        var newClass = ' ' + this.cssClass.replace( /[\t\r\n]/g, ' ' ) + ' ';
+        if (this.hasCssClass( className)) {
+            while (newClass.indexOf(' ' + className + ' ') >= 0 ) {
+                newClass = newClass.replace( ' ' + className + ' ' , ' ' );
+            }
+            this.setCssClass( newClass.replace(/^\s+|\s+$/g, ''));
+        } else {
+            this.setCssClass(this.cssClass + ' ' + className);
+        }
+        
         return this;
     },
     
@@ -246,6 +328,8 @@ draw2d.Figure = Class.extend({
       this.children.each(function(i,e){
           e.figure.setCanvas(canvas);
       });
+      
+      return this;
       
      },
      
@@ -290,6 +374,8 @@ draw2d.Figure = Class.extend({
   		  window.clearInterval(this.timerId);
 		  this.timerId=-1;
     	} 
+    	
+    	return this;
      },
 
      /**
@@ -329,6 +415,8 @@ draw2d.Figure = Class.extend({
          }
          policy.onInstall(this);
          this.editPolicy.add(policy);
+         
+         return this;
      },
      
      /**
@@ -368,6 +456,7 @@ draw2d.Figure = Class.extend({
          this.children.each(function(i,e){
              shapes.add(e.figure);
          });
+         
          return shapes;
      },
      
@@ -383,6 +472,8 @@ draw2d.Figure = Class.extend({
          });
          this.children= new draw2d.util.ArrayList();
          this.repaint();
+         
+         return this;
      },
      
 
@@ -399,6 +490,12 @@ draw2d.Figure = Class.extend({
        }
 
       this.shape=this.createShapeElement();
+      
+      // add CSS class to enable styling of the element with CSS rules/files
+      //
+      if(this.cssClass!==null){
+          this.shape.node.setAttribute("class",this.cssClass);
+      }
       
       return this.shape;
     },
@@ -1499,6 +1596,11 @@ draw2d.Figure = Class.extend({
             userData: this.userData
         };
 
+        
+        if(this.cssClass!==null){
+            memento.cssClass= this.cssClass;
+        }
+        
         return memento;
     },
     
@@ -1527,6 +1629,10 @@ draw2d.Figure = Class.extend({
         
         if(typeof memento.userData !== "undefined"){
             this.userData= memento.userData;
+        }
+
+        if(typeof memento.cssClass !== "undefined"){
+            this.setCssClass(memento.cssClass);
         }
 
         return this;
