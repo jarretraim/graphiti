@@ -38,10 +38,10 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
      * @constructor
      * Creates a new figure element which are not assigned to any canvas.
      * 
-     * @param {Number} startX the x-coordinate of the start
-     * @param {Number} startY the y-coordinate of the start
-     * @param {Number} endX   the x-coordinate of the end
-     * @param {Number} endY   the y-coordinate of the end
+     * @param {Number} start.x the x-coordinate of the start
+     * @param {Number} start.y the y-coordinate of the start
+     * @param {Number} end.x   the x-coordinate of the end
+     * @param {Number} end.y   the y-coordinate of the end
      * 
      */
     init: function(startX, startY, endX, endY ) {
@@ -57,50 +57,93 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
         this.lineColor = this.DEFAULT_COLOR;
         this.stroke=1;
 
-        this.dasharray = null;//can be one of: [Ã’Ã“, Ã’-Ã“, Ã’.Ã“, Ã’-.Ã“, Ã’-..Ã“, Ã’. Ã“, Ã’- Ã“, Ã’--Ã“, Ã’- .Ã“, Ã’--.Ã“, Ã’--..Ã“] 
+        this.dasharray = null;//can be one of: [ÒÓ, Ò-Ó, Ò.Ó, Ò-.Ó, Ò-..Ó, Ò. Ó, Ò- Ó, Ò--Ó, Ò- .Ó, Ò--.Ó, Ò--..Ó] 
         
         if(typeof endY ==="number"){
-            this.startX = startX;
-            this.startY = startY;
-            
-            this.endX   = endX;
-            this.endY   = endY;
+            this.start = new draw2d.geo.Point(startX,startY);
+            this.end   = new draw2d.geo.Point(endX,endY);
         }
         else{
-            this.startX = 30;
-            this.startY = 30;
-            
-            this.endX   = 100;
-            this.endY   = 100;
+            this.start = new draw2d.geo.Point(30,30);
+            this.end   = new draw2d.geo.Point(100,100);
         }
 
+        this.basePoints = new draw2d.util.ArrayList();
+        this.basePoints.add(this.start);
+        this.basePoints.add(this.end);
+        
         this._super();
         
         // create the selections handles/decorations
-        this.installEditPolicy(new draw2d.policy.figure.LineSelectionFeedbackPolicy());
+        this.installEditPolicy(new draw2d.policy.line.LineSelectionFeedbackPolicy());
 
         this.setSelectable(true);
         this.setDeleteable(true);
    },
-      
+   
+
+   /**
+    * @method
+    * Don't call them manually. This will be done by the framework.<br>
+    * Will be called if the object are moved via drag and drop.
+    * Sub classes can override this method to implement additional stuff. Don't forget to call
+    * the super implementation via <code>this._super(dx, dy, dx2, dy2);</code>
+    * @private
+    * @param {Number} dx the x difference between the start of the drag drop operation and now
+    * @param {Number} dy the y difference between the start of the drag drop operation and now
+    * @param {Number} dx2 The x diff since the last call of this dragging operation
+    * @param {Number} dy2 The y diff since the last call of this dragging operation
+    **/
+   onDrag : function( dx, dy, dx2, dy2)
+   {
+       if(this.command ===null){
+           return;
+       }
+       
+       this.command.setTranslation(dx,dy);
+       
+       this.getPoints().each(function(i,e){
+           e.translate(dx2, dy2);
+       });
+
+       this._super(dx, dy, dx2, dy2);
+       
+       this.svgPathString = null;
+       this.repaint();
+   },
+
    onDragEnd : function()
    {
-	   this.setAlpha(this.originalAlpha);
-	   // Element ist zwar schon an seine Position, das Command muss aber trotzdem
-	   // in dem CommandStack gelegt werden damit das Undo funktioniert.
-	   //
-//	   this.command.setPosition(this.x, this.y);
-	   this.isInDragDrop = false;
-	   this.canvas.getCommandStack().execute(this.command);
+       this.setAlpha(this.originalAlpha);
+       // Element ist zwar schon an seine Position, das Command muss aber trotzdem
+       // in dem CommandStack gelegt werden damit das Undo funktioniert.
+       //
+       this.isInDragDrop = false;
+
+       if(this.command===null){
+           return;
+       }
+
+	   // we must undo the interim drag/drop translation of the line. The real translation will be done
+	   // by the execute of the command. Yes - you are right. This is a HACK or design flaw :-/
+	   this.getPoints().each($.proxy(function(i,e){
+           e.translate(-this.command.dx, -this.command.dy);
+       },this));
+
+
+       this.canvas.getCommandStack().execute(this.command);
 	   this.command = null;
 	   this.isMoving = false;
+	   
 	   // notify all installed policies
 	   //
 	   this.editPolicy.each($.proxy(function(i,e){
-	   if(e instanceof draw2d.policy.figure.DragDropEditPolicy){
-		   e.onDragEnd(this.canvas, this);
-	   }
+    	   if(e instanceof draw2d.policy.figure.DragDropEditPolicy){
+    		   e.onDragEnd(this.canvas, this);
+    	   }
 	   },this));
+	   
+	   // inform all other listener
 	   this.fireMoveEvent();
    },
 
@@ -109,7 +152,7 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
     * Set the line style for this object.
     * 
     * experimental only.
-    * @param dash can be one of this [Ã’Ã“, Ã’-Ã“, Ã’.Ã“, Ã’-.Ã“, Ã’-..Ã“, Ã’. Ã“, Ã’- Ã“, Ã’--Ã“, Ã’- .Ã“, Ã’--.Ã“, Ã’--..Ã“] 
+    * @param dash can be one of this [ÒÓ, Ò-Ó, Ò.Ó, Ò-.Ó, Ò-..Ó, Ò. Ó, Ò- Ó, Ò--Ó, Ò- .Ó, Ò--.Ó, Ò--..Ó] 
     */
    setDashArray: function(dash){
        this.dasharray = dash;
@@ -140,7 +183,7 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
     **/
    createShapeElement:function()
    {
-     return this.canvas.paper.path("M"+this.getStartX()+" "+this.getStartY()+"L"+this.getEndX()+" "+this.getEndY());
+     return this.canvas.paper.path("M"+this.start.x+" "+this.start.y+"L"+this.end.x+" "+this.end.y);
    },
 
    /**
@@ -159,11 +202,11 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
        if(typeof attributes === "undefined"){
            attributes = {"stroke":"#"+this.lineColor.hex(),
                          "stroke-width":this.stroke,
-                         "path":["M",this.getStartX(),this.getStartY(),"L",this.getEndX(),this.getEndY()].join(" ")};
+                         "path":["M",this.start.x,this.start.y,"L",this.end.x,this.end.y].join(" ")};
        }
        else{
     	   if(typeof attributes.path ==="undefined"){
-    		   attributes.path =["M",this.getStartX(),this.getStartY(),"L",this.getEndX(),this.getEndY()].join(" ");
+    		   attributes.path =["M",this.start.x,this.start.y,"L",this.end.x,this.end.y].join(" ");
     	   }
     	   attributes.stroke = this.lineColor.hash();
     	   attributes["stroke-width"]=this.stroke;
@@ -234,11 +277,11 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
 
 
    /**
-    * @mehod
+    * @method
     * Set the color of the line.
     * This method fires a <i>document dirty</i> event.
     * 
-    * @param {draw2d.util.Color} color The new color of the line.
+    * @param {draw2d.util.Color|String} color The new color of the line.
     **/
    setColor:function( color)
    {
@@ -269,12 +312,11 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
     **/
    setStartPoint:function( x, y)
    {
-     if(this.startX===x && this.startY===y){
+     if(this.start.x===x && this.start.y===y){
         return;
      }
 
-     this.startX = x;
-     this.startY = y;
+     this.start.setPosition(x, y);
      this.repaint();
 
      this.editPolicy.each($.proxy(function(i,e){
@@ -295,12 +337,11 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
     **/
    setEndPoint:function(x, y)
    {
-     if(this.endX===x && this.endY===y){
+     if(this.end.x===x && this.end.y===y){
         return;
      }
 
-     this.endX = x;
-     this.endY = y;
+     this.end.setPosition(x, y);
      this.repaint();
 
      this.editPolicy.each($.proxy(function(i,e){
@@ -315,23 +356,24 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
    /**
     * @method
     * Return the x coordinate of the start.
-    * 
+    * @deprecated
     * @return {Number}
     **/
    getStartX:function()
    {
-     return this.startX;
+     return this.start.x;
    },
 
    /**
     * @method
     * Return the y coordinate of the start.
     * 
+    * @deprecated
     * @return {Number}
     **/
    getStartY:function()
    {
-     return this.startY;
+     return this.start.y;
    },
 
    /**
@@ -342,7 +384,7 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
     **/
    getStartPoint:function()
    {
-     return new draw2d.geo.Point(this.startX,this.startY);
+     return this.start.clone();
    },
 
 
@@ -350,22 +392,24 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
     * @method
     * Return the x coordinate of the end point
     * 
+    * @deprecated
     * @return {Number}
     **/
    getEndX:function()
    {
-     return this.endX;
+     return this.end.x;
    },
 
    /**
     * @method
     * Return the y coordinate of the end point.
     * 
+    * @deprecated
     * @return {Number}
     **/
    getEndY:function()
    {
-     return this.endY;
+     return this.end.y;
    },
 
    /**
@@ -376,16 +420,27 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
     **/
    getEndPoint:function()
    {
-     return new draw2d.geo.Point(this.endX,this.endY);
+     return this.end.clone();
    },
 
+
+   /**
+    * @method
+    * Returns the fulcrums of the connection
+    *
+    * @return {draw2d.util.ArrayList} an draw2d.util.ArrayList of type draw2d.Point
+    **/
+   getPoints:function()
+   {
+       return this.basePoints;
+   },
    
-   getSegments: function(){
+   getSegments: function()
+   {
        var result = new draw2d.util.ArrayList();
        result.add({start: this.getStartPoint(), end: this.getEndPoint()});
        return result;
    },
-   
    
    /**
     * @method
@@ -400,7 +455,7 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
        return this.shape.getTotalLength();
      }
        
-     return Math.sqrt((this.startX-this.endX)*(this.startX-this.endX)+(this.startY-this.endY)*(this.startY-this.endY));
+     return Math.sqrt((this.start.x-this.end.x)*(this.start.x-this.end.x)+(this.start.y-this.end.y)*(this.start.y-this.end.y));
    },
 
    /**
@@ -408,29 +463,29 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
     * Returns the angle of the line in degree
     *
     * <pre>
-    *                                 270Ã‚Â°
+    *                                 270Â°
     *                               |
     *                               |
     *                               |
     *                               |
-    * 180Ã‚Â° -------------------------+------------------------> +X
-    *                               |                        0Ã‚Â°
+    * 180Â° -------------------------+------------------------> +X
+    *                               |                        0Â°
     *                               |
     *                               |
     *                               |
     *                               V +Y
-    *                              90Ã‚Â°
+    *                              90Â°
     * </pre>
     * @return {Number}
     **/
    getAngle:function()
    {
      var length = this.getLength();
-     var angle = -(180/Math.PI) *Math.asin((this.startY-this.endY)/length);
+     var angle = -(180/Math.PI) *Math.asin((this.start.y-this.end.y)/length);
 
      if(angle<0)
      {
-        if(this.endX<this.startX){
+        if(this.end.x<this.start.x){
           angle = Math.abs(angle) + 180;
         }
         else{
@@ -439,7 +494,7 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
      }
      else
      {
-        if(this.endX<this.startX){
+        if(this.end.x<this.start.x){
           angle = 180-angle;
         }
      }
@@ -457,11 +512,9 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
    {
      if(request.getPolicy() === draw2d.command.CommandType.MOVE)
      {
-       var x1 = this.getStartX();
-       var y1 = this.getStartY();
-       var x2 = this.getEndX();
-       var y2 = this.getEndY();
-       return new draw2d.command.CommandMoveLine(this,x1,y1,x2,y2);
+         if(this.isDraggable()){
+             return new draw2d.command.CommandMoveLine(this);
+          }
      }
      if(request.getPolicy() === draw2d.command.CommandType.DELETE)
      {
@@ -470,6 +523,7 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
         }
         return new draw2d.command.CommandDelete(this);
      }
+     
      return null;
    },
 
@@ -485,7 +539,7 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
     **/
    hitTest: function( px, py)
    {
-     return draw2d.shape.basic.Line.hit(this.corona, this.startX,this.startY, this.endX, this.endY, px,py);
+     return draw2d.shape.basic.Line.hit(this.corona, this.start.x,this.start.y, this.end.x, this.end.y, px,py);
    },
    
    intersection: function (other){
@@ -527,6 +581,9 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
 
        memento.stroke = this.stroke;
        memento.color  = this.getColor().hash();
+       if(this.editPolicy.getSize()>0){
+           memento.policy = this.editPolicy.getFirstElement().NAME;
+       }
        
        return memento;
    },
@@ -547,6 +604,9 @@ draw2d.shape.basic.Line = draw2d.Figure.extend({
        }
        if(typeof memento.color !=="undefined"){
            this.setColor(memento.color);
+       }
+       if(typeof memento.policy !=="undefined"){
+           this.installEditPolicy(eval("new "+memento.policy +"()" ));
        }
    }
 });

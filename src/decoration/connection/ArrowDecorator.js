@@ -83,7 +83,7 @@ draw2d.decoration.connection.ArrowDecorator = draw2d.decoration.connection.Decor
 		
 	    st.attr({fill:this.backgroundColor.hash(),stroke:this.color.hash()});
 
-		return st;
+	    return st;
 	}
 });
 

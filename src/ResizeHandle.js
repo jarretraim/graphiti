@@ -188,10 +188,12 @@ draw2d.ResizeHandle = draw2d.shape.basic.Rectangle.extend({
      * 
      * @param {Number} dx the move x offset
      * @param {Number} dy the move y offset
+     * @param {Number} dx2 The x diff since the last call of this dragging operation
+     * @param {Number} dy2 The y diff since the last call of this dragging operation
      * 
      * @return {boolean}
      */
-    onDrag : function(dx, dy)
+    onDrag : function(dx, dy, dx2, dy2)
     {
         if (this.isDraggable() === false) {
             return;
@@ -201,7 +203,7 @@ draw2d.ResizeHandle = draw2d.shape.basic.Rectangle.extend({
         var oldY = this.getAbsoluteY();
         
         // call the super.drag method with all snapTo### handler and adjustments
-        this._super(dx, dy);
+        this._super(dx, dy, dx2, dy2);
 
         var diffX = this.getAbsoluteX() - oldX;
         var diffY = this.getAbsoluteY() - oldY;

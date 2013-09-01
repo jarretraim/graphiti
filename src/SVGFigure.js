@@ -52,7 +52,7 @@ draw2d.SVGFigure = draw2d.SetFigure.extend({
         }
         
         var findStyle = new RegExp('([a-z0-9\-]+) ?: ?([^ ;]+)[ ;]?','gi');
-               
+        
         svgDOM.children().each(function(i,element){
           //element = $(element);
           var shape=null;
@@ -79,7 +79,7 @@ draw2d.SVGFigure = draw2d.SetFigure.extend({
               case 'id':
               case 'xml:space':
                   // just to ignore
-              break;
+                  break;
               default:
                 attr[this.nodeName] = this.nodeValue;
               break;
@@ -189,7 +189,7 @@ draw2d.SVGFigure = draw2d.SetFigure.extend({
                   if(typeof attr["fill"]==="undefined")
                       attr["fill"] = "#000000";
                   if(typeof attr["text-anchor"]==="undefined")
-              attr["text-anchor"] = "start";
+                      attr["text-anchor"] = "start";
                   if(typeof attr["font-size"]!=="undefined")
                       attr["font-size"] = parseInt(attr["font-size"]);
                   if(typeof attr["font-family"]!=="undefined")

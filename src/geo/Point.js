@@ -17,8 +17,14 @@ draw2d.geo.Point = Class.extend({
      */
     init : function(x, y)
     {
-        this.x = x;
-        this.y = y;
+        if(x instanceof draw2d.geo.Point){
+            this.x = x.x;
+            this.y = x.y;
+        }
+        else{
+            this.x = x;
+            this.y = y;
+        }
 
         // limit for the maxi/minimum boundary of this rectangle
         // It is not possible that the rect leave the boundary if set.
@@ -79,7 +85,6 @@ draw2d.geo.Point = Class.extend({
      * @param {Number} dx  Shift along X axis
      * @param {Number} dy  Shift along Y axis
      * 
-     * @return  {draw2d.geo.Rectangle} The method return the object itself
      **/
     translate:function( dx,  dy)
     {
@@ -209,6 +214,18 @@ draw2d.geo.Point = Class.extend({
 
     /**
      * @method 
+     * Return the th of the vector from [0,0]
+     * 
+     * @return {Number}
+     * @since 2.10.0
+     */
+    length : function()
+    {
+        return Math.sqrt(this.x  * this.x  + this.y * this.y);
+    },
+
+    /**
+     * @method 
      * Return a new Point translated with the x/y values of the hands over point.
      * 
      * @param {draw2d.geo.Point} other the offset to add for the new point.
@@ -217,6 +234,18 @@ draw2d.geo.Point = Class.extend({
     getTranslated : function(other)
     {
         return new draw2d.geo.Point(this.x + other.x, this.y + other.y);
+    },
+
+    /**
+     * @method 
+     * Return a new Point scaled with the x/y values of the hands over point.
+     * 
+     * @param {Number} factor the factor to scaled the new point.
+     * @return {draw2d.geo.Point} The new translated point.
+     */
+    getScaled : function(factor)
+    {
+        return new draw2d.geo.Point(this.x * factor, this.y * factor);
     },
 
     /**
@@ -247,7 +276,7 @@ draw2d.geo.Point = Class.extend({
     },
     
     /**
-     * @method 
+     * @method
      * substract the given point and return the new point.
      * 
      * @param that

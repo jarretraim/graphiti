@@ -29,7 +29,14 @@ draw2d.layout.connection.SplineConnectionRouter = draw2d.layout.connection.Manha
         this.cheapRouter = null;
     },
 
-    route : function(conn)
+	/**
+	 * @method
+	 * Layout the hands over connection with the cubic spline calculation and manhattan routing
+	 * 
+	 * @param {draw2d.Connection} conn
+     * @param {draw2d.util.ArrayList} oldJunctionPoints old/existing junction points of the Connection
+	 */
+    route : function(conn, oldJunctionPoints)
     {
     	var i=0;
 		var fromPt  = conn.getStartPoint();
@@ -44,31 +51,6 @@ draw2d.layout.connection.SplineConnectionRouter = draw2d.layout.connection.Manha
 
         var ps = conn.getPoints();
 
-        // align the point a little bit
-        // (required for CatmullRomSpline)
-        //
-        /*
-            var clone = new draw2d.util.ArrayList();
-            var length = ps.getSize()-2;
-            clone.add(ps.get(0));
-            for(i=0 ; i<length; i++){
-                var p1= ps.get(i);
-                var p2= ps.get(i+1).clone();
-                var p3= ps.get(i+2);
-                if(p1.x != p2.x){
-                    p2.x = p2.x + (p1.x-p2.x)/4;
-                    p2.y = p2.y + (p3.y-p2.y)/4;
-                }
-                else{
-                    p2.x = p2.x + (p3.x-p2.x)/4;
-                    p2.y = p2.y + (p1.y-p2.y)/4;
-                }
-                clone.add(p2);
-            }
-            clone.add(ps.get(ps.getSize()-1));
-            ps = clone;
-        */
-        
         conn.oldPoint=null;
         conn.lineSegments = new draw2d.util.ArrayList();
         conn.basePoints   = new draw2d.util.ArrayList();

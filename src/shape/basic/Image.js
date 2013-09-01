@@ -42,7 +42,7 @@ draw2d.shape.basic.Image = draw2d.shape.node.Node.extend({
         
         return this;
     },
-      
+    
     /**
      * @method
      * Return the image path attribute of the shape.
@@ -53,7 +53,7 @@ draw2d.shape.basic.Image = draw2d.shape.node.Node.extend({
     getPath: function(){
         return this.path;
     },
-
+    
    /**
     * @method
     * propagate all attributes like color, stroke,... to the shape element
@@ -115,7 +115,7 @@ draw2d.shape.basic.Image = draw2d.shape.node.Node.extend({
         this._super(memento);
         if(typeof memento.path !=="undefined"){
             this.setPath(memento.path);
-    }
+        }
     }
 
 });

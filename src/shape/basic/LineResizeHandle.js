@@ -32,10 +32,16 @@ draw2d.shape.basic.LineResizeHandle = draw2d.shape.basic.Circle.extend({
         this.setColor("#7A7A7A");
         this.setStroke(1);
         this.setSelectable(false);
-    //    this.setRadius(0);
 
         this.currentTarget = null;
     },
+
+    createShapeElement : function(){
+        var shape= this._super();
+        
+        shape.attr({"cursor":"move"});
+        return shape;
+     },
 
     /**
      * @method
@@ -107,10 +113,7 @@ draw2d.shape.basic.LineResizeHandle = draw2d.shape.basic.Circle.extend({
             attributes.fill="r(.4,.3)#b4e391-#61c419:60-#299a0b";
         }
         
-        // a port did have the 0/0 coordinate in the center and not in the top/left corner
-        //
-        
-       this._super(attributes);
+        this._super(attributes);
     },
 
     /**
@@ -123,9 +126,6 @@ draw2d.shape.basic.LineResizeHandle = draw2d.shape.basic.Circle.extend({
      **/
     onDragStart : function()
     {
-        this.ox = this.x;
-        this.oy = this.y;
-
         this.command = this.getCanvas().getCurrentSelection().createCommand(new draw2d.command.CommandType(draw2d.command.CommandType.MOVE_BASEPOINT));
 
         return true;
@@ -138,11 +138,13 @@ draw2d.shape.basic.LineResizeHandle = draw2d.shape.basic.Circle.extend({
      * 
      * @param {Number} dx the x difference between the start of the drag drop operation and now
      * @param {Number} dy the y difference between the start of the drag drop operation and now
+     * @param {Number} dx2 The x diff since the last call of this dragging operation
+     * @param {Number} dy2 The y diff since the last call of this dragging operation
      * @return {boolean}
      **/
-    onDrag : function(dx, dy)
+    onDrag : function(dx, dy, dx2, dy2)
     {
-        this.setPosition(this.ox + dx, this.oy + dy);
+        this.setPosition(this.x + dx2, this.y + dy2);
 
         var port = this.getOppositePort();
 
@@ -214,6 +216,17 @@ draw2d.shape.basic.LineResizeHandle = draw2d.shape.basic.Circle.extend({
     },
 
 
+    /**
+     * @method
+     * Controls the location of the resize handle 
+     *
+     * @template
+     **/
+    relocate:function(){
+    	
+    },
+    
+    
     /**
      * @method
      * The LineResizeHandle didn't support the SnapToHelper feature if the

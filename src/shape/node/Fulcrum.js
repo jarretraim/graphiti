@@ -64,6 +64,4 @@ draw2d.shape.node.Fulcrum = draw2d.shape.node.Hub.extend({
        this._super(attributes);
     }
     
-
-    
 });

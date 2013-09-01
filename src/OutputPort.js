@@ -83,11 +83,11 @@ draw2d.OutputPort = draw2d.Port.extend({
     
          if(request.source instanceof draw2d.InputPort){
             // This is the different to the InputPort implementation of createCommand.
-            return new draw2d.command.CommandConnect(request.canvas,request.target,request.source);
+            return new draw2d.command.CommandConnect(request.canvas,request.target,request.source, request.source);
          }
          if(request.source instanceof draw2d.HybridPort){
              // This is the different to the InputPort implementation of createCommand.
-             return new draw2d.command.CommandConnect(request.canvas,request.target,request.source);
+             return new draw2d.command.CommandConnect(request.canvas,request.target,request.source, request.source);
          }
     
          return null;

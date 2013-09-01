@@ -104,7 +104,7 @@ draw2d.Canvas = Class.extend(
         this.currentDropTarget = null;
         this.isInExternalDragOperation=false;
         this.currentHoverFigure = null;
-
+        
         this.editPolicy = new draw2d.util.ArrayList();
 
         // internal document with all figures, ports, ....
@@ -210,7 +210,7 @@ draw2d.Canvas = Class.extend(
                var diffXAbs = (event.clientX - this.mouseDownX)*this.zoomFactor;
                var diffYAbs = (event.clientY - this.mouseDownY)*this.zoomFactor;
                this.editPolicy.each($.proxy(function(i,policy){
-                   policy.onMouseDrag(this,diffXAbs, diffYAbs, this.mouseDragDiffX-diffXAbs, this.mouseDragDiffY-diffYAbs);
+                   policy.onMouseDrag(this,diffXAbs, diffYAbs, diffXAbs-this.mouseDragDiffX, diffYAbs-this.mouseDragDiffY);
                },this));
                this.mouseDragDiffX = diffXAbs;
                this.mouseDragDiffY = diffYAbs;
@@ -299,6 +299,7 @@ draw2d.Canvas = Class.extend(
      * @private
      */
     calculateConnectionIntersection: function(){
+
         this.lineIntersections = new draw2d.util.ArrayList();
         var lines = this.getLines().clone();
         while(lines.getSize()>0){
@@ -493,7 +494,7 @@ draw2d.Canvas = Class.extend(
                     (x - this.getAbsoluteX())*this.zoomFactor,
                     (y - this.getAbsoluteY())*this.zoomFactor);
     },
-    
+
     /**
      * @method
      * Transforms a canvas coordinate to document coordinate.
@@ -532,11 +533,11 @@ draw2d.Canvas = Class.extend(
       // check for iPad, Android touch events
       //
       if(typeof event.originalEvent !== "undefined"){  
-		  if(event.originalEvent.touches && event.originalEvent.touches.length) {
-		       return event.originalEvent.touches[0];
-		  } else if(event.originalEvent.changedTouches && event.originalEvent.changedTouches.length) {
-		       return event.originalEvent.changedTouches[0];
-		  }
+          if(event.originalEvent.touches && event.originalEvent.touches.length) {
+               return event.originalEvent.touches[0];
+          } else if(event.originalEvent.changedTouches && event.originalEvent.changedTouches.length) {
+               return event.originalEvent.changedTouches[0];
+          }
       }
       return event;
     },
@@ -651,8 +652,8 @@ draw2d.Canvas = Class.extend(
 
       // important inital 
       figure.getShapeElement();
-      
-     
+
+
       if(figure instanceof draw2d.shape.basic.Line){
         this.lines.add(figure);
         this.linesToRepaintAfterDragDrop = this.lines;
@@ -761,7 +762,7 @@ draw2d.Canvas = Class.extend(
               return false;
            }
       });
-            return figure;
+      return figure;
     },
 
     /**
@@ -774,6 +775,7 @@ draw2d.Canvas = Class.extend(
      */
     getIntersection:function(line){
        var result = new draw2d.util.ArrayList();
+       
        this.lineIntersections.each($.proxy(function(i, entry){
            if(entry.line ===line){
                entry.intersection.each(function(i,p){
@@ -781,11 +783,12 @@ draw2d.Canvas = Class.extend(
                });
            }
        },this));
+       
        return result;
     },
     
 
-    
+
 
     /** 
      * @method
@@ -1011,14 +1014,14 @@ draw2d.Canvas = Class.extend(
                 }
             }
 
-        if(result !==null){
-            return result;
+            if(result !==null){
+                return result;
             }
         }
         
         // 4.) Check the children of the lines as well
         //     Not selectable/draggable. But should receive onClick/onDoubleClick events 
-       //      as well.
+        //      as well.
         var count = this.lines.getSize();
         for(i=0;i< count;i++)
         {

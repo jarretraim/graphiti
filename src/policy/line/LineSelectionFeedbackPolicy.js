@@ -9,9 +9,10 @@
  * @author Andreas Herz
  * @extends draw2d.policy.figure.SelectionFeedbackPolicy
  */
-draw2d.policy.figure.LineSelectionFeedbackPolicy = draw2d.policy.figure.SelectionFeedbackPolicy.extend({
+draw2d.policy.line.LineSelectionFeedbackPolicy = draw2d.policy.figure.SelectionFeedbackPolicy.extend({
 
-    NAME : "draw2d.policy.figure.LineSelectionFeedbackPolicy",
+    NAME : "draw2d.policy.line.LineSelectionFeedbackPolicy",
+    
     /**
      * @constructor 
      * Creates a new Router object
@@ -47,21 +48,9 @@ draw2d.policy.figure.LineSelectionFeedbackPolicy = draw2d.policy.figure.Selectio
      * @template
      */
     moved: function(canvas,figure){
-        if(figure.selectionHandles.isEmpty()){
-            return; // silently
-        }
-        
-        var resizeHandleStart = figure.selectionHandles.get(0);
-        var resizeHandleEnd = figure.selectionHandles.get(1);
-
-        var resizeWidthHalf = resizeHandleStart.getWidth()/2;
-        var resizeHeightHalf= resizeHandleStart.getHeight()/2;
-        
-        var startPoint = figure.getStartPoint();
-        var endPoint   = figure.getEndPoint();
-        
-        resizeHandleStart.setPosition(startPoint.x-resizeWidthHalf,startPoint.y-resizeHeightHalf);
-        resizeHandleEnd.setPosition(endPoint.x-resizeWidthHalf,endPoint.y-resizeHeightHalf);
+    	figure.selectionHandles.each(function(i,e){
+            e.relocate();
+        });
     }
     
 });

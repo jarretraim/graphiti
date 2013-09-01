@@ -60,7 +60,7 @@ draw2d.policy.canvas.FadeoutDecorationPolicy = draw2d.policy.canvas.DecorationPo
                     handle.setAlpha(this.alpha);
                 },this));
             },this));
-       }
+        }
         else if(this.hidePortsCounter>0 && this.alpha!==1.0){
             this.alpha =1;// Math.min(1,this.alpha+0.1);
             this.duringHide = false;

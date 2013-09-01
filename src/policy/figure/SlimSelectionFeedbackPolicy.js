@@ -50,5 +50,5 @@ draw2d.policy.figure.SlimSelectionFeedbackPolicy = draw2d.policy.figure.Rectangl
              });
         }
         this.moved(canvas,figure);
-       }
+   }
 });

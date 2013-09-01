@@ -30,7 +30,7 @@ draw2d.shape.state.Connection = draw2d.Connection.extend({
         this.setRouter(draw2d.shape.state.Connection.DEFAULT_ROUTER);
 
         this.setStroke(2);
-        this.setTargetDecorator(new draw2d.decoration.connection.ArrowDecorator());
+        this.setTargetDecorator(new draw2d.decoration.connection.ArrowDecorator(17,8));
 
 
         this.label = new draw2d.shape.basic.Label("label");

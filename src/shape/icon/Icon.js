@@ -43,7 +43,7 @@ draw2d.shape.icon.Icon = draw2d.SetFigure.extend({
         if(this.svgNodes!==null) {
             this.svgNodes.attr({fill: this.bgColor.hash(), stroke:"none"});
         }
-
+        
         this._super(attributes);
     },
 

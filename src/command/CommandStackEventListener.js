@@ -7,7 +7,6 @@
  * 
  * Event class which will be fired for every CommandStack operation. Required for CommandStackListener.
  * 
- * @inherit
  * @author Andreas Herz
  */
 draw2d.command.CommandStackEventListener = Class.extend({

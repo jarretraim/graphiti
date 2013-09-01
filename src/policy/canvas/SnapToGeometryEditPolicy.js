@@ -296,7 +296,7 @@ draw2d.policy.canvas.SnapToGeometryEditPolicy = draw2d.policy.canvas.SnapToEditP
                         .attr({"stroke":this.LINE_COLOR,"stroke-width":1});
     },
     
-    hideVerticalLine:function(x){
+    hideVerticalLine:function(){
         if(this.vline==null){
             return;
         }

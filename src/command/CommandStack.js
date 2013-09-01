@@ -21,6 +21,26 @@ draw2d.command.CommandStack = Class.extend({
        this.maxundo = 50;
        this.transactionCommand = null;
        this.eventListeners = new draw2d.util.ArrayList();
+       
+       window.onpopstate = $.proxy(function(event) {
+    	   if( event.state === null){
+    		   return;
+    	   }
+    	   
+    	   /*
+    	   var stackLegth = event.state.length;
+    	   console.log(stackLegth +"<="+ this.undostack.length );
+    	   if(stackLegth <= this.undostack.length ){
+    		   console.log("Back");
+    		   this.undo();
+    	   }
+    	   else{
+    		   console.log("Forward");
+    		   this.redo();
+    	   }
+    	   console.log("location: " + document.location + ", state: " + JSON.stringify(event.state));
+    	   */
+       },this);
     },
     
  
@@ -102,6 +122,8 @@ draw2d.command.CommandStack = Class.extend({
           this.undostack = this.undostack.slice(this.undostack.length-this.maxundo);
        }
        this.notifyListeners(command, draw2d.command.CommandStack.POST_EXECUTE);
+       
+//       window.history.pushState({length: this.undostack.length}, "title 1", "?undo="+this.undostack.length);
     },
     
     /**

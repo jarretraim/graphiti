@@ -38,26 +38,10 @@ draw2d.shape.state.Start = draw2d.shape.basic.Circle.extend({
         this.setStroke(0);
         //this.setColor(this.DEFAULT_COLOR.darker());
 
-        var label = new draw2d.shape.basic.Label("Start");
+        var label = new draw2d.shape.basic.Label("START");
         label.setStroke(0);
+        label.setFontColor("#ffffff");
+        label.setFontFamily('"Open Sans",sans-serif');
         this.addFigure(label, new draw2d.layout.locator.CenterLocator(this));
-        
-    },
- 
-	/**
-	 * @method
-	 * 
-	 * @param draggedFigure
-	 * @return {draw2d.Figure} the figure which should receive the drop event or null if the element didnt want a drop event
-	 */
-    /*
-	onDragEnter : function( draggedFigure )
-	{
-	    // redirect the dragEnter handling to the hybrid port
-	    // In this case we can drop any port on the shape for connection creation
-		//
-		return this.port.onDragEnter(draggedFigure);
-	}
-	*/
-
+    }
 });

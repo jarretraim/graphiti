@@ -3,7 +3,7 @@
  *   Copyright (c) 2012 Andreas Herz
  ****************************************/
 /**
- * @class draw2d.layout.connection.DirectRouter
+ * @class draw2d.layout.connection.JunctionRouter
  * Router for direct connections between two ports. Beeline
  * 
  * See the example:
@@ -41,9 +41,9 @@
  * 
  * @extends  draw2d.layout.connection.ConnectionRouter
  */
-draw2d.layout.connection.DirectRouter = draw2d.layout.connection.ConnectionRouter.extend({
+draw2d.layout.connection.JunctionRouter = draw2d.layout.connection.ConnectionRouter.extend({
 
-    NAME : "draw2d.layout.connection.DirectRouter",
+    NAME : "draw2d.layout.connection.JunctionRouter",
 
     /**
 	 * @constructor 
@@ -76,14 +76,70 @@ draw2d.layout.connection.DirectRouter = draw2d.layout.connection.ConnectionRoute
        
        // required for hit tests
        //
+       var count = oldJunctionPoints.getSize()-1;
        connection.addPoint(start);
+       for(var i=1; i<count;i++){
+           connection.addPoint(oldJunctionPoints.get(i));
+       }
        connection.addPoint(end);
        
-       // calculate the path
-       var path = ["M",start.x," ",start.y];
-       path.push("L", end.x, " ", end.y);
+		// calculate the manhatten bend points between start/end.
+		//
+//		this._route(conn, toPt, toDir, fromPt, fromDir);
 
+       var ps = connection.getPoints();
+       
+       length = ps.getSize();
+       var p = ps.get(0);
+       var path = ["M",p.x," ",p.y];
+       for(var i=1;i<length;i++){
+             p = ps.get(i);
+             path.push("L", p.x, " ", p.y);
+       }
        connection.svgPathString = path.join("");
+    },
+    
+    /**
+     * @method 
+     * Tweak or enrich the polyline persistence data with routing information
+     * 
+     * @since 2.10.0
+     * @param {draw2d.shape.basic.PolyLine} line
+     * @param {Object} memento The memento data of the polyline
+     * @returns {Object}
+     */
+    getPersistentAttributes : function(line, memento)
+    {   
+        memento.junction = [];
+        
+        line.getPoints().each(function(i,e){
+            memento.junction.push({x:e.x, y:e.y});
+        });
+        
+        return memento;
+    },
+    
+    /**
+     * @method 
+     * set the attributes for the polyline with routing information
+     * 
+     * @since 2.10.0
+     * @param {Object} memento
+     */
+    setPersistentAttributes : function(line, memento)
+    {
+        // restore the points from the JSON data and add them to the polyline
+        //
+        if(typeof memento.junction !=="undefined"){
+            
+            line.oldPoint=null;
+            line.lineSegments = new draw2d.util.ArrayList();
+            line.basePoints   = new draw2d.util.ArrayList();
 
+            $.each(memento.junction, $.proxy(function(i,e){
+                line.addPoint(e.x, e.y);
+            },this));
+        }
     }
+    
 });

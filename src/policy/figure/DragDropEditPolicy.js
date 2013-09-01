@@ -35,6 +35,8 @@ draw2d.policy.figure.DragDropEditPolicy = draw2d.policy.EditPolicy.extend({
      */
     onDragStart: function(canvas, figure){
     	figure.shape.attr({cursor:"move"});
+    	figure.isMoving = false;
+    	figure.originalAlpha = figure.getAlpha();
     },
     
     /**
@@ -46,7 +48,14 @@ draw2d.policy.figure.DragDropEditPolicy = draw2d.policy.EditPolicy.extend({
      * @template
      */
     onDrag: function(canvas, figure){
-    	
+        
+        // enable the alpha blending of the first real move of the object
+        //
+        if(figure.isMoving===false)
+        {
+            figure.isMoving = true;
+            figure.setAlpha(figure.originalAlpha*0.4);
+        }    	
     },
     
     /**
@@ -59,6 +68,7 @@ draw2d.policy.figure.DragDropEditPolicy = draw2d.policy.EditPolicy.extend({
      */
     onDragEnd: function(canvas, figure){
         figure.shape.attr({cursor:"default"});
+        figure.isMoving = false;
     },
     
     /**

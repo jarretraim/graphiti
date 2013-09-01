@@ -37,7 +37,7 @@ draw2d.shape.basic.Rectangle = draw2d.VectorFigure.extend({
     init: function( width, height) {
        // corner radius
        this.radius = 2;
-       this.dasharray = null;//can be one of: [√í√ì, √í-√ì, √í.√ì, √í-.√ì, √í-..√ì, √í. √ì, √í- √ì, √í--√ì, √í- .√ì, √í--.√ì, √í--..√ì] 
+       this.dasharray = null;//can be one of: [“”, “-”, “.”, “-.”, “-..”, “. ”, “- ”, “--”, “- .”, “--.”, “--..”] 
        
       this._super();
 

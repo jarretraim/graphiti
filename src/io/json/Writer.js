@@ -13,7 +13,7 @@
  *      var writer = new draw2d.io.json.Writer();
  *      var json = writer.marshal(canvas);
  *      
- *      // convert the json object into string repesentation
+ *      // convert the json object into string representation
  *      var jsonTxt = JSON.stringify(json,null,2);
  *      
  *      // insert the json string into a DIV for preview or post

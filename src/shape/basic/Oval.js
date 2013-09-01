@@ -33,7 +33,8 @@ draw2d.shape.basic.Oval = draw2d.VectorFigure.extend({
         this._super( );
         this.setBackgroundColor("#C02B1D");
         this.setColor("#1B1B1B");
-        if((typeof height ==="number") &&(typeof width === "number")){
+        
+        if((typeof height === "number") &&(typeof width === "number")){
             this.setDimension(width,height);
         }
         else{
@@ -79,7 +80,7 @@ draw2d.shape.basic.Oval = draw2d.VectorFigure.extend({
            attributes.cx = this.getAbsoluteX()+attributes.rx;
            attributes.cy = this.getAbsoluteY()+attributes.ry;
        }
-      
+       
        this._super(attributes);
    },
    
@@ -138,7 +139,7 @@ draw2d.shape.basic.Oval = draw2d.VectorFigure.extend({
        }
        
        return result;
-   }
+   }	 
     
 });
 

@@ -7,7 +7,6 @@
  * 
  * Command for the movement of figures.
  *
- * @inheritable
  * @author Andreas Herz
  * 
  * @extends draw2d.command.Command

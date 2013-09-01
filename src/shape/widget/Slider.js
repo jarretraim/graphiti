@@ -109,8 +109,10 @@ draw2d.shape.widget.Slider = draw2d.shape.widget.Widget.extend({
      * 
      * @param {Number} dx the x difference between the mouse down operation and now
      * @param {Number} dy the y difference between the mouse down operation and now
+     * @param {Number} dx2 The x diff since the last call of this dragging operation
+     * @param {Number} dy2 The y diff since the last call of this dragging operation
      */
-    onPanning: function(dx, dy){
+    onPanning: function(dx, dy, dx2, dy2){
         this.slideBoundingBox.setPosition(this.origX+dx, this.origY+dy);
         // calculate the internal value of the slider
         this.setValue(100/(this.slideBoundingBox.bw-this.slideBoundingBox.getWidth())*this.slideBoundingBox.getX());
@@ -168,9 +170,9 @@ draw2d.shape.widget.Slider = draw2d.shape.widget.Widget.extend({
         this._super(attributes);
     },
     
+
     applyTransformation:function(){
         this.svgNodes.transform("T" + this.getAbsoluteX() + "," + this.getAbsoluteY());
-     }
-     
+    }
 
 });

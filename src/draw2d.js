@@ -35,6 +35,7 @@ var draw2d =
     
     policy : {
         canvas:{},
+        line:{},
         port:{},
         figure:{}
     },

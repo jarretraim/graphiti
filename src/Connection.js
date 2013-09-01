@@ -102,7 +102,7 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
      * @param {draw2d.layout.connection.ConnectionRouter} router The router to use for this connection
      */
     init: function( router) {
-      this._super();
+      this._super(router );
       
       this.sourcePort = null;
       this.targetPort = null;
@@ -116,13 +116,13 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
       //
       this.sourceDecoratorNode = null;
       this.targetDecoratorNode=null;
-  
-      this.router = router || draw2d.Connection.DEFAULT_ROUTER;
-
+      
       this.setColor("#1B1B1B");
       this.setStroke(1);
       this.setCssClass("stroke");
-    },
+
+      this.isMoving=false;
+   },
     
 
     /**
@@ -248,45 +248,7 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
       return this.targetDecorator;
     },
     
-        
-    /**
-     * @method
-     * Set the router for this connection.
-     * 
-     * @param {draw2d.layout.connection.ConnectionRouter} [router] the new router for this connection or null if the connection should use the default routing
-     **/
-    setRouter:function(router)
-    {
-      if(this.router !==null){
-          this.router.onUninstall(this);
-      }
-      
-      if(typeof router ==="undefined" || router===null){
-    	  this.router = new draw2d.layout.connection.NullRouter();
-      }
-      else{
-    	  this.router = router;
-      }
-      
-      this.router.onInstall(this);
-      
-      this.routingRequired =true;
-    
-      // repaint the connection with the new router
-      this.repaint();
-    },
-    
-    /**
-     * @method
-     * Return the current active router of this connection.
-     *
-     * @type draw2d.ConnectionRouter
-     **/
-    getRouter:function()
-    {
-      return this.router;
-    },
-    
+
     /**
      * @method
      * Calculate the path of the polyline.
@@ -320,33 +282,35 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
 
 	    // paint the decorator if any exists
 	    //
-	    if(this.getSource().getParent().isMoving===false && this.getTarget().getParent().isMoving===false )
-	    {
-	      if(this.targetDecorator!==null && this.targetDecoratorNode===null){
+        if(this.targetDecorator!==null && this.targetDecoratorNode===null){
 	      	this.targetDecoratorNode= this.targetDecorator.paint(this.getCanvas().paper);
-	      }
-	
-	      if(this.sourceDecorator!==null && this.sourceDecoratorNode===null){
-	      	this.sourceDecoratorNode= this.sourceDecorator.paint(this.getCanvas().paper);
-	      }
 	    }
+	
+	    if(this.sourceDecorator!==null && this.sourceDecoratorNode===null){
+	      	this.sourceDecoratorNode= this.sourceDecorator.paint(this.getCanvas().paper);
+	    }
+
 	    
 	    // translate/transform the decorations to the end/start of the connection 
 	    // and rotate them as well
 	    //
 	    if(this.sourceDecoratorNode!==null){
 	    	var start = this.getPoints().get(0);
-	  	    this.sourceDecoratorNode.transform("r"+this.getStartAngle()+"," + start.x + "," + start.y
-	  			                            +" t" + start.x + "," + start.y);
-	  	    
+	  	    this.sourceDecoratorNode.transform("r"+this.getStartAngle()+"," + start.x + "," + start.y +" t" + start.x + "," + start.y);
 	  	    // propagate the color and the opacity to the decoration as well
-	  	  this.sourceDecoratorNode.attr({"stroke":"#"+this.lineColor.hex(), opacity:this.alpha});
+	  	    this.sourceDecoratorNode.attr({"stroke":"#"+this.lineColor.hex(), opacity:this.alpha});
+            this.sourceDecoratorNode.forEach($.proxy(function(shape){
+                shape.node.setAttribute("class",this.cssClass!==null?this.cssClass:"");
+            },this));
 	    }
+	    
         if(this.targetDecoratorNode!==null){
 	    	var end = this.getPoints().getLastElement();
-            this.targetDecoratorNode.transform("r"+this.getEndAngle()+"," + end.x + "," + end.y
-            		                          +" t" + end.x + "," + end.y);
+            this.targetDecoratorNode.transform("r"+this.getEndAngle()+"," + end.x + "," + end.y+" t" + end.x + "," + end.y);
             this.targetDecoratorNode.attr({"stroke":"#"+this.lineColor.hex(), opacity:this.alpha});
+            this.targetDecoratorNode.forEach($.proxy(function(shape){
+                shape.node.setAttribute("class",this.cssClass!==null?this.cssClass:"");
+            },this));
         }
 
     },
@@ -422,7 +386,7 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
      * 
      * @return draw2d.geo.Point
      **/
-     getStartPoint:function()
+    getStartPoint:function()
      {
       if(this.isMoving===false){
          return this.sourcePort.getConnectionAnchorLocation(this.targetPort.getConnectionAnchorReferencePoint());
@@ -469,8 +433,9 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
       this.routingRequired = true;
       this.fireSourcePortRouteEvent();
       this.sourcePort.attachMoveListener(this);
-      if(this.canvas!==null)
+      if(this.canvas!==null){
           this.sourcePort.onConnect(this);
+      }
       this.setStartPoint(port.getAbsoluteX(), port.getAbsoluteY());
     },
     
@@ -506,8 +471,9 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
       this.routingRequired = true;
       this.fireTargetPortRouteEvent();
       this.targetPort.attachMoveListener(this);
-      if(this.canvas!==null)
+      if(this.canvas!==null){
          this.targetPort.onConnect(this);
+      }
       this.setEndPoint(port.getAbsoluteX(), port.getAbsoluteY());
     },
     
@@ -594,7 +560,6 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
      **/
     onOtherFigureIsMoving:function( figure)
     {
-//        console.log(figure);
       if(figure===this.sourcePort){
         this.setStartPoint(this.sourcePort.getAbsoluteX(), this.sourcePort.getAbsoluteY());
       }
@@ -758,9 +723,7 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
                   node:parentNode.getId(),
                   port:this.getTarget().getName()
                 };
-        
-        memento.router = this.router.NAME;
-        
+       
         return memento;
     },
     
@@ -774,12 +737,10 @@ draw2d.Connection = draw2d.shape.basic.PolyLine.extend({
     setPersistentAttributes : function(memento)
     {
         this._super(memento);
-        if(typeof memento.router !=="undefined"){
-            this.setRouter(eval("new "+memento.router+"()"));
-        }
-
-        // no extra param to read.
-        // Reason: done by the Layoute/Router
+        
+        // nothing to to for the connection creation. This will be done in the draw2d.io.Reader 
+        // implementation
+        //
     }
 });
 

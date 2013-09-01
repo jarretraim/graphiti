@@ -33,5 +33,4 @@ draw2d.shape.node.Between = draw2d.shape.basic.Rectangle.extend({
         this.createPort("output");
         this.createPort("input");
     }
-
 });

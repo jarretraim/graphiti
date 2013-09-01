@@ -34,9 +34,13 @@ draw2d.io.png.Writer = draw2d.io.Writer.extend({
     marshal: function(canvas){
         
         var svg = canvas.getHtmlContainer().html().replace(/>\s+/g, ">").replace(/\s+</g, "<");
-
+       
         // required for IE9 support. 
-        svg = svg.replace("<svg xmlns=\"http://www.w3.org/2000/svg\"", "<svg");
+        svg = svg.replace(/xmlns=\"http:\/\/www\.w3\.org\/2000\/svg\"/, '');
+//svg = svg.replace("<svg xmlns=\"http://www.w3.org/2000/svg\"", "<svg");
+
+        
+        svg = svg.replace("<image", "<image xmlns:xlink=\"http://www.w3.org/1999/xlink\" ");
 
         var canvasDomNode = $('<canvas id="canvas" width="1000px" height="600px"></canvas>');
 

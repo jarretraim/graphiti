@@ -26,7 +26,7 @@ draw2d.policy.canvas.SingleSelectionPolicy =  draw2d.policy.canvas.SelectionPoli
    
     select: function(canvas, figure){
         if(canvas.getSelection().getAll().contains(figure)){
-            return; // noting to to
+            return; // nothing to to
         }
         
         if(canvas.getSelection().getPrimary()!==null){
@@ -141,11 +141,11 @@ draw2d.policy.canvas.SingleSelectionPolicy =  draw2d.policy.canvas.SelectionPoli
             //
             var sel =canvas.getSelection().getAll();
             if(!sel.contains(this.mouseDraggingElement)){
-                this.mouseDraggingElement.onDrag(dx, dy);
+                this.mouseDraggingElement.onDrag(dx, dy, dx2, dy2);
             }
             else{
                 sel.each(function(i,figure){
-                    figure.onDrag(dx,dy);
+                    figure.onDrag(dx, dy, dx2, dy2);
                 });
             }
             
@@ -166,7 +166,7 @@ draw2d.policy.canvas.SingleSelectionPolicy =  draw2d.policy.canvas.SelectionPoli
        // decision.
        //
        else if(this.mouseDownElement!==null && !(this.mouseDownElement instanceof draw2d.Connection)){
-           this.mouseDownElement.onPanning(dx, dy);
+           this.mouseDownElement.onPanning(dx, dy, dx2, dy2);
        } 
     },
     

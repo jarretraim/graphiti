@@ -95,6 +95,7 @@ draw2d.policy.canvas.BoundingboxSelectionPolicy =  draw2d.policy.canvas.SingleSe
     onMouseDrag:function(canvas, dx, dy, dx2, dy2){
         
         this._super(canvas, dx,dy,dx2,dy2);
+        
         if (this.mouseDraggingElement === null && this.mouseDownElement===null && this.boundingBoxFigure1===null) {
             this.boundingBoxFigure1 = new draw2d.shape.basic.Rectangle(1,1);
             this.boundingBoxFigure1.setPosition(this.x,this.y);
@@ -133,6 +134,11 @@ draw2d.policy.canvas.BoundingboxSelectionPolicy =  draw2d.policy.canvas.SingleSe
             canvas.getSelection().getAll().each($.proxy(function(i,figure){
                 this.unselect(canvas, figure);
             },this));
+        }
+        else if(this.mouseDownElement instanceof draw2d.ResizeHandle || (this.mouseDownElement instanceof draw2d.shape.basic.LineResizeHandle)){
+            // Do nothing
+            // A click on a resize handle didn't change the selection of the canvas
+            //
         }
         // delete the current selection if you click on another figure than the current
         // selection and you didn't drag the complete selection.

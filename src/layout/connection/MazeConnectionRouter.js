@@ -45,8 +45,9 @@ draw2d.layout.connection.MazeConnectionRouter = draw2d.layout.connection.Connect
 	 * Layout the hands over connection in a manhattan like layout
 	 * 
 	 * @param {draw2d.Connection} conn
+     * @param {draw2d.util.ArrayList} oldJunctionPoints old/existing junction points of the Connection
 	 */
-	route:function( conn)
+	route:function( conn, oldJunctionPoints)
 	{
 	   var fromPt  = conn.getStartPoint();
 	   var fromDir = conn.getSource().getConnectionDirection(conn, conn.getTarget());
@@ -420,7 +421,7 @@ draw2d.layout.connection.MazeConnectionRouter = draw2d.layout.connection.Connect
 
     		var i,
     		    len = points.length,
-    		    point,
+    		    point =null,
     		    prevPoint = points[0],
     		    newPoints = [prevPoint];
 

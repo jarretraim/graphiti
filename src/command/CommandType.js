@@ -42,11 +42,13 @@ draw2d.command.CommandType = Class.extend({
     }
 });
  
-draw2d.command.CommandType.DELETE         = "DELETE";
-draw2d.command.CommandType.MOVE           = "MOVE";
-draw2d.command.CommandType.CONNECT        = "CONNECT";
-draw2d.command.CommandType.MOVE_BASEPOINT = "MOVE_BASEPOINT";
-draw2d.command.CommandType.RESIZE         = "RESIZE";
-draw2d.command.CommandType.RESET          = "RESET";
+draw2d.command.CommandType.DELETE               = "DELETE";
+draw2d.command.CommandType.MOVE                 = "MOVE";
+draw2d.command.CommandType.CONNECT              = "CONNECT";
+draw2d.command.CommandType.MOVE_BASEPOINT       = "MOVE_BASEPOINT";
+draw2d.command.CommandType.MOVE_JUNCTION        = "MOVE_JUNCTION";
+draw2d.command.CommandType.MOVE_GHOST_JUNCTION  = "MOVE_GHOST_JUNCTION";
+draw2d.command.CommandType.RESIZE               = "RESIZE";
+draw2d.command.CommandType.RESET                 = "RESET";
 
 

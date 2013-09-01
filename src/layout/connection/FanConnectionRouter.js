@@ -70,8 +70,9 @@ draw2d.layout.connection.FanConnectionRouter = draw2d.layout.connection.DirectRo
      * Layout the hands over connection in a manhattan like layout
      * 
      * @param {draw2d.Connection}  conn
+     * @param {draw2d.util.ArrayList} oldJunctionPoints old/existing junction points of the Connection
      */
-    route : function(conn)
+    route : function(conn, oldJunctionPoints)
     {
         var lines = conn.getSource().getConnections();
         var connections = new draw2d.util.ArrayList();

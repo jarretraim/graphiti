@@ -57,22 +57,21 @@ draw2d.shape.basic.LineEndResizeHandle = draw2d.shape.basic.LineResizeHandle.ext
      * 
      * @param {Number} dx the x difference between the start of the drag drop operation and now
      * @param {Number} dy the y difference between the start of the drag drop operation and now
+     * @param {Number} dx2 The x diff since the last call of this dragging operation
+     * @param {Number} dy2 The y diff since the last call of this dragging operation
      * @return {boolean}
      **/
-    onDrag:function( dx, dy)
+    onDrag:function( dx, dy, dx2, dy2)
     {
-      var oldX = this.getX();
-      var oldY = this.getY();
-      this._super(dx,dy);
-      var diffX = oldX-this.getX();
-      var diffY = oldY-this.getY();
+      this._super(dx,dy, dx2, dy2);
     
       var objPos = this.owner.getEndPoint();
-    
-      this.owner.setEndPoint(objPos.x-diffX, objPos.y-diffY);
-      this.owner.isMoving = true;
-      this.detachMoveListener(this.owner);
+      objPos.translate(dx2,dy2);
       
+      this.owner.setEndPoint(objPos.x, objPos.y);
+      
+      this.owner.isMoving = true;
+    
       return true;
     },
     
@@ -89,5 +88,21 @@ draw2d.shape.basic.LineEndResizeHandle = draw2d.shape.basic.LineResizeHandle.ext
          this.getCanvas().getCommandStack().execute(this.command);
       }
       this.command = null;
-    }
+    },
+    
+    /**
+     * @method
+     * Controls the location of the resize handle 
+     *
+     * @template
+     **/
+    relocate:function(){
+
+        var resizeWidthHalf = this.getWidth()/2;
+        var resizeHeightHalf= this.getHeight()/2;
+        
+        var anchor   = this.owner.getEndPoint();
+        
+        this.setPosition(anchor.x-resizeWidthHalf,anchor.y-resizeHeightHalf);
+    }    
 });

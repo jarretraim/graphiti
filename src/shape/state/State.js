@@ -3,23 +3,10 @@
  *   Copyright (c) 2012 Andreas Herz
  ****************************************/
 /**
- * @class draw2d.shape.pert.Activity
+ * @class draw2d.shape.state.State
  * 
  * NOT FOR PRODUCTIVE
  * 
- * Checkout [Wikipedia PERT][1] for more information.
- * 
- * Double click on the Task name or the top middle number to change the value.
- * 
- * See the example:
- *
- *     @example preview small frame
- *     
- *     canvas.addFigure( new draw2d.shape.pert.Activity,10,10);
- *     canvas.addFigure( new draw2d.shape.pert.Activity,80,130);
- *     canvas.addFigure( new draw2d.shape.pert.Activity,180,50);
- *     
- * [1] http://en.wikipedia.org/wiki/Program_Evaluation_and_Review_Technique
  * 
  * @extends draw2d.shape.layout.VerticalLayout
  */
@@ -115,22 +102,7 @@ draw2d.shape.state.State = draw2d.shape.layout.VerticalLayout.extend({
     	 return label;
      },
      
- 	/**
- 	 * @method
- 	 * 
- 	 * @param draggedFigure
- 	 * @return {draw2d.Figure} the figure which should receive the drop event or null if the element didnt want a drop event
- 	 */
-     /*
- 	onDragEnter : function( draggedFigure )
- 	{
- 	    // redirect the dragEnter handling to the hybrid port
- 	    // In this case we can drop any port on the shape for connection creation
- 		//
- 		return this.port.onDragEnter(draggedFigure);
- 	},
- 	
-*/
+
     /**
      * @method 
      * Return an objects with all important attributes for XML or JSON serialization
@@ -145,7 +117,7 @@ draw2d.shape.state.State = draw2d.shape.layout.VerticalLayout.extend({
         
         return memento;
     },
-    
+
     /**
      * @method 
      * Read all attributes from the serialized properties and transfer them into the shape.
